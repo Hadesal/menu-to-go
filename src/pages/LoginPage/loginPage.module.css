@@ -1,0 +1,9 @@
+.sign_in_heading {
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.welcome_text {
+  text-align: center;
+  color: #797979;
+}

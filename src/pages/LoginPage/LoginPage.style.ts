@@ -1,37 +1,63 @@
+import "../../App.css";
+
 export const Styles = {
-  box: { display: "flex", alignItems: "flex-end" },
-  button: {
-    width: "12vw",
-    background: "#99cc33",
-    marginTop: "20px",
+  wrapper_box: {
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    overflow: "hidden",
   },
-  textField: { width: "12vw", marginBottom: "20px" },
+  grid: {
+    height: "100%",
+  },
+  grid_item_1: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 3,
+  },
+  sign_in_heading: {
+    textAlign: "center",
+    color: "var(--primary-color)",
+  },
+  sign_in_welcome_text: {
+    textAlign: "center",
+    color: "#797979",
+  },
+  input_box: {
+    display: "flex",
+    alignItems: "flex-end",
+  },
   inputStyle: {
-    width: "12vw",
-    background: "#ebebeb",
+    width: "100%",
   },
-  container: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "40vw",
-    height: "98vh",
+  button: {
+    marginBottom: 2,
+    borderRadius: "20px",
+    padding: "10px 125px 10px 125px",
+    backgroundColor: "var(--primary-color)",
+    Opacity: 0,
+
+    "&:hover": {
+      backgroundColor: "var(--primary-color)", // Change color on hover
+      opacity: 0.9,
+    },
   },
-  card: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "2vw",
-    boxShadow:
-      "0px 2px 19px 0px rgba(0,0,0,0.2), 0px 1px 20px 0px rgba(0,0,0,0.14), 0px 1px 3px 3px rgba(0,0,0,0.12)",
-    width: "18vw",
+  register_text: {
+    marginBottom: 2,
   },
-  cardContent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: "30vh",
-    margin: "2vw",
+  sign_up_link: {
+    color: "var(--primary-color)",
+    textDecoration: "none",
+  },
+  grid_item_2: {
+    display: { xs: "none", sm: "block", md: "block" },
+    height: "100%",
+
+    "& img": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
   },
 };

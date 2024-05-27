@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  TextFieldVariants,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface InputComponentProps {
@@ -13,6 +19,7 @@ interface InputComponentProps {
   id: string;
   error?: boolean;
   helperText?: string;
+  variant?: TextFieldVariants;
 }
 
 export default function InputComponent({
@@ -26,6 +33,7 @@ export default function InputComponent({
   id,
   error,
   helperText,
+  variant,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -62,9 +70,10 @@ export default function InputComponent({
         sx={textFieldStyle}
         id={id}
         label={label}
+        margin="normal"
         type={showPassword ? "text" : type}
         required={required}
-        variant="filled"
+        variant={variant}
         InputProps={{
           endAdornment:
             type === "password" ? endPassowrdAdorment : endAdornment,
