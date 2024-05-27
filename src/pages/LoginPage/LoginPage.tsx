@@ -1,13 +1,15 @@
 import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SignUpImage from "../../assets/signup.jpg";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignupData } from "../../DataTypes/UserDataTypes";
 import { handleSignIn } from "../../utils/Validators";
-import { Styles } from "./LoginPage.style";
 import styles from "./loginPage.module.css";
+import { Styles } from "./LoginPage.style";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     password: "",
@@ -63,17 +65,7 @@ export default function LoginPage() {
               error={errorMessages.password ? true : false}
               helperText={errorMessages.password}
             />
-            <Link
-              href="#"
-              variant="body2"
-              sx={{
-                display: "block",
-                marginBottom: 2,
-                textAlign: "right",
-                color: "var(--primary-color)",
-                textDecoration: "none",
-              }}
-            >
+            <Link href="#" variant="body2" sx={Styles.forget_password_link}>
               Forget Password!
             </Link>
             <Button
@@ -95,7 +87,7 @@ export default function LoginPage() {
               <Link
                 href="#"
                 variant="body2"
-                onClick={() => console.log("SignUp Clicked")}
+                onClick={() => navigate("/register")}
                 sx={Styles.sign_up_link}
               >
                 Sign Up

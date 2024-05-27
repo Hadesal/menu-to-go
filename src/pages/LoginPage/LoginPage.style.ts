@@ -32,15 +32,21 @@ export const Styles = {
     width: "100%",
   },
   button: {
+    marginTop: 4,
     marginBottom: 2,
     borderRadius: "20px",
     padding: "10px 125px 10px 125px",
     backgroundColor: "var(--primary-color)",
+    border: "1px solid transparent", // Set a transparent border initially
+
     Opacity: 0,
 
     "&:hover": {
-      backgroundColor: "var(--primary-color)", // Change color on hover
-      opacity: 0.9,
+      backgroundColor: "transparent",
+      borderColor: "var(--primary-color)", // Set border color on hover
+      boxShadow: "none",
+      outline: "none",
+      color: "var(--primary-color)", // Change color on hover
     },
   },
   register_text: {
@@ -49,6 +55,21 @@ export const Styles = {
   sign_up_link: {
     color: "var(--primary-color)",
     textDecoration: "none",
+
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+  forget_password_link: {
+    display: "block",
+    marginBottom: 2,
+    textAlign: "right",
+    color: "var(--primary-color)",
+    textDecoration: "none",
+
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
   grid_item_2: {
     display: { xs: "none", sm: "block", md: "block" },
