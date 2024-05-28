@@ -1,3 +1,4 @@
+import { Password } from "@mui/icons-material";
 import { UserSignInData, UserSignupData } from "../DataTypes/UserDataTypes";
 
 export const validatePassword = (password: string): string => {
@@ -108,6 +109,24 @@ export const handleSignup = (
   console.log("Signup successful", userData);
 };
 
+const users = [
+  {
+    email: "bedo.faruk13@gmail.com",
+    password: "123456",
+  },
+  {
+    email: "bedo.faruk@gmail.com",
+    password: "123456",
+  },
+  {
+    email: "omar.faruk13@gmail.com",
+    password: "123456",
+  },
+  {
+    email: "fares.faruk13@gmail.com",
+    password: "123456",
+  },
+];
 export const handleSignIn = (
   userData: UserSignInData,
   setErrorMessages: React.Dispatch<
@@ -116,4 +135,54 @@ export const handleSignIn = (
       password: string;
     }>
   >
-) => {};
+) => {
+  const errors = {
+    email: "",
+    password: "",
+  };
+
+  // check if email is empty
+  if (userData.email.length === 0) {
+    errors.email = "Please enter your email";
+  }
+
+  // check if password is empty
+  if (userData.password.length === 0) {
+    errors.password = "Please enter your password";
+  }
+
+  if (errors.email || errors.password) {
+    setErrorMessages(errors);
+    return;
+  }
+
+  const user = users.find((user) => {
+    return user.email === userData.email;
+  });
+
+  if (!user) {
+    console.log("user doesnt exist");
+    //errors.email = "Email is in correct"
+    setErrorMessages({
+      password: "",
+      email: "Email is in correct",
+    });
+    return;
+  }
+
+  if (user.password !== userData.password) {
+    setErrorMessages({
+      email: "",
+      password: "Password is incorrect",
+    });
+
+    return;
+  }
+
+  setErrorMessages({
+    email: "",
+    password: "",
+  });
+
+  console.log(user);
+};

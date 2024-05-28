@@ -1,27 +1,20 @@
 import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SignUpImage from "../../assets/signup.jpg";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { UserSignupData } from "../../DataTypes/UserDataTypes";
+import { UserSignInData } from "../../DataTypes/UserDataTypes";
 import { handleSignIn } from "../../utils/Validators";
-import styles from "./loginPage.module.css";
 import { Styles } from "./LoginPage.style";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     password: "",
   });
-  const [userData, setUserData] = useState<UserSignupData>({
-    userFullName: "",
+
+  const [userData, setUserData] = useState<UserSignInData>({
     email: "",
-    phone: { number: "", country: "" },
     password: "",
-    rePassword: "",
-    image: "",
-    agreedTermsAndConditions: false,
   });
 
   return (
@@ -29,10 +22,21 @@ export default function LoginPage() {
       <Grid container sx={Styles.grid}>
         <Grid item xs={12} sm={6} md={5} sx={Styles.grid_item_1}>
           <Box sx={{ width: "100%", maxWidth: 400 }}>
-            <h1 className={styles.sign_in_heading}>Sign in</h1>
-            <p className={styles.welcome_text}>
+            <Typography
+              variant="h4"
+              textAlign={"center"}
+              sx={Styles.sign_in_heading}
+            >
+              Sign in
+            </Typography>
+            <Typography
+              variant="body1"
+              textAlign={"center"}
+              sx={Styles.sign_in_welcome_text}
+            >
               Hi Welcome Back, You’ve been Missed
-            </p>
+            </Typography>
+
             <InputComponent
               id="nameField"
               label="Email"
@@ -45,7 +49,7 @@ export default function LoginPage() {
               onChange={(e) => {
                 setUserData((prevState) => ({
                   ...prevState,
-                  userFullName: e.target.value,
+                  email: e.target.value,
                 }));
               }}
             />
@@ -65,7 +69,7 @@ export default function LoginPage() {
               error={errorMessages.password ? true : false}
               helperText={errorMessages.password}
             />
-            <Link href="#" variant="body2" sx={Styles.forget_password_link}>
+            <Link href="#" underline="hover" sx={Styles.forget_password_link}>
               Forget Password!
             </Link>
             <Button
@@ -84,12 +88,7 @@ export default function LoginPage() {
               sx={Styles.register_text}
             >
               Not Registered?{" "}
-              <Link
-                href="#"
-                variant="body2"
-                onClick={() => navigate("/register")}
-                sx={Styles.sign_up_link}
-              >
+              <Link href="/register" underline="hover" sx={Styles.sign_up_link}>
                 Sign Up
               </Link>
             </Typography>

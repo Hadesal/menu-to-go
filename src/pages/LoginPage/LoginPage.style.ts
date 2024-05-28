@@ -17,12 +17,14 @@ export const Styles = {
     padding: 3,
   },
   sign_in_heading: {
-    textAlign: "center",
+    fontWeight: 500,
     color: "var(--primary-color)",
+    marginBottom: 1,
   },
   sign_in_welcome_text: {
-    textAlign: "center",
+    fontWeight: 400,
     color: "#797979",
+    marginBottom: 4,
   },
   input_box: {
     display: "flex",
@@ -37,16 +39,12 @@ export const Styles = {
     borderRadius: "20px",
     padding: "10px 125px 10px 125px",
     backgroundColor: "var(--primary-color)",
-    border: "1px solid transparent", // Set a transparent border initially
-
-    Opacity: 0,
-
+    border: "1px solid transparent",
     "&:hover": {
       backgroundColor: "transparent",
-      borderColor: "var(--primary-color)", // Set border color on hover
+      borderColor: "var(--primary-color)",
       boxShadow: "none",
-      outline: "none",
-      color: "var(--primary-color)", // Change color on hover
+      color: "var(--primary-color)",
     },
   },
   register_text: {
@@ -66,10 +64,6 @@ export const Styles = {
     textAlign: "right",
     color: "var(--primary-color)",
     textDecoration: "none",
-
-    "&:hover": {
-      textDecoration: "underline",
-    },
   },
   grid_item_2: {
     display: { xs: "none", sm: "block", md: "block" },
