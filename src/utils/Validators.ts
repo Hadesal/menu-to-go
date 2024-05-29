@@ -1,4 +1,3 @@
-import { Password } from "@mui/icons-material";
 import { UserSignInData, UserSignupData } from "../DataTypes/UserDataTypes";
 
 export const validatePassword = (password: string): string => {
@@ -144,6 +143,8 @@ export const handleSignIn = (
   // check if email is empty
   if (userData.email.length === 0) {
     errors.email = "Please enter your email";
+  } else if (!isValidEmail(userData.email)) {
+    errors.email = "Invalid email format.";
   }
 
   // check if password is empty
