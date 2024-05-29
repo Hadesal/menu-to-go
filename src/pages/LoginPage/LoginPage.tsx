@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { useState } from "react";
-import SignUpImage from "../../assets/signup.jpg";
+import { useNavigate } from "react-router-dom";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignInData } from "../../DataTypes/UserDataTypes";
 import { handleSignIn } from "../../utils/Validators";
@@ -17,11 +17,13 @@ export default function LoginPage() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   return (
-    <Box sx={Styles.wrapper_box}>
+    <Box sx={Styles.mainBox}>
       <Grid container sx={Styles.grid}>
         <Grid item xs={12} sm={6} md={5} sx={Styles.grid_item_1}>
-          <Box sx={{ width: "100%", maxWidth: 400 }}>
+          <Box sx={Styles.gridWrapperBox}>
             <Typography
               variant="h4"
               textAlign={"center"}
@@ -82,20 +84,22 @@ export default function LoginPage() {
             >
               Sign in
             </Button>
-            <Typography
-              variant="body2"
-              align="center"
-              sx={Styles.register_text}
-            >
-              Not Registered?{" "}
-              <Link href="/register" underline="hover" sx={Styles.sign_up_link}>
+            <Box sx={Styles.signUpBox}>
+              <Typography variant="body2" sx={Styles.signUpText}>
+                Not Registered?
+              </Typography>
+              <Button
+                variant="text"
+                onClick={() => navigate("/register")}
+                sx={Styles.signUpButton}
+              >
                 Sign Up
-              </Link>
-            </Typography>
+              </Button>
+            </Box>
           </Box>
         </Grid>
         <Grid item xs={0} sm={6} md={7} sx={Styles.grid_item_2}>
-          <img src={SignUpImage} alt="SignUpImage" />
+          {/* <img src={SignUpImage} alt="SignUpImage" /> */}
         </Grid>
       </Grid>
     </Box>

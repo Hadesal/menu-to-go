@@ -1,64 +1,103 @@
 export const Styles = {
-  container: {
+  mainBox: {
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  grid: {
+    height: "100%",
+  },
+  gridWrapperBox: {
+    width: "100%",
+    maxWidth: 400,
+  },
+  gridItem1: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "63vw",
-    height: "98vh",
+    padding: 3,
   },
-  card: {
+  signUpHeading: {
+    fontWeight: 500,
+    color: "var(--primary-color)",
+    marginBottom: 1,
+  },
+  signUpWelcomeText: {
+    fontWeight: 400,
+    color: "#797979",
+    marginBottom: 4,
+  },
+  inputBox: {
     display: "flex",
+    alignItems: "flex-end",
+  },
+  inputStyle: {
+    width: "100%",
+  },
+  phoneInputStyle: {
+    width: "100%",
+  },
+  phoneBox: {
+    marginTop: "16px",
+    marginBottom: "8px",
+  },
+  button: {
+    marginTop: 4,
+    marginBottom: 2,
+    borderRadius: "20px",
+    padding: "10px 125px 10px 125px",
+    backgroundColor: "var(--primary-color)",
+    border: "1px solid transparent",
+    "&:hover": {
+      backgroundColor: "transparent",
+      borderColor: "var(--primary-color)",
+      boxShadow: "none",
+      color: "var(--primary-color)",
+    },
+  },
+  signInBox: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: "2vw",
-    boxShadow:
-      "0px 2px 19px 0px rgba(0,0,0,0.2), 0px 1px 20px 0px rgba(0,0,0,0.14), 0px 1px 3px 3px rgba(0,0,0,0.12)",
-    width: "20vw",
   },
-  cardContent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: "55vh",
+  signInText: {
+    marginRight: 0.5,
   },
-  accountProfileIconContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "8vw",
-    top: "7vh",
-    left: "46vw",
-    borderRadius: "50%",
-    height: " 15vh",
-    position: "absolute",
-    background: "#99cc33",
+  signInButton: {
+    color: "var(--primary-color)",
+    textDecoration: "none",
+    padding: 0,
+    textTransform: "none",
+    minWidth: "inherit",
+
+    "&:hover": {
+      textDecoration: "underline",
+      backgroundColor: "transparent",
+    },
   },
-  accountProfileIcon: {
-    color: "white",
-    width: "8vw",
-    height: "8vh",
+  termsConditions: {
+    color: "var(--primary-color)",
   },
-  box: { display: "flex", alignItems: "flex-end" },
+  termsConditionsError: {
+    color: "red",
+  },
+  gridItem2: {
+    display: { xs: "none", sm: "block", md: "block" },
+    height: "100%",
+
+    "& img": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+  },
+
   checkbox: {
-    width: "16vw",
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "start",
-  },
-  button: {
-    width: "15vw",
-    background: " #99cc33",
-  },
-  textField: { width: "15vw" },
-  inputStyle: {
-    width: "15vw",
-    background: "#ebebeb",
-  },
-  image: {
-    borderRadius: "50%",
-    width: "10vw",
-    height: "17vh",
   },
 };

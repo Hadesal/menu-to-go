@@ -1,7 +1,7 @@
 import "../../App.css";
 
 export const Styles = {
-  wrapper_box: {
+  mainBox: {
     height: "100vh",
     display: "flex",
     alignItems: "center",
@@ -9,6 +9,10 @@ export const Styles = {
   },
   grid: {
     height: "100%",
+  },
+  gridWrapperBox: {
+    width: "100%",
+    maxWidth: 400,
   },
   grid_item_1: {
     display: "flex",
@@ -47,15 +51,25 @@ export const Styles = {
       color: "var(--primary-color)",
     },
   },
-  register_text: {
-    marginBottom: 2,
+  signUpBox: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent:"center",
+    alignItems:"center"
   },
-  sign_up_link: {
+  signUpText: {
+    marginRight: 0.5,
+  },
+  signUpButton: {
     color: "var(--primary-color)",
     textDecoration: "none",
+    padding: 0,
+    textTransform: "none",
+    minWidth: "inherit",
 
     "&:hover": {
       textDecoration: "underline",
+      backgroundColor: "transparent",
     },
   },
   forget_password_link: {
