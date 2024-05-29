@@ -1,8 +1,8 @@
 import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignInData } from "../../DataTypes/UserDataTypes";
+import InputComponent from "../../components/InputComponent/InputComponent";
 import { handleSignIn } from "../../utils/Validators";
 import { Styles } from "./LoginPage.style";
 
@@ -23,7 +23,7 @@ export default function LoginPage() {
     <Box sx={Styles.mainBox}>
       <Grid container sx={Styles.grid}>
         <Grid item xs={12} sm={6} md={5} sx={Styles.grid_item_1}>
-          <Box sx={Styles.gridWrapperBox}>
+          <Box sx={Styles.grid1WrapperBox}>
             <Typography
               variant="h4"
               textAlign={"center"}
@@ -98,9 +98,7 @@ export default function LoginPage() {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={0} sm={6} md={7} sx={Styles.grid_item_2}>
-          {/* <img src={SignUpImage} alt="SignUpImage" /> */}
-        </Grid>
+        <Grid item xs={0} sm={6} md={7} sx={Styles.grid_item_2}></Grid>
       </Grid>
     </Box>
   );

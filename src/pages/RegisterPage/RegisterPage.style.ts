@@ -1,22 +1,22 @@
+import SignUpImage from "../../assets/signup.jpg";
+
 export const Styles = {
   mainBox: {
-    height: "100vh",
-    display: "flex",
-    alignItems: "center",
-    overflow: "hidden",
+    height: "100%",
+    minHeight: "100vh", // Ensure the main box takes at least the viewport height
   },
   grid: {
     height: "100%",
-  },
-  gridWrapperBox: {
-    width: "100%",
-    maxWidth: 400,
   },
   gridItem1: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
+  },
+  gridWrapperBox: {
+    width: "100%",
+    maxWidth: 400,
   },
   signUpHeading: {
     fontWeight: 500,
@@ -85,15 +85,10 @@ export const Styles = {
   },
   gridItem2: {
     display: { xs: "none", sm: "block", md: "block" },
-    height: "100%",
-
-    "& img": {
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    },
+    backgroundImage: `url(${SignUpImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
-
   checkbox: {
     width: "100%",
     display: "flex",

@@ -1,24 +1,22 @@
 import "../../App.css";
+import SignUpImage from "../../assets/signup.jpg";
 
 export const Styles = {
   mainBox: {
-    height: "100vh",
-    display: "flex",
-    alignItems: "center",
-    overflow: "hidden",
+    height: "100%",
   },
   grid: {
     height: "100%",
-  },
-  gridWrapperBox: {
-    width: "100%",
-    maxWidth: 400,
   },
   grid_item_1: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
+  },
+  grid1WrapperBox: {
+    width: "100%",
+    maxWidth: 400,
   },
   sign_in_heading: {
     fontWeight: 500,
@@ -54,8 +52,8 @@ export const Styles = {
   signUpBox: {
     display: "flex",
     flexDirection: "row",
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center",
   },
   signUpText: {
     marginRight: 0.5,
@@ -81,12 +79,8 @@ export const Styles = {
   },
   grid_item_2: {
     display: { xs: "none", sm: "block", md: "block" },
-    height: "100%",
-
-    "& img": {
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    },
+    backgroundImage: `url(${SignUpImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
 };

@@ -5,7 +5,6 @@ import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 import { useNavigate } from "react-router-dom";
-import SignUpImage from "../../assets/signup.jpg";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { CountryData, UserSignupData } from "../../DataTypes/UserDataTypes";
 import { handleSignup } from "../../utils/Validators";
@@ -192,9 +191,7 @@ export default function LoginPage() {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={0} sm={6} md={7} sx={Styles.gridItem2}>
-          <img src={SignUpImage} alt="SignUpImage" />
-        </Grid>
+        <Grid item xs={0} sm={6} md={7} sx={Styles.gridItem2}></Grid>
       </Grid>
     </Box>
   );
