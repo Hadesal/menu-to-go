@@ -35,76 +35,43 @@ export const handleSignup = (
     React.SetStateAction<{
       email: string;
       password: string;
-      rePassword: string;
+      rePassword?: string;
       agreed: boolean;
-      fullName: string;
-      phone: string;
+      fullName?: string;
+      phone?: string;
     }>
   >
 ) => {
-  if (userData.userFullName.length < 5) {
-    setErrorMessages((prev) => ({
-      ...prev,
-      fullName: "Enter your full name please!",
-    }));
-  } else {
-    setErrorMessages((prev) => ({
-      ...prev,
-      fullName: "",
-    }));
-  }
-  if (userData.phone.number.length < 6) {
-    setErrorMessages((prev) => ({
-      ...prev,
-      phone: "Make sure you entered your phone number",
-    }));
-  } else {
-    setErrorMessages((prev) => ({ ...prev, phone: "" }));
-  }
-  if (!isValidEmail(userData.email)) {
-    // Validate Email
-    setErrorMessages((prev) => ({
-      ...prev,
-      email: "Invalid email format.",
-    }));
-    return; // Stop the signup process
-  } else {
-    setErrorMessages((prev) => ({ ...prev, email: "" }));
+  const errors = {
+    email: "",
+    password: "",
+    agreed: false,
+  };
+  // check if email is empty
+  if (userData.email.length === 0) {
+    errors.email = "Please enter your email";
+  } else if (!isValidEmail(userData.email)) {
+    errors.email = "Invalid email format.";
   }
 
-  // Validate Password
   const passwordError = validatePassword(userData.password);
-  if (passwordError) {
-    setErrorMessages((prev) => ({ ...prev, password: passwordError }));
-    return; // Stop the signup process
-  } else {
-    setErrorMessages((prev) => ({ ...prev, password: "" }));
-  }
-  const rePasswordError = validateRePassword(
-    userData.password,
-    userData.rePassword
-  );
-  if (rePasswordError) {
-    setErrorMessages((prev) => ({ ...prev, rePassword: rePasswordError }));
-    return;
-  } else {
-    setErrorMessages((prev) => ({
-      ...prev,
-      rePassword: "",
-    }));
+  // check if password is empty
+  if (userData.password.length === 0) {
+    errors.password = "Please enter your password";
+    // Validate Password
+  }else if (passwordError) {
+    errors.password = passwordError;
   }
   if (!userData.agreedTermsAndConditions) {
-    setErrorMessages((prev) => ({
-      ...prev,
-      agreed: true,
-    }));
-    return;
-  } else {
-    setErrorMessages((prev) => ({
-      ...prev,
-      agreed: false,
-    }));
+    errors.agreed = true;
   }
+
+  if (errors.email || errors.password || errors.agreed) {
+    setErrorMessages(errors);
+    console.log("unsuccessful");
+    return;
+  }
+
   console.log("Signup successful", userData);
 };
 

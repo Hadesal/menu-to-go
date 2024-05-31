@@ -1,4 +1,4 @@
-import SignUpImage from "../../assets/signup.jpg";
+import SignUpImage from "../../assets/qr-code-restaurants.jpg";
 
 export const Styles = {
   mainBox: {
@@ -46,7 +46,7 @@ export const Styles = {
     marginTop: 4,
     marginBottom: 2,
     borderRadius: "20px",
-    padding: "10px 125px 10px 125px",
+    padding: "10px 0px 10px 0px",
     backgroundColor: "var(--primary-color)",
     border: "1px solid transparent",
     "&:hover": {
@@ -81,18 +81,39 @@ export const Styles = {
     color: "var(--primary-color)",
   },
   termsConditionsError: {
-    color: "red",
+    color: "#d32f2f;",
   },
   gridItem2: {
     display: { xs: "none", sm: "block", md: "block" },
+    position: "relative", // Position relative to enable pseudo-element positioning
     backgroundImage: `url(${SignUpImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust the color and opacity as needed
+      zIndex: 1, // Ensure the mask is on top of the background image
+    },
   },
-  checkbox: {
+  checkbox_wrapper: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
+    marginTop: "20px",
+  },
+  checkbox: {
+    color: "var(--primary-color)",
+    padding: 0,
+    marginRight: 1,
+
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
   },
 };

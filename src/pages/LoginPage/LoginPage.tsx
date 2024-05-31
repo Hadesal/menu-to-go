@@ -5,6 +5,7 @@ import { UserSignInData } from "../../DataTypes/UserDataTypes";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { handleSignIn } from "../../utils/Validators";
 import { Styles } from "./LoginPage.style";
+import { Email } from "@mui/icons-material";
 
 export default function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({
@@ -22,7 +23,7 @@ export default function LoginPage() {
   return (
     <Box sx={Styles.mainBox}>
       <Grid container sx={Styles.grid}>
-        <Grid item xs={12} sm={6} md={5} sx={Styles.grid_item_1}>
+        <Grid item xs={12} md={5} sx={Styles.grid_item_1}>
           <Box sx={Styles.grid1WrapperBox}>
             <Typography
               variant="h4"
@@ -40,9 +41,10 @@ export default function LoginPage() {
             </Typography>
 
             <InputComponent
-              id="nameField"
+              id="emailField"
+              type="email"
               label="Email"
-              type="text"
+              RightIcon={Email}
               error={errorMessages.email ? true : false}
               helperText={errorMessages.email}
               required
@@ -71,7 +73,7 @@ export default function LoginPage() {
               error={errorMessages.password ? true : false}
               helperText={errorMessages.password}
             />
-            <Link href="#" underline="hover" sx={Styles.forget_password_link}>
+            <Link href="" underline="hover" sx={Styles.forget_password_link}>
               Forget Password!
             </Link>
             <Button
@@ -86,7 +88,7 @@ export default function LoginPage() {
             </Button>
             <Box sx={Styles.signUpBox}>
               <Typography variant="body2" sx={Styles.signUpText}>
-                Not Registered?
+                Don't have an account?
               </Typography>
               <Button
                 variant="text"
@@ -98,7 +100,7 @@ export default function LoginPage() {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={0} sm={6} md={7} sx={Styles.grid_item_2}></Grid>
+        <Grid item xs={0} md={7} sx={Styles.grid_item_2}></Grid>
       </Grid>
     </Box>
   );
