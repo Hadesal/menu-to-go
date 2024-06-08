@@ -1,4 +1,4 @@
-import { Email } from "@mui/icons-material";
+import { Email, Person } from "@mui/icons-material";
 import { Box, Button, Checkbox, Grid, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import "react-phone-input-2/lib/material.css";
@@ -9,11 +9,13 @@ import { handleSignup } from "../../utils/Validators";
 import { Styles } from "./RegisterPage.style";
 export default function LoginPage() {
   const [userData, setUserData] = useState<UserSignupData>({
+    name: "",
     email: "",
     password: "",
     agreedTermsAndConditions: false,
   });
   const [errorMessages, setErrorMessages] = useState({
+    name: "",
     email: "",
     password: "",
     agreed: false,
@@ -41,6 +43,23 @@ export default function LoginPage() {
             >
               Sign up and start your journey today.
             </Typography>
+            <InputComponent
+              id="nameField"
+              type="name"
+              label="Name"
+              RightIcon={Person}
+              required
+              onChange={(e) => {
+                setUserData((prevState) => ({
+                  ...prevState,
+                  name: e.target.value,
+                }));
+              }}
+              boxStyle={Styles.inputBox}
+              textFieldStyle={Styles.inputStyle}
+              error={errorMessages.name ? true : false}
+              helperText={errorMessages.name}
+            />
             <InputComponent
               id="emailField"
               type="email"
@@ -121,7 +140,6 @@ export default function LoginPage() {
               }}
               sx={Styles.button}
             >
-              {/* Sign up */}
               Create an Account
             </Button>
             <Box sx={Styles.signInBox}>

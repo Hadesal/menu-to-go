@@ -1,30 +1,36 @@
+/* Import Google Fonts and set global variables */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-* {
-  box-sizing: border-box; /* Include padding and border in element's total size */
-}
+
 :root {
   --primary-color: #a4755d;
   --secondary-color: #d9b18f;
 }
 
-html {
-  font-family: "Poppins", sans-serif !important;
+/* Apply a consistent box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif !important;
+  display: flex;
+  flex-direction: column;
 }
 
-html,
-body,
-#root {
+html, body, #root {
   height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure App component takes remaining height */
 .App {
-  height: 100%; /* Ensure App component takes full height */
+  flex: 1;
 }
