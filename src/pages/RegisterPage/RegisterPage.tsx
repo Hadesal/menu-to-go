@@ -5,7 +5,7 @@ import "react-phone-input-2/lib/material.css";
 import { useNavigate } from "react-router-dom";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignupData } from "../../DataTypes/UserDataTypes";
-import { handleSignup } from "../../utils/Validators";
+import { handleSignup } from "../../utils/auth-handlers";
 import { Styles } from "./RegisterPage.style";
 export default function LoginPage() {
   const [userData, setUserData] = useState<UserSignupData>({
@@ -136,7 +136,7 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               onClick={() => {
-                handleSignup(userData, setErrorMessages);
+                handleSignup(userData, setErrorMessages, navigate);
               }}
               sx={Styles.button}
             >

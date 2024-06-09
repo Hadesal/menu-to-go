@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserSignInData } from "../../DataTypes/UserDataTypes";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { handleSignIn } from "../../utils/Validators";
+import { handleSignIn } from "../../utils/auth-handlers";
 import { Styles } from "./LoginPage.style";
 import { Email } from "@mui/icons-material";
 
