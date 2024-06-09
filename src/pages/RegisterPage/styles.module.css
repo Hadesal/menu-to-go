@@ -4,6 +4,11 @@
   opacity: 1;
 }
 
+.phoneInput:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
+}
+
 .phoneInputError::placeholder {
   /* error state */
   color: rgba(217, 8, 8, 0.877); /* Error placeholder color */

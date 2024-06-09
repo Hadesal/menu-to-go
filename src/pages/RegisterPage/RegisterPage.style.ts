@@ -1,64 +1,119 @@
+import SignUpImage from "../../assets/qr-code-restaurants.jpg";
+
 export const Styles = {
-  container: {
+  mainBox: {
+    height: "100%",
+    minHeight: "100vh", // Ensure the main box takes at least the viewport height
+  },
+  grid: {
+    height: "100%",
+  },
+  gridItem1: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "63vw",
-    height: "98vh",
+    padding: 3,
   },
-  card: {
+  gridWrapperBox: {
+    width: "100%",
+    maxWidth: 400,
+  },
+  signUpHeading: {
+    fontWeight: 500,
+    color: "var(--primary-color)",
+    marginBottom: 1,
+  },
+  signUpWelcomeText: {
+    fontWeight: 400,
+    color: "#797979",
+    marginBottom: 4,
+  },
+  inputBox: {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "2vw",
-    boxShadow:
-      "0px 2px 19px 0px rgba(0,0,0,0.2), 0px 1px 20px 0px rgba(0,0,0,0.14), 0px 1px 3px 3px rgba(0,0,0,0.12)",
-    width: "20vw",
+    alignItems: "flex-end",
   },
-  cardContent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: "55vh",
+  inputStyle: {
+    width: "100%",
   },
-  accountProfileIconContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "8vw",
-    top: "7vh",
-    left: "46vw",
-    borderRadius: "50%",
-    height: " 15vh",
-    position: "absolute",
-    background: "#99cc33",
+  phoneInputStyle: {
+    width: "100%",
   },
-  accountProfileIcon: {
-    color: "white",
-    width: "8vw",
-    height: "8vh",
-  },
-  box: { display: "flex", alignItems: "flex-end" },
-  checkbox: {
-    width: "16vw",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "start",
+  phoneBox: {
+    marginTop: "16px",
+    marginBottom: "8px",
   },
   button: {
-    width: "15vw",
-    background: " #99cc33",
+    marginTop: 4,
+    marginBottom: 2,
+    borderRadius: "20px",
+    padding: "10px 0px 10px 0px",
+    backgroundColor: "var(--primary-color)",
+    border: "1px solid transparent",
+    "&:hover": {
+      backgroundColor: "transparent",
+      borderColor: "var(--primary-color)",
+      boxShadow: "none",
+      color: "var(--primary-color)",
+    },
   },
-  textField: { width: "15vw" },
-  inputStyle: {
-    width: "15vw",
-    background: "#ebebeb",
+  signInBox: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  image: {
-    borderRadius: "50%",
-    width: "10vw",
-    height: "17vh",
+  signInText: {
+    marginRight: 0.5,
+  },
+  signInButton: {
+    color: "var(--primary-color)",
+    textDecoration: "none",
+    padding: 0,
+    textTransform: "none",
+    minWidth: "inherit",
+
+    "&:hover": {
+      textDecoration: "underline",
+      backgroundColor: "transparent",
+    },
+  },
+  termsConditions: {
+    color: "var(--primary-color)",
+  },
+  termsConditionsError: {
+    color: "#d32f2f;",
+  },
+  gridItem2: {
+    display: { xs: "none", sm: "block", md: "block" },
+    position: "relative", // Position relative to enable pseudo-element positioning
+    backgroundImage: `url(${SignUpImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust the color and opacity as needed
+      zIndex: 1, // Ensure the mask is on top of the background image
+    },
+  },
+  checkbox_wrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginTop: "20px",
+  },
+  checkbox: {
+    color: "var(--primary-color)",
+    padding: 0,
+    marginRight: 1,
+
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
   },
 };
