@@ -1,5 +1,5 @@
 import { UserSignInData, UserSignupData } from "../DataTypes/UserDataTypes";
-import { register } from "../Services/apiService";
+import { register } from "../services/api/userCrud";
 import { validateEmail, validateName, validatePassword } from "./validator";
 
 type ErrorMessages = {
@@ -47,7 +47,7 @@ const handleSignup = async (
     });
     console.log(response);
     navigate("/menu");
-  } catch (error) {
+  } catch (error: any) {
     if (error.response.status === 409) {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
