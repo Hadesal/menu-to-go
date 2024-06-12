@@ -1,22 +1,30 @@
 import axios from "axios";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
+import { ExtraData } from "../../DataTypes/ProductDetailsDataTypes";
 
-const API_Product_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/categories";
+interface ErrorResponseObject {
+  details: string;
+  message: string;
+  status: number;
+  timestamp: string;
+}
 
+const API_Extra_BASE_URL =
+  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/productDetails";
+
+// Create an instance of axios
 const apiService = axios.create({
-  baseURL: API_Product_BASE_URL,
+  baseURL: API_Extra_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export const getAllProductsByCategoryId = async (
-  categoryId: string,
+export const getAllExtrasByProductDetailsId = async (
+  productDetailsId: number,
   token: string
 ) => {
   try {
-    const response = await apiService.get(`/${categoryId}/products`, {
+    const response = await apiService.get(`/${productDetailsId}/extras`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,32 +36,15 @@ export const getAllProductsByCategoryId = async (
   }
 };
 
-export const addProduct = async (
-  categoryId: string,
-  product: ProductData,
+export const addExtra = async (
+  productDetailsId: number,
+  extra: ExtraData,
   token: string
 ) => {
   try {
-    const response = await apiService.post(`/${categoryId}/products`, product, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
-  }
-};
-
-export const getProductById = async (
-  categoryId: string,
-  productId: string,
-  token: string
-) => {
-  try {
-    const response = await apiService.get(
-      `/${categoryId}/products/${productId}`,
+    const response = await apiService.post(
+      `/${productDetailsId}/extras`,
+      extra,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,16 +58,34 @@ export const getProductById = async (
   }
 };
 
-export const updateProduct = async (
-  categoryId: string,
-  productId: string,
-  updatedProduct: ProductData,
+export const getExtraByIdAndProductDetailsId = async (
+  productDetailsId: number,
+  id: number,
+  token: string
+) => {
+  try {
+    const response = await apiService.get(`/${productDetailsId}/extras/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
+};
+
+export const updateExtra = async (
+  productDetailsId: number,
+  id: number,
+  updatedExtra: ExtraData,
   token: string
 ) => {
   try {
     const response = await apiService.put(
-      `/${categoryId}/products/${productId}`,
-      updatedProduct,
+      `/${productDetailsId}/extras/${id}`,
+      updatedExtra,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,14 +99,14 @@ export const updateProduct = async (
   }
 };
 
-export const deleteProduct = async (
-  categoryId: string,
-  productId: string,
+export const deleteExtra = async (
+  productDetailsId: number,
+  id: number,
   token: string
 ) => {
   try {
     const response = await apiService.delete(
-      `/${categoryId}/products/${productId}`,
+      `/${productDetailsId}/extras/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

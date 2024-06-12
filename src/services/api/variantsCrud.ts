@@ -1,22 +1,22 @@
 import axios from "axios";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
+import { VariantsData } from "../../DataTypes/ProductDetailsDataTypes";
 
-const API_Product_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/categories";
+const API_Variants_BASE_URL =
+  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/productDetails";
 
 const apiService = axios.create({
-  baseURL: API_Product_BASE_URL,
+  baseURL: API_Variants_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export const getAllProductsByCategoryId = async (
-  categoryId: string,
+export const getAllVariantsByProductDetailsId = async (
+  productDetailsId: number,
   token: string
 ) => {
   try {
-    const response = await apiService.get(`/${categoryId}/products`, {
+    const response = await apiService.get(`/${productDetailsId}/variants`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,17 +28,21 @@ export const getAllProductsByCategoryId = async (
   }
 };
 
-export const addProduct = async (
-  categoryId: string,
-  product: ProductData,
+export const addVariants = async (
+  productDetailsId: number,
+  variants: VariantsData,
   token: string
 ) => {
   try {
-    const response = await apiService.post(`/${categoryId}/products`, product, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.post(
+      `/${productDetailsId}/variants`,
+      variants,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -46,14 +50,14 @@ export const addProduct = async (
   }
 };
 
-export const getProductById = async (
-  categoryId: string,
-  productId: string,
+export const getVariantsByIdAndProductDetailsId = async (
+  productDetailsId: number,
+  id: number,
   token: string
 ) => {
   try {
     const response = await apiService.get(
-      `/${categoryId}/products/${productId}`,
+      `/${productDetailsId}/variants/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,16 +71,16 @@ export const getProductById = async (
   }
 };
 
-export const updateProduct = async (
-  categoryId: string,
-  productId: string,
-  updatedProduct: ProductData,
+export const updateVariants = async (
+  productDetailsId: number,
+  id: number,
+  updatedVariants: VariantsData,
   token: string
 ) => {
   try {
     const response = await apiService.put(
-      `/${categoryId}/products/${productId}`,
-      updatedProduct,
+      `/${productDetailsId}/variants/${id}`,
+      updatedVariants,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,14 +94,14 @@ export const updateProduct = async (
   }
 };
 
-export const deleteProduct = async (
-  categoryId: string,
-  productId: string,
+export const deleteVariants = async (
+  productDetailsId: number,
+  id: number,
   token: string
 ) => {
   try {
     const response = await apiService.delete(
-      `/${categoryId}/products/${productId}`,
+      `/${productDetailsId}/variants/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
