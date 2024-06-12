@@ -20,6 +20,7 @@ export default function LoginPage() {
     password: "",
     agreed: false,
   });
+  
 
   const navigate = useNavigate();
 
@@ -96,7 +97,12 @@ export default function LoginPage() {
 
             <Box sx={Styles.checkbox_wrapper}>
               <Checkbox
-                sx={Styles.checkbox}
+                sx={{
+                  ...Styles.checkbox,
+                  color: errorMessages.agreed
+                    ? "#d32f2f"
+                    : "var(--primary-color)",
+                }}
                 required
                 onChange={(e) => {
                   setUserData((prev) => ({

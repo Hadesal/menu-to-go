@@ -9,6 +9,10 @@ type ErrorMessages = {
   agreed: boolean;
 };
 
+// Store the last attempted email
+let lastAttemptedEmail = "";
+let ApiError = "";
+
 const isSignupDataValidate = (
   userData: UserSignupData,
   setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>
@@ -20,10 +24,12 @@ const isSignupDataValidate = (
     agreed: !userData.agreedTermsAndConditions,
   };
 
-  setErrorMessages(errors);
+  if (errors.email) {
+    lastAttemptedEmail = "";
+  }
 
   if (errors.name || errors.email || errors.password || errors.agreed) {
-    console.log("Signup unsuccessful due to validation errors");
+    setErrorMessages(errors);
     return false;
   }
 
@@ -38,45 +44,46 @@ const handleSignup = async (
   if (!isSignupDataValidate(userData, setErrorMessages)) {
     return;
   }
-
-  try {
-    const response = await register({
-      email: userData.email,
-      name: userData.name,
-      password: userData.password,
-    });
-    console.log(response);
-    navigate("/menu");
-  } catch (error: any) {
-    if (error.response.status === 409) {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        email: error.response.data,
-      }));
-    }
-    console.log(error);
+  setErrorMessages({
+    name: "",
+    email: ApiError.length !== 0 ? ApiError : "",
+    password: "",
+    agreed: false,
+  });
+  // Check if the email has changed since the last attempt
+  if (lastAttemptedEmail === userData.email) {
+    return;
   }
-};
 
-//TODO: Remove this dummy data once the api is available
-const users = [
-  {
-    email: "bedo.faruk13@gmail.com",
-    password: "123456",
-  },
-  {
-    email: "bedo.faruk@gmail.com",
-    password: "123456",
-  },
-  {
-    email: "omar.faruk13@gmail.com",
-    password: "123456",
-  },
-  {
-    email: "fares.faruk13@gmail.com",
-    password: "123456",
-  },
-];
+  // Update the last attempted email
+  lastAttemptedEmail = userData.email;
+  const registerResponse = await register({
+    email: userData.email,
+    name: userData.name,
+    password: userData.password,
+  });
+
+  if (registerResponse.status) {
+    ApiError = registerResponse.message;
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      email: registerResponse.message,
+    }));
+    return;
+  }
+
+  ApiError = "";
+
+  // Clear all error messages on successful registration
+  setErrorMessages({
+    name: "",
+    email: "",
+    password: "",
+    agreed: false,
+  });
+
+  navigate("/menu");
+};
 
 const handleSignIn = async (
   userData: UserSignInData,
@@ -105,7 +112,9 @@ const handleSignIn = async (
     setErrorMessages(errors);
     return;
   }
+
   const loginResponse = await login(userData);
+
   if (loginResponse.status) {
     errors.email = loginResponse.message;
     errors.password = loginResponse.message;
@@ -117,7 +126,6 @@ const handleSignIn = async (
     email: "",
     password: "",
   });
-  console.log(loginResponse);
   return loginResponse;
 };
 
