@@ -10,12 +10,11 @@ type ErrorMessages = {
 };
 
 // Store the last attempted email
-let lastAttemptedEmail = "";
-let ApiError = "";
 
 const isSignupDataValidate = (
   userData: UserSignupData,
-  setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>
+  setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>,
+  setLastAttemptedEmail: React.Dispatch<React.SetStateAction<string>>
 ): boolean => {
   const errors: ErrorMessages = {
     name: validateName(userData.name),
@@ -25,7 +24,7 @@ const isSignupDataValidate = (
   };
 
   if (errors.email) {
-    lastAttemptedEmail = "";
+    setLastAttemptedEmail("");
   }
 
   if (errors.name || errors.email || errors.password || errors.agreed) {
@@ -39,24 +38,32 @@ const isSignupDataValidate = (
 const handleSignup = async (
   userData: UserSignupData,
   setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>,
+  setLastAttemptedEmail: React.Dispatch<React.SetStateAction<string>>,
+  lastAttemptedEmail: string,
+  setApiError: React.Dispatch<React.SetStateAction<string>>,
+  apiError: string,
   navigate: (path: string) => void
 ) => {
-  if (!isSignupDataValidate(userData, setErrorMessages)) {
+  if (
+    !isSignupDataValidate(userData, setErrorMessages, setLastAttemptedEmail)
+  ) {
     return;
   }
+  // clear all errors
   setErrorMessages({
     name: "",
-    email: ApiError.length !== 0 ? ApiError : "",
+    email: apiError.length !== 0 ? apiError : "",
     password: "",
     agreed: false,
   });
+
   // Check if the email has changed since the last attempt
   if (lastAttemptedEmail === userData.email) {
     return;
   }
 
   // Update the last attempted email
-  lastAttemptedEmail = userData.email;
+  setLastAttemptedEmail(userData.email);
   const registerResponse = await register({
     email: userData.email,
     name: userData.name,
@@ -64,7 +71,7 @@ const handleSignup = async (
   });
 
   if (registerResponse.status) {
-    ApiError = registerResponse.message;
+    setApiError(registerResponse.message);
     setErrorMessages((prevErrors) => ({
       ...prevErrors,
       email: registerResponse.message,
@@ -72,7 +79,7 @@ const handleSignup = async (
     return;
   }
 
-  ApiError = "";
+  setApiError("");
 
   // Clear all error messages on successful registration
   setErrorMessages({

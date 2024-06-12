@@ -20,7 +20,9 @@ export default function LoginPage() {
     password: "",
     agreed: false,
   });
-  
+
+  const [lastAttemptedEmail, setLastAttemptedEmail] = useState("");
+  const [apiError, setApiError] = useState("");
 
   const navigate = useNavigate();
 
@@ -142,7 +144,15 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               onClick={() => {
-                handleSignup(userData, setErrorMessages, navigate);
+                handleSignup(
+                  userData,
+                  setErrorMessages,
+                  setLastAttemptedEmail,
+                  lastAttemptedEmail,
+                  setApiError,
+                  apiError,
+                  navigate
+                );
               }}
               sx={Styles.button}
             >
