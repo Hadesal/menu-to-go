@@ -1,5 +1,5 @@
 import { UserSignInData, UserSignupData } from "../DataTypes/UserDataTypes";
-import { register } from "../services/api/userCrud";
+import { login, register } from "../services/api/userCrud";
 import { validateEmail, validateName, validatePassword } from "./validator";
 
 type ErrorMessages = {
@@ -78,7 +78,7 @@ const users = [
   },
 ];
 
-const handleSignIn = (
+const handleSignIn = async (
   userData: UserSignInData,
   setErrorMessages: React.Dispatch<
     React.SetStateAction<{
@@ -105,23 +105,11 @@ const handleSignIn = (
     setErrorMessages(errors);
     return;
   }
-
-  const user = users.find((user) => user.email === userData.email);
-
-  if (!user) {
-    console.log("user doesn't exist");
-    setErrorMessages({
-      password: "",
-      email: "Email is incorrect",
-    });
-    return;
-  }
-
-  if (user.password !== userData.password) {
-    setErrorMessages({
-      email: "",
-      password: "Password is incorrect",
-    });
+  const loginResponse = await login(userData);
+  if (loginResponse.status) {
+    errors.email = loginResponse.message;
+    errors.password = loginResponse.message;
+    setErrorMessages(errors);
     return;
   }
 
@@ -129,7 +117,8 @@ const handleSignIn = (
     email: "",
     password: "",
   });
-  console.log(user);
+  console.log(loginResponse);
+  return loginResponse;
 };
 
 export { handleSignIn, handleSignup };

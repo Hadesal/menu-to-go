@@ -5,8 +5,8 @@ import {
   UserUpdateData,
 } from "../../DataTypes/UserDataTypes";
 
-const API_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api";
+const API_BASE_URL: string =
+  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/users";
 
 // create an instance of axios
 const apiService = axios.create({
@@ -20,19 +20,22 @@ export const register = async (userData: UserSignupApiData) => {
   const response = await apiService.post("/register", userData);
   return response.data;
 };
+
 export const login = async (userSignInData: UserSignInData) => {
-  const response = await apiService.post(
-    "/register/authenticate",
-    userSignInData
-  );
-  return response.data;
+  try {
+    const response = await apiService.post("/authenticate", userSignInData);
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
 };
 export const updateUser = async (
   updatedUser: UserUpdateData,
-  userId: Number,
-  token: String
+  userId: number,
+  token: string
 ) => {
-  const response = await apiService.put("/users/" + userId, updatedUser, {
+  const response = await apiService.put("/" + userId, updatedUser, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -40,8 +43,8 @@ export const updateUser = async (
   return response.data;
 };
 
-export const getUserById = async (userId: Number, token: String) => {
-  const response = await apiService.get("/users/" + userId, {
+export const getUserById = async (userId: number, token: string) => {
+  const response = await apiService.get("/" + userId, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -49,8 +52,8 @@ export const getUserById = async (userId: Number, token: String) => {
   return response.data;
 };
 
-export const deleteUser = async (userId: Number, token: String) => {
-  const response = await apiService.delete("/users/" + userId, {
+export const deleteUser = async (userId: number, token: string) => {
+  const response = await apiService.delete("/" + userId, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
