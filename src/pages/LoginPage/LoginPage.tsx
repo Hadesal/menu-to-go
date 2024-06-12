@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Link, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserSignInData } from "../../DataTypes/UserDataTypes";
@@ -19,9 +27,19 @@ export default function LoginPage() {
   });
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   return (
     <Box sx={Styles.mainBox}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Grid container sx={Styles.grid}>
         <Grid item xs={12} md={5} sx={Styles.grid_item_1}>
           <Box sx={Styles.grid1WrapperBox}>
@@ -80,7 +98,7 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               onClick={() => {
-                handleSignIn(userData, setErrorMessages);
+                handleSignIn(userData, setErrorMessages, setLoading, navigate);
               }}
               sx={Styles.button}
             >

@@ -9,8 +9,6 @@ type ErrorMessages = {
   agreed: boolean;
 };
 
-// Store the last attempted email
-
 const isSignupDataValidate = (
   userData: UserSignupData,
   setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>,
@@ -42,6 +40,7 @@ const handleSignup = async (
   lastAttemptedEmail: string,
   setApiError: React.Dispatch<React.SetStateAction<string>>,
   apiError: string,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   navigate: (path: string) => void
 ) => {
   if (
@@ -61,6 +60,7 @@ const handleSignup = async (
   if (lastAttemptedEmail === userData.email) {
     return;
   }
+  setLoading(true);
 
   // Update the last attempted email
   setLastAttemptedEmail(userData.email);
@@ -71,6 +71,7 @@ const handleSignup = async (
   });
 
   if (registerResponse.status) {
+    setLoading(false);
     setApiError(registerResponse.message);
     setErrorMessages((prevErrors) => ({
       ...prevErrors,
@@ -89,6 +90,7 @@ const handleSignup = async (
     agreed: false,
   });
 
+  setLoading(false);
   navigate("/menu");
 };
 
@@ -99,7 +101,9 @@ const handleSignIn = async (
       email: string;
       password: string;
     }>
-  >
+  >,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  navigate: (path: string) => void
 ) => {
   const errors = {
     email: "",
@@ -120,9 +124,11 @@ const handleSignIn = async (
     return;
   }
 
+  setLoading(true);
   const loginResponse = await login(userData);
 
   if (loginResponse.status) {
+    setLoading(false);
     errors.email = loginResponse.message;
     errors.password = loginResponse.message;
     setErrorMessages(errors);
@@ -133,6 +139,9 @@ const handleSignIn = async (
     email: "",
     password: "",
   });
+  setLoading(false);
+  navigate("/menu");
+
   return loginResponse;
 };
 
