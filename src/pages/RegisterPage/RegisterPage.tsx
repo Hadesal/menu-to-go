@@ -1,11 +1,20 @@
 import { Email, Person } from "@mui/icons-material";
-import { Box, Button, Checkbox, Grid, Link, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import "react-phone-input-2/lib/material.css";
 import { useNavigate } from "react-router-dom";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignupData } from "../../DataTypes/UserDataTypes";
-import { handleSignup } from "../../utils/Validators";
+import { handleSignup } from "../../utils/auth-handlers";
 import { Styles } from "./RegisterPage.style";
 export default function LoginPage() {
   const [userData, setUserData] = useState<UserSignupData>({
@@ -21,10 +30,24 @@ export default function LoginPage() {
     agreed: false,
   });
 
+  const [lastAttemptedEmail, setLastAttemptedEmail] = useState("");
+  const [apiError, setApiError] = useState("");
+
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <Box sx={Styles.mainBox}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Grid container sx={Styles.grid}>
         <Grid item xs={0} md={7} sx={Styles.gridItem2}></Grid>
         <Grid item xs={12} md={5} sx={Styles.gridItem1}>
@@ -96,7 +119,12 @@ export default function LoginPage() {
 
             <Box sx={Styles.checkbox_wrapper}>
               <Checkbox
-                sx={Styles.checkbox}
+                sx={{
+                  ...Styles.checkbox,
+                  color: errorMessages.agreed
+                    ? "#d32f2f"
+                    : "var(--primary-color)",
+                }}
                 required
                 onChange={(e) => {
                   setUserData((prev) => ({
@@ -136,7 +164,16 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               onClick={() => {
-                handleSignup(userData, setErrorMessages);
+                handleSignup(
+                  userData,
+                  setErrorMessages,
+                  setLastAttemptedEmail,
+                  lastAttemptedEmail,
+                  setApiError,
+                  apiError,
+                  setLoading,
+                  navigate
+                );
               }}
               sx={Styles.button}
             >
