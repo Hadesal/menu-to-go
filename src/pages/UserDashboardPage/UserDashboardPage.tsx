@@ -42,7 +42,7 @@ const buttonData = [
   { id: "Logout", icon: <LogoutOutlinedIcon />, label: "Log out" },
 ];
 
-export default function MainView() {
+export default function UserDashboardPage() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
