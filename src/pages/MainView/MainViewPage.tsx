@@ -236,11 +236,10 @@ export default function MainView() {
       >
         <Toolbar />
         <LogoutDialog
-          showDialog={showLogoutDialog}
-          onLogout={handleLogout}
-          onCancel={handleCancel}
+          isOpen={showLogoutDialog}
+          onLogoutClick={handleLogout}
+          onCancelClick={handleCancel}
         />
-
         {activeTab === "Dashboard" && <h1> dashboard view</h1>}
         {activeTab === "Restaurant" && <h1> Restaurant view</h1>}
         {activeTab === "Categories" && <h1> Categories view</h1>}
@@ -248,7 +247,6 @@ export default function MainView() {
         {activeTab === "Generate qr code" && <h1> Generate qr code view</h1>}
         {activeTab === "Feedbacks" && <h1> Feedbacks view</h1>}
         {activeTab === "Contact us" && <h1> Contact us view</h1>}
-        {activeTab === "Log out" && <h1> Log out view</h1>}
       </Box>
     </Box>
   );

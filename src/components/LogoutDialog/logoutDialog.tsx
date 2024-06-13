@@ -1,37 +1,31 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
-import logoutImg from "../../assets/logoutImg.svg";
+import logoutImage from "../../assets/logoutImg.svg";
 import { Styles } from "./logoutDialog.style";
+
 interface LogoutDialogProps {
-  showDialog: boolean;
-  onLogout: () => void;
-  onCancel: () => void;
+  isOpen: boolean;
+  onLogoutClick: () => void;
+  onCancelClick: () => void;
 }
 
-export default function LogoutDialog({
-  showDialog,
-  onLogout,
-  onCancel,
-}: LogoutDialogProps) {
+const LogoutDialog = ({
+  isOpen,
+  onLogoutClick,
+  onCancelClick,
+}: LogoutDialogProps) => {
+  
+  const handleCancel = () => onCancelClick();
+  const handleLogout = () => onLogoutClick();
+
   return (
-    <Dialog
-      sx={{
-        borderRadius: "32px", // Set the desired border radius
-        "& .MuiDialog-paper": {
-          // This targets the dialog paper (the actual dialog box)
-          width: "580px",
-          height: "500px",
-          borderRadius: "32px",
-        },
-      }}
-      onClose={() => onCancel()}
-      open={showDialog}
-    >
+    <Dialog sx={Styles.dialog} onClose={handleCancel} open={isOpen}>
       <DialogContent sx={{ alignContent: "center" }}>
         <img
+          src={logoutImage}
+          alt="Logout Image"
           style={{ display: "block", margin: "0 auto" }}
           width={170}
           height={211}
-          src={logoutImg}
         />
         <Typography
           width={"100%"}
@@ -47,29 +41,27 @@ export default function LogoutDialog({
           textAlign={"center"}
           sx={Styles.subTitle}
         >
-          You can always log back in at any time
+          You can always log back in at any time.
         </Typography>
         <Box sx={Styles.actionBox} justifyContent={"center"}>
           <Button
             variant="outlined"
-            onClick={() => {
-              onCancel();
-            }}
+            onClick={handleCancel}
             sx={Styles.cancelButton}
           >
             Cancel
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              onLogout();
-            }}
+            onClick={handleLogout}
             sx={Styles.logoutButton}
           >
-            logout
+            Logout
           </Button>
         </Box>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default LogoutDialog;
