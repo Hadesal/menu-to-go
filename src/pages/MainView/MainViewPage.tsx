@@ -1,29 +1,31 @@
-import * as React from "react";
+import HomeIcon from "@mui/icons-material/Home";
+import LayersIcon from "@mui/icons-material/Layers";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
+import QrCodeIcon from "@mui/icons-material/QrCode";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import AppBar from "@mui/material/AppBar";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import HomeIcon from "@mui/icons-material/Home";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import LayersIcon from "@mui/icons-material/Layers";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import logo from "../../assets/qr-code-logo.svg";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import userImg from "../../assets/omarselfie.jpeg";
-import { useSelector, useDispatch } from "react-redux";
+import logo from "../../assets/qr-code-logo.svg";
+import LogoutDialog from "../../components/LogoutDialog/logoutDialog";
 import {
   selectActiveTab,
   setActiveTab,
@@ -39,15 +41,21 @@ const buttonData = [
   { id: "qrcode", icon: <QrCodeIcon />, label: "Generate qr code" },
   { id: "feedbacks", icon: <QuestionAnswerIcon />, label: "Feedbacks" },
   { id: "contactus", icon: <SupportAgentIcon />, label: "Contact us" },
-  { id: "Logout", icon: <LogoutOutlinedIcon />, label: "Log out" },
+  {
+    id: "Logout",
+    icon: <LogoutOutlinedIcon />,
+    label: "Log out",
+  },
 ];
 
 export default function MainView() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const activeTab = useSelector(selectActiveTab);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -62,6 +70,20 @@ export default function MainView() {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutDialog(true);
+  };
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    setShowLogoutDialog(false);
+    navigate("/login");
+  };
+
+  const handleCancel = () => {
+    setShowLogoutDialog(false);
   };
 
   const drawer = (
@@ -84,7 +106,13 @@ export default function MainView() {
             }}
             key={btn.id}
             disablePadding
-            onClick={() => dispatch(setActiveTab(btn.label))}
+            onClick={() => {
+              if (btn.label === "Log out") {
+                handleLogoutClick();
+              } else {
+                dispatch(setActiveTab(btn.label));
+              }
+            }}
           >
             <ListItemButton
               sx={{
@@ -207,6 +235,12 @@ export default function MainView() {
         }}
       >
         <Toolbar />
+        <LogoutDialog
+          showDialog={showLogoutDialog}
+          onLogout={handleLogout}
+          onCancel={handleCancel}
+        />
+
         {activeTab === "Dashboard" && <h1> dashboard view</h1>}
         {activeTab === "Restaurant" && <h1> Restaurant view</h1>}
         {activeTab === "Categories" && <h1> Categories view</h1>}
