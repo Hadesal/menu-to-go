@@ -8,8 +8,7 @@ interface ErrorResponseObject {
   timestamp: string;
 }
 
-const API_Extra_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/productDetails";
+const API_Extra_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
 
 // Create an instance of axios
 const apiService = axios.create({

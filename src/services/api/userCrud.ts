@@ -5,8 +5,7 @@ import {
   UserUpdateData,
 } from "../../DataTypes/UserDataTypes";
 
-const API_BASE_URL: string =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/users";
+const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
 
 const apiService = axios.create({
   baseURL: API_BASE_URL,

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { IngredientData } from "../../DataTypes/ProductDetailsDataTypes";
 
-const API_Ingredient_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/productDetails";
+const API_Ingredient_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
 
 const apiService = axios.create({
   baseURL: API_Ingredient_BASE_URL,

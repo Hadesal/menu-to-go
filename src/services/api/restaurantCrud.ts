@@ -1,8 +1,7 @@
 import axios from "axios";
 import { RestaurantData } from "../../DataTypes/ObjectDataTypes";
 
-const API_Restaurant_BASE_URL =
-  "https://menutogoapi.ambitiousocean-45c3e892.eastus.azurecontainerapps.io/api/restaurants";
+const API_Restaurant_BASE_URL = "http://52.23.230.198:8080/api/restaurants";
 
 const apiService = axios.create({
   baseURL: API_Restaurant_BASE_URL,
