@@ -13,12 +13,15 @@ const LogoutDialog = ({
   onLogoutClick,
   onCancelClick,
 }: LogoutDialogProps) => {
-  
   const handleCancel = () => onCancelClick();
   const handleLogout = () => onLogoutClick();
 
   return (
-    <Dialog sx={Styles.dialog} onClose={handleCancel} open={isOpen}>
+    <Dialog
+      PaperProps={{ sx: Styles.dialog }}
+      onClose={handleCancel}
+      open={isOpen}
+    >
       <DialogContent sx={{ alignContent: "center" }}>
         <img
           src={logoutImage}

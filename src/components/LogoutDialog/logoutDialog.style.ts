@@ -1,12 +1,8 @@
 export const Styles = {
   dialog: {
+    width: "580px",
+    height: "500px",
     borderRadius: "32px",
-    "& .MuiDialog-paper": {
-      // This targets the dialog paper (the actual dialog box)
-      width: "580px",
-      height: "500px",
-      borderRadius: "32px",
-    },
   },
   title: {
     fontWeight: 500,
