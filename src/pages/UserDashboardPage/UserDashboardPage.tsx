@@ -48,7 +48,7 @@ const buttonData = [
   },
 ];
 
-export default function MainView() {
+export default function UserDashboardPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);

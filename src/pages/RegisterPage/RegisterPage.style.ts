@@ -108,7 +108,6 @@ export const Styles = {
     marginTop: "20px",
   },
   checkbox: {
-    color: "var(--primary-color)",
     padding: 0,
     marginRight: 1,
 
