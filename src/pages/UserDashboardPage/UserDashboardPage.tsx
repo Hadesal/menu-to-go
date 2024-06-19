@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../assets/omarselfie.jpeg";
 import logo from "../../assets/qr-code-logo.svg";
-import LogoutDialog from "../../components/LogoutDialog/logoutDialog";
+import LogoutDialog from "../../components/Dialogs/LogoutDialog/logoutDialog";
 import {
   selectActiveTab,
   setActiveTab,
