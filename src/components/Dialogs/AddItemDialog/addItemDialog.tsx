@@ -29,6 +29,10 @@ interface AddItemDialogProps {
 const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
 const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
 
+interface dialogData {
+  name: string;
+  image: string | null;
+}
 const AddItemDialog = ({
   isOpen,
   title,
@@ -39,9 +43,12 @@ const AddItemDialog = ({
   errorMessage,
   fileUpload,
 }: AddItemDialogProps) => {
-  const [nameValue, setNameValue] = useState<string>("");
+  const [dialogData, setDialogData] = useState<dialogData>({
+    name: "",
+    image: null,
+  });
+
   const [showError, setShowError] = useState<boolean>(false);
-  const [image, setImage] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
 
   /**
@@ -49,7 +56,7 @@ const AddItemDialog = ({
    *
    */
   const handleConfirm = () => {
-    if (nameValue.length === 0) {
+    if (dialogData.name.length === 0) {
       // Show name input error
       setShowError(true);
       return;
@@ -59,7 +66,7 @@ const AddItemDialog = ({
     }
 
     handleCancel();
-    onConfirmClick({ name: nameValue, image });
+    onConfirmClick(dialogData);
   };
 
   /**
@@ -67,7 +74,11 @@ const AddItemDialog = ({
    *
    */
   const handleCancel = () => {
-    setImage(null);
+    setDialogData({
+      ...dialogData,
+      image: null,
+    });
+    //setImage(null);
     // clear all error
     setImageError(null);
     setShowError(false);
@@ -100,7 +111,10 @@ const AddItemDialog = ({
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        setDialogData({
+          ...dialogData,
+          image: reader.result as string,
+        });
         setImageError(null); // Clear any previous errors
       };
       reader.readAsDataURL(file);
@@ -114,7 +128,10 @@ const AddItemDialog = ({
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    setImage(null);
+    setDialogData({
+      ...dialogData,
+      image: null,
+    });
   };
 
   const VisuallyHiddenInput = styled("input")({
@@ -145,10 +162,10 @@ const AddItemDialog = ({
       {fileUpload && (
         <Box sx={Styles.fileUpload}>
           <label htmlFor="upload-button">
-            {image ? (
+            {dialogData.image ? (
               <Box sx={Styles.uploadedImageWrapper}>
                 <img
-                  src={image}
+                  src={dialogData.image}
                   alt="Uploaded"
                   style={{ width: 100, height: 100, borderRadius: "50%" }}
                 />
@@ -181,7 +198,7 @@ const AddItemDialog = ({
             variant="body1"
             sx={{
               ...Styles.imageLabel,
-              visibility: image === null ? "visible" : "hidden",
+              visibility: dialogData.image === null ? "visible" : "hidden",
             }}
           >
             Load Image
@@ -205,7 +222,10 @@ const AddItemDialog = ({
           textFieldStyle={Styles.textFieldStyle}
           InputPropStyle={Styles.inputPropStyle}
           onChange={(e) => {
-            setNameValue(e.target.value.trim());
+            setDialogData({
+              ...dialogData,
+              name: e.target.value.trim(),
+            });
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
