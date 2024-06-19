@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
-import logoutImage from "../../assets/logoutImg.svg";
+import logoutImage from "../../../assets/logoutImg.svg";
 import { Styles } from "./logoutDialog.style";
 
 interface LogoutDialogProps {
