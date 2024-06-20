@@ -22,6 +22,7 @@ interface InputComponentProps {
   helperText?: string;
   variant?: TextFieldVariants;
   InputPropStyle?: object;
+  value?: string;
 }
 
 export default function InputComponent({
@@ -38,6 +39,7 @@ export default function InputComponent({
   helperText,
   variant,
   InputPropStyle,
+  value,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -85,6 +87,7 @@ export default function InputComponent({
         }}
         onKeyDown={onKeyDown}
         onChange={onChange}
+        value={value}
       />
     </Box>
   );
