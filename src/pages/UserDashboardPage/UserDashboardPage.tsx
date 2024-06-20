@@ -1,6 +1,5 @@
 import HomeIcon from "@mui/icons-material/Home";
 import LayersIcon from "@mui/icons-material/Layers";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
@@ -21,11 +20,14 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import userImg from "../../assets/omarselfie.jpeg";
-import logo from "../../assets/qr-code-logo.svg";
 import LogoutDialog from "../../components/Dialogs/LogoutDialog/logoutDialog";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import logo from "../../assets/qr-code-logo.svg";
+import userImg from "../../assets/omarselfie.jpeg";
+import DashboardView from "../DashboardView/DashboardViewPage";
+import { useSelector, useDispatch } from "react-redux";
 import {
   selectActiveTab,
   setActiveTab,
@@ -161,6 +163,7 @@ export default function UserDashboardPage() {
               display: "flex",
               width: "100%",
               justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <Typography
@@ -177,7 +180,20 @@ export default function UserDashboardPage() {
             >
               Menu-To-Go
             </Typography>
-            <Avatar style={{}} alt="Omar Fares" src={userImg} />
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Avatar
+                style={{ alignSelf: "center" }}
+                alt="Omar Fares"
+                src={userImg}
+              />
+              <IconButton
+                aria-label="profile details icon"
+                onClick={() => {}}
+                sx={{ color: "#F9FDFE" }}
+              >
+                <KeyboardArrowDownIcon />
+              </IconButton>
+            </Box>
           </div>
         </Toolbar>
       </AppBar>
@@ -240,7 +256,7 @@ export default function UserDashboardPage() {
           onLogoutClick={handleLogout}
           onCancelClick={handleCancel}
         />
-        {activeTab === "Dashboard" && <h1> dashboard view</h1>}
+        {activeTab === "Dashboard" && <DashboardView />}
         {activeTab === "Restaurant" && <h1> Restaurant view</h1>}
         {activeTab === "Categories" && <h1> Categories view</h1>}
         {activeTab === "Templates" && <h1> Templates view</h1>}
