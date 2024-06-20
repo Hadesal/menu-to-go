@@ -21,8 +21,10 @@ import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import logo from "../../assets/qr-code-logo.svg";
 import userImg from "../../assets/omarselfie.jpeg";
+import DashboardView from "../DashboardView/DashboardViewPage";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectActiveTab,
@@ -133,6 +135,7 @@ export default function MainView() {
               display: "flex",
               width: "100%",
               justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <Typography
@@ -149,7 +152,20 @@ export default function MainView() {
             >
               Menu-To-Go
             </Typography>
-            <Avatar style={{}} alt="Omar Fares" src={userImg} />
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Avatar
+                style={{ alignSelf: "center" }}
+                alt="Omar Fares"
+                src={userImg}
+              />
+              <IconButton
+                aria-label="profile details icon"
+                onClick={() => {}}
+                sx={{ color: "#F9FDFE" }}
+              >
+                <KeyboardArrowDownIcon />
+              </IconButton>
+            </Box>
           </div>
         </Toolbar>
       </AppBar>
@@ -207,7 +223,7 @@ export default function MainView() {
         }}
       >
         <Toolbar />
-        {activeTab === "Dashboard" && <h1> dashboard view</h1>}
+        {activeTab === "Dashboard" && <DashboardView />}
         {activeTab === "Restaurant" && <h1> Restaurant view</h1>}
         {activeTab === "Categories" && <h1> Categories view</h1>}
         {activeTab === "Templates" && <h1> Templates view</h1>}
