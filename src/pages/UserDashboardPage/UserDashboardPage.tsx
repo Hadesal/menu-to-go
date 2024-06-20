@@ -30,6 +30,7 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
+import ContactPage from "../ContactPage/Contact";
 
 const drawerWidth = 240;
 
@@ -246,7 +247,12 @@ export default function UserDashboardPage() {
         {activeTab === "Templates" && <h1> Templates view</h1>}
         {activeTab === "Generate qr code" && <h1> Generate qr code view</h1>}
         {activeTab === "Feedbacks" && <h1> Feedbacks view</h1>}
-        {activeTab === "Contact us" && <h1> Contact us view</h1>}
+        {activeTab === "Contact us" && (
+          <h1>
+            {" "}
+            <ContactPage />
+          </h1>
+        )}
       </Box>
     </Box>
   );
