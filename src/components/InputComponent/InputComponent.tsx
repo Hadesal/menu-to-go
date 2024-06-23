@@ -13,6 +13,7 @@ interface InputComponentProps {
   label: string;
   type: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void; // Use generic type for event
   required?: boolean;
   boxStyle?: object;
   textFieldStyle?: object;
@@ -20,6 +21,8 @@ interface InputComponentProps {
   error?: boolean;
   helperText?: string;
   variant?: TextFieldVariants;
+  InputPropStyle?: object;
+  value?: string;
 }
 
 export default function InputComponent({
@@ -27,6 +30,7 @@ export default function InputComponent({
   label,
   type,
   onChange,
+  onKeyDown,
   required,
   boxStyle,
   textFieldStyle,
@@ -34,6 +38,8 @@ export default function InputComponent({
   error,
   helperText,
   variant,
+  InputPropStyle,
+  value,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -75,10 +81,13 @@ export default function InputComponent({
         required={required}
         variant={variant}
         InputProps={{
+          sx: InputPropStyle,
           endAdornment:
             type === "password" ? endPassowrdAdorment : endAdornment,
         }}
+        onKeyDown={onKeyDown}
         onChange={onChange}
+        value={value}
       />
     </Box>
   );
