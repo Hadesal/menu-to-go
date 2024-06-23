@@ -24,8 +24,8 @@ import { Styles } from "./Form.styles";
 
 interface FormProps {
   feedback: boolean;
-  title: React.ReactNode; // Allow JSX elements
-  subTitle: React.ReactNode; // Allow JSX elements
+  title: React.ReactNode;
+  subTitle: React.ReactNode;
   textFiledLabel: string;
   loading: boolean;
   handleSubmit: (
@@ -37,6 +37,7 @@ interface FormProps {
   severity: "success" | "error";
   setShowToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 interface FormData {
   name?: string;
   email?: string;
@@ -74,7 +75,6 @@ export default function Form({
     name: "",
     email: "",
     message: "",
-    //sentiments: "",
   });
 
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
@@ -85,7 +85,7 @@ export default function Form({
     const { id, value } = e.target;
     setFormValuesLocal((prevValues) => ({
       ...prevValues,
-      [id]: value,
+      [id]: value.trimStart(),
     }));
   };
 
@@ -95,15 +95,12 @@ export default function Form({
     };
 
     if (feedback) {
-      errors = {
-        message: !formValuesLocal.message ? "Message is required." : "",
-        // sentiments: !formValuesLocal.sentiments
-        //   ? "Please select a sentiment."
-        //   : "",
-      };
+      errors.message = !formValuesLocal.message.trim()
+        ? "Message is required."
+        : "";
     } else {
       errors = {
-        name: !formValuesLocal.name ? "Please enter your name." : "",
+        name: !formValuesLocal.name?.trim() ? "Please enter your name." : "",
         email: validateEmail(
           formValuesLocal.email !== undefined ? formValuesLocal.email : ""
         ),
@@ -111,7 +108,7 @@ export default function Form({
       };
     }
 
-    setFormErrors(errors); // Cast to any to avoid TypeScript error
+    setFormErrors(errors);
 
     const isFormValid = Object.values(errors).every((error) => !error);
 
