@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RestaurantData } from "../../DataTypes/ObjectDataTypes";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 
 const API_Restaurant_BASE_URL = "http://52.23.230.198:8080/api/restaurants";
 

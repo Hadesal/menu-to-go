@@ -30,6 +30,7 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
+import RestaurantSection from "../RestaurantSection/RestaurantSection";
 
 const drawerWidth = 240;
 
@@ -241,7 +242,9 @@ export default function UserDashboardPage() {
           onCancelClick={handleCancel}
         />
         {activeTab === "Dashboard" && <h1> dashboard view</h1>}
-        {activeTab === "Restaurant" && <h1> Restaurant view</h1>}
+        {activeTab === "Restaurant" && (
+          <RestaurantSection label="Add Restaurant" />
+        )}
         {activeTab === "Categories" && <h1> Categories view</h1>}
         {activeTab === "Templates" && <h1> Templates view</h1>}
         {activeTab === "Generate qr code" && <h1> Generate qr code view</h1>}
