@@ -19,7 +19,6 @@ export default function ContactPage() {
     formValues: FormData,
     setFormValuesLocal: React.Dispatch<React.SetStateAction<FormData>>
   ) => {
-    console.log(formValues);
     setLoading(true);
     emailjs
       .send(
