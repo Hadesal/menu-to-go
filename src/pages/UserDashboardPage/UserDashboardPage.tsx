@@ -34,6 +34,7 @@ import {
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import ContactPage from "../ContactPage/Contact";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
+import DashboardView from "../DashboardView/DashboardViewPage";
 
 const drawerWidth = 240;
 
@@ -258,7 +259,7 @@ export default function UserDashboardPage() {
           onLogoutClick={handleLogout}
           onCancelClick={handleCancel}
         />
-        {activeTab === "Dashboard" && <h1> dashboard view</h1>}
+        {activeTab === "Dashboard" && <DashboardView />}
         {activeTab === "Restaurant" && (
           <RestaurantSection label="Add Restaurant" />
         )}
