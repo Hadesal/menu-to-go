@@ -5,18 +5,24 @@ import {
   IconButton,
   Paper,
   Stack,
+  SvgIconTypeMap,
   Typography,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import Styles from "../../DataTypes/StylesTypes";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 interface GridViewProps {
   items: any[];
   deleteFunction: (item: object) => void;
   editFunction: (item: object) => void;
   styles: Styles;
+  CardIcon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+    muiName: string;
+  };
 }
-const GridView = ({
+const ItemsGridView = ({
+  CardIcon,
   items,
   deleteFunction,
   editFunction,
@@ -33,6 +39,7 @@ const GridView = ({
                   <Typography sx={styles.typography} variant="h6">
                     {item.name}
                   </Typography>
+                  <CardIcon sx={{ alignSelf: "center", fontSize: "5vh" }} />
                   <Stack direction="row" spacing={1} sx={styles.stackRow}>
                     <IconButton
                       onClick={() => {
@@ -61,4 +68,4 @@ const GridView = ({
   );
 };
 
-export default GridView;
+export default ItemsGridView;

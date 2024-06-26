@@ -11,7 +11,14 @@ const styles = {
     },
   },
   addButton: { borderRadius: 10, width: "8vw", height: "5vh" },
-  gridPaper: { borderRadius: "20px" },
+  gridPaper: {
+    borderRadius: "20px",
+    width: "14vw",
+    " & .MuiPaper-root.MuiPaper-elevation1.MuiCard-root.css-1sayfjc-MuiPaper-root-MuiCard-root":
+      {
+        height: "22vh",
+      },
+  },
   card: { height: "17vh", borderRadius: "20px" },
   cardContent: { height: "100%" },
   stackColumn: {
