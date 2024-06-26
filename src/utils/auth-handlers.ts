@@ -140,7 +140,8 @@ const handleSignIn = async (
     password: "",
   });
   setLoading(false);
-  navigate("/menu");
+  localStorage.setItem("userToken", loginResponse.token);
+  navigate("/dashboard");
 
   return loginResponse;
 };

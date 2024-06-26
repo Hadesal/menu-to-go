@@ -84,6 +84,7 @@ export default function UserDashboardPage() {
   const handleLogout = () => {
     // Add your logout logic here
     setShowLogoutDialog(false);
+    localStorage.removeItem("userToken");
     navigate("/login");
   };
 

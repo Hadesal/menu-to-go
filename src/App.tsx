@@ -1,11 +1,13 @@
+// src/App.js
 import { createTheme, ThemeProvider } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
+import PrivateRoute from "./utils/PrivateRoute";
+import PublicRoute from "./utils/PublicRoute";
 
 // Define your custom theme
 const theme = createTheme({
@@ -37,10 +39,38 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<UserDashboardPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/menu" element={<MenuPage />} />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <RegisterPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <UserDashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/menu"
+            element={
+              <PrivateRoute>
+                <MenuPage />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
