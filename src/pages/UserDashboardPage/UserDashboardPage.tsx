@@ -98,7 +98,7 @@ export default function UserDashboardPage() {
     localStorage.removeItem("expireTime");
   };
 
-  const handleCancel = () => {
+  const handleLogoutDialogCancel = () => {
     setShowLogoutDialog(false);
   };
 
@@ -310,7 +310,7 @@ export default function UserDashboardPage() {
         <ConfirmDialog
           isOpen={showLogoutDialog}
           onPrimaryActionClick={handleLogout}
-          onSecondaryActionClick={handleCancel}
+          onSecondaryActionClick={handleLogoutDialogCancel}
           width="580px"
           height="500px"
           showImg={true}
@@ -318,7 +318,7 @@ export default function UserDashboardPage() {
           primaryActionText="Logout"
           title="Are You Logging Out?"
           subTitle="You can always log back in at any time."
-          onClose={handleLogout}
+          onClose={handleLogoutDialogCancel}
         />
         {/* confirm session timeout */}
         <ConfirmDialog
