@@ -1,6 +1,6 @@
 // src/App.js
 import { createTheme, ThemeProvider } from "@mui/material";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
@@ -8,7 +8,6 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
-
 // Define your custom theme
 const theme = createTheme({
   typography: {
