@@ -1,5 +1,7 @@
 import HomeIcon from "@mui/icons-material/Home";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LayersIcon from "@mui/icons-material/Layers";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
@@ -19,26 +21,30 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useIdleTimer } from "react-idle-timer";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import LogoutDialog from "../../components/Dialogs/LogoutDialog/logoutDialog";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import logo from "../../assets/qr-code-logo.svg";
 import userImg from "../../assets/omarselfie.jpeg";
-import { useSelector, useDispatch } from "react-redux";
+import logo from "../../assets/qr-code-logo.svg";
+import ConfirmDialog from "../../components/Dialogs/LogoutDialog/confirmDialog";
 import {
+  resetActiveTab,
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
-import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import ContactPage from "../ContactPage/Contact";
-import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import DashboardView from "../DashboardView/DashboardViewPage";
 import LanguageIcon from "@mui/icons-material/Language";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
+import FeedbackPage from "../FeedbackPage/FeedbackPage";
+import RestaurantSection from "../RestaurantSection/RestaurantSection";
+
+const INACTIVITY_PERIOD = 60 * 1000; // 1 minute in milliseconds
+const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
+const CHECK_INTERVAL = 1000; // 1 second in milliseconds
 
 const drawerWidth = 240;
 
@@ -92,6 +98,9 @@ export default function UserDashboardPage() {
   const handleLangClose = () => {
     setAnchorElLang(null);
   };
+  const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
+    useState(false);
+  const [remaining, setRemaining] = useState<number>(10 * 6000);
 
   const activeTab = useSelector(selectActiveTab);
   const dispatch = useDispatch();
@@ -117,15 +126,56 @@ export default function UserDashboardPage() {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
     setShowLogoutDialog(false);
-    localStorage.removeItem("userToken");
     navigate("/login");
+    dispatch(resetActiveTab());
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("expireTime");
   };
 
-  const handleCancel = () => {
+  const handleLogoutDialogCancel = () => {
     setShowLogoutDialog(false);
   };
+
+  /**
+   * Function is trigged after the inactivity timeout is over
+   */
+  const onIdle = () => {
+    handleLogout();
+  };
+
+  /**
+   * Function is trigged to inform the user about his inactivity and that he will be logged out after specific time
+   */
+  const onPrompt = () => {
+    setShowSessionTimeoutDialog(true);
+  };
+
+  const handleStillHere = () => {
+    activate();
+    setShowSessionTimeoutDialog(false);
+  };
+
+  const { getRemainingTime, activate } = useIdleTimer({
+    onIdle,
+    onPrompt,
+    crossTab: true,
+    timeout: INACTIVITY_PERIOD,
+    promptBeforeIdle: PROMPT_BEFORE_IDLE,
+    throttle: CHECK_INTERVAL,
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      //FIXME: Remove during production , only for testing purposes
+      console.log(Math.ceil(getRemainingTime() / 1000));
+      setRemaining(Math.ceil(getRemainingTime() / 1000));
+    }, 500);
+
+    return () => {
+      clearInterval(interval);
+    };
+  });
 
   const drawer = (
     <div>
@@ -152,6 +202,7 @@ export default function UserDashboardPage() {
                 handleLogoutClick();
               } else {
                 dispatch(setActiveTab(btn.label));
+                //isTokenValid(handleLogout);
               }
             }}
           >
@@ -352,10 +403,32 @@ export default function UserDashboardPage() {
         }}
       >
         <Toolbar />
-        <LogoutDialog
+        {/* confirm logout */}
+        <ConfirmDialog
           isOpen={showLogoutDialog}
-          onLogoutClick={handleLogout}
-          onCancelClick={handleCancel}
+          onPrimaryActionClick={handleLogout}
+          onSecondaryActionClick={handleLogoutDialogCancel}
+          width="580px"
+          height="500px"
+          showImg={true}
+          secondaryActionText="Cancel"
+          primaryActionText="Logout"
+          title="Are You Logging Out?"
+          subTitle="You can always log back in at any time."
+          onClose={handleLogoutDialogCancel}
+        />
+        {/* confirm session timeout */}
+        <ConfirmDialog
+          isOpen={showSessionTimeoutDialog}
+          onPrimaryActionClick={handleStillHere}
+          onSecondaryActionClick={handleLogout}
+          width="500px"
+          height="300px"
+          showImg={false}
+          secondaryActionText="Log out now"
+          primaryActionText="Continue session"
+          title="You will be logged out soon"
+          subTitle={`For your security, we automatically log you out after a period of inactivity. You will be logged out in ${remaining} seconds.`}
         />
         {activeTab === "Dashboard" && <DashboardView />}
         {activeTab === "Restaurant" && (

@@ -17,11 +17,14 @@ export const mainSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload;
     },
+    resetActiveTab: (state) => {
+      state.activeTab = initialState.activeTab;
+    },
   },
 });
 
 export const selectActiveTab = (state: RootState) => state.mainView.activeTab;
 
-export const { setActiveTab } = mainSlice.actions;
+export const { setActiveTab, resetActiveTab } = mainSlice.actions;
 
 export default mainSlice.reducer;
