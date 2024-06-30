@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useDispatch } from "react-redux";
 import { setActiveTab } from "../../redux/slices/mainViewSlice";
+import { useTranslation } from "react-i18next";
 
 const dashboardCards = [
   { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
@@ -23,6 +24,8 @@ const dashboardCards = [
 
 export default function DashboardView() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const getString = t;
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
@@ -34,7 +37,7 @@ export default function DashboardView() {
             lineHeight: "43.2px",
           }}
         >
-          Hi, Welcome Back
+          {getString("welcomeBack")}
         </Typography>
         <Typography
           sx={{

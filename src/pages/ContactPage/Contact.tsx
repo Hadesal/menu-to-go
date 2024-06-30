@@ -1,6 +1,7 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import Form from "../../components/Form/Form";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   name?: string;
@@ -14,6 +15,10 @@ export default function ContactPage() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [severity, setSeverity] = useState<"success" | "error">("success");
+
+  const { t } = useTranslation();
+  const getString = t;
+
 
   const sendEmail = (
     formValues: FormData,
@@ -34,7 +39,7 @@ export default function ContactPage() {
       .then(
         () => {
           setLoading(false);
-          setToastMessage("Your request has been submitted successfully!");
+          setToastMessage(getString("toastSuccessfully"));
           setSeverity("success");
           setShowToast(true);
           setFormValuesLocal({
@@ -45,7 +50,7 @@ export default function ContactPage() {
         },
         () => {
           setLoading(false);
-          setToastMessage("Failed to submit your request. Please try again.");
+          setToastMessage(getString("toastFail"));
           setSeverity("error");
           setShowToast(true);
         }
@@ -55,12 +60,12 @@ export default function ContactPage() {
   return (
     <Form
       feedback={false}
-      title={<>Contact Us</>}
+      title={<>{getString("contactUs")}</>}
       subTitle={
         <>
-          Have a question? Feel free to contact us.
+          {getString("haveQuestionText")}
           <br />
-          We are happy to help you!
+          {getString("happyToHelpText")}
         </>
       }
       textFiledLabel=""

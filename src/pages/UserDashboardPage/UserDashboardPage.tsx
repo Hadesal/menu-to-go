@@ -35,6 +35,10 @@ import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import ContactPage from "../ContactPage/Contact";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import DashboardView from "../DashboardView/DashboardViewPage";
+import LanguageIcon from "@mui/icons-material/Language";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = 240;
 
@@ -53,10 +57,41 @@ const buttonData = [
   },
 ];
 
+const langs = {
+  en: { nativeName: "English" },
+  de: { nativeName: "Deutsch" },
+};
+
+const profileOptions = [
+  { id: "myprofile", optionName: "My profile" },
+  { id: "notifications", optionName: "Notifications" },
+  { id: "subscription", optionName: "Subscription" },
+];
+
 export default function UserDashboardPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [anchorElProfile, setAnchorElProfile] = useState(null);
+  const [anchorElLang, setAnchorElLang] = useState(null);
+
+  const openProfile = Boolean(anchorElProfile);
+  const openLang = Boolean(anchorElLang);
+
+  const { i18n } = useTranslation();
+
+  const handleProfileClick = (event) => {
+    setAnchorElProfile(event.currentTarget);
+  };
+  const handleProfileClose = () => {
+    setAnchorElProfile(null);
+  };
+  const handleLangClick = (event) => {
+    setAnchorElLang(event.currentTarget);
+  };
+  const handleLangClose = () => {
+    setAnchorElLang(null);
+  };
 
   const activeTab = useSelector(selectActiveTab);
   const dispatch = useDispatch();
@@ -191,12 +226,74 @@ export default function UserDashboardPage() {
                 src={userImg}
               />
               <IconButton
+                id="profile-icon"
                 aria-label="profile details icon"
-                onClick={() => {}}
+                aria-controls={openProfile ? "profile-icon" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openProfile ? "true" : undefined}
+                onClick={handleProfileClick}
                 sx={{ color: "#F9FDFE" }}
               >
                 <KeyboardArrowDownIcon />
               </IconButton>
+              <Menu
+                id="profile-icon"
+                anchorEl={anchorElProfile}
+                open={openProfile}
+                onClose={handleProfileClose}
+                MenuListProps={{
+                  "aria-labelledby": "profile-icon",
+                }}
+              >
+                {profileOptions.map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    onClick={() => {
+                      console.log(option.optionName);
+                    }}
+                  >
+                    {option.optionName}
+                  </MenuItem>
+                ))}
+              </Menu>
+              <Box
+                sx={{
+                  borderLeft: "1px solid #F9FDFE",
+                  marginLeft: "0.5rem",
+                  paddingLeft: "0.5rem",
+                }}
+              >
+                <IconButton
+                  id="language-icon"
+                  aria-label="Language icon"
+                  aria-controls={openLang ? "language-icon" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openLang ? "true" : undefined}
+                  onClick={handleLangClick}
+                  sx={{ color: "#F9FDFE" }}
+                >
+                  <LanguageIcon />
+                </IconButton>
+                <Menu
+                  id="language-icon"
+                  anchorEl={anchorElLang}
+                  open={openLang}
+                  onClose={handleLangClose}
+                  MenuListProps={{
+                    "aria-labelledby": "language-icon",
+                  }}
+                >
+                  {Object.keys(langs).map((lang) => (
+                    <MenuItem
+                      key={lang}
+                      onClick={() => i18n.changeLanguage(lang)}
+                      disabled={i18n.resolvedLanguage === lang}
+                    >
+                      {langs[lang].nativeName}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
             </Box>
           </div>
         </Toolbar>
