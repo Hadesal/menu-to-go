@@ -1,19 +1,116 @@
-import { Box, Container } from "@mui/material";
-import React from "react";
-import { ProductDetails } from "../../components/ProductDetails/ProductDetails";
+import { Box, Container, Typography } from "@mui/material";
+import SmokedChickenImage from "../../assets/ingredient.jpg"; // Importing the image as a default export
+import onionsImage from "../../assets/onion.jpg"; // Importing the image as a default export
+import parsleyImage from "../../assets/parsili.jpg"; // Importing the image as a default export
+import pineappleImage from "../../assets/pinapple.jpg"; // Importing the image as a default export
+import spicesImage from "../../assets/spices.jpg"; // Importing the image as a default export
+import TomatoesImage from "../../assets/tomamto.jpg"; // Importing the image as a default export
+import MenuHeader from "../../components/MenuHeader/MenuHeader";
+import ProductDetails from "../../components/ProductDetails/ProductDetails";
+import ExtrasList from "../../components/ProductExtras/ExtrasList";
+import IngredientList from "../../components/ProductIngredient/IngredientList";
+import VariantList from "../../components/ProductVariants/ProductVariants";
 
 export default function ProductPage() {
+  const ingredients = [
+    {
+      ingredientImg: SmokedChickenImage,
+      ingredientName: "Smoked Chicken",
+    },
+    {
+      ingredientImg: onionsImage,
+      ingredientName: "Onions",
+    },
+    {
+      ingredientImg: parsleyImage,
+      ingredientName: "Parsley",
+    },
+    {
+      ingredientImg: pineappleImage,
+      ingredientName: "Pineapple",
+    },
+    {
+      ingredientImg: spicesImage,
+      ingredientName: "Spices",
+    },
+    {
+      ingredientImg: TomatoesImage,
+      ingredientName: "Tomatoes",
+    },
+  ];
+
+  const variants = [
+    {
+      variantName: "Small",
+      variantPrice: "10$",
+    },
+    {
+      variantName: "Medium",
+      variantPrice: "10$",
+    },
+    {
+      variantName: "Large",
+      variantPrice: "10$",
+    },
+  ];
+  const extras = [
+    {
+      extrasName: "Chesses",
+      extrasPrice: "10$",
+    },
+    {
+      extrasName: "Tomato's",
+      extrasPrice: "10$",
+    },
+    {
+      extrasName: "Onions",
+      extrasPrice: "10$",
+    },
+  ];
+
+  ingredients.map((i) => {
+    console.log(i);
+  });
   return (
     <Container maxWidth="sm">
-      <Box
-        // sx={{
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   height: "100vh",
-        // }}
-      >
+      <Box sx={{ paddingTop: "2rem" }}>
+        <MenuHeader />
         <ProductDetails />
+
+        <Box>
+          <Typography
+            color="var(--primary-color)"
+            variant="h6"
+            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            Ingredients
+          </Typography>
+          <IngredientList ingredients={ingredients} />
+        </Box>
+
+        <Box>
+          <Typography
+            color="var(--primary-color)"
+            variant="h6"
+            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            Size
+          </Typography>
+          <VariantList variants={variants} />
+        </Box>
+
+        <Box sx={{marginBottom:"1rem"}}>
+          <Typography
+            color="var(--primary-color)"
+            variant="h6"
+            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            Extras
+          </Typography>
+          <ExtrasList extras={extras}  />
+        </Box>
       </Box>
+
     </Container>
   );
 }

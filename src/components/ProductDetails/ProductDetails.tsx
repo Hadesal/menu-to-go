@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import productImage from "../../assets/Hawaiian-Chicken.jpg";
 import { Styles } from "./ProductDetails.styles";
-export const ProductDetails = () => {
+export default function ProductDetails() {
   return (
     <Box>
       <img
@@ -22,4 +22,4 @@ export const ProductDetails = () => {
       </Box>
     </Box>
   );
-};
+}
