@@ -14,11 +14,9 @@ interface RestaurantSectionProps {
 }
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const userToken = localStorage.getItem("userToken");
-  const [userData, setUserData] = useState();
   const [restaurants, setRestaurants] = useState<RestaurantData[]>([]);
-  const retriveUserAndRestaurantsdata = async (token: string | null) => {
+  const retriveUserAndRestaurantsdata = async () => {
     const user = await getUserData(userToken);
-    setUserData(user);
     const restaurantData = await getAllRestaurantsByUserId(
       user.id,
       userToken as string
@@ -26,7 +24,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
     setRestaurants(restaurantData);
   };
   useEffect(() => {
-    retriveUserAndRestaurantsdata(userToken);
+    retriveUserAndRestaurantsdata();
   }, []);
   const editRestaurant = (restaurant: object): void => {};
   const deleteRestaurant = (restaurant: object) => {};
