@@ -140,7 +140,11 @@ const handleSignIn = async (
     password: "",
   });
   setLoading(false);
-  localStorage.setItem("userToken", loginResponse.token);
+  const authData = {
+    token: loginResponse.token,
+    loginTime: Date.now(),
+  };
+  localStorage.setItem("userToken", JSON.stringify(authData));
   navigate("/dashboard");
   console.log(loginResponse);
   return loginResponse;

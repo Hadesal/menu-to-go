@@ -10,12 +10,16 @@ export const Styles = {
   },
   subTitle: {
     color: "#797979",
+    marginTop: 2,
+    lineHeight: 2,
+    paddingRight: 2,
+    paddingLeft: 2,
   },
   actionBox: {
     display: "flex",
     marginTop: 6,
   },
-  logoutButton: {
+  primaryActionButton: {
     borderRadius: "20px",
     padding: "5px 25px 5px 25px",
     backgroundColor: "var(--primary-color)",
@@ -27,7 +31,7 @@ export const Styles = {
       color: "var(--primary-color)",
     },
   },
-  cancelButton: {
+  secondaryActionButton: {
     marginRight: 2,
     borderRadius: "20px",
     padding: "5px 25px 5px 25px",

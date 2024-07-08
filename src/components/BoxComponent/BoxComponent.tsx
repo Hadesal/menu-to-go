@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Paper, Stack, TextField, Button, SvgIconTypeMap } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
+import { Button, Paper, Stack, SvgIconTypeMap, TextField } from "@mui/material";
+import { useState } from "react";
+// import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path7
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 interface BoxComponentProps {
@@ -63,7 +64,7 @@ const BoxComponent = ({
           Add
         </Button>
       </Stack>
-      {items && (
+      {/* {items && (
         <ItemsGridView
           CardIcon={CardIcon}
           items={items}
@@ -74,7 +75,25 @@ const BoxComponent = ({
       )}
 
       {!items && <EmptyState />}
-      <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} />
+      <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} /> */}
+      <ItemsGridView
+        CardIcon={CardIcon}
+        items={items}
+        editFunction={editFunction}
+        deleteFunction={deleteFunction}
+        styles={styles}
+      />
+      {/* <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} /> */}
+      <AddItemDialog
+        title="Add restaurant"
+        fileUpload={false}
+        errorMessage="Please enter restaurant name"
+        cancelText="Cancel"
+        confirmText="Add"
+        isOpen={open}
+        onCancelClick={handleClose}
+        onConfirmClick={addFunction}
+      />
     </Paper>
   );
 };
