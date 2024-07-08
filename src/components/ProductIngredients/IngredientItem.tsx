@@ -22,7 +22,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
       <Typography
         variant="body2"
         textAlign="center"
-        sx={{ fontSize: "12px", fontWeight: "400", lineHeight: "14px" }}
+        sx={{ fontSize: "10px", fontWeight: "400", lineHeight: "14px" }}
       >
         {ingredient.ingredientName}
       </Typography>

@@ -1,6 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import productImage from "../../assets/Hawaiian-Chicken.jpg";
 import { Styles } from "./ProductDetails.styles";
+
+interface productDetailsProps {
+  productImg: string;
+  productName: string;
+  productDescription: string;
+}
+
 export default function ProductDetails() {
   return (
     <Box>
@@ -11,7 +18,7 @@ export default function ProductDetails() {
         width={"100%"}
         height={168}
       />
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" , marginTop:"0.3rem" }}>
         <Typography sx={Styles.title} color="var(--primary-color)" variant="h6">
           Hawaiian Chicken Pizza Smoked
         </Typography>

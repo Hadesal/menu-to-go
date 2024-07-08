@@ -15,7 +15,6 @@ const styles = {
     display: "flex",
     overflowX: "auto",
     gap: "1.5rem",
-    //whiteSpace: "nowrap",
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
     '&::-webkit-scrollbar': { // For WebKit (Chrome, Safari)

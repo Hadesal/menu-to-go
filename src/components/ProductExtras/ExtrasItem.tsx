@@ -19,18 +19,18 @@ export default function ExtrasItem({ extras }: ExtrasItemProps) {
         alignItems: "center",
         justifyContent: "center",
         padding: "0.5rem 0.8rem",
-        flex: "0 0 calc(50% - 0.5rem)", // Each item takes half the width with some gap
+        flex: "0 0 calc(50% - 0.5rem)",
         borderRadius: "8px",
-        marginBottom: "1rem", // Adjust vertical spacing between items
+        marginBottom: "0.5rem",
       }}
     >
       <img
         src={PlusImage}
         alt="Bullet"
         style={{
-          width: "18px", // Adjust as needed
-          height: "18px", // Adjust as needed
-          marginRight: "0.3rem", // Adjust spacing between image and content
+          width: "18px",
+          height: "18px",
+          marginRight: "0.3rem",
         }}
       />
       <Typography

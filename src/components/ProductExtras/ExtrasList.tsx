@@ -16,7 +16,7 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    gap: "1rem",
+    gap: "0.5rem",
   },
 };
 

@@ -8,7 +8,7 @@ import TomatoesImage from "../../assets/tomamto.jpg"; // Importing the image as 
 import MenuHeader from "../../components/MenuHeader/MenuHeader";
 import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
-import IngredientList from "../../components/ProductIngredient/IngredientList";
+import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
 
 export default function ProductPage() {
@@ -81,7 +81,7 @@ export default function ProductPage() {
           <Typography
             color="var(--primary-color)"
             variant="h6"
-            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+            sx={{ marginTop: "1rem", marginBottom: "0.5rem" }}
           >
             Ingredients
           </Typography>
@@ -92,7 +92,7 @@ export default function ProductPage() {
           <Typography
             color="var(--primary-color)"
             variant="h6"
-            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+            sx={{ marginTop: "1rem", marginBottom: "0.5rem" }}
           >
             Size
           </Typography>
@@ -103,7 +103,7 @@ export default function ProductPage() {
           <Typography
             color="var(--primary-color)"
             variant="h6"
-            sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+            sx={{ marginTop: "1rem", marginBottom: "0.5rem" }}
           >
             Extras
           </Typography>
