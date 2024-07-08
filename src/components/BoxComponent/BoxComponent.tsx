@@ -6,13 +6,14 @@ import { Button, Paper, Stack, SvgIconTypeMap, TextField } from "@mui/material";
 import { useState } from "react";
 // import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path7
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 
 interface BoxComponentProps {
-  items: any[];
+  items: RestaurantData[];
   styles: Styles;
-  editFunction: (item: object) => void;
-  deleteFunction: (item: object) => void;
-  addFunction: (item: { name: string }) => void;
+  editFunction: (item: RestaurantData) => void;
+  deleteFunction: (item: RestaurantData) => void;
+  addFunction: (item: RestaurantData) => void;
   CardIcon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
     muiName: string;
   };
@@ -35,13 +36,15 @@ const BoxComponent = ({
   const handleClose = () => {
     setOpen(false);
   };
+
   const EmptyState = () => {
     return (
       <>
-        <p>no items</p>
+        <p>No items</p>
       </>
     );
   };
+
   return (
     <Paper elevation={3} sx={styles.paper}>
       <Stack direction="row" spacing={2} alignItems="center" mb={3}>
@@ -64,7 +67,7 @@ const BoxComponent = ({
           Add
         </Button>
       </Stack>
-      {/* {items && (
+      {items.length > 0 ? (
         <ItemsGridView
           CardIcon={CardIcon}
           items={items}
@@ -72,18 +75,9 @@ const BoxComponent = ({
           deleteFunction={deleteFunction}
           styles={styles}
         />
+      ) : (
+        <EmptyState />
       )}
-
-      {!items && <EmptyState />}
-      <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} /> */}
-      <ItemsGridView
-        CardIcon={CardIcon}
-        items={items}
-        editFunction={editFunction}
-        deleteFunction={deleteFunction}
-        styles={styles}
-      />
-      {/* <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} /> */}
       <AddItemDialog
         title="Add restaurant"
         fileUpload={false}
