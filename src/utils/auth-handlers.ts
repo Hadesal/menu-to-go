@@ -142,7 +142,7 @@ const handleSignIn = async (
   setLoading(false);
   localStorage.setItem("userToken", loginResponse.token);
   navigate("/dashboard");
-
+  console.log(loginResponse);
   return loginResponse;
 };
 

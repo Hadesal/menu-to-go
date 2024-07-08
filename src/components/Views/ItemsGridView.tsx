@@ -30,10 +30,10 @@ const ItemsGridView = ({
 }: GridViewProps): JSX.Element => {
   return (
     <Grid container spacing={3}>
-      {items.map((item: object) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-          <Paper elevation={3} sx={styles.gridPaper}>
-            <Card sx={styles.card}>
+      {items.map((item: object, index) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          <Paper elevation={3} sx={styles.gridPaper} key={index}>
+            <Card sx={styles.card} key={index}>
               <CardContent sx={styles.cardContent}>
                 <Stack direction="column" sx={styles.stackColumn}>
                   <Typography sx={styles.typography} variant="h6">

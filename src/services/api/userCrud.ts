@@ -33,6 +33,20 @@ export const login = async (userSignInData: UserSignInData) => {
     return errorResponseObject;
   }
 };
+export const getUserData = async (token: string | null) => {
+  try {
+    if (token == null) throw Error;
+    const response = await apiService.get("/token", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
+};
 export const updateUser = async (
   updatedUser: UserUpdateData,
   userId: number,

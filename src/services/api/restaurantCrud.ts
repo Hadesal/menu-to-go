@@ -11,7 +11,7 @@ const apiService = axios.create({
 });
 
 export const getRestaurantById = async (
-  restaurantId: Number,
+  restaurantId: string,
   token: String
 ) => {
   try {
@@ -28,7 +28,7 @@ export const getRestaurantById = async (
 };
 
 export const getAllRestaurantsByUserId = async (
-  userId: Number,
+  userId: string,
   token: String
 ) => {
   try {
@@ -46,7 +46,7 @@ export const getAllRestaurantsByUserId = async (
 
 export const updateRestaurant = async (
   updatedRestaurant: RestaurantData,
-  restaurantId: Number,
+  restaurantId: string,
   token: String
 ) => {
   try {
@@ -66,7 +66,7 @@ export const updateRestaurant = async (
   }
 };
 
-export const deleteRestaurant = async (restaurantId: Number, token: String) => {
+export const deleteRestaurant = async (restaurantId: string, token: String) => {
   try {
     const response = await apiService.delete(`${restaurantId}`, {
       headers: {

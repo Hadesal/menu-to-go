@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Paper, Stack, TextField, Button, SvgIconTypeMap } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ItemsListView from "../Views/ItemsListView";
 import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
@@ -35,7 +34,13 @@ const BoxComponent = ({
   const handleClose = () => {
     setOpen(false);
   };
-
+  const EmptyState = () => {
+    return (
+      <>
+        <p>no items</p>
+      </>
+    );
+  };
   return (
     <Paper elevation={3} sx={styles.paper}>
       <Stack direction="row" spacing={2} alignItems="center" mb={3}>
@@ -58,13 +63,17 @@ const BoxComponent = ({
           Add
         </Button>
       </Stack>
-      <ItemsGridView
-        CardIcon={CardIcon}
-        items={items}
-        editFunction={editFunction}
-        deleteFunction={deleteFunction}
-        styles={styles}
-      />
+      {items && (
+        <ItemsGridView
+          CardIcon={CardIcon}
+          items={items}
+          editFunction={editFunction}
+          deleteFunction={deleteFunction}
+          styles={styles}
+        />
+      )}
+
+      {!items && <EmptyState />}
       <AddItemDialog open={open} onClose={handleClose} onAdd={addFunction} />
     </Paper>
   );

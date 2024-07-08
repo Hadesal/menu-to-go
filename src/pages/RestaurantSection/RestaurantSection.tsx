@@ -1,25 +1,39 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import styles from "./RestaurantSection.styles";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import BoxComponent from "../../components/DialogComponent/BoxComponent";
+import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import {
+  createRestaurant,
+  getAllRestaurantsByUserId,
+} from "../../services/api/restaurantCrud";
+import { getUserData } from "../../services/api/userCrud";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 interface RestaurantSectionProps {
   label: string;
 }
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
-  const restaurantState = useSelector((state) => state.restaurant);
-  const restaurants: RestaurantData[] = [
-    { id: "1", name: "Restaurant 1", table: [] },
-    { id: "2", name: "Restaurant 2", table: [] },
-    { id: "3", name: "Restaurant 3", table: [] },
-    { id: "4", name: "Restaurant 4", table: [] },
-    { id: "5", name: "Restaurant 5", table: [] },
-  ];
+  const userToken = localStorage.getItem("userToken");
+  const [userData, setUserData] = useState();
+  const [restaurants, setRestaurants] = useState<RestaurantData[]>([]);
+  const retriveUserAndRestaurantsdata = async (token: string | null) => {
+    const user = await getUserData(userToken);
+    setUserData(user);
+    const restaurantData = await getAllRestaurantsByUserId(
+      user.id,
+      userToken as string
+    );
+    setRestaurants(restaurantData);
+  };
+  useEffect(() => {
+    retriveUserAndRestaurantsdata(userToken);
+  }, []);
   const editRestaurant = (restaurant: object): void => {};
   const deleteRestaurant = (restaurant: object) => {};
-  const addRestaurant = () => {
-    deleteRestaurant;
+  const addRestaurant = async (restaurant: RestaurantData) => {
+    createRestaurant(restaurant, userToken as String).then((data) => {
+      setRestaurants((prev) => [...prev, restaurant]);
+    });
   };
   return (
     <Stack spacing={3} sx={styles.stack}>
