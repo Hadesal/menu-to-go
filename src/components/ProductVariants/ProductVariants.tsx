@@ -18,15 +18,16 @@ export default function VariantList({ variants }: VariantListProps) {
           paddingRight: "1.5rem",
           display: "flex",
           flexDirection: "column",
+          background: "#F9FDFE",
         }}
         elevation={3}
       >
-        <ul style={{ listStyleType: "none", paddingLeft: "1rem" }}>
+        <ul style={{ listStyleType: "none", paddingLeft: "1.5rem" , paddingRight:"0.7rem" }}>
           {variants.map((variant, index) => (
             <li
               key={index}
               style={{
-                marginBottom: index === variants.length - 1 ? "0" : "1rem", // Apply margin only to non-last items
+                marginBottom: index === variants.length - 1 ? "0" : "0.5rem", // Apply margin only to non-last items
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -52,14 +53,14 @@ export default function VariantList({ variants }: VariantListProps) {
                 <Typography
                   component="span"
                   color="var(--primary-color)"
-                  sx={{ fontWeight: "500", fontSize: "16px" }}
+                  sx={{ fontWeight: "500", fontSize: "18px" }}
                 >
                   {variant.variantName}
                 </Typography>
               </Box>
               <Typography
                 component="span"
-                sx={{ fontWeight: "500", fontSize: "16px" }}
+                sx={{ fontWeight: "500", fontSize: "18px" }}
               >
                 {variant.variantPrice}
               </Typography>

@@ -14,11 +14,18 @@ export default function ProductDetails() {
       <img
         src={productImage}
         alt="Product Image"
-        style={{ borderRadius: "24px", backgroundSize: "contain" }}
+        style={{ borderRadius: "24px", backgroundSize: "cover" , backgroundPosition:"left" }}
         width={"100%"}
-        height={168}
+        height={180}
       />
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" , marginTop:"0.3rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          marginTop: "0.3rem",
+        }}
+      >
         <Typography sx={Styles.title} color="var(--primary-color)" variant="h6">
           Hawaiian Chicken Pizza Smoked
         </Typography>

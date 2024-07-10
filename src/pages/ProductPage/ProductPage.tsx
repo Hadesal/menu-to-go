@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, IconButton, Paper, Typography } from "@mui/material";
 import SmokedChickenImage from "../../assets/ingredient.jpg"; // Importing the image as a default export
 import onionsImage from "../../assets/onion.jpg"; // Importing the image as a default export
 import parsleyImage from "../../assets/parsili.jpg"; // Importing the image as a default export
@@ -10,6 +10,9 @@ import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
+import WestIcon from "@mui/icons-material/West";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function ProductPage() {
   const ingredients = [
@@ -68,13 +71,24 @@ export default function ProductPage() {
     },
   ];
 
-  ingredients.map((i) => {
-    console.log(i);
-  });
   return (
-    <Container maxWidth="sm">
+    <Container sx={{ background: "#F9FDFE" }} maxWidth="sm">
       <Box sx={{ paddingTop: "2rem" }}>
-        <MenuHeader />
+        {/* <MenuHeader /> */}
+        <IconButton
+          onClick={() => console.log("go back")}
+          sx={{
+            marginBottom: 5,
+            padding: 0,
+            background: "#A4755D30",
+            "&:hover": {
+              background: "#A4755D30", // Ensure the background remains the same on hover
+            },
+          }}
+          aria-label="arrowback"
+        >
+          <NavigateBeforeIcon fontSize="large" color="primary" />
+        </IconButton>
         <ProductDetails />
 
         <Box>
@@ -99,7 +113,7 @@ export default function ProductPage() {
           <VariantList variants={variants} />
         </Box>
 
-        <Box sx={{marginBottom:"1rem"}}>
+        <Box sx={{ marginBottom: "1rem" }}>
           <Typography
             color="var(--primary-color)"
             variant="h6"
@@ -107,10 +121,9 @@ export default function ProductPage() {
           >
             Extras
           </Typography>
-          <ExtrasList extras={extras}  />
+          <ExtrasList extras={extras} />
         </Box>
       </Box>
-
     </Container>
   );
 }
