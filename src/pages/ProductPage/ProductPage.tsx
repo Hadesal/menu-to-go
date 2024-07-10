@@ -5,14 +5,13 @@ import parsleyImage from "../../assets/parsili.jpg"; // Importing the image as a
 import pineappleImage from "../../assets/pinapple.jpg"; // Importing the image as a default export
 import spicesImage from "../../assets/spices.jpg"; // Importing the image as a default export
 import TomatoesImage from "../../assets/tomamto.jpg"; // Importing the image as a default export
-import MenuHeader from "../../components/MenuHeader/MenuHeader";
+// import MenuHeader from "../../components/MenuHeader/MenuHeader";
 import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
-import WestIcon from "@mui/icons-material/West";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 
 export default function ProductPage() {
   const ingredients = [
