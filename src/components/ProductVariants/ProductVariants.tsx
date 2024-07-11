@@ -53,14 +53,14 @@ export default function VariantList({ variants }: VariantListProps) {
                 <Typography
                   component="span"
                   color="var(--primary-color)"
-                  sx={{ fontWeight: "500", fontSize: "18px" }}
+                  sx={{ fontWeight: "500", fontSize: "16px" }}
                 >
                   {variant.variantName}
                 </Typography>
               </Box>
               <Typography
                 component="span"
-                sx={{ fontWeight: "500", fontSize: "18px" }}
+                sx={{ fontWeight: "500", fontSize: "16px" }}
               >
                 {variant.variantPrice}
               </Typography>
