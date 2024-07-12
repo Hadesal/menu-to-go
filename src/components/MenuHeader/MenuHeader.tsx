@@ -5,24 +5,20 @@ export default function MenuHeader() {
   const title: string = "";
 
   return (
-    <Box sx={{ marginBottom: "2rem" }}>
+    <Box sx={Styles.container}>
       <Box sx={Styles.backgroundBluredDivStyle}></Box>
-      <div
-        className="titleContainer"
-        style={{ display: "flex", marginTop: "1rem" }}
-      >
+      <Box sx={Styles.titleContainer}>
         <Typography
-          sx={{ fontWeight: "600", fontSize: "32px" }}
+          sx={Styles.titlePrimary}
           variant="h4"
           color="var(--primary-color)"
         >
           {title ? title.split("-")[0] : "MENU"}
         </Typography>
-        <Typography sx={{ fontWeight: "600", fontSize: "32px" }} variant="h4">
+        <Typography sx={Styles.titleSecondary} variant="h4">
           {title ? title : "-TO-GO"}
         </Typography>
-      </div>
-
+      </Box>
       <Box
         sx={{
           ...Styles.backgroundBluredDivStyle2,

@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { Styles } from "./ProductIngredients.styles";
 
 interface Ingredient {
   ingredientImg: string;
@@ -11,7 +12,7 @@ interface IngredientItemProps {
 
 export default function IngredientItem({ ingredient }: IngredientItemProps) {
   return (
-    <Box sx={{ width: "50px" }}>
+    <Box sx={Styles.IngredientItemContainer}>
       <img
         src={ingredient.ingredientImg}
         alt={ingredient.ingredientName}
@@ -22,7 +23,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
       <Typography
         variant="body2"
         textAlign="center"
-        sx={{ fontSize: "10px", fontWeight: "400", lineHeight: "14px" }}
+        sx={Styles.IngredientItemName}
       >
         {ingredient.ingredientName}
       </Typography>
