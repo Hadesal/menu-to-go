@@ -34,7 +34,7 @@ import {
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
 import ContactPage from "../ContactPage/Contact";
-import DashboardView from "../DashboardView/DashboardViewPage";
+import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 import LanguageIcon from "@mui/icons-material/Language";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";

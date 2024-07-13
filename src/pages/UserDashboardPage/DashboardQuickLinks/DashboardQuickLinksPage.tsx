@@ -10,7 +10,7 @@ import ContactCardImg from "../../assets/contactus-card.svg";
 import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useDispatch } from "react-redux";
-import { setActiveTab } from "../../redux/slices/mainViewSlice";
+import { setActiveTab } from "../../../redux/slices/mainViewSlice";
 import { useTranslation } from "react-i18next";
 
 const dashboardCards = [
