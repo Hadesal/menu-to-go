@@ -1,17 +1,16 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import RestaurantCardImg from "../../assets/resturant-card.svg";
-import CategoriesCardImg from "../../assets/categories-card.svg";
-import TemplatesCardImg from "../../assets/templates-card.svg";
-import QRCodeCardImg from "../../assets/generateqrcode-card.svg";
-import FeedbacksCardImg from "../../assets/feedbacks-card.svg";
-import ContactCardImg from "../../assets/contactus-card.svg";
-import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { setActiveTab } from "../../../redux/slices/mainViewSlice";
-import { useTranslation } from "react-i18next";
+import CategoriesCardImg from "../../../assets/categories-card.svg";
+import ContactCardImg from "../../../assets/contactus-card.svg";
+import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
+import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
+import RestaurantCardImg from "../../../assets/resturant-card.svg";
+import TemplatesCardImg from "../../../assets/templates-card.svg";
 
 const dashboardCards = [
   { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
