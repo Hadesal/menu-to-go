@@ -13,7 +13,15 @@ export interface RestaurantState {
 }
 
 const initialState: RestaurantState = {
-  restaurantList: [],
+  restaurantList: [
+    { name: "Sample restaurant" },
+    { name: "Burgerio" },
+    { name: "Asala Halal Food" },
+    { name: "Koshary Mix" },
+    { name: "Hamama" },
+    { name: "Ferhat Döner" },
+    { name: "Kaffein Zeitgeist" },
+  ],
   loading: false,
   error: null,
 };
@@ -28,6 +36,7 @@ export const addRestaurant = createAsyncThunk(
       const response = await apiCreateRestaurant(restaurant, token);
       return response;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response?.data || "Error adding restaurant");
     }
   }
@@ -86,7 +95,8 @@ export const RestaurantSlice = createSlice({
         state.error = null;
       })
       .addCase(addRestaurant.fulfilled, (state, action) => {
-        state.restaurantList.push(action.payload);
+        console.log(action);
+        state.restaurantList.push(action.meta.arg.restaurant);
         state.loading = false;
       })
       .addCase(addRestaurant.rejected, (state, action) => {

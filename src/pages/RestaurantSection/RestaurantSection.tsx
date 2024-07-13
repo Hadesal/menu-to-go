@@ -1,7 +1,16 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Backdrop,
+  CircularProgress,
+  Divider,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
 import styles from "./RestaurantSection.styles";
 import BoxComponent from "../../components/BoxComponent/BoxComponent";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
+// import RestaurantIcon from "@mui/icons-material/Restaurant";
+import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import {
@@ -25,6 +34,8 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
     (state) => state.restaurantsData
   );
 
+  const [showToast, setShowToast] = useState(false);
+
   const retriveUserAndRestaurantsdata = async () => {
     const user = await getUserData(userToken);
     const restaurantData = await getAllRestaurantsByUserId(
@@ -35,8 +46,14 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   };
 
   useEffect(() => {
-    retriveUserAndRestaurantsdata();
+    //retriveUserAndRestaurantsdata();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setShowToast(true);
+    }
+  }, [error]);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
     dispatch(addRestaurant({ restaurant, token: userToken as string }));
@@ -57,6 +74,32 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
 
   return (
     <Stack spacing={3} sx={styles.stack}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => setShowToast(false)}
+      >
+        <Alert
+          onClose={() => setShowToast(false)}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+
       <Typography variant="h5">{label}</Typography>
       <Divider />
       <BoxComponent
@@ -67,8 +110,6 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         deleteFunction={handleDeleteRestaurant}
         styles={styles}
       />
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
     </Stack>
   );
 };
