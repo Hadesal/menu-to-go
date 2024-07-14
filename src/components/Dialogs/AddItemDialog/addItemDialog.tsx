@@ -65,8 +65,8 @@ const AddItemDialog = ({
       return;
     }
 
-    handleCancel();
     onConfirmClick(dialogData);
+    handleCancel();
   };
 
   /**
@@ -74,11 +74,11 @@ const AddItemDialog = ({
    *
    */
   const handleCancel = () => {
-    setDialogData({
-      ...dialogData,
-      image: null,
-    });
-    //setImage(null);
+    // setDialogData({
+    //   ...dialogData,
+    //   image: null,
+    // });
+    setDialogData({ name: "", image: null });
     // clear all error
     setImageError(null);
     setShowError(false);
@@ -148,6 +148,7 @@ const AddItemDialog = ({
 
   return (
     <Dialog
+      disableRestoreFocus
       PaperProps={{
         sx: {
           ...Styles.dialog,
@@ -229,9 +230,12 @@ const AddItemDialog = ({
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
+              //e.stopPropagation();
+              e.preventDefault();
               handleConfirm();
             }
           }}
+          value={dialogData.name}
           error={showError ? true : false}
           helperText={showError ? errorMessage : ""}
         />

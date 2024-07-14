@@ -59,6 +59,13 @@ const AddItemDialog = ({
           fullWidth
           variant="outlined"
           value={newItem.name}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              e.stopPropagation();
+              handleAdd();
+            }
+          }}
           onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
           sx={{ width: "25vw" }}
         />

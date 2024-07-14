@@ -1,10 +1,10 @@
 import SearchIcon from "@mui/icons-material/Search";
-import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path
+//import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
 import { Button, Paper, Stack, SvgIconTypeMap, TextField } from "@mui/material";
 import { useState } from "react";
-// import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path7
+import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog"; // Adjust the import path7
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 
@@ -14,9 +14,10 @@ interface BoxComponentProps {
   editFunction: (item: RestaurantData) => void;
   deleteFunction: (item: RestaurantData) => void;
   addFunction: (item: RestaurantData) => void;
-  CardIcon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
+  // CardIcon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+  //   muiName: string;
+  // };
+  CardIcon: string;
 }
 
 const BoxComponent = ({

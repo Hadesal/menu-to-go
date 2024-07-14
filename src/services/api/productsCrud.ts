@@ -3,23 +3,18 @@ import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 const API_Product_BASE_URL = "http://52.23.230.198:8080/api/categories";
 
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Product_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
-export const getAllProductsByCategoryId = async (
-  categoryId: string,
-  token: string
-) => {
+export const getAllProductsByCategoryId = async (categoryId: string) => {
   try {
-    const response = await apiService.get(`/${categoryId}/products`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${categoryId}/products`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -27,17 +22,9 @@ export const getAllProductsByCategoryId = async (
   }
 };
 
-export const addProduct = async (
-  categoryId: string,
-  product: ProductData,
-  token: string
-) => {
+export const addProduct = async (categoryId: string, product: ProductData) => {
   try {
-    const response = await apiService.post(`/${categoryId}/products`, product, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.post(`/${categoryId}/products`, product);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -45,19 +32,10 @@ export const addProduct = async (
   }
 };
 
-export const getProductById = async (
-  categoryId: string,
-  productId: string,
-  token: string
-) => {
+export const getProductById = async (categoryId: string, productId: string) => {
   try {
     const response = await apiService.get(
-      `/${categoryId}/products/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${categoryId}/products/${productId}`
     );
     return response.data;
   } catch (error: any) {
@@ -69,18 +47,12 @@ export const getProductById = async (
 export const updateProduct = async (
   categoryId: string,
   productId: string,
-  updatedProduct: ProductData,
-  token: string
+  updatedProduct: ProductData
 ) => {
   try {
     const response = await apiService.put(
       `/${categoryId}/products/${productId}`,
-      updatedProduct,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedProduct
     );
     return response.data;
   } catch (error: any) {
@@ -89,19 +61,10 @@ export const updateProduct = async (
   }
 };
 
-export const deleteProduct = async (
-  categoryId: string,
-  productId: string,
-  token: string
-) => {
+export const deleteProduct = async (categoryId: string, productId: string) => {
   try {
     const response = await apiService.delete(
-      `/${categoryId}/products/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${categoryId}/products/${productId}`
     );
     return response.data;
   } catch (error: any) {

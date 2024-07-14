@@ -42,7 +42,7 @@ import { useTranslation } from "react-i18next";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
 
-const INACTIVITY_PERIOD = 60 * 1000; // 1 minute in milliseconds
+const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
 
@@ -168,7 +168,6 @@ export default function UserDashboardPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       //FIXME: Remove during production , only for testing purposes
-      console.log(Math.ceil(getRemainingTime() / 1000));
       setRemaining(Math.ceil(getRemainingTime() / 1000));
     }, 500);
 
@@ -176,7 +175,6 @@ export default function UserDashboardPage() {
       clearInterval(interval);
     };
   });
-
   const drawer = (
     <div>
       <img
@@ -432,7 +430,7 @@ export default function UserDashboardPage() {
         />
         {activeTab === "Dashboard" && <DashboardView />}
         {activeTab === "Restaurant" && (
-          <RestaurantSection label="Add Restaurant" />
+          <RestaurantSection label="Restaurants" />
         )}
         {activeTab === "Categories" && <h1> Categories view</h1>}
         {activeTab === "Templates" && <h1> Templates view</h1>}

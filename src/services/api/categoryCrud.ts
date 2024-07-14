@@ -2,20 +2,18 @@ import axios from "axios";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 const API_Category_BASE_URL = "http://52.23.230.198:8080/api/categories";
 
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Category_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
-export const getCategoryById = async (categoryId: number, token: string) => {
+export const getCategoryById = async (categoryId: number) => {
   try {
-    const response = await apiService.get(`/${categoryId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${categoryId}`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -23,13 +21,9 @@ export const getCategoryById = async (categoryId: number, token: string) => {
   }
 };
 
-export const createCategory = async (category: CategoryData, token: string) => {
+export const createCategory = async (category: CategoryData) => {
   try {
-    const response = await apiService.post("", category, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.post("", category);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -37,19 +31,11 @@ export const createCategory = async (category: CategoryData, token: string) => {
   }
 };
 
-export const updateCategory = async (
-  updatedCategory: CategoryData,
-  token: string
-) => {
+export const updateCategory = async (updatedCategory: CategoryData) => {
   try {
     const response = await apiService.put(
       `/${updatedCategory.id}`,
-      updatedCategory,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedCategory
     );
     return response.data;
   } catch (error: any) {
@@ -58,13 +44,9 @@ export const updateCategory = async (
   }
 };
 
-export const deleteCategory = async (categoryId: number, token: string) => {
+export const deleteCategory = async (categoryId: number) => {
   try {
-    const response = await apiService.delete(`/${categoryId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.delete(`/${categoryId}`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -72,16 +54,9 @@ export const deleteCategory = async (categoryId: number, token: string) => {
   }
 };
 
-export const getAllCategoriesByRestaurantId = async (
-  restaurantId: number,
-  token: string
-) => {
+export const getAllCategoriesByRestaurantId = async (restaurantId: number) => {
   try {
-    const response = await apiService.get(`/restaurant/${restaurantId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/restaurant/${restaurantId}`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
