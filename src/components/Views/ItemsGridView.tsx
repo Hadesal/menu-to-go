@@ -99,8 +99,7 @@ const ItemsGridView = ({
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      console.log(item);
-                      //deleteFunction(item);
+                      deleteFunction(item);
                     }}
                   >
                     <DeleteOutlinedIcon

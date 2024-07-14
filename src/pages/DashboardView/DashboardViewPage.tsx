@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import RestaurantCardImg from "../../assets/resturant-card.svg";
@@ -12,6 +12,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useDispatch } from "react-redux";
 import { setActiveTab } from "../../redux/slices/mainViewSlice";
 import { useTranslation } from "react-i18next";
+import { fetchUserData } from "../../redux/slices/userSlice";
 
 const dashboardCards = [
   { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
@@ -26,7 +27,9 @@ export default function DashboardView() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const getString = t;
-
+  useEffect(() => {
+    dispatch(fetchUserData() as any);
+  }, []);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>

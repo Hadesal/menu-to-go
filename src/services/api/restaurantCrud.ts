@@ -3,12 +3,16 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 
 const API_Restaurant_BASE_URL = "http://52.23.230.198:8080/api/restaurants";
 const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-const apiService = axios.create({
-  baseURL: API_Restaurant_BASE_URL,
-  headers: {
+let headers = { "Content-Type": "application/json" };
+if (userToken?.token != null) {
+  headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${userToken.token}`,
-  },
+  };
+}
+const apiService = axios.create({
+  baseURL: API_Restaurant_BASE_URL,
+  headers: headers,
 });
 
 export const getRestaurantById = async (restaurantId: string) => {

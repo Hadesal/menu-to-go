@@ -7,12 +7,10 @@ import {
 
 const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
 
-const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
@@ -35,10 +33,14 @@ export const login = async (userSignInData: UserSignInData) => {
     return errorResponseObject;
   }
 };
-export const getUserData = async () => {
+export const getUserData = async (userToken) => {
   try {
     if (userToken == null) throw Error;
-    const response = await apiService.get("/token");
+    const response = await apiService.get("/token", {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -47,10 +49,13 @@ export const getUserData = async () => {
 };
 export const updateUser = async (
   updatedUser: UserUpdateData,
-  userId: number
+  userId: number,
+  userToken
 ) => {
   try {
-    const response = await apiService.put("/" + userId, updatedUser);
+    const response = await apiService.put("/" + userId, updatedUser, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -58,9 +63,11 @@ export const updateUser = async (
   }
 };
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: string, userToken) => {
   try {
-    const response = await apiService.get("/" + userId);
+    const response = await apiService.get("/" + userId, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -68,9 +75,11 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userId: number, userToken) => {
   try {
-    const response = await apiService.delete("/" + userId);
+    const response = await apiService.delete("/" + userId, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;

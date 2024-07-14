@@ -52,7 +52,6 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   }, [error]);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
-    console.log(restaurant);
     dispatch(addRestaurant({ restaurant }));
   };
 

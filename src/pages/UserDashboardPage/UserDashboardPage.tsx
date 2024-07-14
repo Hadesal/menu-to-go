@@ -168,7 +168,6 @@ export default function UserDashboardPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       //FIXME: Remove during production , only for testing purposes
-      console.log(Math.ceil(getRemainingTime() / 1000));
       setRemaining(Math.ceil(getRemainingTime() / 1000));
     }, 500);
 
@@ -176,7 +175,6 @@ export default function UserDashboardPage() {
       clearInterval(interval);
     };
   });
-
   const drawer = (
     <div>
       <img
