@@ -17,9 +17,8 @@ import {
   addRestaurant,
   deleteRestaurant,
   editRestaurant,
-  setRestaurantList,
+  fetchAllRestaurants,
 } from "../../redux/slices/restaurantsSlice";
-import { getAllRestaurantsByUserId } from "../../services/api/restaurantCrud";
 import { getUserData } from "../../services/api/userCrud";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 
@@ -28,7 +27,7 @@ interface RestaurantSectionProps {
 }
 
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
-  const userToken = localStorage.getItem("userToken");
+  const userToken = JSON.parse(localStorage.getItem("userToken") as string);
   const dispatch = useAppDispatch();
   const { restaurantList, loading, error } = useAppSelector(
     (state) => state.restaurantsData
@@ -37,16 +36,13 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const [showToast, setShowToast] = useState(false);
 
   const retriveUserAndRestaurantsdata = async () => {
-    const user = await getUserData(userToken);
-    const restaurantData = await getAllRestaurantsByUserId(
-      user.id,
-      userToken as string
-    );
-    dispatch(setRestaurantList(restaurantData));
+    const user = await getUserData(userToken.token);
+    console.log(user);
+    dispatch(fetchAllRestaurants({ userID: user.id }));
   };
 
   useEffect(() => {
-    //retriveUserAndRestaurantsdata();
+    retriveUserAndRestaurantsdata();
   }, []);
 
   useEffect(() => {
@@ -56,18 +52,18 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   }, [error]);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
-    dispatch(addRestaurant({ restaurant, token: userToken as string }));
+    console.log(restaurant);
+    dispatch(addRestaurant({ restaurant }));
   };
 
   const handleEditRestaurant = (restaurant: RestaurantData) => {
-    dispatch(editRestaurant({ restaurant, token: userToken as string }));
+    dispatch(editRestaurant({ restaurant }));
   };
 
   const handleDeleteRestaurant = (restaurant: RestaurantData) => {
     dispatch(
       deleteRestaurant({
         restaurantId: restaurant.id,
-        token: userToken as string,
       })
     );
   };

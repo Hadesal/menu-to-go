@@ -5,7 +5,9 @@ import {
   createRestaurant as apiCreateRestaurant,
   updateRestaurant as apiUpdateRestaurant,
   deleteRestaurant as apiDeleteRestaurant,
+  getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
+
 export interface RestaurantState {
   restaurantList: RestaurantData[];
   loading: boolean;
@@ -13,27 +15,33 @@ export interface RestaurantState {
 }
 
 const initialState: RestaurantState = {
-  restaurantList: [
-    { name: "Sample restaurant" },
-    { name: "Burgerio" },
-    { name: "Asala Halal Food" },
-    { name: "Koshary Mix" },
-    { name: "Hamama" },
-    { name: "Ferhat Döner" },
-    { name: "Kaffein Zeitgeist" },
-  ],
+  restaurantList: [],
   loading: false,
   error: null,
 };
 
+export const fetchAllRestaurants = createAsyncThunk(
+  "restaurantsData/fetchAllRestaurants",
+  async ({ userID }: { userID: string }, { rejectWithValue }) => {
+    try {
+      const response = await apiFetchRestaurants(userID);
+      return response;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Error fetching restaurants"
+      );
+    }
+  }
+);
+
 export const addRestaurant = createAsyncThunk(
   "restaurantsData/addRestaurant",
   async (
-    { restaurant, token }: { restaurant: RestaurantData; token: string },
+    { restaurant }: { restaurant: RestaurantData },
     { rejectWithValue }
   ) => {
     try {
-      const response = await apiCreateRestaurant(restaurant, token);
+      const response = await apiCreateRestaurant(restaurant);
       return response;
     } catch (error) {
       console.log(error);
@@ -45,15 +53,11 @@ export const addRestaurant = createAsyncThunk(
 export const editRestaurant = createAsyncThunk(
   "restaurantsData/editRestaurant",
   async (
-    { restaurant, token }: { restaurant: RestaurantData; token: string },
+    { restaurant }: { restaurant: RestaurantData },
     { rejectWithValue }
   ) => {
     try {
-      const response = await apiUpdateRestaurant(
-        restaurant,
-        restaurant.id,
-        token
-      );
+      const response = await apiUpdateRestaurant(restaurant, restaurant.id);
       return response;
     } catch (error) {
       return rejectWithValue(
@@ -65,12 +69,9 @@ export const editRestaurant = createAsyncThunk(
 
 export const deleteRestaurant = createAsyncThunk(
   "restaurantsData/deleteRestaurant",
-  async (
-    { restaurantId, token }: { restaurantId: string; token: string },
-    { rejectWithValue }
-  ) => {
+  async ({ restaurantId }: { restaurantId: string }, { rejectWithValue }) => {
     try {
-      await apiDeleteRestaurant(restaurantId, token);
+      await apiDeleteRestaurant(restaurantId);
       return restaurantId;
     } catch (error) {
       return rejectWithValue(
@@ -90,6 +91,18 @@ export const RestaurantSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllRestaurants.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllRestaurants.fulfilled, (state, action) => {
+        state.restaurantList = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchAllRestaurants.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
       .addCase(addRestaurant.pending, (state) => {
         state.loading = true;
         state.error = null;
