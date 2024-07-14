@@ -9,25 +9,20 @@ interface ErrorResponseObject {
 }
 
 const API_Extra_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
-
-// Create an instance of axios
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Extra_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
 export const getAllExtrasByProductDetailsId = async (
-  productDetailsId: number,
-  token: string
+  productDetailsId: number
 ) => {
   try {
-    const response = await apiService.get(`/${productDetailsId}/extras`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${productDetailsId}/extras`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -35,20 +30,11 @@ export const getAllExtrasByProductDetailsId = async (
   }
 };
 
-export const addExtra = async (
-  productDetailsId: number,
-  extra: ExtraData,
-  token: string
-) => {
+export const addExtra = async (productDetailsId: number, extra: ExtraData) => {
   try {
     const response = await apiService.post(
       `/${productDetailsId}/extras`,
-      extra,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      extra
     );
     return response.data;
   } catch (error: any) {
@@ -59,15 +45,10 @@ export const addExtra = async (
 
 export const getExtraByIdAndProductDetailsId = async (
   productDetailsId: number,
-  id: number,
-  token: string
+  id: number
 ) => {
   try {
-    const response = await apiService.get(`/${productDetailsId}/extras/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${productDetailsId}/extras/${id}`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -78,18 +59,12 @@ export const getExtraByIdAndProductDetailsId = async (
 export const updateExtra = async (
   productDetailsId: number,
   id: number,
-  updatedExtra: ExtraData,
-  token: string
+  updatedExtra: ExtraData
 ) => {
   try {
     const response = await apiService.put(
       `/${productDetailsId}/extras/${id}`,
-      updatedExtra,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedExtra
     );
     return response.data;
   } catch (error: any) {
@@ -98,19 +73,10 @@ export const updateExtra = async (
   }
 };
 
-export const deleteExtra = async (
-  productDetailsId: number,
-  id: number,
-  token: string
-) => {
+export const deleteExtra = async (productDetailsId: number, id: number) => {
   try {
     const response = await apiService.delete(
-      `/${productDetailsId}/extras/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${productDetailsId}/extras/${id}`
     );
     return response.data;
   } catch (error: any) {
