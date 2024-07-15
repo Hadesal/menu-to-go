@@ -145,7 +145,7 @@ const handleSignIn = async (
     loginTime: Date.now(),
   };
   localStorage.setItem("userToken", JSON.stringify(authData));
-  navigate("/");
+  navigate("/dashboard");
   return loginResponse;
 };
 
