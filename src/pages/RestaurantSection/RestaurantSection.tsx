@@ -27,7 +27,7 @@ interface RestaurantSectionProps {
 }
 
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
-  const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+  //const userToken = JSON.parse(localStorage.getItem("userToken") as string);
   const dispatch = useAppDispatch();
   const { restaurantList, loading, error } = useAppSelector(
     (state) => state.restaurantsData
@@ -35,15 +35,15 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
 
   const [showToast, setShowToast] = useState(false);
 
-  const retriveUserAndRestaurantsdata = async () => {
-    const user = await getUserData(userToken.token);
-    console.log(user);
-    dispatch(fetchAllRestaurants({ userID: user.id }));
-  };
+  // const retriveUserAndRestaurantsdata = async () => {
+  //   const user = await getUserData(userToken.token);
+  //   console.log(user);
+  //   dispatch(fetchAllRestaurants({ userID: user.id }));
+  // };
 
-  useEffect(() => {
-    retriveUserAndRestaurantsdata();
-  }, []);
+  // useEffect(() => {
+  //   retriveUserAndRestaurantsdata();
+  // }, []);
 
   useEffect(() => {
     if (error) {

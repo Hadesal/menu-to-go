@@ -41,6 +41,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
+import useUserDataFetching, { fetchData } from "../../utils/DataFetching";
+import SplashScreen from "../SplashScreen/SplashScreen";
+import { useAppDispatch } from "../../utils/hooks";
 
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
@@ -80,6 +83,11 @@ export default function UserDashboardPage() {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElLang, setAnchorElLang] = useState(null);
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true); // State to track loading state
+
+  // const { userLoading, restaurantsLoading, userError, restaurantsError } =
+  //   useUserDataFetching();
 
   const openProfile = Boolean(anchorElProfile);
   const openLang = Boolean(anchorElLang);
@@ -103,7 +111,7 @@ export default function UserDashboardPage() {
   const [remaining, setRemaining] = useState<number>(10 * 6000);
 
   const activeTab = useSelector(selectActiveTab);
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleDrawerClose = () => {
@@ -164,7 +172,20 @@ export default function UserDashboardPage() {
     promptBeforeIdle: PROMPT_BEFORE_IDLE,
     throttle: CHECK_INTERVAL,
   });
+  useEffect(() => {
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true); // Start loading
+      try {
+        await fetchData(dispatch); // Fetch data
+        setLoading(false); // Loading finished successfully
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        //setLoading(false); // Loading finished with error
+      }
+    };
 
+    fetchDataAndHandleLoading();
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       //FIXME: Remove during production , only for testing purposes
@@ -224,6 +245,11 @@ export default function UserDashboardPage() {
       </List>
     </div>
   );
+
+  // Show splash screen while loading
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
