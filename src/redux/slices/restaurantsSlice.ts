@@ -57,6 +57,7 @@ export const editRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      console.log(restaurant);
       const response = await apiUpdateRestaurant(restaurant, restaurant.id);
       return response;
     } catch (error) {

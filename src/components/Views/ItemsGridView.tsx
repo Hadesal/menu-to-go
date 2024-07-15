@@ -15,6 +15,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert"; // Import the more menu
 import EditIcon from "@mui/icons-material/Edit";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { useState } from "react";
+import AddItemDialog from "../AddItemDialogComponent/AddItemDialog";
 
 interface GridViewProps {
   items: any[];
@@ -34,7 +35,10 @@ const ItemsGridView = ({
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
-
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
+  const handleClose = () => {
+    setIsUpdateDialogOpen(false);
+  };
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
@@ -87,7 +91,7 @@ const ItemsGridView = ({
                   <MenuItem
                     onClick={() => {
                       console.log(item);
-                      //editFunction(item);
+                      setIsUpdateDialogOpen(true);
                     }}
                   >
                     <EditIcon
@@ -97,6 +101,23 @@ const ItemsGridView = ({
                     />
                     Edit
                   </MenuItem>
+                  <AddItemDialog
+                    title="Update restaurant"
+                    fileUpload={false}
+                    errorMessage="Please enter restaurant name"
+                    cancelText="Cancel"
+                    confirmText="Update"
+                    isOpen={isUpdateDialogOpen}
+                    onCancelClick={handleClose}
+                    onConfirmClick={(newRestaurantName) => {
+                      const newRestaurant = {
+                        ...item,
+                        name: newRestaurantName.name,
+                      };
+                      editFunction(newRestaurant);
+                    }}
+                  />
+
                   <MenuItem
                     onClick={() => {
                       deleteFunction(item);
