@@ -1,3 +1,7 @@
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Card,
   CardContent,
@@ -9,19 +13,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import MoreVertIcon from "@mui/icons-material/MoreVert"; // Import the more menu icon
-import EditIcon from "@mui/icons-material/Edit";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { useState } from "react";
-import AddItemDialog from "../AddItemDialogComponent/AddItemDialog";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
+import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 
 interface GridViewProps {
   items: any[];
   deleteFunction: (item: object) => void;
   editFunction: (item: object) => void;
-  styles: any; // Updated to any to avoid import issues
+  styles: any;
   CardIcon: string;
 }
 
@@ -35,10 +36,19 @@ const ItemsGridView = ({
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
-  const handleClose = () => {
+  const [currentItem, setCurrentItem] = useState<RestaurantData>({
+    name: "",
+  });
+
+  const handleEditDialogClose = () => {
     setIsUpdateDialogOpen(false);
   };
+  const handleDeleteDialogClose = () => {
+    setIsDeleteDialogOpen(false);
+  };
+
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
@@ -52,6 +62,15 @@ const ItemsGridView = ({
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = null;
     setAnchorEls(newAnchorEls);
+  };
+
+  const handleEditClick = (item: RestaurantData) => {
+    setCurrentItem(item);
+    setIsUpdateDialogOpen(true);
+  };
+  const handleDeleteClick = (item: RestaurantData) => {
+    setCurrentItem(item);
+    setIsDeleteDialogOpen(true);
   };
 
   return (
@@ -69,11 +88,11 @@ const ItemsGridView = ({
                     padding: 0.8,
                     background: "#A4755D30",
                     "&:hover": {
-                      background: "#A4755D30", // Ensure the background remains the same on hover
+                      background: "#A4755D30",
                     },
                   }}
                   aria-label="more"
-                  onClick={(event) => handleMenuClick(event, index)} // Prevent card click when clicking the menu
+                  onClick={(event) => handleMenuClick(event, index)}
                 >
                   <MoreVertIcon fontSize="small" color="primary" />
                 </IconButton>
@@ -90,8 +109,8 @@ const ItemsGridView = ({
                 >
                   <MenuItem
                     onClick={() => {
-                      console.log(item);
-                      setIsUpdateDialogOpen(true);
+                      handleEditClick(item);
+                      handleMenuClose(index);
                     }}
                   >
                     <EditIcon
@@ -101,26 +120,10 @@ const ItemsGridView = ({
                     />
                     Edit
                   </MenuItem>
-                  <AddItemDialog
-                    title="Update restaurant"
-                    fileUpload={false}
-                    errorMessage="Please enter restaurant name"
-                    cancelText="Cancel"
-                    confirmText="Update"
-                    isOpen={isUpdateDialogOpen}
-                    onCancelClick={handleClose}
-                    onConfirmClick={(newRestaurantName) => {
-                      const newRestaurant = {
-                        ...item,
-                        name: newRestaurantName.name,
-                      };
-                      editFunction(newRestaurant);
-                    }}
-                  />
-
                   <MenuItem
                     onClick={() => {
-                      deleteFunction(item);
+                      handleDeleteClick(item);
+                      handleMenuClose(index);
                     }}
                   >
                     <DeleteOutlinedIcon
@@ -159,7 +162,7 @@ const ItemsGridView = ({
                     }}
                     noWrap
                     variant="h6"
-                    title={item.name} // Set the title attribute to show full text on hover
+                    title={item.name}
                   >
                     {item.name}
                   </Typography>
@@ -169,6 +172,39 @@ const ItemsGridView = ({
           </Paper>
         </Grid>
       ))}
+      <AddItemDialog
+        title="Update restaurant"
+        fileUpload={false}
+        errorMessage="Please enter restaurant name"
+        cancelText="Cancel"
+        confirmText="Update"
+        isOpen={isUpdateDialogOpen}
+        onCancelClick={handleEditDialogClose}
+        onConfirmClick={(newRestaurantName) => {
+          const newRestaurant = {
+            ...currentItem,
+            name: newRestaurantName.name.trim(),
+          };
+          editFunction(newRestaurant);
+          handleEditDialogClose();
+        }}
+      />
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onPrimaryActionClick={() => {
+          deleteFunction(currentItem);
+          setIsDeleteDialogOpen(false);
+        }}
+        onSecondaryActionClick={handleDeleteDialogClose}
+        onClose={handleDeleteDialogClose}
+        width="500px"
+        height="300px"
+        showImg={false}
+        secondaryActionText="Cancel"
+        primaryActionText="Delete"
+        title="Confirm Deletion"
+        subTitle={`Are you sure you want to permanently delete the restaurant "${currentItem.name}"?`}
+      />
     </Grid>
   );
 };

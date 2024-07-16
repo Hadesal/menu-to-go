@@ -7,20 +7,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import styles from "./RestaurantSection.styles";
 import BoxComponent from "../../components/BoxComponent/BoxComponent";
+import styles from "./RestaurantSection.styles";
 // import RestaurantIcon from "@mui/icons-material/Restaurant";
-import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import RestaurantIcon from "../../assets/restaurant-icon.jpg";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import {
   addRestaurant,
   deleteRestaurant,
-  editRestaurant,
-  fetchAllRestaurants,
+  editRestaurant
 } from "../../redux/slices/restaurantsSlice";
-import { getUserData } from "../../services/api/userCrud";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 
 interface RestaurantSectionProps {
   label: string;
@@ -34,16 +32,6 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   );
 
   const [showToast, setShowToast] = useState(false);
-
-  // const retriveUserAndRestaurantsdata = async () => {
-  //   const user = await getUserData(userToken.token);
-  //   console.log(user);
-  //   dispatch(fetchAllRestaurants({ userID: user.id }));
-  // };
-
-  // useEffect(() => {
-  //   retriveUserAndRestaurantsdata();
-  // }, []);
 
   useEffect(() => {
     if (error) {

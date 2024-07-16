@@ -110,7 +110,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addRestaurant.fulfilled, (state, action) => {
         console.log(action);
-        state.restaurantList.push(action.meta.arg.restaurant);
+        state.restaurantList.push(action.payload);
         state.loading = false;
       })
       .addCase(addRestaurant.rejected, (state, action) => {
