@@ -1,5 +1,6 @@
 import HomeIcon from "@mui/icons-material/Home";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LanguageIcon from "@mui/icons-material/Language";
 import LayersIcon from "@mui/icons-material/Layers";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,11 +20,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../assets/omarselfie.jpeg";
 import logo from "../../assets/qr-code-logo.svg";
@@ -33,14 +37,13 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
+import { fetchAllData } from "../../utils/DataFetching";
+import { useAppDispatch } from "../../utils/hooks";
 import ContactPage from "../ContactPage/Contact";
-import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-import LanguageIcon from "@mui/icons-material/Language";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useTranslation } from "react-i18next";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
+import SplashScreen from "../SplashScreen/SplashScreen";
+import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
@@ -80,6 +83,11 @@ export default function UserDashboardPage() {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElLang, setAnchorElLang] = useState(null);
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true); // State to track loading state
+
+  // const { userLoading, restaurantsLoading, userError, restaurantsError } =
+  //   useUserDataFetching();
 
   const openProfile = Boolean(anchorElProfile);
   const openLang = Boolean(anchorElLang);
@@ -103,7 +111,7 @@ export default function UserDashboardPage() {
   const [remaining, setRemaining] = useState<number>(10 * 6000);
 
   const activeTab = useSelector(selectActiveTab);
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleDrawerClose = () => {
@@ -167,7 +175,6 @@ export default function UserDashboardPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      //FIXME: Remove during production , only for testing purposes
       setRemaining(Math.ceil(getRemainingTime() / 1000));
     }, 500);
 
@@ -175,6 +182,22 @@ export default function UserDashboardPage() {
       clearInterval(interval);
     };
   });
+
+  useEffect(() => {
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true); // Start loading
+      try {
+        await fetchAllData(dispatch); // Fetch data
+        setLoading(false); // Loading finished successfully
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        //setLoading(false); // Loading finished with error
+      }
+    };
+
+    fetchDataAndHandleLoading();
+  }, []);
+
   const drawer = (
     <div>
       <img
@@ -224,6 +247,11 @@ export default function UserDashboardPage() {
       </List>
     </div>
   );
+
+  // Show splash screen while loading
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>

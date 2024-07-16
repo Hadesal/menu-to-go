@@ -1,18 +1,17 @@
-import React, { useEffect } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { setActiveTab } from "../../../redux/slices/mainViewSlice";
 import CategoriesCardImg from "../../../assets/categories-card.svg";
 import ContactCardImg from "../../../assets/contactus-card.svg";
 import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
 import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
 import RestaurantCardImg from "../../../assets/resturant-card.svg";
 import TemplatesCardImg from "../../../assets/templates-card.svg";
-import { fetchUserData } from "../../../redux/slices/userSlice";
+import { setActiveTab } from "../../../redux/slices/mainViewSlice";
+import { useAppSelector } from "../../../utils/hooks";
 
 const dashboardCards = [
   { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
@@ -27,9 +26,7 @@ export default function DashboardView() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const getString = t;
-  useEffect(() => {
-    dispatch(fetchUserData() as any);
-  }, []);
+  const { userList } = useAppSelector((state) => state.userData);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -50,7 +47,8 @@ export default function DashboardView() {
             color: "#A4755D",
           }}
         >
-          Hady!
+          {/* FIXME: we need a user object */}
+          {userList[0].name}
         </Typography>
       </Box>
       <Box

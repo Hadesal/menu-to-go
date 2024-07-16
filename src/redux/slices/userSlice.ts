@@ -24,7 +24,7 @@ export const fetchUserData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-      const response = await getUserData(userToken);
+      const response = await getUserData(userToken.token);
       return [response];
     } catch (error: any) {
       return rejectWithValue(
