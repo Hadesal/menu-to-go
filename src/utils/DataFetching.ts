@@ -1,8 +1,9 @@
 import { fetchUserData } from "../redux/slices/userSlice";
 import { fetchAllRestaurants } from "../redux/slices/restaurantsSlice";
 import { getUserData } from "../services/api/userCrud";
+import { AppDispatch } from "../redux/store"; // Adjust the path as needed
 
-export const fetchData = async (dispatch) => {
+export const fetchAllData = async (dispatch: AppDispatch) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);
     await dispatch(fetchUserData());

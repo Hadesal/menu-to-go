@@ -1,5 +1,6 @@
 import HomeIcon from "@mui/icons-material/Home";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LanguageIcon from "@mui/icons-material/Language";
 import LayersIcon from "@mui/icons-material/Layers";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,11 +20,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../assets/omarselfie.jpeg";
 import logo from "../../assets/qr-code-logo.svg";
@@ -33,17 +37,13 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
+import { fetchAllData } from "../../utils/DataFetching";
+import { useAppDispatch } from "../../utils/hooks";
 import ContactPage from "../ContactPage/Contact";
-import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-import LanguageIcon from "@mui/icons-material/Language";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useTranslation } from "react-i18next";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
-import useUserDataFetching, { fetchData } from "../../utils/DataFetching";
 import SplashScreen from "../SplashScreen/SplashScreen";
-import { useAppDispatch } from "../../utils/hooks";
+import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
@@ -172,11 +172,22 @@ export default function UserDashboardPage() {
     promptBeforeIdle: PROMPT_BEFORE_IDLE,
     throttle: CHECK_INTERVAL,
   });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemaining(Math.ceil(getRemainingTime() / 1000));
+    }, 500);
+
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
       setLoading(true); // Start loading
       try {
-        await fetchData(dispatch); // Fetch data
+        await fetchAllData(dispatch); // Fetch data
         setLoading(false); // Loading finished successfully
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -186,16 +197,7 @@ export default function UserDashboardPage() {
 
     fetchDataAndHandleLoading();
   }, []);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      //FIXME: Remove during production , only for testing purposes
-      setRemaining(Math.ceil(getRemainingTime() / 1000));
-    }, 500);
 
-    return () => {
-      clearInterval(interval);
-    };
-  });
   const drawer = (
     <div>
       <img

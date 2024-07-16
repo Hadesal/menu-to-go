@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { setActiveTab } from "../../../redux/slices/mainViewSlice";
 import CategoriesCardImg from "../../../assets/categories-card.svg";
 import ContactCardImg from "../../../assets/contactus-card.svg";
 import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
 import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
 import RestaurantCardImg from "../../../assets/resturant-card.svg";
 import TemplatesCardImg from "../../../assets/templates-card.svg";
+import { setActiveTab } from "../../../redux/slices/mainViewSlice";
 import { useAppSelector } from "../../../utils/hooks";
 
 const dashboardCards = [
@@ -48,7 +47,8 @@ export default function DashboardView() {
             color: "#A4755D",
           }}
         >
-         { userList[0].name}
+          {/* FIXME: we need a user object */}
+          {userList[0].name}
         </Typography>
       </Box>
       <Box
