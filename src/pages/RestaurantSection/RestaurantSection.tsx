@@ -92,7 +92,8 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         editFunction={handleEditRestaurant}
         deleteFunction={handleDeleteRestaurant}
         styles={styles}
-        emptyText={getString("noRestaurantsfound")}
+        emptyStateTitle={getString("noRestaurantsfoundTitle")}
+        emptyStateMessage={getString("noRestaurantsfoundMessage")}
       />
     </Stack>
   );

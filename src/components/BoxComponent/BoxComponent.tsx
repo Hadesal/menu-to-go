@@ -14,7 +14,8 @@ interface BoxComponentProps {
   editFunction: (item: RestaurantData) => void;
   deleteFunction: (item: RestaurantData) => void;
   addFunction: (item: RestaurantData) => void;
-  emptyText?: String;
+  emptyStateTitle?: string;
+  emptyStateMessage?: string;
   CardIcon: string;
 }
 
@@ -25,7 +26,8 @@ const BoxComponent = ({
   editFunction,
   deleteFunction,
   addFunction,
-  emptyText,
+  emptyStateTitle,
+  emptyStateMessage,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState(items);
@@ -99,7 +101,10 @@ const BoxComponent = ({
           styles={styles}
         />
       ) : (
-        <EmptyState emptyText={emptyText} />
+        <EmptyState
+          emptyStateTitle={emptyStateTitle}
+          emptyStateMessage={emptyStateMessage}
+        />
       )}
       <AddItemDialog
         title={getString("addRestaurantText")}
