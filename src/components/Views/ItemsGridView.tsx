@@ -9,7 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Import the more menu icon
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,7 +20,7 @@ interface GridViewProps {
   items: any[];
   deleteFunction: (item: object) => void;
   editFunction: (item: object) => void;
-  styles: any; // Updated to any to avoid import issues
+  styles: any;
   CardIcon: string;
 }
 
