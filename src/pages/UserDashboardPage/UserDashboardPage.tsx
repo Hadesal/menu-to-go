@@ -44,38 +44,20 @@ import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
 
 const drawerWidth = 240;
 
-const buttonData = [
-  { id: "home", icon: <HomeIcon />, label: "Dashboard" },
-  { id: "resturant", icon: <RestaurantIcon />, label: "Restaurant" },
-  { id: "categories", icon: <LayersIcon />, label: "Categories" },
-  { id: "templates", icon: <ViewQuiltIcon />, label: "Templates" },
-  { id: "qrcode", icon: <QrCodeIcon />, label: "Generate qr code" },
-  { id: "feedbacks", icon: <QuestionAnswerIcon />, label: "Feedbacks" },
-  { id: "contactus", icon: <SupportAgentIcon />, label: "Contact us" },
-  {
-    id: "Logout",
-    icon: <LogoutOutlinedIcon />,
-    label: "Log out",
-  },
-];
-
 const langs = {
   en: { nativeName: "English" },
   de: { nativeName: "Deutsch" },
+  es: { nativeName: "Español" },
+  ar: { nativeName: "العربية" },
+  fr: { nativeName: "Français" },
+  tr: { nativeName: "Türkçe" },
 };
-
-const profileOptions = [
-  { id: "myprofile", optionName: "My profile" },
-  { id: "notifications", optionName: "Notifications" },
-  { id: "subscription", optionName: "Subscription" },
-];
 
 export default function UserDashboardPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -84,15 +66,44 @@ export default function UserDashboardPage() {
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElLang, setAnchorElLang] = useState(null);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true); // State to track loading state
-
-  // const { userLoading, restaurantsLoading, userError, restaurantsError } =
-  //   useUserDataFetching();
-
+  const [loading, setLoading] = useState(true);
   const openProfile = Boolean(anchorElProfile);
   const openLang = Boolean(anchorElLang);
 
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const getString = t;
+
+  const buttonData = [
+    { id: "home", icon: <HomeIcon />, label: getString("dashboard") },
+    {
+      id: "resturant",
+      icon: <RestaurantIcon />,
+      label: getString("restaurant"),
+    },
+    { id: "categories", icon: <LayersIcon />, label: getString("categories") },
+    { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
+    { id: "qrcode", icon: <QrCodeIcon />, label: getString("generateQrCode") },
+    {
+      id: "feedbacks",
+      icon: <QuestionAnswerIcon />,
+      label: getString("feedbacks"),
+    },
+    {
+      id: "contactus",
+      icon: <SupportAgentIcon />,
+      label: getString("contactUs"),
+    },
+    {
+      id: "Logout",
+      icon: <LogoutOutlinedIcon />,
+      label: getString("logout"),
+    },
+  ];
+  const profileOptions = [
+    { id: "myprofile", optionName: getString("myProfile") },
+    { id: "notifications", optionName: getString("notification") },
+    { id: "subscription", optionName: getString("Subscription") },
+  ];
 
   const handleProfileClick = (event) => {
     setAnchorElProfile(event.currentTarget);
@@ -111,7 +122,6 @@ export default function UserDashboardPage() {
   const [remaining, setRemaining] = useState<number>(10 * 6000);
 
   const activeTab = useSelector(selectActiveTab);
-  //const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleDrawerClose = () => {
@@ -219,7 +229,7 @@ export default function UserDashboardPage() {
             key={btn.id}
             disablePadding
             onClick={() => {
-              if (btn.label === "Log out") {
+              if (btn.label === getString("logout")) {
                 handleLogoutClick();
               } else {
                 dispatch(setActiveTab(btn.label));
@@ -363,7 +373,9 @@ export default function UserDashboardPage() {
                   {Object.keys(langs).map((lang) => (
                     <MenuItem
                       key={lang}
-                      onClick={() => i18n.changeLanguage(lang)}
+                      onClick={() => {
+                        i18n.changeLanguage(lang);
+                      }}
                       disabled={i18n.resolvedLanguage === lang}
                     >
                       {langs[lang].nativeName}
@@ -437,10 +449,10 @@ export default function UserDashboardPage() {
           width="580px"
           height="500px"
           showImg={true}
-          secondaryActionText="Cancel"
-          primaryActionText="Logout"
-          title="Are You Logging Out?"
-          subTitle="You can always log back in at any time."
+          secondaryActionText={getString("cancel")}
+          primaryActionText={getString("logout")}
+          title={getString("logoutSubText")}
+          subTitle={getString("logoutText")}
           onClose={handleLogoutDialogCancel}
         />
         {/* confirm session timeout */}
@@ -451,20 +463,22 @@ export default function UserDashboardPage() {
           width="500px"
           height="300px"
           showImg={false}
-          secondaryActionText="Log out now"
-          primaryActionText="Continue session"
-          title="You will be logged out soon"
-          subTitle={`For your security, we automatically log you out after a period of inactivity. You will be logged out in ${remaining} seconds.`}
+          secondaryActionText={getString("sessionalLogoutCancelText")}
+          primaryActionText={getString("sessionalLogoutAcceptText")}
+          title={getString("sessionalLogoutText")}
+          subTitle={getString("sessionalLogoutSubText")}
         />
-        {activeTab === "Dashboard" && <DashboardView />}
-        {activeTab === "Restaurant" && (
-          <RestaurantSection label="Restaurants" />
+        {activeTab === getString("dashboard") && <DashboardView />}
+        {activeTab === getString("restaurant") && (
+          <RestaurantSection label={getString("restaurant")} />
         )}
-        {activeTab === "Categories" && <h1> Categories view</h1>}
-        {activeTab === "Templates" && <h1> Templates view</h1>}
-        {activeTab === "Generate qr code" && <h1> Generate qr code view</h1>}
-        {activeTab === "Feedbacks" && <FeedbackPage />}
-        {activeTab === "Contact us" && <ContactPage />}
+        {activeTab === getString("categories") && <h1> Categories view</h1>}
+        {activeTab === getString("templates") && <h1> Templates view</h1>}
+        {activeTab === getString("generateQrCode") && (
+          <h1> Generate qr code view</h1>
+        )}
+        {activeTab === getString("feedbacks") && <FeedbackPage />}
+        {activeTab === getString("contactUs") && <ContactPage />}
       </Box>
     </Box>
   );

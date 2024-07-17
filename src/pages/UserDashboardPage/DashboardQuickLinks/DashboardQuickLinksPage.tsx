@@ -13,19 +13,26 @@ import TemplatesCardImg from "../../../assets/templates-card.svg";
 import { setActiveTab } from "../../../redux/slices/mainViewSlice";
 import { useAppSelector } from "../../../utils/hooks";
 
-const dashboardCards = [
-  { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
-  { id: "categories", image: CategoriesCardImg, label: "Categories" },
-  { id: "templates", image: TemplatesCardImg, label: "Templates" },
-  { id: "qrcode", image: QRCodeCardImg, label: "Generate qr code" },
-  { id: "feedbacks", image: FeedbacksCardImg, label: "Feedbacks" },
-  { id: "contactus", image: ContactCardImg, label: "Contact us" },
-];
-
 export default function DashboardView() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const getString = t;
+  const dashboardCards = [
+    {
+      id: "resturant",
+      image: RestaurantCardImg,
+      label: getString("restaurant"),
+    },
+    {
+      id: "categories",
+      image: CategoriesCardImg,
+      label: getString("categories"),
+    },
+    { id: "templates", image: TemplatesCardImg, label: getString("templates") },
+    { id: "qrcode", image: QRCodeCardImg, label: getString("generateQrCode") },
+    { id: "feedbacks", image: FeedbacksCardImg, label: getString("feedbacks") },
+    { id: "contactus", image: ContactCardImg, label: getString("contactUs") },
+  ];
   const { userList } = useAppSelector((state) => state.userData);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
