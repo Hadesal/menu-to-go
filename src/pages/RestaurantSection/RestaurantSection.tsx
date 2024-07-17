@@ -16,7 +16,7 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import {
   addRestaurant,
   deleteRestaurant,
-  editRestaurant
+  editRestaurant,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 
@@ -25,7 +25,6 @@ interface RestaurantSectionProps {
 }
 
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
-  //const userToken = JSON.parse(localStorage.getItem("userToken") as string);
   const dispatch = useAppDispatch();
   const { restaurantList, loading, error } = useAppSelector(
     (state) => state.restaurantsData

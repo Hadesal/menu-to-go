@@ -1,7 +1,7 @@
 import { Container, Typography } from "@mui/material";
 import emptyStateImage from "../../assets/emptystate.svg";
 interface EmptyStateProps {
-  emptyText: String;
+  emptyText?: String;
 }
 const EmptyState = ({ emptyText }: EmptyStateProps) => {
   return (
@@ -14,7 +14,7 @@ const EmptyState = ({ emptyText }: EmptyStateProps) => {
       }}
     >
       <img src={emptyStateImage} />
-      <Typography>{emptyText}</Typography>
+      <Typography>{emptyText || "no items found"}</Typography>
     </Container>
   );
 };
