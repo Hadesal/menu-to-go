@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import styles from "./RestaurantSection.styles";
-// import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { useEffect, useState } from "react";
 import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
@@ -19,7 +18,7 @@ import {
   editRestaurant,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
-
+import { useTranslation } from "react-i18next";
 interface RestaurantSectionProps {
   label: string;
 }
@@ -31,6 +30,8 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   );
 
   const [showToast, setShowToast] = useState(false);
+  const { t } = useTranslation();
+  const getString = t;
 
   useEffect(() => {
     if (error) {
@@ -91,7 +92,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         editFunction={handleEditRestaurant}
         deleteFunction={handleDeleteRestaurant}
         styles={styles}
-        emptyText={"No Restaurants found"}
+        emptyText={getString("noRestaurantsfound")}
       />
     </Stack>
   );

@@ -17,6 +17,8 @@ import { useState } from "react";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
+import { useTranslation } from "react-i18next";
+import { Cancel } from "@mui/icons-material";
 
 interface GridViewProps {
   items: any[];
@@ -41,6 +43,8 @@ const ItemsGridView = ({
   const [currentItem, setCurrentItem] = useState<RestaurantData>({
     name: "",
   });
+  const { t } = useTranslation();
+  const getString = t;
 
   const handleEditDialogClose = () => {
     setIsUpdateDialogOpen(false);
@@ -118,7 +122,7 @@ const ItemsGridView = ({
                       fontSize="small"
                       sx={{ marginRight: 1 }}
                     />
-                    Edit
+                    {getString("edit")}
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -130,7 +134,7 @@ const ItemsGridView = ({
                       fontSize="small"
                       sx={{ marginRight: 1 }}
                     />
-                    Delete
+                    {getString("delete")}
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -138,7 +142,7 @@ const ItemsGridView = ({
                     }}
                   >
                     <FileCopyIcon fontSize="small" sx={{ marginRight: 1 }} />
-                    Duplicate
+                    {getString("duplicate")}
                   </MenuItem>
                 </Menu>
                 <Stack direction="column" sx={styles.stackColumn}>
@@ -173,11 +177,11 @@ const ItemsGridView = ({
         </Grid>
       ))}
       <AddItemDialog
-        title="Update restaurant"
+        title={getString("updateRestaurant")}
         fileUpload={false}
-        errorMessage="Please enter restaurant name"
-        cancelText="Cancel"
-        confirmText="Update"
+        errorMessage={getString("restaurantError")}
+        cancelText={getString("cancel")}
+        confirmText={getString("update")}
         isOpen={isUpdateDialogOpen}
         onCancelClick={handleEditDialogClose}
         onConfirmClick={(newRestaurantName) => {
@@ -200,10 +204,10 @@ const ItemsGridView = ({
         width="500px"
         height="300px"
         showImg={false}
-        secondaryActionText="Cancel"
-        primaryActionText="Delete"
-        title="Confirm Deletion"
-        subTitle={`Are you sure you want to permanently delete the restaurant "${currentItem.name}"?`}
+        secondaryActionText={getString("cancel")}
+        primaryActionText={getString("delete")}
+        title={getString("deleteConfirmText")}
+        subTitle={`${getString("restaurantDeleteText")}`}
       />
     </Grid>
   );
