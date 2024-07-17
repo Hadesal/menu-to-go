@@ -38,12 +38,13 @@ import {
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
 import { fetchAllData } from "../../utils/DataFetching";
-import { useAppDispatch } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import ContactPage from "../ContactPage/Contact";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
+import UserDetailsInputComponent from "../../components/UserDetailsInputComponent/UserDetailsInputComponent";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
@@ -73,6 +74,14 @@ export default function UserDashboardPage() {
   const { i18n, t } = useTranslation();
   const getString = t;
 
+  const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
+    useState(false);
+  const [remaining, setRemaining] = useState<number>(10 * 6000);
+
+  const activeTab = useSelector(selectActiveTab);
+  const navigate = useNavigate();
+  const userData = useAppSelector((selector) => selector.userData.userList[0]);
+  const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
   const buttonData = [
     { id: "dashboard", icon: <HomeIcon />, label: getString("dashboard") },
     {
@@ -82,7 +91,11 @@ export default function UserDashboardPage() {
     },
     { id: "categories", icon: <LayersIcon />, label: getString("categories") },
     { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
-    { id: "generateQrCode", icon: <QrCodeIcon />, label: getString("generateQrCode") },
+    {
+      id: "generateQrCode",
+      icon: <QrCodeIcon />,
+      label: getString("generateQrCode"),
+    },
     {
       id: "feedback",
       icon: <QuestionAnswerIcon />,
@@ -117,12 +130,6 @@ export default function UserDashboardPage() {
   const handleLangClose = () => {
     setAnchorElLang(null);
   };
-  const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
-    useState(false);
-  const [remaining, setRemaining] = useState<number>(10 * 6000);
-
-  const activeTab = useSelector(selectActiveTab);
-  const navigate = useNavigate();
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -199,6 +206,11 @@ export default function UserDashboardPage() {
       try {
         await fetchAllData(dispatch); // Fetch data
         setLoading(false); // Loading finished successfully
+        if (userData.name === "hade") {
+          setUserDetailsisOpen(true);
+        } else {
+          setUserDetailsisOpen(false);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
         //setLoading(false); // Loading finished with error
@@ -266,6 +278,7 @@ export default function UserDashboardPage() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+      <UserDetailsInputComponent isOpen={userDetailsisOpen} />
       <AppBar
         position="fixed"
         sx={{

@@ -7,7 +7,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserSignInData } from "../../DataTypes/UserDataTypes";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -28,6 +28,20 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("signInButton").click();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keypress", handleKeyPress);
+    return () => {
+      document.removeEventListener("keypress", handleKeyPress);
+    };
+  }, []);
 
   return (
     <Box sx={Styles.mainBox}>
@@ -95,6 +109,7 @@ export default function LoginPage() {
               Forget Password!
             </Link>
             <Button
+              id="signInButton"
               variant="contained"
               fullWidth
               onClick={() => {

@@ -18,7 +18,6 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
-import { Cancel } from "@mui/icons-material";
 
 interface GridViewProps {
   items: any[];

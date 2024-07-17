@@ -97,6 +97,8 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         action.payload.forEach((newUser) => {
+          console.log(newUser);
+
           const existingUserIndex = state.userList.findIndex(
             (user) => user.id === newUser.id
           );
