@@ -50,7 +50,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const handleDeleteRestaurant = (restaurant: RestaurantData) => {
     dispatch(
       deleteRestaurant({
-        restaurantId: restaurant.id,
+        restaurantId: restaurant.id as string,
       })
     );
   };
@@ -92,6 +92,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         editFunction={handleEditRestaurant}
         deleteFunction={handleDeleteRestaurant}
         styles={styles}
+        emptyText={"No Restaurants found"}
       />
     </Stack>
   );

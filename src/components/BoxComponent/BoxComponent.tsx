@@ -2,11 +2,11 @@ import SearchIcon from "@mui/icons-material/Search";
 //import AddItemDialog from "../AddItemDialogComponent/AddItemDialog"; // Adjust the import path
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
-import { Button, Paper, Stack, SvgIconTypeMap, TextField } from "@mui/material";
+import { Button, Paper, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog"; // Adjust the import path7
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import EmptyState from "../EmptyStateComponet/EmptyState";
 
 interface BoxComponentProps {
   items: RestaurantData[];
@@ -14,6 +14,7 @@ interface BoxComponentProps {
   editFunction: (item: RestaurantData) => void;
   deleteFunction: (item: RestaurantData) => void;
   addFunction: (item: RestaurantData) => void;
+  emptyText?: String;
   // CardIcon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
   //   muiName: string;
   // };
@@ -27,6 +28,7 @@ const BoxComponent = ({
   editFunction,
   deleteFunction,
   addFunction,
+  emptyText,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
 
@@ -36,14 +38,6 @@ const BoxComponent = ({
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const EmptyState = () => {
-    return (
-      <>
-        <p>No items</p>
-      </>
-    );
   };
 
   return (
@@ -77,7 +71,7 @@ const BoxComponent = ({
           styles={styles}
         />
       ) : (
-        <EmptyState />
+        <EmptyState emptyText={emptyText} />
       )}
       <AddItemDialog
         title="Add restaurant"
