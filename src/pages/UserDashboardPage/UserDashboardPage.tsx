@@ -74,27 +74,27 @@ export default function UserDashboardPage() {
   const getString = t;
 
   const buttonData = [
-    { id: "home", icon: <HomeIcon />, label: getString("dashboard") },
+    { id: "dashboard", icon: <HomeIcon />, label: getString("dashboard") },
     {
-      id: "resturant",
+      id: "restaurant",
       icon: <RestaurantIcon />,
       label: getString("restaurant"),
     },
     { id: "categories", icon: <LayersIcon />, label: getString("categories") },
     { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
-    { id: "qrcode", icon: <QrCodeIcon />, label: getString("generateQrCode") },
+    { id: "generateQrCode", icon: <QrCodeIcon />, label: getString("generateQrCode") },
     {
-      id: "feedbacks",
+      id: "feedback",
       icon: <QuestionAnswerIcon />,
       label: getString("feedbacks"),
     },
     {
-      id: "contactus",
+      id: "contactUs",
       icon: <SupportAgentIcon />,
       label: getString("contactUs"),
     },
     {
-      id: "Logout",
+      id: "logout",
       icon: <LogoutOutlinedIcon />,
       label: getString("logout"),
     },
@@ -229,18 +229,18 @@ export default function UserDashboardPage() {
             key={btn.id}
             disablePadding
             onClick={() => {
-              if (btn.label === getString("logout")) {
+              if (btn.id === "logout") {
                 handleLogoutClick();
               } else {
-                dispatch(setActiveTab(btn.label));
+                dispatch(setActiveTab(btn.id));
                 //isTokenValid(handleLogout);
               }
             }}
           >
             <ListItemButton
               sx={{
-                color: activeTab === btn.label ? "#F9FDFE" : "#8B6A58",
-                backgroundColor: activeTab === btn.label ? "#A4755D" : null,
+                color: activeTab === btn.id ? "#F9FDFE" : "#8B6A58",
+                backgroundColor: activeTab === btn.id ? "#A4755D" : null,
                 "&:hover": {
                   backgroundColor: "#A4755D",
                   color: "#F9FDFE",
@@ -468,17 +468,15 @@ export default function UserDashboardPage() {
           title={getString("sessionalLogoutText")}
           subTitle={getString("sessionalLogoutSubText")}
         />
-        {activeTab === getString("dashboard") && <DashboardView />}
-        {activeTab === getString("restaurant") && (
+        {activeTab === "dashboard" && <DashboardView />}
+        {activeTab === "restaurant" && (
           <RestaurantSection label={getString("restaurant")} />
         )}
-        {activeTab === getString("categories") && <h1> Categories view</h1>}
-        {activeTab === getString("templates") && <h1> Templates view</h1>}
-        {activeTab === getString("generateQrCode") && (
-          <h1> Generate qr code view</h1>
-        )}
-        {activeTab === getString("feedbacks") && <FeedbackPage />}
-        {activeTab === getString("contactUs") && <ContactPage />}
+        {activeTab === "categories" && <h1> Categories view</h1>}
+        {activeTab === "templates" && <h1> Templates view</h1>}
+        {activeTab === "generateQrCode" && <h1> Generate qr code view</h1>}
+        {activeTab === "feedback" && <FeedbackPage />}
+        {activeTab === "contactUs" && <ContactPage />}
       </Box>
     </Box>
   );

@@ -19,7 +19,7 @@ export default function DashboardView() {
   const getString = t;
   const dashboardCards = [
     {
-      id: "resturant",
+      id: "restaurant",
       image: RestaurantCardImg,
       label: getString("restaurant"),
     },
@@ -29,9 +29,9 @@ export default function DashboardView() {
       label: getString("categories"),
     },
     { id: "templates", image: TemplatesCardImg, label: getString("templates") },
-    { id: "qrcode", image: QRCodeCardImg, label: getString("generateQrCode") },
-    { id: "feedbacks", image: FeedbacksCardImg, label: getString("feedbacks") },
-    { id: "contactus", image: ContactCardImg, label: getString("contactUs") },
+    { id: "generateQrCode", image: QRCodeCardImg, label: getString("generateQrCode") },
+    { id: "feedback", image: FeedbacksCardImg, label: getString("feedbacks") },
+    { id: "contactUs", image: ContactCardImg, label: getString("contactUs") },
   ];
   const { userList } = useAppSelector((state) => state.userData);
   return (
@@ -86,7 +86,7 @@ export default function DashboardView() {
               },
               cursor: "pointer",
             }}
-            onClick={() => dispatch(setActiveTab(card.label))}
+            onClick={() => dispatch(setActiveTab(card.id))}
           >
             <Box>
               <img
