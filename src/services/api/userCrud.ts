@@ -33,16 +33,28 @@ export const login = async (userSignInData: UserSignInData) => {
     return errorResponseObject;
   }
 };
+export const getUserData = async (userToken) => {
+  try {
+    if (userToken == null) throw Error;
+    const response = await apiService.get("/token", {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
+};
 export const updateUser = async (
   updatedUser: UserUpdateData,
   userId: number,
-  token: string
+  userToken
 ) => {
   try {
     const response = await apiService.put("/" + userId, updatedUser, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${userToken.token}` },
     });
     return response.data;
   } catch (error: any) {
@@ -51,12 +63,10 @@ export const updateUser = async (
   }
 };
 
-export const getUserById = async (userId: number, token: string) => {
+export const getUserById = async (userId: string, userToken) => {
   try {
     const response = await apiService.get("/" + userId, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${userToken.token}` },
     });
     return response.data;
   } catch (error: any) {
@@ -65,12 +75,10 @@ export const getUserById = async (userId: number, token: string) => {
   }
 };
 
-export const deleteUser = async (userId: number, token: string) => {
+export const deleteUser = async (userId: number, userToken) => {
   try {
     const response = await apiService.delete("/" + userId, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${userToken.token}` },
     });
     return response.data;
   } catch (error: any) {

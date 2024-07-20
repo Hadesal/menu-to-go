@@ -1,10 +1,14 @@
 // store.ts
 import { configureStore } from "@reduxjs/toolkit";
-import mainReducer from "../../src/redux/slices/mainViewSlice"; // Adjust the import path based on your project structure
+import mainReducer from "../../src/redux/slices/mainViewSlice";
+import restaurantReducer from "../../src/redux/slices/restaurantsSlice";
+import userReducer from "../../src/redux/slices/userSlice";
 
 export const store = configureStore({
   reducer: {
     mainView: mainReducer,
+    restaurantsData: restaurantReducer,
+    userData: userReducer,
   },
 });
 

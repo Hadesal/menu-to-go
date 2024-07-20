@@ -1,32 +1,39 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import RestaurantCardImg from "../../assets/resturant-card.svg";
-import CategoriesCardImg from "../../assets/categories-card.svg";
-import TemplatesCardImg from "../../assets/templates-card.svg";
-import QRCodeCardImg from "../../assets/generateqrcode-card.svg";
-import FeedbacksCardImg from "../../assets/feedbacks-card.svg";
-import ContactCardImg from "../../assets/contactus-card.svg";
-import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useDispatch } from "react-redux";
-import { setActiveTab } from "../../redux/slices/mainViewSlice";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
-
-const dashboardCards = [
-  { id: "resturant", image: RestaurantCardImg, label: "Restaurant" },
-  { id: "categories", image: CategoriesCardImg, label: "Categories" },
-  { id: "templates", image: TemplatesCardImg, label: "Templates" },
-  { id: "qrcode", image: QRCodeCardImg, label: "Generate qr code" },
-  { id: "feedbacks", image: FeedbacksCardImg, label: "Feedbacks" },
-  { id: "contactus", image: ContactCardImg, label: "Contact us" },
-];
+import { useDispatch } from "react-redux";
+import CategoriesCardImg from "../../../assets/categories-card.svg";
+import ContactCardImg from "../../../assets/contactus-card.svg";
+import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
+import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
+import RestaurantCardImg from "../../../assets/resturant-card.svg";
+import TemplatesCardImg from "../../../assets/templates-card.svg";
+import { setActiveTab } from "../../../redux/slices/mainViewSlice";
+import { useAppSelector } from "../../../utils/hooks";
 
 export default function DashboardView() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const getString = t;
-
+  const dashboardCards = [
+    {
+      id: "restaurant",
+      image: RestaurantCardImg,
+      label: getString("restaurant"),
+    },
+    {
+      id: "categories",
+      image: CategoriesCardImg,
+      label: getString("categories"),
+    },
+    { id: "templates", image: TemplatesCardImg, label: getString("templates") },
+    { id: "generateQrCode", image: QRCodeCardImg, label: getString("generateQrCode") },
+    { id: "feedback", image: FeedbacksCardImg, label: getString("feedbacks") },
+    { id: "contactUs", image: ContactCardImg, label: getString("contactUs") },
+  ];
+  const { userList } = useAppSelector((state) => state.userData);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -47,7 +54,8 @@ export default function DashboardView() {
             color: "#A4755D",
           }}
         >
-          Hady!
+          {/* FIXME: we need a user object */}
+          {userList[0].name}
         </Typography>
       </Box>
       <Box
@@ -78,7 +86,7 @@ export default function DashboardView() {
               },
               cursor: "pointer",
             }}
-            onClick={() => dispatch(setActiveTab(card.label))}
+            onClick={() => dispatch(setActiveTab(card.id))}
           >
             <Box>
               <img

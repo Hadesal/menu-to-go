@@ -7,7 +7,7 @@ export interface MainState {
 }
 
 const initialState: MainState = {
-  activeTab: "Dashboard",
+  activeTab: "dashboard",
 };
 
 export const mainSlice = createSlice({

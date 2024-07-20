@@ -3,23 +3,20 @@ import { IngredientData } from "../../DataTypes/ProductDetailsDataTypes";
 
 const API_Ingredient_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
 
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Ingredient_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
 export const getAllIngredientsByProductDetailsId = async (
-  productDetailsId: number,
-  token: string
+  productDetailsId: number
 ) => {
   try {
-    const response = await apiService.get(`/${productDetailsId}/ingredients`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${productDetailsId}/ingredients`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -29,18 +26,12 @@ export const getAllIngredientsByProductDetailsId = async (
 
 export const addIngredient = async (
   productDetailsId: number,
-  ingredient: IngredientData,
-  token: string
+  ingredient: IngredientData
 ) => {
   try {
     const response = await apiService.post(
       `/${productDetailsId}/ingredients`,
-      ingredient,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      ingredient
     );
     return response.data;
   } catch (error: any) {
@@ -51,17 +42,11 @@ export const addIngredient = async (
 
 export const getIngredientByIdAndProductDetailsId = async (
   productDetailsId: number,
-  id: number,
-  token: string
+  id: number
 ) => {
   try {
     const response = await apiService.get(
-      `/${productDetailsId}/ingredients/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${productDetailsId}/ingredients/${id}`
     );
     return response.data;
   } catch (error: any) {
@@ -73,18 +58,12 @@ export const getIngredientByIdAndProductDetailsId = async (
 export const updateIngredient = async (
   productDetailsId: number,
   id: number,
-  updatedIngredient: IngredientData,
-  token: string
+  updatedIngredient: IngredientData
 ) => {
   try {
     const response = await apiService.put(
       `/${productDetailsId}/ingredients/${id}`,
-      updatedIngredient,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedIngredient
     );
     return response.data;
   } catch (error: any) {
@@ -95,17 +74,11 @@ export const updateIngredient = async (
 
 export const deleteIngredient = async (
   productDetailsId: number,
-  id: number,
-  token: string
+  id: number
 ) => {
   try {
     const response = await apiService.delete(
-      `/${productDetailsId}/ingredients/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${productDetailsId}/ingredients/${id}`
     );
     return response.data;
   } catch (error: any) {

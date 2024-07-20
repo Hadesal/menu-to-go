@@ -146,7 +146,6 @@ const handleSignIn = async (
   };
   localStorage.setItem("userToken", JSON.stringify(authData));
   navigate("/dashboard");
-
   return loginResponse;
 };
 

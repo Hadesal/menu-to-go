@@ -3,24 +3,18 @@ import { ProductDetailsData } from "../../DataTypes/ProductDetailsDataTypes.ts";
 
 const API_ProductDetails_BASE_URL = "http://52.23.230.198:8080/api/products";
 
-// Create an instance of axios
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_ProductDetails_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
-export const getProductDetailsByProductId = async (
-  productId: string,
-  token: string
-) => {
+export const getProductDetailsByProductId = async (productId: string) => {
   try {
-    const response = await apiService.get(`/${productId}/details`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${productId}/details`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -30,18 +24,12 @@ export const getProductDetailsByProductId = async (
 
 export const addProductDetails = async (
   productId: string,
-  productDetails: ProductDetailsData,
-  token: string
+  productDetails: ProductDetailsData
 ) => {
   try {
     const response = await apiService.post(
       `/${productId}/details`,
-      productDetails,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      productDetails
     );
     return response.data;
   } catch (error: any) {
@@ -52,18 +40,12 @@ export const addProductDetails = async (
 
 export const updateProductDetails = async (
   productId: string,
-  updatedProductDetails: ProductDetailsData,
-  token: string
+  updatedProductDetails: ProductDetailsData
 ) => {
   try {
     const response = await apiService.put(
       `/${productId}/details`,
-      updatedProductDetails,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedProductDetails
     );
     return response.data;
   } catch (error: any) {
@@ -72,16 +54,9 @@ export const updateProductDetails = async (
   }
 };
 
-export const deleteProductDetails = async (
-  productId: string,
-  token: string
-) => {
+export const deleteProductDetails = async (productId: string) => {
   try {
-    const response = await apiService.delete(`/${productId}/details`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.delete(`/${productId}/details`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;

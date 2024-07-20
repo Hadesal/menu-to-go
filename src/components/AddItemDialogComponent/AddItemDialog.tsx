@@ -9,33 +9,47 @@ import {
 } from "@mui/material";
 
 interface AddItemDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onAdd: (item: { name: string }) => void;
+  title: String;
+  fileUpload: boolean;
+  errorMessage: String;
+  cancelText: String;
+  confirmText: String;
+  isOpen: boolean;
+  onCancelClick: () => void;
+  onConfirmClick: (item: { name: string }) => void;
 }
 
 const AddItemDialog = ({
-  open,
-  onClose,
-  onAdd,
+  title,
+  fileUpload,
+  errorMessage,
+  cancelText,
+  confirmText,
+  isOpen,
+  onCancelClick,
+  onConfirmClick,
 }: AddItemDialogProps): JSX.Element => {
   const [newItem, setNewItem] = useState({ name: "" });
 
   const handleAdd = () => {
-    onAdd(newItem);
+    if (newItem.name.trim() === "") {
+      alert(errorMessage);
+      return;
+    }
+    onConfirmClick(newItem);
     setNewItem({ name: "" });
-    onClose();
+    onCancelClick();
   };
 
   return (
     <Dialog
-      open={open}
-      onClose={onClose}
+      open={isOpen}
+      onClose={onCancelClick}
       PaperProps={{
         sx: { borderRadius: "20px" },
       }}
     >
-      <DialogTitle>Add New Restaurant</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -45,16 +59,23 @@ const AddItemDialog = ({
           fullWidth
           variant="outlined"
           value={newItem.name}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              e.stopPropagation();
+              handleAdd();
+            }
+          }}
           onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
           sx={{ width: "25vw" }}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Cancel
+        <Button onClick={onCancelClick} color="primary">
+          {cancelText}
         </Button>
         <Button onClick={handleAdd} color="primary">
-          Add
+          {confirmText}
         </Button>
       </DialogActions>
     </Dialog>

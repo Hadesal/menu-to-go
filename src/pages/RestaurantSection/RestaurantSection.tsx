@@ -1,37 +1,99 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Backdrop,
+  CircularProgress,
+  Divider,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
+import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import styles from "./RestaurantSection.styles";
+import { useEffect, useState } from "react";
+import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import BoxComponent from "../../components/DialogComponent/BoxComponent";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { useSelector } from "react-redux";
+import {
+  addRestaurant,
+  deleteRestaurant,
+  editRestaurant,
+} from "../../redux/slices/restaurantsSlice";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { useTranslation } from "react-i18next";
 interface RestaurantSectionProps {
   label: string;
 }
+
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
-  const restaurantState = useSelector((state) => state.restaurant);
-  const restaurants: RestaurantData[] = [
-    { id: "1", name: "Restaurant 1", table: [] },
-    { id: "2", name: "Restaurant 2", table: [] },
-    { id: "3", name: "Restaurant 3", table: [] },
-    { id: "4", name: "Restaurant 4", table: [] },
-    { id: "5", name: "Restaurant 5", table: [] },
-  ];
-  const editRestaurant = (restaurant: object): void => {};
-  const deleteRestaurant = (restaurant: object) => {};
-  const addRestaurant = () => {
-    deleteRestaurant;
+  const dispatch = useAppDispatch();
+  const { restaurantList, loading, error } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+
+  const [showToast, setShowToast] = useState(false);
+  const { t } = useTranslation();
+  const getString = t;
+
+  useEffect(() => {
+    if (error) {
+      setShowToast(true);
+    }
+  }, [error]);
+
+  const handleAddRestaurant = (restaurant: RestaurantData) => {
+    dispatch(addRestaurant({ restaurant }));
   };
+
+  const handleEditRestaurant = (restaurant: RestaurantData) => {
+    dispatch(editRestaurant({ restaurant }));
+  };
+
+  const handleDeleteRestaurant = (restaurant: RestaurantData) => {
+    dispatch(
+      deleteRestaurant({
+        restaurantId: restaurant.id as string,
+      })
+    );
+  };
+
   return (
     <Stack spacing={3} sx={styles.stack}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => setShowToast(false)}
+      >
+        <Alert
+          onClose={() => setShowToast(false)}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+
       <Typography variant="h5">{label}</Typography>
       <Divider />
       <BoxComponent
         CardIcon={RestaurantIcon}
-        items={restaurants}
-        addFunction={addRestaurant}
-        editFunction={editRestaurant}
-        deleteFunction={deleteRestaurant}
+        items={restaurantList}
+        addFunction={handleAddRestaurant}
+        editFunction={handleEditRestaurant}
+        deleteFunction={handleDeleteRestaurant}
         styles={styles}
+        emptyStateTitle={getString("noRestaurantsfoundTitle")}
+        emptyStateMessage={getString("noRestaurantsfoundMessage")}
       />
     </Stack>
   );
