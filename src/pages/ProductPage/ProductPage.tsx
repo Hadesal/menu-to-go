@@ -1,25 +1,29 @@
-import { Box, Container, IconButton, Paper, Typography } from "@mui/material";
+import { Box, Container, IconButton } from "@mui/material";
+import AmericanCheese from "../../assets/American Cheese.jpg";
+import GroundBeef from "../../assets/Ground-Beefjpg.jpg";
+import Bun from "../../assets/bunjpg.jpg";
 import SmokedChickenImage from "../../assets/ingredient.jpg";
+import milk from "../../assets/milk.jpg";
 import onionsImage from "../../assets/onion.jpg";
 import parsleyImage from "../../assets/parsili.jpg";
 import pineappleImage from "../../assets/pinapple.jpg";
-import spicesImage from "../../assets/spices.jpg";
-import TomatoesImage from "../../assets/tomamto.jpg";
-import GroundBeef from "../../assets/Ground-Beefjpg.jpg";
-import Bun from "../../assets/bunjpg.jpg";
-import AmericanCheese from "../../assets/American Cheese.jpg";
 import shot from "../../assets/shot.jpg";
-import milk from "../../assets/milk.jpg";
+import spicesImage from "../../assets/spices.jpg";
 import Sugar from "../../assets/sugar.jpg";
+import TomatoesImage from "../../assets/tomamto.jpg";
 
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import { useEffect, useState } from "react";
 import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import MenuHeader from "../../components/MenuHeader/MenuHeader";
-import Section from "./Section";
+import { fetchAllCategories } from "../../redux/slices/menuSlice";
+import { useAppDispatch } from "../../utils/hooks";
 import { Styles } from "./ProductPage.styles";
+import Section from "./Section";
+import { fetchMenuData } from "../../utils/MenuDataFetching";
+import SplashScreen from "../SplashScreen/SplashScreen";
 
 export default function ProductPage() {
   const ingredients = [
@@ -67,6 +71,28 @@ export default function ProductPage() {
     { extrasName: "Onions", extrasPrice: "1$" },
   ];
 
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true);
+      const result = await fetchMenuData(dispatch);
+
+      if (result.success) {
+        setLoading(false);
+      } else {
+        console.error("Error fetching data:", result.error);
+      }
+    };
+
+    fetchDataAndHandleLoading();
+  }, [dispatch]); // Added dispatch to the dependency array
+
+  // Show splash screen while loading
+  if (loading) {
+    return <SplashScreen />;
+  }
   return (
     <Container sx={Styles.container} maxWidth="sm">
       <Box sx={Styles.box}>

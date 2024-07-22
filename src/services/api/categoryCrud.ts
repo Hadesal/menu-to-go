@@ -2,12 +2,10 @@ import axios from "axios";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 const API_Category_BASE_URL = "http://52.23.230.198:8080/api/categories";
 
-const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Category_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
@@ -54,12 +52,19 @@ export const deleteCategory = async (categoryId: number) => {
   }
 };
 
-export const getAllCategoriesByRestaurantId = async (restaurantId: number) => {
+export const getAllCategoriesByRestaurantId = async (restaurantId: string) => {
   try {
-    const response = await apiService.get(`/restaurant/${restaurantId}`);
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+    console.log(userToken);
+    const response = await apiService.get(`/restaurant/${restaurantId}`, {
+      headers: {
+        Authorization: `Bearer ${userToken.token}`,
+      },
+    });
+    console.log(response);
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };

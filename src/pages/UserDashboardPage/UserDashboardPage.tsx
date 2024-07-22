@@ -37,7 +37,7 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
-import { fetchAllData } from "../../utils/DataFetching";
+import { fetchAllData } from "../../utils/DashboaredDataFetching";
 import { useAppDispatch } from "../../utils/hooks";
 import ContactPage from "../ContactPage/Contact";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
