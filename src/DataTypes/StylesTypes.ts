@@ -5,7 +5,7 @@ interface Styles {
   typography: SxProps<Theme>;
   paper: SxProps<Theme>;
   searchField: SxProps<Theme>;
-  addButton: SxProps<Theme>;
+  addButton?: SxProps<Theme>;
   gridPaper: SxProps<Theme>;
   card: SxProps<Theme>;
   cardContent: SxProps<Theme>;

@@ -36,5 +36,7 @@
   "addRestaurantInfoText": "Please enter restaurant name",
   "updateRestaurant": "Update restaurant",
   "restaurantError": "Please enter restaurant name",
-  "restaurantDeleteText": "Are you sure you want to permanently delete the restaurant"
+  "restaurantDeleteText": "Are you sure you want to permanently delete the restaurant",
+  "categoryPageTitle": "Categories & Products",
+  "categoryPagePreviewMenuText": "Preview Menu"
 }
