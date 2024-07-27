@@ -1,16 +1,38 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "../../services/api/restaurantCrud";
+import { RestaurantAllData } from "../../DataTypes/ResturantAllData";
+import { UserUiPreferences } from "../../DataTypes/userUiPreferences";
 
 export interface MenuState {
-  restaurantData: object;
+  restaurantData: RestaurantAllData;
   selectedProduct: object;
   loading: boolean;
   error: string | null;
 }
 
+const initialUserUiPreferences: UserUiPreferences = {
+  primaryColor: "",
+  secondaryColor: "",
+  fontType: "",
+  categoryShape: "",
+  contactLinks: {
+    facebook: "",
+    twitter: "",
+    instagram: "",
+  },
+  ingredientViewType: "GRID",
+  itemsViewType: "GRID",
+};
+
 const initialState: MenuState = {
-  restaurantData: {},
+  restaurantData: {
+    id: "",
+    name: "",
+    userUiPreferences: initialUserUiPreferences,
+    category: [],
+    tables: [],
+  },
   selectedProduct: {},
   loading: false,
   error: null,
@@ -46,7 +68,7 @@ export const MenuSlice = createSlice({
       })
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload;
-        state.selectedProduct = state.restaurantData.category[0].products[0]
+        state.selectedProduct = state.restaurantData.category[0].products[2];
         state.loading = false;
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {

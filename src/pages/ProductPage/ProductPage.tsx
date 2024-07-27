@@ -45,7 +45,7 @@ export default function ProductPage() {
   if (loading) {
     return <SplashScreen />;
   }
-
+  
   const backgroundColor = hexToRgba(
     restaurantData.userUiPreferences.primaryColor,
     0.19
@@ -75,19 +75,22 @@ export default function ProductPage() {
           productDescription={selectedProduct.details.detailsDescription}
           productImg={selectedProduct.image}
         />
-        <Section
-          name="Ingredients"
-          children={
-            <IngredientList
-              listView={
-                restaurantData.userUiPreferences.ingredientViewType !== "GRID"
-              }
-              ingredients={selectedProduct.details.ingredients}
-            />
-          }
-        />
 
-        {selectedProduct.details.variants && (
+        {selectedProduct.details.ingredients.length !== 0 && (
+          <Section
+            name="Ingredients"
+            children={
+              <IngredientList
+                listView={
+                  restaurantData.userUiPreferences.ingredientViewType !== "GRID"
+                }
+                ingredients={selectedProduct.details.ingredients}
+              />
+            }
+          />
+        )}
+
+        {selectedProduct.details.variants.variantList.length !== 0 && (
           <Section
             name={selectedProduct.details.variants.name}
             children={
@@ -98,7 +101,7 @@ export default function ProductPage() {
           />
         )}
 
-        {selectedProduct.details.extras && (
+        {selectedProduct.details.extras.length !== 0 && (
           <Section
             name="Extras"
             children={<ExtrasList extras={selectedProduct.details.extras} />}

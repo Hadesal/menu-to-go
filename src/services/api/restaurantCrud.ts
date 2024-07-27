@@ -1,5 +1,6 @@
 import axios from "axios";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
 const API_Restaurant_BASE_URL = "http://52.23.230.198:8080/api/restaurants";
 const apiService = axios.create({
@@ -29,8 +30,8 @@ export const getRestaurantByIdOpenApi = async (restaurantId: string) => {
     const response = await apiService.get(`/${restaurantId}`);
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 
