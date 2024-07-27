@@ -27,8 +27,6 @@ export const Styles = {
     justifyContent: "center",
   },
   bulletImage: {
-    width: "25px",
-    height: "25px",
-    marginRight: "0.5rem",
+    display:"block"
   },
 };

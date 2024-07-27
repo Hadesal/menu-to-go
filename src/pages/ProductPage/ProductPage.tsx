@@ -1,16 +1,4 @@
 import { Box, Container, IconButton } from "@mui/material";
-import AmericanCheese from "../../assets/American Cheese.jpg";
-import GroundBeef from "../../assets/Ground-Beefjpg.jpg";
-import Bun from "../../assets/bunjpg.jpg";
-import SmokedChickenImage from "../../assets/ingredient.jpg";
-import milk from "../../assets/milk.jpg";
-import onionsImage from "../../assets/onion.jpg";
-import parsleyImage from "../../assets/parsili.jpg";
-import pineappleImage from "../../assets/pinapple.jpg";
-import shot from "../../assets/shot.jpg";
-import spicesImage from "../../assets/spices.jpg";
-import Sugar from "../../assets/sugar.jpg";
-import TomatoesImage from "../../assets/tomamto.jpg";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useEffect, useState } from "react";
@@ -18,61 +6,25 @@ import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
-import { fetchAllCategories } from "../../redux/slices/menuSlice";
-import { useAppDispatch } from "../../utils/hooks";
+import { fetchMenuData } from "../../utils/MenuDataFetching";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import SplashScreen from "../SplashScreen/SplashScreen";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
-import { fetchMenuData } from "../../utils/MenuDataFetching";
-import SplashScreen from "../SplashScreen/SplashScreen";
+
+// Utility function to convert hex to rgba
+function hexToRgba(hex, alpha = 1) {
+  const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 export default function ProductPage() {
-  const ingredients = [
-    { ingredientImg: SmokedChickenImage, ingredientName: "Smoked Chicken" },
-    { ingredientImg: onionsImage, ingredientName: "Onions" },
-    { ingredientImg: parsleyImage, ingredientName: "Parsley" },
-    { ingredientImg: pineappleImage, ingredientName: "Pineapple" },
-    { ingredientImg: spicesImage, ingredientName: "Spices" },
-    { ingredientImg: TomatoesImage, ingredientName: "Tomatoes" },
-  ];
-
-  const burgerIngredients = [
-    { ingredientImg: Bun, ingredientName: "Bun sesame seed" },
-    { ingredientImg: GroundBeef, ingredientName: "Ground Beef" },
-    { ingredientImg: AmericanCheese, ingredientName: "American Cheese" },
-    {
-      ingredientImg: onionsImage,
-      ingredientName: "Onions (raw, grilled, or caramelized)",
-    },
-    { ingredientImg: TomatoesImage, ingredientName: "Tomatoes" },
-  ];
-
-  const latteburgerIngredients = [
-    { ingredientImg: shot, ingredientName: "Espresso shot" },
-    { ingredientImg: milk, ingredientName: "Steamed milk" },
-    { ingredientImg: Sugar, ingredientName: "Sugar or flavored syrup" },
-  ];
-
-  const variants = [
-    { variantName: "Small", variantPrice: "10$" },
-    { variantName: "Medium", variantPrice: "10$" },
-    { variantName: "Large", variantPrice: "10$" },
-  ];
-
-  const extras = [
-    { extrasName: "Chesses", extrasPrice: "10$" },
-    { extrasName: "Tomato's", extrasPrice: "10$" },
-    { extrasName: "Onions", extrasPrice: "10$" },
-  ];
-
-  const burgerExtras = [
-    { extrasName: "Chesses", extrasPrice: "2$" },
-    { extrasName: "Fried egg", extrasPrice: "1.5$" },
-    { extrasName: "Jalapeños", extrasPrice: "1$" },
-    { extrasName: "Onions", extrasPrice: "1$" },
-  ];
-
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+
+  const { selectedProduct, restaurantData } = useAppSelector(
+    (state) => state.menuData
+  );
 
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
@@ -87,35 +39,71 @@ export default function ProductPage() {
     };
 
     fetchDataAndHandleLoading();
-  }, [dispatch]); // Added dispatch to the dependency array
+  }, [dispatch]);
 
   // Show splash screen while loading
   if (loading) {
     return <SplashScreen />;
   }
+
+  const backgroundColor = hexToRgba(
+    restaurantData.userUiPreferences.primaryColor,
+    0.19
+  );
+
   return (
-    <Container sx={Styles.container} maxWidth="sm">
+    <Container sx={{ ...Styles.container }} maxWidth="sm">
       <Box sx={Styles.box}>
-        {/* <MenuHeader /> */}
         <IconButton
           onClick={() => console.log("go back")}
-          sx={Styles.iconButton}
+          sx={{
+            ...Styles.iconButton,
+            background: backgroundColor,
+            "&:hover": {
+              background: backgroundColor,
+            },
+          }}
           aria-label="arrowback"
         >
-          <NavigateBeforeIcon fontSize="large" color="primary" />
+          <NavigateBeforeIcon
+            fontSize="large"
+            sx={{ color: restaurantData.userUiPreferences.primaryColor }}
+          />
         </IconButton>
-        <ProductDetails />
+        <ProductDetails
+          productName={selectedProduct.name}
+          productDescription={selectedProduct.details.detailsDescription}
+          productImg={selectedProduct.image}
+        />
         <Section
           name="Ingredients"
           children={
             <IngredientList
-              listView={false}
-              ingredients={latteburgerIngredients}
+              listView={
+                restaurantData.userUiPreferences.ingredientViewType !== "GRID"
+              }
+              ingredients={selectedProduct.details.ingredients}
             />
           }
         />
-        <Section name="Size" children={<VariantList variants={variants} />} />
-        <Section name="Extras" children={<ExtrasList extras={extras} />} />
+
+        {selectedProduct.details.variants && (
+          <Section
+            name={selectedProduct.details.variants.name}
+            children={
+              <VariantList
+                variants={selectedProduct.details.variants.variantList}
+              />
+            }
+          />
+        )}
+
+        {selectedProduct.details.extras && (
+          <Section
+            name="Extras"
+            children={<ExtrasList extras={selectedProduct.details.extras} />}
+          />
+        )}
       </Box>
     </Container>
   );

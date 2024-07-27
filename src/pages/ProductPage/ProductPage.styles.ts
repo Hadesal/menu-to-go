@@ -8,17 +8,14 @@ export const Styles = {
   iconButton: {
     marginBottom: 5,
     padding: 0,
-    background: "#A4755D30",
-    "&:hover": {
-      background: "#A4755D30",
-    },
   },
 
   sectionWrapper: {
     marginBottom: "1rem",
   },
   sectionName: {
+    fontWeight: "500",
     marginTop: "1rem",
-    marginBottom: "0.5rem",
+    marginBottom: "1rem",
   },
 };

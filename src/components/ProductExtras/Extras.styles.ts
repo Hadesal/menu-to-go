@@ -20,8 +20,7 @@ export const Styles = {
     marginLeft: "auto",
   },
   bulletImage: {
-    width: "14px",
-    height: "14px",
-    marginRight: "0.3rem",
+    display:"block",
+    marginRight: "0.4rem",
   },
 };

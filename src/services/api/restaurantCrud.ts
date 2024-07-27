@@ -24,6 +24,16 @@ export const getRestaurantById = async (restaurantId: string) => {
   }
 };
 
+export const getRestaurantByIdOpenApi = async (restaurantId: string) => {
+  try {
+    const response = await apiService.get(`/${restaurantId}`);
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
+};
+
 export const getAllRestaurantsByUserId = async (userId: string) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);

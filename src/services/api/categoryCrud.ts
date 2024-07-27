@@ -68,3 +68,19 @@ export const getAllCategoriesByRestaurantId = async (restaurantId: string) => {
     return Promise.reject(errorResponseObject);
   }
 };
+export const getAllCategoriesByRestaurantIdOpenApi = async (restaurantId: string) => {
+  try {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+    console.log(userToken);
+    const response = await apiService.get(`/restaurant/${restaurantId}`, {
+      headers: {
+        Authorization: `Bearer ${userToken.token}`,
+      },
+    });
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
+  }
+};

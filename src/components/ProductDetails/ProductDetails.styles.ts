@@ -16,7 +16,7 @@ export const Styles = {
     borderRadius: "24px",
     backgroundSize: "cover",
     backgroundPosition: "left",
-    width: "100%",
-    height: 200,
+    // width: "100%",
+    // height: 200,
   },
 };
