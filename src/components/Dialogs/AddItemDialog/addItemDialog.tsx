@@ -14,6 +14,10 @@ import InputComponent from "../../InputComponent/InputComponent";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "../../../assets/material-symbols_image-outline (1).svg"; // Adjust the path as necessary
+import {
+  UserUiPreferences,
+  ViewType,
+} from "../../../DataTypes/RestaurantObject";
 
 interface AddItemDialogProps {
   isOpen: boolean;
@@ -21,7 +25,11 @@ interface AddItemDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (data: { name: string; image: string | null }) => void;
+  onConfirmClick: (data: {
+    name: string;
+    image: string | null;
+    userUiPreferences: UserUiPreferences;
+  }) => void;
   onCancelClick: () => void;
   fileUpload?: boolean;
 }
@@ -32,6 +40,7 @@ const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only
 interface dialogData {
   name: string;
   image: string | null;
+  userUiPreferences: UserUiPreferences;
 }
 const AddItemDialog = ({
   isOpen,
@@ -46,6 +55,19 @@ const AddItemDialog = ({
   const [dialogData, setDialogData] = useState<dialogData>({
     name: "",
     image: null,
+    userUiPreferences: {
+      primaryColor: "",
+      secondaryColor: "",
+      fontType: "",
+      categoryShape: "",
+      contactLinks: {
+        facebook: "",
+        twitter: "",
+        instagram: "",
+      },
+      ingredientViewType: ViewType.GRID,
+      itemsViewType: ViewType.GRID,
+    },
   });
 
   const [showError, setShowError] = useState<boolean>(false);
@@ -78,7 +100,11 @@ const AddItemDialog = ({
     //   ...dialogData,
     //   image: null,
     // });
-    setDialogData({ name: "", image: null });
+    setDialogData((prevState) => ({
+      name: prevState.name,
+      image: prevState.image,
+      userUiPreferences: prevState.userUiPreferences,
+    }));
     // clear all error
     setImageError(null);
     setShowError(false);

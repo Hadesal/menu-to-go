@@ -17,7 +17,7 @@ import {
   deleteRestaurant,
   editRestaurant,
 } from "../../redux/slices/restaurantsSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { useTranslation } from "react-i18next";
 interface RestaurantSectionProps {
   label: string;

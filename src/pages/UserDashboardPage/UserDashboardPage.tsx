@@ -82,7 +82,11 @@ export default function UserDashboardPage() {
     },
     { id: "categories", icon: <LayersIcon />, label: getString("categories") },
     { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
-    { id: "generateQrCode", icon: <QrCodeIcon />, label: getString("generateQrCode") },
+    {
+      id: "generateQrCode",
+      icon: <QrCodeIcon />,
+      label: getString("generateQrCode"),
+    },
     {
       id: "feedback",
       icon: <QuestionAnswerIcon />,
@@ -336,7 +340,7 @@ export default function UserDashboardPage() {
                   <MenuItem
                     key={option.id}
                     onClick={() => {
-                      console.log(option.optionName);
+                      navigate(`/${option.id}`);
                     }}
                   >
                     {option.optionName}
