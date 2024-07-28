@@ -70,7 +70,8 @@ export default function UserDashboardPage() {
   const [loading, setLoading] = useState(true);
   const openProfile = Boolean(anchorElProfile);
   const openLang = Boolean(anchorElLang);
-
+  const [verificationWarning, setVerificationWarning] = useState(false);
+  const [daysLeftForVerification, setDaysLeftForVerification] = useState(3);
   const { i18n, t } = useTranslation();
   const getString = t;
 
@@ -199,13 +200,38 @@ export default function UserDashboardPage() {
       clearInterval(interval);
     };
   });
+  useEffect(() => {
+    const createdAtDate = new Date(userData.createdAt);
+    const currentDate = new Date();
+    const timeDifference = currentDate - createdAtDate;
+    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
+    if (daysDifference >= 3) {
+      if (!userData.verified) {
+        console.log("Account should be deleted due to lack of verification.");
+        navigate("/login");
+      }
+    } else if (!userData.verified) {
+      setDaysLeftForVerification(3 - daysDifference);
+      //TODO create a warning dialog and make it visible
+      setVerificationWarning(true);
+      const intervalId = setInterval(() => {
+        alert(
+          `Please verify your account. You have ${
+            3 - daysDifference
+          } days left to verify your account.`
+        );
+      }, 86400000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [userData.verified, userData.createdAt, navigate, dispatch]);
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
-        await fetchAllData(dispatch); // Fetch data
-        setLoading(false); // Loading finished successfully
+        await fetchAllData(dispatch);
+        setLoading(false);
         if (userData.name === "hade") {
           setUserDetailsisOpen(true);
         } else {
@@ -213,7 +239,7 @@ export default function UserDashboardPage() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        //setLoading(false); // Loading finished with error
+        //setLoading(false);
       }
     };
 
