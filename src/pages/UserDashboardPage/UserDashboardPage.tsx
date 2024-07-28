@@ -37,7 +37,7 @@ import {
   selectActiveTab,
   setActiveTab,
 } from "../../redux/slices/mainViewSlice";
-import { fetchAllData } from "../../utils/DataFetching";
+import { fetchAllData } from "../../utils/DashboaredDataFetching";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import ContactPage from "../ContactPage/Contact";
 import FeedbackPage from "../FeedbackPage/FeedbackPage";
@@ -349,7 +349,7 @@ export default function UserDashboardPage() {
                   <MenuItem
                     key={option.id}
                     onClick={() => {
-                      console.log(option.optionName);
+                      navigate(`/${option.id}`);
                     }}
                   >
                     {option.optionName}

@@ -17,7 +17,7 @@ import {
   deleteRestaurant,
   editRestaurant,
 } from "../../redux/slices/restaurantsSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { useTranslation } from "react-i18next";
 interface RestaurantSectionProps {
   label: string;
@@ -92,7 +92,8 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         editFunction={handleEditRestaurant}
         deleteFunction={handleDeleteRestaurant}
         styles={styles}
-        emptyText={getString("noRestaurantsfound")}
+        emptyStateTitle={getString("noRestaurantsfoundTitle")}
+        emptyStateMessage={getString("noRestaurantsfoundMessage")}
       />
     </Stack>
   );

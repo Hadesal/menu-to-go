@@ -1,5 +1,6 @@
 import axios from "axios";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
 const API_Restaurant_BASE_URL = "http://52.23.230.198:8080/api/restaurants";
 const apiService = axios.create({
@@ -21,6 +22,16 @@ export const getRestaurantById = async (restaurantId: string) => {
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
     return errorResponseObject;
+  }
+};
+
+export const getRestaurantByIdOpenApi = async (restaurantId: string) => {
+  try {
+    const response = await apiService.get(`/${restaurantId}`);
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 
@@ -85,7 +96,6 @@ export const createRestaurant = async (restaurant: RestaurantData) => {
         Authorization: `Bearer ${userToken.token}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error;

@@ -7,6 +7,8 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
+import ProductPage from "./pages/ProductPage/ProductPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 // Define your custom theme
 const theme = createTheme({
   typography: {
@@ -66,6 +68,22 @@ function App() {
             element={
               <PrivateRoute>
                 <MenuPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/myprofile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/product"
+            element={
+              <PrivateRoute>
+                <ProductPage />
               </PrivateRoute>
             }
           />

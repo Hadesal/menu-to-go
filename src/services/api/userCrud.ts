@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  UpdatePasswordDataType,
   UserSignInData,
   UserSignupApiData,
   UserUpdateData,
@@ -49,8 +50,8 @@ export const getUserData = async (userToken) => {
 };
 export const updateUser = async (
   updatedUser: UserUpdateData,
-  userId: number,
-  userToken
+  userId: String,
+  userToken: any
 ) => {
   try {
     const response = await apiService.put("/" + userId, updatedUser, {
@@ -62,7 +63,25 @@ export const updateUser = async (
     return errorResponseObject;
   }
 };
-
+export const updateUserPassword = async (
+  updatePasswordObject: UpdatePasswordDataType,
+  userId: String,
+  token: any
+) => {
+  try {
+    const response = await apiService.put(
+      "/" + userId + "/password",
+      updatePasswordObject,
+      {
+        headers: { Authorization: `Bearer ${token.token}` },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    const errorResponseObject: ErrorResponseObject = error.response.data;
+    return errorResponseObject;
+  }
+};
 export const getUserById = async (userId: string, userToken) => {
   try {
     const response = await apiService.get("/" + userId, {

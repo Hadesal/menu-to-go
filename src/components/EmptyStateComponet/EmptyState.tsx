@@ -1,9 +1,13 @@
 import { Container, Typography } from "@mui/material";
-import emptyStateImage from "../../assets/emptystate.svg";
+import emptyStateImage from "../../assets/79436.png";
 interface EmptyStateProps {
-  emptyText?: String;
+  emptyStateTitle?: string;
+  emptyStateMessage?: string;
 }
-const EmptyState = ({ emptyText }: EmptyStateProps) => {
+const EmptyState = ({
+  emptyStateTitle,
+  emptyStateMessage,
+}: EmptyStateProps) => {
   return (
     <Container
       sx={{
@@ -11,10 +15,16 @@ const EmptyState = ({ emptyText }: EmptyStateProps) => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        padding: 2,
       }}
     >
-      <img src={emptyStateImage} />
-      <Typography>{emptyText || "no items found"}</Typography>
+      <img width={200} height={200} style={{opacity:0.5}} src={emptyStateImage} />
+      <Typography variant="h6" textAlign={"center"} sx={{ marginTop: 2 }}>
+        {emptyStateTitle || "no items found"}
+      </Typography>
+      <Typography textAlign={"center"} sx={{ marginTop: 1 }}>
+        {emptyStateMessage || "no items found"}
+      </Typography>
     </Container>
   );
 };
