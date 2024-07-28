@@ -1,18 +1,19 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Dispatch, SetStateAction } from "react";
-import { UserUpdateData } from "../../DataTypes/UserDataTypes";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { useAppSelector } from "../../utils/hooks";
 
 const ProfileDetailsSection = ({
   setActiveTab,
-  userData,
 }: {
   setActiveTab: Dispatch<SetStateAction<String>>;
-  userData: UserUpdateData;
 }) => {
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
   const { t } = useTranslation();
   const getString = t;
+  useEffect(() => {}, [userData]);
   return (
     <Box>
       <Container
@@ -69,6 +70,9 @@ const ProfileDetailsSection = ({
         <Typography variant="subtitle1">
           {getString("phonenumber")}
           {" :"}
+        </Typography>
+        <Typography variant="subtitle1" color={"#A4755D"}>
+          {userData?.billingData?.phoneNumber}
         </Typography>
       </Container>
     </Box>

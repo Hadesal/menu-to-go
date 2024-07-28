@@ -85,7 +85,6 @@ export const createRestaurant = async (restaurant: RestaurantData) => {
         Authorization: `Bearer ${userToken.token}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error;

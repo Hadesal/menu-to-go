@@ -1,10 +1,20 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { useAppSelector } from "../../utils/hooks";
 
-const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
+const BillingDataTextSection = ({
+  setActiveSection,
+}: {
+  setActiveSection: Dispatch<SetStateAction<String>>;
+}) => {
   const { t } = useTranslation();
   const getString = t;
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
+
+  useEffect(() => {}, [userList]);
   return (
     <Container className="billingDataTextMainContainer">
       <Container
@@ -12,12 +22,10 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          marginTop: "1rem",
         }}
       >
-        <Typography
-          variant="subtitle1"
-          sx={{ marginLeft: "2.5vw", color: "#797979" }}
-        >
+        <Typography variant="subtitle1" sx={{ color: "#797979" }}>
           {getString("billingDataPageDescription")}
         </Typography>
         <Button
@@ -45,7 +53,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
             {" :"}
           </Typography>
           <Typography variant="subtitle1" color={"#A4755D"}>
-            {uesrData?.billingData?.fullName}
+            {userData?.billingData?.fullName}
           </Typography>
         </Container>
         <Container
@@ -60,7 +68,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
             {" :"}
           </Typography>
           <Typography variant="subtitle1" color={"#A4755D"}>
-            {uesrData?.email}
+            {userData?.email}
           </Typography>
         </Container>
         <Container
@@ -72,11 +80,11 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
           }}
         >
           <Typography variant="subtitle1" sx={{ marginRight: "1rem" }}>
-            {getString("phoneNumber")}
+            {getString("phonenumber")}
             {" :"}
           </Typography>
           <Typography variant="subtitle1" color={"#A4755D"}>
-            {uesrData?.billingData?.phoneNumber}
+            {userData?.billingData?.phoneNumber}
           </Typography>
         </Container>
       </Container>
@@ -94,7 +102,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingData?.companyName}
+              {userData?.billingData?.companyName}
             </Typography>
           </Container>
           <Container
@@ -110,7 +118,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingData?.country}
+              {userData?.billingData?.country}
             </Typography>
           </Container>
           <Container
@@ -125,7 +133,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingData?.address}
+              {userData?.billingData?.address}
             </Typography>
           </Container>
         </Container>
@@ -142,7 +150,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingData?.taxId}
+              {userData?.billingData?.taxId}
             </Typography>
           </Container>
           <Container
@@ -157,7 +165,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingData?.city}
+              {userData?.billingData?.city}
             </Typography>
           </Container>
           <Container
@@ -173,7 +181,7 @@ const BillingDataTextSection = ({ setActiveSection, uesrData }) => {
               {" :"}
             </Typography>
             <Typography variant="subtitle1" color={"#A4755D"}>
-              {uesrData?.billingCode?.zipCode}
+              {userData?.billingCode?.zipCode}
             </Typography>
           </Container>
         </Container>

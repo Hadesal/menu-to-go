@@ -8,23 +8,27 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ChangePasswordDataType } from "../../DataTypes/UserDataTypes";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { userUpdatePassword } from "../../redux/slices/userSlice";
 const ChangePasswordSection = ({
-  onSave,
-  onCancel,
+  setActiveTab,
 }: {
-  onSave: (updatedPassword: ChangePasswordDataType) => void;
-  onCancel: () => void;
+  setActiveTab: Dispatch<SetStateAction<String>>;
 }) => {
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
   const { t } = useTranslation();
   const getString = t;
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<ChangePasswordDataType>({
-    oldPassword: "",
+    currentPassword: "",
     newPassword: "",
   });
 
+  useEffect(() => {}, [userList]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevValues) => ({
@@ -34,9 +38,20 @@ const ChangePasswordSection = ({
   };
 
   const handleSave = () => {
-    onSave(formData);
+    console.log(formData);
+    dispatch(
+      userUpdatePassword({
+        updatePasswordObject: formData,
+        userId: userData.id,
+      })
+    ).then((res) => {
+      console.log(res);
+    });
+    setActiveTab("profileDetails");
   };
-
+  const onCancel = () => {
+    setActiveTab("profileDetails");
+  };
   return (
     <Box
       sx={{
@@ -63,9 +78,9 @@ const ChangePasswordSection = ({
       >
         <TextField
           variant="outlined"
-          value={formData.oldPassword}
+          value={formData.currentPassword}
           label={getString("oldPassword")}
-          name="old password"
+          name="currentPassword"
           autoComplete="password"
           onChange={handleInputChange}
           sx={{
@@ -93,7 +108,7 @@ const ChangePasswordSection = ({
           variant="outlined"
           value={formData.newPassword}
           label={getString("newPassword")}
-          name="new-password"
+          name="newPassword"
           autoComplete="password"
           onChange={handleInputChange}
           sx={{
@@ -118,6 +133,7 @@ const ChangePasswordSection = ({
         <Button
           sx={{ borderRadius: "1rem", marginRight: "2rem" }}
           variant="outlined"
+          onClick={onCancel}
           startIcon={<CloseOutlinedIcon />}
         >
           {getString("cancel")}
@@ -126,7 +142,7 @@ const ChangePasswordSection = ({
           sx={{ borderRadius: "1rem", marginRight: "2rem" }}
           variant="outlined"
           startIcon={<DoneOutlineOutlinedIcon />}
-          onClick={onCancel}
+          onClick={handleSave}
         >
           {getString("save")}
         </Button>

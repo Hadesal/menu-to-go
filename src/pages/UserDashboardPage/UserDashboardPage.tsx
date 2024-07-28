@@ -340,7 +340,6 @@ export default function UserDashboardPage() {
                   <MenuItem
                     key={option.id}
                     onClick={() => {
-                      console.log(option.optionName);
                       navigate(`/${option.id}`);
                     }}
                   >

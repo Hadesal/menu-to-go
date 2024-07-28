@@ -20,13 +20,16 @@ export interface UserSignInData {
   password: string;
 }
 export interface UserUpdateData {
+  id: String;
   name: string;
   email: string;
   password: string;
+  image?: String;
+  billingData?: BillingDataType;
 }
 
 export interface ChangePasswordDataType {
-  oldPassword: String;
+  currentPassword: String;
   newPassword: String;
 }
 
@@ -40,4 +43,9 @@ export interface BillingDataType {
   taxId: String;
   city: String;
   zipCode: String;
+}
+
+export interface UpdatePasswordDataType {
+  currentPassword: String;
+  newPassword: String;
 }

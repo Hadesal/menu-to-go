@@ -1,39 +1,57 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { BillingDataType, UserUpdateData } from "../../DataTypes/UserDataTypes";
-import { useState } from "react";
+import { UserUpdateData } from "../../DataTypes/UserDataTypes";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { userUpdate } from "../../redux/slices/userSlice";
 const BillingDataEditSection = ({
-  onSave,
-  onCancel,
   setActiveSection,
-  setNewUser,
+}: {
+  setActiveSection: Dispatch<SetStateAction<String>>;
 }) => {
   const { t } = useTranslation();
   const getString = t;
-  const [formData, setFormData] = useState<BillingDataType>({
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    companyName: "",
-    country: "",
-    address: "",
-    city: "",
-    taxId: "",
-    zipCode: "",
-  });
-
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
+  const [formData, setFormData] = useState<UserUpdateData>(userData);
+  const dispatch = useAppDispatch();
+  useEffect(() => {}, [userList]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    if (name === "email") {
+      setFormData((prevValue) => ({ ...prevValue, email: value }));
+    } else {
+      setFormData((prevValue) => ({
+        ...prevValue,
+        billingData: { ...prevValue.billingData!, [name]: value },
+      }));
+    }
   };
+
+  const isFormDataChanged = (formData: any, userData: any) => {
+    if (formData.email !== userData.email) return true;
+    for (const key in formData.billingData) {
+      if (formData.billingData[key] !== userData.billingData[key]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const handleOnSave = () => {
-    console.log("hey");
+    if (isFormDataChanged(formData, userData)) {
+      dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
+        () => {
+          setActiveSection("billingDataText");
+        }
+      );
+    } else {
+      setActiveSection("billingDataText");
+    }
   };
+
   return (
     <>
       <Container>
@@ -47,7 +65,7 @@ const BillingDataEditSection = ({
         >
           <TextField
             variant="outlined"
-            value={formData.fullName}
+            value={formData?.billingData?.fullName}
             label={getString("fullName")}
             name="fullName"
             autoComplete="fullName"
@@ -72,7 +90,7 @@ const BillingDataEditSection = ({
         >
           <TextField
             variant="outlined"
-            value={formData.email}
+            value={formData?.email}
             label={getString("email")}
             name="email"
             autoComplete="email"
@@ -97,8 +115,8 @@ const BillingDataEditSection = ({
         >
           <TextField
             variant="outlined"
-            value={formData.phoneNumber}
-            label={getString("phoneNumber")}
+            value={formData?.billingData?.phoneNumber}
+            label={getString("phonenumber")}
             name="phoneNumber"
             autoComplete="phone"
             onChange={handleInputChange}
@@ -125,7 +143,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.companyName}
+              value={formData?.billingData?.companyName}
               label={getString("companyName")}
               name="companyName"
               autoComplete="companyName"
@@ -150,7 +168,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.country}
+              value={formData?.billingData?.country}
               label={getString("country")}
               name="country"
               autoComplete="country"
@@ -174,7 +192,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.address}
+              value={formData?.billingData?.address}
               label={getString("address")}
               name="address"
               autoComplete="address"
@@ -200,7 +218,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.taxId}
+              value={formData?.billingData?.taxId}
               label={getString("taxId")}
               name="taxId"
               autoComplete="taxId"
@@ -224,7 +242,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.city}
+              value={formData?.billingData?.city}
               label={getString("city")}
               name="city"
               autoComplete="city"
@@ -249,7 +267,7 @@ const BillingDataEditSection = ({
           >
             <TextField
               variant="outlined"
-              value={formData.zipCode}
+              value={formData?.billingData?.zipCode}
               label={getString("zipCode")}
               name="zipCode"
               autoComplete="zipCode"
@@ -289,7 +307,7 @@ const BillingDataEditSection = ({
           sx={{ borderRadius: "1rem", marginRight: "2rem" }}
           variant="outlined"
           startIcon={<DoneOutlineOutlinedIcon />}
-          onClick={onSave}
+          onClick={handleOnSave}
         >
           {getString("save")}
         </Button>

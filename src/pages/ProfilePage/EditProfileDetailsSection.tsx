@@ -1,36 +1,68 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { UserUpdateData } from "../../DataTypes/UserDataTypes";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { userUpdate } from "../../redux/slices/userSlice";
+
 const EditProfileDetailsSection = ({
-  userData,
-  onSave,
-  onCancel,
+  setActiveTab,
 }: {
-  userData: UserUpdateData;
-  onSave: (updatedData: UserUpdateData) => void;
-  onCancel: () => void;
+  setActiveTab: Dispatch<SetStateAction<String>>;
 }) => {
   const { t } = useTranslation();
   const getString = t;
-  const [formData, setFormData] = useState<UserUpdateData>({
-    email: userData?.email || "",
-    name: userData?.name || "",
-    password: "",
-  });
-
+  const dispatch = useAppDispatch();
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
+  const [formData, setFormData] = useState<UserUpdateData>(userData);
+  useEffect(() => {
+    setFormData(userData);
+  }, [userData]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    if (name === "phoneNumber") {
+      setFormData((prevValue) => ({
+        ...prevValue,
+        billingData: {
+          ...prevValue.billingData!,
+          phoneNumber: value,
+        },
+      }));
+    } else {
+      setFormData((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleSave = () => {
-    onSave(formData);
+  const isFormDataChanged = (formData: any, userData: any) => {
+    if (formData.phoneNumber !== userData.phoneNumber) return true;
+    for (const key in formData) {
+      if (formData[key] !== userData[key]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const onSave = () => {
+    if (isFormDataChanged(formData, userData)) {
+      dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
+        () => {
+          setActiveTab("profileDetails");
+        }
+      );
+    } else {
+      setActiveTab("profileDetails");
+    }
+  };
+
+  const onCancel = () => {
+    setActiveTab("profileDetails");
   };
 
   return (
@@ -71,7 +103,7 @@ const EditProfileDetailsSection = ({
             sx={{ borderRadius: "1rem" }}
             variant="outlined"
             startIcon={<DoneOutlineOutlinedIcon />}
-            onClick={handleSave}
+            onClick={onSave}
           >
             {getString("save")}
           </Button>
@@ -129,11 +161,11 @@ const EditProfileDetailsSection = ({
       <Container sx={{ display: " flex", flexDirection: "row" }}>
         <TextField
           variant="outlined"
-          value={formData.password}
-          label={getString("password")}
-          type="password"
-          name="password"
-          autoComplete="new-password"
+          value={formData.billingData?.phoneNumber}
+          label={getString("phonenumber")}
+          type="phoneNumber"
+          name="phoneNumber"
+          autoComplete="phoneNumber"
           onChange={handleInputChange}
           sx={{
             width: "25vw",
