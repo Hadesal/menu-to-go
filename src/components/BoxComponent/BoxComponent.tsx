@@ -1,7 +1,7 @@
 import SearchIcon from "@mui/icons-material/Search";
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
-import { Button, Paper, Stack, TextField } from "@mui/material";
+import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
@@ -17,6 +17,7 @@ interface BoxComponentProps {
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
+  title?: string;
 }
 
 const BoxComponent = ({
@@ -28,6 +29,7 @@ const BoxComponent = ({
   addFunction,
   emptyStateTitle,
   emptyStateMessage,
+  title,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState(items);
@@ -71,27 +73,68 @@ const BoxComponent = ({
   };
   return (
     <Paper elevation={3} sx={styles.paper}>
-      <Stack direction="row" spacing={2} alignItems="center" mb={3}>
-        <TextField
-          sx={styles.searchField}
-          variant="outlined"
-          placeholder="   Search"
-          color="primary"
-          InputProps={{
-            startAdornment: <SearchIcon />,
-          }}
-          fullWidth
-          onChange={onSearch}
-        />
-        <Button
-          sx={styles.addButton}
-          variant="outlined"
-          color="primary"
-          onClick={handleClickOpen}
-        >
-          Add
-        </Button>
-      </Stack>
+      {!title && (
+        <Stack direction="row" spacing={2} alignItems="center" mb={3}>
+          <>
+            <TextField
+              sx={styles.searchField}
+              variant="outlined"
+              placeholder="   Search"
+              color="primary"
+              InputProps={{
+                startAdornment: <SearchIcon />,
+              }}
+              fullWidth
+              onChange={onSearch}
+            />
+            <Button
+              sx={styles.addButton}
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              Add
+            </Button>
+          </>
+        </Stack>
+      )}
+      {title && (
+        <Stack direction="column" spacing={2} mb={3}>
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h6">
+                {title}
+              </Typography>
+
+              <Button
+                sx={styles.addButton}
+                variant="outlined"
+                color="primary"
+                onClick={handleClickOpen}
+              >
+                Add
+              </Button>
+            </Box>
+            <TextField
+              sx={styles.searchField}
+              variant="outlined"
+              placeholder="   Search"
+              color="primary"
+              InputProps={{
+                startAdornment: <SearchIcon />,
+              }}
+              fullWidth
+              onChange={onSearch}
+            />
+          </>
+        </Stack>
+      )}
       {filteredItems.length > 0 ? (
         <ItemsGridView
           CardIcon={CardIcon}

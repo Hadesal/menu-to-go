@@ -5,7 +5,8 @@ interface Styles {
   typography: SxProps<Theme>;
   paper: SxProps<Theme>;
   searchField: SxProps<Theme>;
-  addButton: SxProps<Theme>;
+  addButton?: SxProps<Theme>;
+  addButtonCategory?: SxProps<Theme>;
   gridPaper: SxProps<Theme>;
   card: SxProps<Theme>;
   cardContent: SxProps<Theme>;
@@ -16,6 +17,7 @@ interface Styles {
   list: SxProps<Theme>;
   paperListView: SxProps<Theme>;
   listItemBox: SxProps<Theme>;
+  categoryList: SxProps<Theme>;
 }
 
 export default Styles;

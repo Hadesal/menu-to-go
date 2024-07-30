@@ -2,6 +2,7 @@ const styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
   paper: { padding: 3, borderRadius: "20px" },
+  categoryPaper: { borderRadius: "20px" },
   searchField: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
@@ -11,6 +12,27 @@ const styles = {
     },
   },
   addButton: { borderRadius: 10, width: "8vw", height: "5vh" },
+  addButtonCategory: {
+    borderRadius: 16,
+    //padding:"8px 21px 8px 21px",
+    background: "var(--primary-color)",
+    color: "white",
+    "&:hover": {
+      color: "var(--primary-color)",
+    },
+  },
+  previewMenu: {
+    borderRadius: "20px",
+    padding: "10px 25px 10px 25px",
+    backgroundColor: "var(--primary-color)",
+    border: "1px solid transparent",
+    "&:hover": {
+      backgroundColor: "transparent",
+      borderColor: "var(--primary-color)",
+      boxShadow: "none",
+      color: "var(--primary-color)",
+    },
+  },
   gridPaper: {
     borderRadius: "20px",
     //width: "14vw",
@@ -55,6 +77,13 @@ const styles = {
   },
   listItemBox: {
     color: "primary",
+  },
+  categoryList: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    width: "100%",
+    paddingBottom: 0,
   },
 };
 export default styles;

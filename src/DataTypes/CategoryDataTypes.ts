@@ -1,8 +1,9 @@
 export interface CategoryData {
-  id: number;
+  id: string;
   name: string;
-  image: string;
+  image: ArrayBuffer | null;
   products: [];
   restaurant: object;
   restaurantId: string;
+  categoryType: string;
 }

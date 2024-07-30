@@ -61,5 +61,10 @@
   "newPassword": "New Password",
   "changePassword": "Change Password",
   "billingDataPageDescription": "Billing data This data will be used for invoicing",
-  "fullName": "Full Name"
+  "fullName": "Full Name",
+  "categoryPageTitle": "Categories & Products",
+  "categoryPagePreviewMenuText": "Preview Menu",
+  "addCategoryText": "Add Category",
+  "addCategoryInfoText": "Please enter category name",
+  "categoryDeleteText": "Are you sure you want to permanently delete the category {{categoryName}}?"
 }

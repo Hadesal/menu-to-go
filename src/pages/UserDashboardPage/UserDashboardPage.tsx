@@ -45,6 +45,7 @@ import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 import UserDetailsInputComponent from "../../components/UserDetailsInputComponent/UserDetailsInputComponent";
+import CategoryPage from "../CategoryPage/CategoryPage";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
@@ -511,7 +512,7 @@ export default function UserDashboardPage() {
         {activeTab === "restaurant" && (
           <RestaurantSection label={getString("restaurant")} />
         )}
-        {activeTab === "categories" && <h1> Categories view</h1>}
+        {activeTab === "categories" && <CategoryPage />}
         {activeTab === "templates" && <h1> Templates view</h1>}
         {activeTab === "generateQrCode" && <h1> Generate qr code view</h1>}
         {activeTab === "feedback" && <FeedbackPage />}
