@@ -82,7 +82,7 @@ const CategoryBoxComponent = ({
         </Box>
       </Stack>
 
-      {filteredItems.length > 0 ? (
+      {filteredItems?.length > 0 ? (
         <CategoryItemsListView
           CardIcon={CardIcon}
           items={filteredItems}
@@ -101,7 +101,7 @@ const CategoryBoxComponent = ({
         fileUpload={true}
         errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
-        confirmText={getString("Add")}
+        confirmText={getString("add")}
         isOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}

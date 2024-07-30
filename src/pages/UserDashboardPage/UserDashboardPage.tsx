@@ -82,7 +82,9 @@ export default function UserDashboardPage() {
 
   const activeTab = useSelector(selectActiveTab);
   const navigate = useNavigate();
-  const userData = useAppSelector((selector) => selector.userData.userList[0]);
+  const userData = useAppSelector(
+    (selector) => selector?.userData?.userList[0]
+  );
   const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
   const buttonData = [
     { id: "dashboard", icon: <HomeIcon />, label: getString("dashboard") },
@@ -202,17 +204,17 @@ export default function UserDashboardPage() {
     };
   });
   useEffect(() => {
-    const createdAtDate = new Date(userData.createdAt);
+    const createdAtDate = new Date(userData?.createdAt);
     const currentDate = new Date();
     const timeDifference = currentDate - createdAtDate;
     const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
     if (daysDifference >= 3) {
-      if (!userData.verified) {
+      if (!userData?.verified) {
         console.log("Account should be deleted due to lack of verification.");
         navigate("/login");
       }
-    } else if (!userData.verified) {
+    } else if (!userData?.verified) {
       setDaysLeftForVerification(3 - daysDifference);
       //TODO create a warning dialog and make it visible
       setVerificationWarning(true);
@@ -226,14 +228,14 @@ export default function UserDashboardPage() {
 
       return () => clearInterval(intervalId);
     }
-  }, [userData.verified, userData.createdAt, navigate, dispatch]);
+  }, [userData?.verified, userData?.createdAt, navigate, dispatch]);
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
       try {
         await fetchAllData(dispatch);
         setLoading(false);
-        if (userData.name === "hade") {
+        if (userData?.name === "hade") {
           setUserDetailsisOpen(true);
         } else {
           setUserDetailsisOpen(false);

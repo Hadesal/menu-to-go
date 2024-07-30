@@ -103,6 +103,8 @@ export const addCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      console.log(restaurantId);
+      console.log(category);
       const response = await apiCreateCategory(restaurantId, category);
       console.log(response);
       return { restaurantId, category: response };
@@ -213,7 +215,9 @@ export const RestaurantSlice = createSlice({
         if (restaurant) {
           restaurant.category.push(category);
         }
-
+        console.log(category);
+        console.log("restaurant: ", restaurant);
+        console.log("state: ", state.selectedCategory);
         if (Object.keys(state.selectedCategory).length === 0) {
           state.selectedCategory = category;
         }
@@ -256,7 +260,11 @@ export const RestaurantSlice = createSlice({
   },
 });
 
-export const { setRestaurantList, setSelectedCategory, clearSuccessMessage , clearCategoryErrorMessage } =
-  RestaurantSlice.actions;
+export const {
+  setRestaurantList,
+  setSelectedCategory,
+  clearSuccessMessage,
+  clearCategoryErrorMessage,
+} = RestaurantSlice.actions;
 
 export default RestaurantSlice.reducer;

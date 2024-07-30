@@ -2,7 +2,7 @@ export interface RestaurantData {
   id?: string;
   name: string;
   category: [];
-  table?: [];
+  table: [];
   userUiPreferences: UserUiPreferences;
 }
 export interface UserUiPreferences {

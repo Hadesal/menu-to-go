@@ -1,7 +1,14 @@
 import SearchIcon from "@mui/icons-material/Search";
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
-import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
@@ -108,9 +115,7 @@ const BoxComponent = ({
                 justifyContent: "space-between",
               }}
             >
-              <Typography variant="h6">
-                {title}
-              </Typography>
+              <Typography variant="h6">{title}</Typography>
 
               <Button
                 sx={styles.addButton}
@@ -135,7 +140,7 @@ const BoxComponent = ({
           </>
         </Stack>
       )}
-      {filteredItems.length > 0 ? (
+      {filteredItems?.length > 0 ? (
         <ItemsGridView
           CardIcon={CardIcon}
           items={filteredItems}

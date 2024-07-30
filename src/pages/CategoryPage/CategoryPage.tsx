@@ -40,6 +40,9 @@ export default function CategoryPage() {
   const { t } = useTranslation();
   const getString = t;
 
+  const [showError, setShowError] = useState<boolean>(false);
+  const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
+  const [imageError, setImageError] = useState<string | null>(null);
   useEffect(() => {
     if (categoryError) {
       setShowToast(true);
@@ -53,8 +56,9 @@ export default function CategoryPage() {
   }, [successMessage]);
 
   useEffect(() => {
+    console.log(restaurantList);
     if (restaurantList[0]?.category?.length !== 0) {
-      dispatch(setSelectedCategory(restaurantList[0].category[0]));
+      dispatch(setSelectedCategory(restaurantList[0]?.category[0]));
     }
     setShowSuccessToast(false);
     setShowToast(false);
@@ -62,19 +66,34 @@ export default function CategoryPage() {
     dispatch(clearCategoryErrorMessage(null)); // Ensure you have this action in your slice
   }, []);
 
-  const handleAddCategory = (category) => {
-    dispatch(addCategory({ restaurantId: restaurantList[0].id, category }));
+  const handleAddCategory = (category: any) => {
+    let hasError = false;
+
+    if (category.name.length === 0) {
+      setShowError(true);
+      hasError = true;
+    }
+
+    if (category.categoryType.length === 0) {
+      setShowCategoryError(true);
+      hasError = true;
+    }
+
+    //  if (fileUpload && imageError) {
+    //    hasError = true;
+    //  }
+    dispatch(addCategory({ restaurantId: restaurantList[0]?.id, category }));
   };
 
   // const handleEditRestaurant = (restaurant: RestaurantData) => {
   //   dispatch(editRestaurant({ restaurant }));
   // };
 
-  const handleDeleteCategory = (category) => {
+  const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
       deleteCategory({
-        restaurantId: restaurantList[0].id as string,
-        categoryId: category.id as string,
+        restaurantId: restaurantList[0]?.id as string,
+        categoryId: category?.id as string,
       })
     );
   };
@@ -160,7 +179,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 1 }}>
           <CategoryBoxComponent
             CardIcon={RestaurantIcon}
-            items={restaurantList[0].category}
+            items={restaurantList[0]?.category}
             addFunction={handleAddCategory}
             editFunction={() => {}}
             deleteFunction={handleDeleteCategory}
@@ -174,14 +193,14 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={restaurantList[1].category}
+            items={restaurantList[1]?.category}
             addFunction={() => {}}
             editFunction={() => {}}
             deleteFunction={() => {}}
             styles={styles}
             //emptyStateTitle={getString("noRestaurantsfoundTitle")}
             //emptyStateMessage={getString("noRestaurantsfoundMessage")}
-            title={selectedCategory ? selectedCategory.name : ""}
+            title={selectedCategory ? selectedCategory?.name : ""}
           />
         </Box>
       </Box>

@@ -41,6 +41,7 @@ interface DialogData {
   userUiPreferences: UserUiPreferences;
   image: ArrayBuffer | null;
   categoryType: string;
+  table: [];
 }
 
 const AddItemDialog = ({
@@ -69,6 +70,7 @@ const AddItemDialog = ({
       ingredientViewType: ViewType.GRID,
       itemsViewType: ViewType.GRID,
     },
+    table: [],
     categoryType: "",
   });
 
@@ -79,20 +81,6 @@ const AddItemDialog = ({
   const handleConfirm = () => {
     console.log(dialogData);
     let hasError = false;
-
-    if (dialogData.name.length === 0) {
-      setShowError(true);
-      hasError = true;
-    }
-
-    if (dialogData.categoryType.length === 0) {
-      setShowCategoryError(true);
-      hasError = true;
-    }
-
-    if (fileUpload && imageError) {
-      hasError = true;
-    }
 
     if (hasError) {
       return;
