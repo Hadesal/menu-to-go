@@ -109,7 +109,7 @@ const BoxComponent = ({
               }}
             >
               <Typography variant="h6">
-                {getString("categoryPageTitle")}
+                {title}
               </Typography>
 
               <Button

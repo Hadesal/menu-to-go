@@ -7,17 +7,28 @@ import {
   deleteRestaurant as apiDeleteRestaurant,
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
+import {
+  createCategory as apiCreateCategory,
+  deleteCategory as ApiDeleteCategory,
+} from "../../services/api/categoryCrud";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 
 export interface RestaurantState {
   restaurantList: RestaurantData[];
+  selectedCategory: any;
   loading: boolean;
   error: string | null;
+  categoryError: string | null;
+  successMessage: string | null;
 }
 
 const initialState: RestaurantState = {
   restaurantList: [],
+  selectedCategory: {},
   loading: false,
   error: null,
+  categoryError: null,
+  successMessage: null,
 };
 
 export const fetchAllRestaurants = createAsyncThunk(
@@ -82,12 +93,56 @@ export const deleteRestaurant = createAsyncThunk(
   }
 );
 
+export const addCategory = createAsyncThunk(
+  "restaurantsData/addCategory",
+  async (
+    {
+      restaurantId,
+      category,
+    }: { restaurantId: string; category: CategoryData },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await apiCreateCategory(restaurantId, category);
+      console.log(response);
+      return { restaurantId, category: response };
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response?.data || "Error adding category");
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  "restaurantsData/deleteCategory",
+  async (
+    { restaurantId, categoryId }: { restaurantId: string; categoryId: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      await ApiDeleteCategory(categoryId);
+      return { restaurantId, categoryId }; // Return both IDs for use in the reducer
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error deleting category");
+    }
+  }
+);
+
 export const RestaurantSlice = createSlice({
   name: "restaurantsData",
   initialState,
   reducers: {
     setRestaurantList: (state, action: PayloadAction<RestaurantData[]>) => {
       state.restaurantList = action.payload;
+    },
+    setSelectedCategory: (state, action: PayloadAction<any>) => {
+      state.selectedCategory = action.payload;
+    },
+    clearSuccessMessage: (state, action: PayloadAction<any>) => {
+      state.successMessage = action.payload;
+    },
+    clearCategoryErrorMessage: (state, action: PayloadAction<any>) => {
+      state.categoryError = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -144,10 +199,64 @@ export const RestaurantSlice = createSlice({
       .addCase(deleteRestaurant.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(addCategory.pending, (state) => {
+        state.loading = true;
+        state.categoryError = null;
+        state.successMessage = null; // Reset success message on pending
+      })
+      .addCase(addCategory.fulfilled, (state, action) => {
+        const { restaurantId, category } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (res) => res.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.category.push(category);
+        }
+
+        if (Object.keys(state.selectedCategory).length === 0) {
+          state.selectedCategory = category;
+        }
+
+        state.loading = false;
+        state.successMessage = "Category added successfully!"; // Set success message
+      })
+      .addCase(addCategory.rejected, (state, action) => {
+        state.loading = false;
+        console.log(action.payload);
+        state.categoryError = action.payload.details || action.payload;
+      })
+      .addCase(deleteCategory.pending, (state) => {
+        state.loading = true;
+        state.categoryError = null;
+        state.successMessage = null; // Set success message
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        const { restaurantId, categoryId } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (res) => res.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.category = restaurant.category.filter(
+            (category) => category.id !== categoryId
+          );
+        }
+
+        // Update the selected category if it was deleted
+        if (state.selectedCategory.id === categoryId) {
+          state.selectedCategory = restaurant.category[0] || {}; // Set to first category or empty object
+        }
+        state.loading = false;
+        state.successMessage = "Category deleted successfully!"; // Set success message
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.categoryError = action.payload.details || action.payload;
       });
   },
 });
 
-export const { setRestaurantList } = RestaurantSlice.actions;
+export const { setRestaurantList, setSelectedCategory, clearSuccessMessage , clearCategoryErrorMessage } =
+  RestaurantSlice.actions;
 
 export default RestaurantSlice.reducer;

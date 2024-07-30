@@ -40,9 +40,7 @@ const ItemsGridView = ({
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<RestaurantData>({
-    name: "",
-  });
+  const [currentItem, setCurrentItem] = useState<RestaurantData>({name: ""});
   const { t } = useTranslation();
   const getString = t;
 
