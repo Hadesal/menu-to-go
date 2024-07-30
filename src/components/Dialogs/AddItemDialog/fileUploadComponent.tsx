@@ -20,8 +20,8 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 interface FileUploadComponentProps {
-  image: string | null;
-  onImageChange: (image: string | null) => void;
+  image: ArrayBuffer | null;
+  onImageChange: (image: ArrayBuffer | null) => void;
   error: string | null;
   setError: (error: string | null) => void;
 }
@@ -50,7 +50,7 @@ const FileUploadComponent = ({
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        onImageChange(reader.result as string);
+        onImageChange(reader.result);
         setError(null);
       };
       reader.readAsDataURL(file);
