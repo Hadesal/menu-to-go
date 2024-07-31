@@ -21,7 +21,7 @@ const VisuallyHiddenInput = styled("input")({
 
 interface FileUploadComponentProps {
   image: ArrayBuffer | null;
-  onImageChange: (image: ArrayBuffer | null) => void;
+  onImageChange: (image: String | null) => void;
   error: string | null;
   setError: (error: string | null) => void;
 }
@@ -50,13 +50,12 @@ const FileUploadComponent = ({
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        onImageChange(reader.result);
+        onImageChange(reader.result as string);
         setError(null);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // This will read the file as a Base64 encoded string
     }
   };
-
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
