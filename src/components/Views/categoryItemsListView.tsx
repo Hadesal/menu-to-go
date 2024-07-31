@@ -20,20 +20,22 @@ import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 
 import EditIcon from "@mui/icons-material/Edit";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
+import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 
 interface Props {
   items: CategoryData[];
-  editfunction: (item: object) => void;
+  editFunction: (item: object) => void;
   deleteFunction: (item: object) => void;
   styles: Styles;
 }
 const CategoryItemsListView = ({
   items,
-  editfunction,
+  editFunction,
   deleteFunction,
   styles,
 }: Props): JSX.Element => {
+  const [open, setOpen] = useState(false);
+
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
@@ -72,9 +74,18 @@ const CategoryItemsListView = ({
     setAnchorEls(newAnchorEls);
   };
 
+  const handleEditClick = (item: CategoryData) => {
+    setCurrentItem(item);
+    setOpen(true);
+  };
+
   const handleDeleteClick = (item: CategoryData) => {
     setCurrentItem(item);
     setIsDeleteDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -93,7 +104,7 @@ const CategoryItemsListView = ({
               cursor: "pointer",
               borderRadius: index === items.length - 1 ? "0 0 16px 16px" : "0",
               background:
-                selectedCategory.name === item.name
+                selectedCategory.id === item.id
                   ? "var(--primary-color)"
                   : "initial",
             }}
@@ -113,7 +124,7 @@ const CategoryItemsListView = ({
                     variant="body1"
                     style={{
                       color:
-                        selectedCategory.name === item.name
+                        selectedCategory.id === item.id
                           ? "white"
                           : "var(--primary-color)",
                     }}
@@ -121,9 +132,7 @@ const CategoryItemsListView = ({
                     {item.name}
                     <Typography
                       color={
-                        selectedCategory.name === item.name
-                          ? "white"
-                          : "#BCB8B1"
+                        selectedCategory.id === item.id ? "white" : "#BCB8B1"
                       }
                       component="span"
                     >
@@ -146,7 +155,7 @@ const CategoryItemsListView = ({
               <MoreVertIcon
                 sx={{
                   color:
-                    selectedCategory.name === item.name
+                    selectedCategory.id === item.id
                       ? "white"
                       : "var(--primary-color)",
                 }}
@@ -166,7 +175,7 @@ const CategoryItemsListView = ({
             >
               <MenuItem
                 onClick={() => {
-                  //handleEditClick(item);
+                  handleEditClick(item);
                   handleMenuClose(index);
                 }}
               >
@@ -190,6 +199,16 @@ const CategoryItemsListView = ({
           </ListItem>
         ))}
       </List>
+      <AddCategoryDialog
+        title={"Edit category"}
+        errorMessage={getString("addCategoryInfoText")}
+        cancelText={getString("cancel")}
+        confirmText={"Update"}
+        isOpen={open}
+        onCancelClick={handleClose}
+        onConfirmClick={editFunction}
+        initialData={currentItem}
+      />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {

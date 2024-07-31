@@ -1,27 +1,22 @@
-import SearchIcon from "@mui/icons-material/Search";
-import Styles from "../../DataTypes/StylesTypes";
-import ItemsGridView from "../Views/ItemsGridView";
 import {
   Box,
   Button,
-  Divider,
   Paper,
   Stack,
-  TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import { ChangeEvent, useEffect, useState } from "react";
-import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import EmptyState from "../EmptyStateComponet/EmptyState";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ItemsListView from "../Views/ItemsListView";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import Styles from "../../DataTypes/StylesTypes";
+import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
+import EmptyState from "../EmptyStateComponet/EmptyState";
 import CategoryItemsListView from "../Views/categoryItemsListView";
 
 interface CategoryBoxComponentProps {
-  items: RestaurantData[];
+  items: CategoryData[];
   styles: Styles;
-  editFunction: (item: RestaurantData) => void;
+  editFunction: (item) => void;
   deleteFunction: (item) => void;
   addFunction: (item) => void;
   emptyStateTitle?: string;
@@ -96,9 +91,8 @@ const CategoryBoxComponent = ({
           emptyStateMessage={emptyStateMessage}
         />
       )}
-      <AddItemDialog
+      <AddCategoryDialog
         title={getString("addCategoryText")}
-        fileUpload={true}
         errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}

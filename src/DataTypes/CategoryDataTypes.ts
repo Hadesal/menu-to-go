@@ -1,7 +1,7 @@
 export interface CategoryData {
   id: string;
   name: string;
-  image: ArrayBuffer | null;
+  image: string | null;
   products: [];
   restaurant: object;
   restaurantId: string;

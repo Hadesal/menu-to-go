@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
+import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
 
@@ -39,7 +39,7 @@ const ItemsGridView = ({
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<RestaurantData>({name: ""});
+  const [currentItem, setCurrentItem] = useState<RestaurantData>({ name: "" });
   const { t } = useTranslation();
   const getString = t;
 
@@ -173,9 +173,8 @@ const ItemsGridView = ({
           </Paper>
         </Grid>
       ))}
-      <AddItemDialog
+      <AddRestaurantDialog
         title={getString("updateRestaurant")}
-        fileUpload={false}
         errorMessage={getString("restaurantError")}
         cancelText={getString("cancel")}
         confirmText={getString("update")}
@@ -187,8 +186,8 @@ const ItemsGridView = ({
             name: newRestaurantName.name.trim(),
           };
           editFunction(newRestaurant);
-          handleEditDialogClose();
         }}
+        initialData={currentItem}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

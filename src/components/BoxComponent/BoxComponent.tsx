@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import AddItemDialog from "../Dialogs/AddItemDialog/addItemDialog";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
+import { addRestaurantData, RestaurantData } from "../../DataTypes/RestaurantObject";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +20,7 @@ interface BoxComponentProps {
   styles: Styles;
   editFunction: (item: RestaurantData) => void;
   deleteFunction: (item: RestaurantData) => void;
-  addFunction: (item: RestaurantData) => void;
+  addFunction: (item: addRestaurantData) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
@@ -154,9 +154,8 @@ const BoxComponent = ({
           emptyStateMessage={emptyStateMessage}
         />
       )}
-      <AddItemDialog
+      <AddRestaurantDialog
         title={getString("addRestaurantText")}
-        fileUpload={false}
         errorMessage={getString("addRestaurantInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}

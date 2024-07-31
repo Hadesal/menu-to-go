@@ -20,9 +20,11 @@ import {
   setSelectedCategory,
   clearSuccessMessage,
   clearCategoryErrorMessage,
+  updateCategory,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import styles from "./RestaurantSection.styles";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 
 export default function CategoryPage() {
   const {
@@ -40,9 +42,10 @@ export default function CategoryPage() {
   const { t } = useTranslation();
   const getString = t;
 
-  const [showError, setShowError] = useState<boolean>(false);
+  const [showError, setShowNameError] = useState<boolean>(false);
   const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
+
   useEffect(() => {
     if (categoryError) {
       setShowToast(true);
@@ -56,38 +59,30 @@ export default function CategoryPage() {
   }, [successMessage]);
 
   useEffect(() => {
-    console.log(restaurantList);
     if (restaurantList[0]?.category?.length !== 0) {
       dispatch(setSelectedCategory(restaurantList[0]?.category[0]));
     }
     setShowSuccessToast(false);
     setShowToast(false);
-    dispatch(clearSuccessMessage(null)); // Ensure you have this action in your slice
-    dispatch(clearCategoryErrorMessage(null)); // Ensure you have this action in your slice
+    dispatch(clearSuccessMessage(null));
+    dispatch(clearCategoryErrorMessage(null));
   }, []);
 
-  const handleAddCategory = (category: any) => {
-    let hasError = false;
-
-    if (category.name.length === 0) {
-      setShowError(true);
-      hasError = true;
-    }
-
-    if (category.categoryType.length === 0) {
-      setShowCategoryError(true);
-      hasError = true;
-    }
-
-    //  if (fileUpload && imageError) {
-    //    hasError = true;
-    //  }
-    dispatch(addCategory({ restaurantId: restaurantList[0]?.id, category }));
+  const handleAddCategory = (category: CategoryData) => {
+    dispatch(
+      addCategory({ restaurantId: restaurantList[0]?.id as string, category })
+    );
   };
 
-  // const handleEditRestaurant = (restaurant: RestaurantData) => {
-  //   dispatch(editRestaurant({ restaurant }));
-  // };
+  const handleEditCategory = (category: CategoryData) => {
+    dispatch(
+      updateCategory({
+        restaurantId: restaurantList[0]?.id,
+        categoryId: selectedCategory.id,
+        category,
+      })
+    );
+  };
 
   const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
@@ -142,7 +137,6 @@ export default function CategoryPage() {
         <Alert
           onClose={() => {
             setShowSuccessToast(false);
-            console.log("clear it");
           }}
           severity="success"
           variant="filled"
@@ -159,12 +153,7 @@ export default function CategoryPage() {
         }}
       >
         <Typography variant="h5">{getString("categoryPageTitle")}</Typography>
-        <Button
-          sx={styles.previewMenu}
-          variant="contained"
-          //color="primary"
-          //onClick={handleClickOpen}
-        >
+        <Button sx={styles.previewMenu} variant="contained">
           {getString("categoryPagePreviewMenuText")}
         </Button>
       </Box>
@@ -181,7 +170,7 @@ export default function CategoryPage() {
             CardIcon={RestaurantIcon}
             items={restaurantList[0]?.category}
             addFunction={handleAddCategory}
-            editFunction={() => {}}
+            editFunction={handleEditCategory}
             deleteFunction={handleDeleteCategory}
             styles={styles}
             emptyStateTitle={"Your category list is empty."}
@@ -193,7 +182,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={restaurantList[1]?.category}
+            items={restaurantList[0]?.category[0]?.product}
             addFunction={() => {}}
             editFunction={() => {}}
             deleteFunction={() => {}}

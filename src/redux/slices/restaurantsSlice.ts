@@ -10,6 +10,7 @@ import {
 import {
   createCategory as apiCreateCategory,
   deleteCategory as ApiDeleteCategory,
+  updateCategory as apiUpdateCategory,
 } from "../../services/api/categoryCrud";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 
@@ -115,6 +116,24 @@ export const addCategory = createAsyncThunk(
   }
 );
 
+export const updateCategory = createAsyncThunk(
+  "restaurantsData/editCategory",
+  async (
+    {
+      restaurantId,
+      categoryId,
+      category,
+    }: { restaurantId: string; categoryId: string; category: CategoryData },
+    { rejectWithValue }
+  ) => {
+    try {
+      await apiUpdateCategory(restaurantId, categoryId, category);
+      return { restaurantId, categoryId, category }; // Return both IDs for use in the reducer
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error deleting category");
+    }
+  }
+);
 export const deleteCategory = createAsyncThunk(
   "restaurantsData/deleteCategory",
   async (
@@ -254,6 +273,39 @@ export const RestaurantSlice = createSlice({
         state.successMessage = "Category deleted successfully!"; // Set success message
       })
       .addCase(deleteCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.categoryError = action.payload.details || action.payload;
+      })
+      .addCase(updateCategory.pending, (state) => {
+        state.loading = true;
+        state.categoryError = null;
+        state.successMessage = null; // Set success message
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        const { restaurantId, categoryId, category } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (res) => res.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.category = restaurant.category.map(
+            (updatedCategory: CategoryData) =>
+              updatedCategory.id === categoryId
+                ? { ...updatedCategory, ...category }
+                : updatedCategory
+          );
+
+          // Update selectedCategory if it matches the updated category
+          if (
+            state.selectedCategory &&
+            state.selectedCategory.id === categoryId
+          ) {
+            state.selectedCategory = { ...state.selectedCategory, ...category };
+          }
+        }
+        state.loading = false;
+        state.successMessage = "Category updated successfully!";
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
         state.loading = false;
         state.categoryError = action.payload.details || action.payload;
       });
