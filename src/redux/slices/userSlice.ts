@@ -96,10 +96,9 @@ export const fetchUserById = createAsyncThunk(
 
 export const userDelete = createAsyncThunk(
   "user/delete",
-  async (userId: number, { rejectWithValue }) => {
+  async (userId: String, { rejectWithValue }) => {
     try {
       const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-
       const response = await deleteUser(userId, userToken);
       return response;
     } catch (error: any) {

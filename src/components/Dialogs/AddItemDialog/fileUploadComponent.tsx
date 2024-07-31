@@ -53,10 +53,9 @@ const FileUploadComponent = ({
         onImageChange(reader.result as string);
         setError(null);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // This will read the file as a Base64 encoded string
     }
   };
-
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();

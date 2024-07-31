@@ -29,7 +29,6 @@ import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import userImg from "../../assets/omarselfie.jpeg";
 import logo from "../../assets/qr-code-logo.svg";
 import ConfirmDialog from "../../components/Dialogs/LogoutDialog/confirmDialog";
 import {
@@ -46,6 +45,7 @@ import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 import UserDetailsInputComponent from "../../components/UserDetailsInputComponent/UserDetailsInputComponent";
 import CategoryPage from "../CategoryPage/CategoryPage";
+import { userDelete } from "../../redux/slices/userSlice";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
@@ -71,11 +71,10 @@ export default function UserDashboardPage() {
   const [loading, setLoading] = useState(true);
   const openProfile = Boolean(anchorElProfile);
   const openLang = Boolean(anchorElLang);
-  const [verificationWarning, setVerificationWarning] = useState(false);
   const [daysLeftForVerification, setDaysLeftForVerification] = useState(3);
   const { i18n, t } = useTranslation();
   const getString = t;
-
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
     useState(false);
   const [remaining, setRemaining] = useState<number>(10 * 6000);
@@ -154,7 +153,9 @@ export default function UserDashboardPage() {
   const handleLogoutClick = () => {
     setShowLogoutDialog(true);
   };
-
+  const closeDialog = () => {
+    setShowDeleteDialog(false);
+  };
   const handleLogout = () => {
     setShowLogoutDialog(false);
     navigate("/login");
@@ -207,29 +208,20 @@ export default function UserDashboardPage() {
   useEffect(() => {
     const createdAtDate = new Date(userData?.createdAt);
     const currentDate = new Date();
-    const timeDifference = currentDate - createdAtDate;
+    const timeDifference = currentDate.getTime() - createdAtDate.getTime();
     const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-
     if (daysDifference >= 3) {
-      if (!userData?.verified) {
+      if (userData?.verified === false) {
         console.log("Account should be deleted due to lack of verification.");
+        dispatch(userDelete(userData.id));
         navigate("/login");
       }
-    } else if (!userData?.verified) {
-      setDaysLeftForVerification(3 - daysDifference);
-      //TODO create a warning dialog and make it visible
-      setVerificationWarning(true);
-      const intervalId = setInterval(() => {
-        alert(
-          `Please verify your account. You have ${
-            3 - daysDifference
-          } days left to verify your account.`
-        );
-      }, 86400000);
-
-      return () => clearInterval(intervalId);
     }
-  }, [userData?.verified, userData?.createdAt, navigate, dispatch]);
+    if (userData?.verified === false) {
+      setDaysLeftForVerification(3 - daysDifference);
+      setShowDeleteDialog(true);
+    }
+  }, [userData?.verified, userData?.createdAt]);
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
@@ -352,11 +344,10 @@ export default function UserDashboardPage() {
               Menu-To-Go
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <Avatar
-                style={{ alignSelf: "center" }}
-                alt="Omar Fares"
-                src={userImg}
-              />
+              <Avatar style={{ alignSelf: "center" }}>
+                {userData?.name.split("")[0]}
+              </Avatar>
+
               <IconButton
                 id="profile-icon"
                 aria-label="profile details icon"
@@ -499,6 +490,20 @@ export default function UserDashboardPage() {
           title={getString("logoutSubText")}
           subTitle={getString("logoutText")}
           onClose={handleLogoutDialogCancel}
+        />
+        {/*confirm delete account*/}
+        <ConfirmDialog
+          isOpen={showDeleteDialog}
+          onPrimaryActionClick={closeDialog}
+          width="580px"
+          height="500px"
+          showImg={false}
+          primaryActionText={getString("close")}
+          title={getString("verifyText")}
+          subTitle={getString("verifySubText").replace(
+            "%number%",
+            daysLeftForVerification.toString()
+          )}
         />
         {/* confirm session timeout */}
         <ConfirmDialog

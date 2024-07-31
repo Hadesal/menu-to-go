@@ -5,6 +5,7 @@ import {
   UserSignupApiData,
   UserUpdateData,
 } from "../../DataTypes/UserDataTypes";
+import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
 const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
 
@@ -34,7 +35,7 @@ export const login = async (userSignInData: UserSignInData) => {
     return errorResponseObject;
   }
 };
-export const getUserData = async (userToken) => {
+export const getUserData = async (userToken: any) => {
   try {
     if (userToken == null) throw Error;
     const response = await apiService.get("/token", {
@@ -82,7 +83,7 @@ export const updateUserPassword = async (
     return errorResponseObject;
   }
 };
-export const getUserById = async (userId: string, userToken) => {
+export const getUserById = async (userId: string, userToken: any) => {
   try {
     const response = await apiService.get("/" + userId, {
       headers: { Authorization: `Bearer ${userToken.token}` },
@@ -94,7 +95,7 @@ export const getUserById = async (userId: string, userToken) => {
   }
 };
 
-export const deleteUser = async (userId: number, userToken) => {
+export const deleteUser = async (userId: String, userToken: any) => {
   try {
     const response = await apiService.delete("/" + userId, {
       headers: { Authorization: `Bearer ${userToken.token}` },
