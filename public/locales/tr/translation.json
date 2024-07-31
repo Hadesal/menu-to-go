@@ -34,6 +34,7 @@
   "templates": "Şablonlar",
   "toastFail": "İsteğinizi gönderme başarısız oldu. Lütfen tekrar deneyin.",
   "toastSuccessfully": "İsteğiniz başarıyla gönderildi!",
+  "errorDeleteRestaurant": "En az 1 tane Restoran olmalı, bu Restoranı silebilmek için yeni Restoran oluşturun",
   "update": "Güncelle",
   "updateRestaurant": "Restoranı güncelle",
   "welcomeBack": "Merhaba, Tekrar Hoş Geldiniz"

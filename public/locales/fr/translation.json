@@ -3,6 +3,7 @@
   "welcomeBack": "Merhaba, Hoş geldiniz",
   "toastSuccessfully": "Talebiniz başarıyla gönderildi!",
   "toastFail": "Talebiniz gönderilemedi. Lütfen tekrar deneyin.",
+  "errorDeleteRestaurant": "Il doit y avoir au moins 1 restaurant, créez un nouveau restaurant pour pouvoir supprimer ce restaurant",
   "contactUs": "Bize Ulaşın",
   "haveQuestionText": "Bir sorunuz mu var? Bizimle iletişime geçmekten çekinmeyin.",
   "happyToHelpText": "Yardım etmekten mutluluk duyarız!",

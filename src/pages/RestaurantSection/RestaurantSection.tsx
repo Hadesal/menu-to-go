@@ -28,13 +28,14 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const { restaurantList, loading, error } = useAppSelector(
     (state) => state.restaurantsData
   );
-
+  const [errorMessage, setErrorMessage] = useState(error);
   const [showToast, setShowToast] = useState(false);
   const { t } = useTranslation();
   const getString = t;
 
   useEffect(() => {
     if (error) {
+      setErrorMessage(error);
       setShowToast(true);
     }
   }, [error]);
@@ -48,11 +49,16 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   };
 
   const handleDeleteRestaurant = (restaurant: RestaurantData) => {
-    dispatch(
-      deleteRestaurant({
-        restaurantId: restaurant.id as string,
-      })
-    );
+    if (restaurantList.length > 1) {
+      dispatch(
+        deleteRestaurant({
+          restaurantId: restaurant.id as string,
+        })
+      );
+    } else if (restaurantList.length < 2) {
+      setErrorMessage(getString("errorDeleteRestaurant"));
+      setShowToast(true);
+    }
   };
 
   return (
@@ -79,7 +85,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {error}
+          {errorMessage}
         </Alert>
       </Snackbar>
 

@@ -3,6 +3,7 @@
   "welcomeBack": "Hola, bienvenido de nuevo",
   "toastSuccessfully": "¡Tu solicitud ha sido enviada con éxito!",
   "toastFail": "No se pudo enviar tu solicitud. Por favor, inténtalo de nuevo.",
+  "errorDeleteRestaurant": "Debe haber al menos 1 Restaurante, crea un nuevo Restaurante para poder eliminar este Restaurante",
   "contactUs": "Contáctanos",
   "haveQuestionText": "¿Tienes alguna pregunta? No dudes en contactarnos.",
   "happyToHelpText": "¡Estamos felices de ayudarte!",
