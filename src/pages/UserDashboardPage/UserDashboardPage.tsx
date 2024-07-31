@@ -85,6 +85,7 @@ export default function UserDashboardPage() {
   const userData = useAppSelector(
     (selector) => selector?.userData?.userList[0]
   );
+  const { restaurantList } = useAppSelector((state) => state.restaurantsData);
   const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
   const buttonData = [
     { id: "dashboard", icon: <HomeIcon />, label: getString("dashboard") },
@@ -235,11 +236,6 @@ export default function UserDashboardPage() {
       try {
         await fetchAllData(dispatch);
         setLoading(false);
-        if (userData?.name === "hade") {
-          setUserDetailsisOpen(true);
-        } else {
-          setUserDetailsisOpen(false);
-        }
       } catch (error) {
         console.error("Error fetching data:", error);
         //setLoading(false);
@@ -248,6 +244,13 @@ export default function UserDashboardPage() {
 
     fetchDataAndHandleLoading();
   }, []);
+  useEffect(() => {
+    if (restaurantList.length < 1) {
+      setUserDetailsisOpen(true);
+    } else if (restaurantList.length > 0) {
+      setUserDetailsisOpen(false);
+    }
+  }, [restaurantList]);
 
   const drawer = (
     <div>

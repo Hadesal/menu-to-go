@@ -1,31 +1,32 @@
 export interface CountryData {
-  name: string;
-  dialCode: string;
-  countryCode: string;
+  name: String;
+  dialCode: String;
+  countryCode: String;
 }
 
 export interface UserSignupData {
-  name: string;
-  email: string;
-  password: string;
+  name: String;
+  email: String;
+  password: String;
   agreedTermsAndConditions: boolean;
 }
 export interface UserSignupApiData {
-  name: string;
-  email: string;
-  password: string;
+  name: String;
+  email: String;
+  password: String;
 }
 export interface UserSignInData {
-  email: string;
-  password: string;
+  email: String;
+  password: String;
 }
 export interface UserUpdateData {
   id: String;
-  name: string;
-  email: string;
-  password: string;
+  name: String;
+  email: String;
+  password: String;
   image?: String;
   billingData?: BillingDataType;
+  currency?: String;
 }
 
 export interface ChangePasswordDataType {

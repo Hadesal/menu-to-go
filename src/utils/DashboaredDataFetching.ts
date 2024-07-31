@@ -1,7 +1,7 @@
 import { fetchUserData } from "../redux/slices/userSlice";
 import { fetchAllRestaurants } from "../redux/slices/restaurantsSlice";
 import { getUserData } from "../services/api/userCrud";
-import { AppDispatch } from "../redux/store"; // Adjust the path as needed
+import { AppDispatch } from "../redux/store";
 
 export const fetchAllData = async (dispatch: AppDispatch) => {
   try {

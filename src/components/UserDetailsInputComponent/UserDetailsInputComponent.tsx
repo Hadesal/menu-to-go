@@ -2,9 +2,12 @@ import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
 import { Styles } from "../Dialogs/LogoutDialog/confirmDialog.style";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../InputComponent/InputComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Styles as inputStyles } from "../../pages/LoginPage/LoginPage.style";
 import logo from "../../assets/logo.svg";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { addRestaurant } from "../../redux/slices/restaurantsSlice";
+import { userUpdate } from "../../redux/slices/userSlice";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -29,7 +32,42 @@ const UserDetailsInputComponent = ({
     currency: "",
     country: "",
   });
+  const dispatch = useAppDispatch();
+  const { userList } = useAppSelector((state) => state.userData);
+  const { restaurantList } = useAppSelector((state) => state.restaurantsData);
+  const userData = userList[0];
+  useEffect(() => {
+    setUserDetails((prevState) => {
+      return {
+        ...prevState,
+        restaurantName: restaurantList.length > 0 ? restaurantList[0].name : "",
+        country:
+          userData?.billingData.country !== ""
+            ? userData?.billingData.country
+            : "",
+        currency: userData?.currency !== "" ? userData?.currency : "",
+      };
+    });
+  }, []);
   const handleUserDetails = () => {
+    dispatch(
+      addRestaurant({
+        restaurant: { name: userDetails.restaurantName, table: [] },
+      })
+    );
+    dispatch(
+      userUpdate({
+        updatedUser: {
+          ...userData,
+          billingData: {
+            ...userData.billingData,
+            country: userDetails.country,
+          },
+          currency: userDetails.currency,
+        },
+        userId: userData.id,
+      })
+    );
     console.log(userDetails);
   };
   return (
@@ -57,6 +95,7 @@ const UserDetailsInputComponent = ({
           type="name"
           label="Restaurant Name"
           required
+          value={userDetails.restaurantName}
           InputPropStyle={{ borderRadius: "1rem" }}
           onChange={(e) => {
             setUserDetails((prevState) => ({
@@ -72,6 +111,7 @@ const UserDetailsInputComponent = ({
           type="name"
           label="Country"
           required
+          value={userDetails.country}
           InputPropStyle={{ borderRadius: "1rem" }}
           onChange={(e) => {
             setUserDetails((prevState) => ({
@@ -86,6 +126,7 @@ const UserDetailsInputComponent = ({
           id="currencyField"
           type="name"
           label="Currency"
+          value={userDetails.currency}
           required
           InputPropStyle={{ borderRadius: "1rem" }}
           onChange={(e) => {
