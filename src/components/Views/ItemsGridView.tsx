@@ -18,6 +18,11 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../utils/hooks";
+import {
+  setSelectedCategory,
+  setSelectedRestaurant,
+} from "../../redux/slices/restaurantsSlice";
 
 interface GridViewProps {
   items: any[];
@@ -42,6 +47,7 @@ const ItemsGridView = ({
   const [currentItem, setCurrentItem] = useState<RestaurantData>({ name: "" });
   const { t } = useTranslation();
   const getString = t;
+  const dispatch = useAppDispatch();
 
   const handleEditDialogClose = () => {
     setIsUpdateDialogOpen(false);
@@ -79,7 +85,19 @@ const ItemsGridView = ({
       {items.map((item: any, index: number) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
           <Paper elevation={3} sx={styles.gridPaper}>
-            <Card sx={styles.card}>
+            <Card
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                dispatch(setSelectedRestaurant(item));
+                dispatch(
+                  setSelectedCategory(
+                    item.category.length !== 0 ? item.category[0] : {}
+                  )
+                );
+              }}
+              sx={{ ...styles.card, cursor: "pointer" }}
+            >
               <CardContent sx={{ ...styles.cardContent, position: "relative" }}>
                 <IconButton
                   sx={{
@@ -93,7 +111,11 @@ const ItemsGridView = ({
                     },
                   }}
                   aria-label="more"
-                  onClick={(event) => handleMenuClick(event, index)}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handleMenuClick(event, index);
+                  }}
                 >
                   <MoreVertIcon fontSize="small" color="primary" />
                 </IconButton>
@@ -101,7 +123,12 @@ const ItemsGridView = ({
                   id={`resturantOptions-${index}`}
                   anchorEl={anchorEls[index]}
                   open={Boolean(anchorEls[index])}
-                  onClose={() => handleMenuClose(index)}
+                  onClose={() => {
+                    handleMenuClose(index);
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation(); // Stop propagation here if necessary
+                  }}
                   MenuListProps={{
                     "aria-labelledby": `resturantOptions-${index}`,
                   }}
@@ -109,7 +136,8 @@ const ItemsGridView = ({
                   elevation={1}
                 >
                   <MenuItem
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents the click event from propagating
                       handleEditClick(item);
                       handleMenuClose(index);
                     }}
@@ -122,7 +150,8 @@ const ItemsGridView = ({
                     {getString("edit")}
                   </MenuItem>
                   <MenuItem
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents the click event from propagating
                       handleDeleteClick(item);
                       handleMenuClose(index);
                     }}
@@ -134,7 +163,8 @@ const ItemsGridView = ({
                     {getString("delete")}
                   </MenuItem>
                   <MenuItem
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents the click event from propagating
                       console.log(item);
                     }}
                   >

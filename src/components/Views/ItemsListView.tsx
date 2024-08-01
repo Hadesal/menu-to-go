@@ -1,15 +1,22 @@
-import {
-  Container,
-  List,
-  Paper,
-  ListItem,
-  Box,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-} from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  Box,
+  Container,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Typography
+} from "@mui/material";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import placeHolderImg from "../../assets/Spaghetti-Bolognese-square-FS-0204.jpg";
 import Styles from "../../DataTypes/StylesTypes";
 
 interface Props {
@@ -24,35 +31,163 @@ const ItemsListView = ({
   deleteFunction,
   styles,
 }: Props): JSX.Element => {
+  const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
+    new Array(items.length).fill(null)
+  );
+  const { t } = useTranslation();
+  const getString = t;
+
+  const handleMenuClick = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = event.currentTarget;
+    setAnchorEls(newAnchorEls);
+  };
+  //const [open, setOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState<any>();
+  //const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+
+  const handleMenuClose = (index: number) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = null;
+    setAnchorEls(newAnchorEls);
+  };
+
+  const handleEditClick = (item) => {
+    setCurrentItem(item);
+    //setOpen(true);
+  };
+
+  const handleDeleteClick = (item) => {
+    setCurrentItem(item);
+    //setIsDeleteDialogOpen(true);
+  };
   return (
     <Container sx={styles.container}>
       <List sx={styles.list}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <Paper key={item.id} elevation={3} sx={styles.paperListView}>
-            <ListItem key={item.id}>
-              <Box sx={styles.listItemBox}>
-                <ListItemText primary={item.name} />
+            <ListItem
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+              key={item.id}
+            >
+              <Box
+                sx={{
+                  ...styles.listItemBox,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <IconButton
+                  sx={{
+                    padding: 0.8,
+                    cursor:"grab",
+                    "&:hover": {
+                      background: "transparent",
+                    },
+                  }}
+                  aria-label="more"
+                >
+                  <DragIndicatorIcon
+                    sx={{
+                      color: "var(--primary-color)",
+                    }}
+                    fontSize="medium"
+                  />
+                </IconButton>
+                <img
+                  style={{ borderRadius: "10px" }}
+                  src={placeHolderImg}
+                  width={60}
+                  height={60}
+                />
+                <ListItemText
+                  primary={
+                    <Typography
+                      sx={{ fontWeight: 500, fontSize: "18px" }}
+                      variant="body1"
+                      style={{
+                        color: "var(--primary-color)",
+                      }}
+                    >
+                      {item.name}
+                    </Typography>
+                  }
+                />
               </Box>
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="edit"
-                  onClick={() => {
-                    editfunction(item);
-                  }}
+              <Box>
+                <Typography
+                  sx={{ fontWeight: 500, fontSize: "18px" }}
+                  component="span"
                 >
-                  <EditOutlinedIcon sx={styles.iconButton} />
-                </IconButton>
+                  {item.price}$
+                </Typography>
                 <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => {
-                    deleteFunction(item);
+                  sx={{
+                    padding: 0.8,
+                    marginLeft: 4,
+                    "&:hover": {
+                      background: "#A4755D30",
+                    },
                   }}
+                  aria-label="more"
+                  onClick={(event) => handleMenuClick(event, index)}
                 >
-                  <DeleteOutlinedIcon sx={styles.iconButton} />
+                  <MoreVertIcon
+                    sx={{
+                      color: "var(--primary-color)",
+                    }}
+                    fontSize="medium"
+                  />
                 </IconButton>
-              </ListItemSecondaryAction>
+
+                <Menu
+                  id={`categoryOptions-${index}`}
+                  anchorEl={anchorEls[index]}
+                  open={Boolean(anchorEls[index])}
+                  onClose={() => handleMenuClose(index)}
+                  MenuListProps={{
+                    "aria-labelledby": `categoryOptions-${index}`,
+                  }}
+                  disableScrollLock={true}
+                  elevation={1}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleEditClick(item);
+                      handleMenuClose(index);
+                    }}
+                  >
+                    <EditIcon
+                      aria-label="edit"
+                      fontSize="small"
+                      sx={{ marginRight: 1 }}
+                    />
+                    {getString("edit")}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleDeleteClick(item);
+                      handleMenuClose(index);
+                    }}
+                  >
+                    <DeleteOutlinedIcon
+                      fontSize="small"
+                      sx={{ marginRight: 1 }}
+                    />
+                    {getString("delete")}
+                  </MenuItem>
+                </Menu>
+              </Box>
             </ListItem>
           </Paper>
         ))}

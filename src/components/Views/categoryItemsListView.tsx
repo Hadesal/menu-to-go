@@ -21,6 +21,7 @@ import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 
 import EditIcon from "@mui/icons-material/Edit";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 interface Props {
   items: CategoryData[];
@@ -90,7 +91,7 @@ const CategoryItemsListView = ({
 
   return (
     <Container sx={{ ...styles.container, padding: "0 !important" }}>
-      <List sx={styles.categoryList}>
+      <List sx={{...styles.categoryList , paddingBottom:0}}>
         {items.map((item, index) => (
           <ListItem
             onClick={() => {
@@ -119,26 +120,49 @@ const CategoryItemsListView = ({
             >
               <ListItemText
                 primary={
-                  <Typography
-                    sx={{ fontWeight: 500, fontSize: "18px" }}
-                    variant="body1"
-                    style={{
-                      color:
-                        selectedCategory.id === item.id
-                          ? "white"
-                          : "var(--primary-color)",
-                    }}
-                  >
-                    {item.name}
-                    <Typography
-                      color={
-                        selectedCategory.id === item.id ? "white" : "#BCB8B1"
-                      }
-                      component="span"
+                  <Box sx={{display:"flex" , flexDirection:"row", alignItems:"center"}}>
+                    <IconButton
+                      sx={{
+                        padding: 0.8,
+                        cursor: "grab",
+                        "&:hover": {
+                          background: "transparent",
+                        },
+                      }}
+                      aria-label="more"
                     >
-                      ({item.products.length})
+                      <DragIndicatorIcon
+                        sx={{
+                          color:
+                            selectedCategory.id === item.id
+                              ? "white"
+                              : "var(--primary-color)",
+                        }}
+                        fontSize="medium"
+                      />
+                    </IconButton>
+                    <Typography
+                      sx={{ fontWeight: 500, fontSize: "18px" }}
+                      variant="body1"
+                      style={{
+                        color:
+                          selectedCategory.id === item.id
+                            ? "white"
+                            : "var(--primary-color)",
+                      }}
+                    >
+                      {item.name}
+                      <Typography
+                        color={
+                          selectedCategory.id === item.id ? "white" : "#BCB8B1"
+                        }
+                        sx={{marginLeft:1}}
+                        component="span"
+                      >
+                        ({item.products.length})
+                      </Typography>
                     </Typography>
-                  </Typography>
+                  </Box>
                 }
               />
             </Box>
@@ -203,7 +227,7 @@ const CategoryItemsListView = ({
         title={"Edit category"}
         errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
-        confirmText={"Update"}
+        confirmText={getString("update")}
         isOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={editFunction}

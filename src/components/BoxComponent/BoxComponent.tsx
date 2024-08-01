@@ -1,6 +1,7 @@
 import SearchIcon from "@mui/icons-material/Search";
 import Styles from "../../DataTypes/StylesTypes";
 import ItemsGridView from "../Views/ItemsGridView";
+import ItemsListView from "../Views/ItemsListView"; // Make sure this import is correct
 import {
   Box,
   Button,
@@ -11,7 +12,10 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
-import { addRestaurantData, RestaurantData } from "../../DataTypes/RestaurantObject";
+import {
+  addRestaurantData,
+  RestaurantData,
+} from "../../DataTypes/RestaurantObject";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +29,7 @@ interface BoxComponentProps {
   emptyStateMessage?: string;
   CardIcon: string;
   title?: string;
+  listView?: boolean;
 }
 
 const BoxComponent = ({
@@ -37,6 +42,7 @@ const BoxComponent = ({
   emptyStateTitle,
   emptyStateMessage,
   title,
+  listView,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState(items);
@@ -78,6 +84,7 @@ const BoxComponent = ({
     });
     setFilteredItems(filtered);
   };
+
   return (
     <Paper elevation={3} sx={styles.paper}>
       {!title && (
@@ -141,13 +148,23 @@ const BoxComponent = ({
         </Stack>
       )}
       {filteredItems?.length > 0 ? (
-        <ItemsGridView
-          CardIcon={CardIcon}
-          items={filteredItems}
-          editFunction={editFunction}
-          deleteFunction={deleteFunction}
-          styles={styles}
-        />
+        listView ? (
+          <ItemsListView
+            CardIcon={CardIcon}
+            items={filteredItems}
+            editFunction={editFunction}
+            deleteFunction={deleteFunction}
+            styles={styles}
+          />
+        ) : (
+          <ItemsGridView
+            CardIcon={CardIcon}
+            items={filteredItems}
+            editFunction={editFunction}
+            deleteFunction={deleteFunction}
+            styles={styles}
+          />
+        )
       ) : (
         <EmptyState
           emptyStateTitle={emptyStateTitle}

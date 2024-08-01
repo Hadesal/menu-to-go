@@ -58,12 +58,14 @@ const styles = {
     width: "100%",
     display: "flex",
     justifyContent: "center",
+    paddingLeft:"0 !important",
+    paddingRight:"0 !important"
   },
   list: {
     display: "flex",
     flexDirection: "column",
     height: "100%",
-    width: "80%",
+    width: "100%",
   },
   paperListView: {
     borderRadius: "10px",
@@ -74,6 +76,8 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "flex-start",
+    paddingTop:"3rem",
+    paddingBottom:"3rem"
   },
   listItemBox: {
     color: "primary",
@@ -83,7 +87,6 @@ const styles = {
     flexDirection: "column",
     height: "100%",
     width: "100%",
-    paddingBottom: 0,
   },
 };
 export default styles;

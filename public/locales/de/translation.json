@@ -60,5 +60,15 @@
   "newPassword": "Neues Passwort",
   "changePassword": "Passwort ändern",
   "billingDataPageDescription": "Rechnungsdaten Diese Daten werden für die Rechnungsstellung verwendet",
-  "fullName": "Vollständiger Name"
+  "fullName": "Vollständiger Name",
+  "addCategoryText": "Kategorie hinzufügen",
+  "addCategoryInfoText": "Bitte geben Sie den Kategorienamen ein",
+  "categoryDeleteText": "Sind Sie sicher, dass Sie die Kategorie {{categoryName}} dauerhaft löschen möchten?",
+  "categoryTypeTitle": "Kategorietyp",
+  "categoryTypeFood": "Essen",
+  "categoryTypeDrink": "Getränke",
+  "categoryEmptyStateTitle": "Ihre Kategorieliste ist leer.",
+  "categoryEmptyStateInfo": "Fangen Sie an, indem Sie eine neue Kategorie hinzufügen.",
+  "productEmptyStateTitle": "Sie haben keine Produkte.",
+  "productEmptyStateInfo": "Fangen Sie an, indem Sie ein neues Produkt hinzufügen."
 }

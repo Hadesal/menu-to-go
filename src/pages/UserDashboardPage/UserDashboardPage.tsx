@@ -93,7 +93,7 @@ export default function UserDashboardPage() {
       icon: <RestaurantIcon />,
       label: getString("restaurant"),
     },
-    { id: "categories", icon: <LayersIcon />, label: getString("categories") },
+    // { id: "categories", icon: <LayersIcon />, label: getString("categories") },
     { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
     {
       id: "generateQrCode",
@@ -522,7 +522,7 @@ export default function UserDashboardPage() {
         {activeTab === "restaurant" && (
           <RestaurantSection label={getString("restaurant")} />
         )}
-        {activeTab === "categories" && <CategoryPage />}
+        {/* {activeTab === "categories" && <CategoryPage />} */}
         {activeTab === "templates" && <h1> Templates view</h1>}
         {activeTab === "generateQrCode" && <h1> Generate qr code view</h1>}
         {activeTab === "feedback" && <FeedbackPage />}

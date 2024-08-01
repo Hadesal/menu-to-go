@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   Divider,
+  IconButton,
   Snackbar,
   Stack,
   Typography,
@@ -14,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "../../components/BoxComponent/categoryBoxComponent";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   addCategory,
   deleteCategory,
@@ -21,6 +23,7 @@ import {
   clearSuccessMessage,
   clearCategoryErrorMessage,
   updateCategory,
+  setSelectedRestaurant,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import styles from "./RestaurantSection.styles";
@@ -28,7 +31,7 @@ import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 
 export default function CategoryPage() {
   const {
-    restaurantList,
+    selectedRestaurant,
     selectedCategory,
     loading,
     successMessage,
@@ -41,10 +44,6 @@ export default function CategoryPage() {
 
   const { t } = useTranslation();
   const getString = t;
-
-  const [showError, setShowNameError] = useState<boolean>(false);
-  const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
-  const [imageError, setImageError] = useState<string | null>(null);
 
   useEffect(() => {
     if (categoryError) {
@@ -59,9 +58,6 @@ export default function CategoryPage() {
   }, [successMessage]);
 
   useEffect(() => {
-    if (restaurantList[0]?.category?.length !== 0) {
-      dispatch(setSelectedCategory(restaurantList[0]?.category[0]));
-    }
     setShowSuccessToast(false);
     setShowToast(false);
     dispatch(clearSuccessMessage(null));
@@ -70,14 +66,14 @@ export default function CategoryPage() {
 
   const handleAddCategory = (category: CategoryData) => {
     dispatch(
-      addCategory({ restaurantId: restaurantList[0]?.id as string, category })
+      addCategory({ restaurantId: selectedRestaurant?.id as string, category })
     );
   };
 
   const handleEditCategory = (category: CategoryData) => {
     dispatch(
       updateCategory({
-        restaurantId: restaurantList[0]?.id,
+        restaurantId: selectedRestaurant?.id,
         categoryId: selectedCategory.id,
         category,
       })
@@ -87,7 +83,7 @@ export default function CategoryPage() {
   const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
       deleteCategory({
-        restaurantId: restaurantList[0]?.id as string,
+        restaurantId: selectedRestaurant?.id as string,
         categoryId: category?.id as string,
       })
     );
@@ -130,7 +126,6 @@ export default function CategoryPage() {
         open={showSuccessToast}
         autoHideDuration={6000}
         onClose={() => {
-          console.log("clear it");
           setShowSuccessToast(false);
         }}
       >
@@ -152,7 +147,33 @@ export default function CategoryPage() {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h5">{getString("categoryPageTitle")}</Typography>
+        {/* <Typography variant="h5">{getString("categoryPageTitle")}</Typography> */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <IconButton
+            sx={{
+              background: "#A4755D30",
+              "&:hover": {
+                background: "#A4755D30",
+              },
+            }}
+            aria-label="back"
+            onClick={() => {
+              dispatch(setSelectedRestaurant({}));
+              dispatch(setSelectedCategory({}));
+            }}
+          >
+            <KeyboardBackspaceIcon fontSize="large" color="primary" />
+          </IconButton>
+          {/* {getString("categoryPagePreviewMenuText")} */}
+          <Typography variant="h5">{selectedRestaurant.name}</Typography>
+        </Box>
         <Button sx={styles.previewMenu} variant="contained">
           {getString("categoryPagePreviewMenuText")}
         </Button>
@@ -168,28 +189,29 @@ export default function CategoryPage() {
         <Box sx={{ flex: 1 }}>
           <CategoryBoxComponent
             CardIcon={RestaurantIcon}
-            items={restaurantList[0]?.category}
+            items={selectedRestaurant?.category}
             addFunction={handleAddCategory}
             editFunction={handleEditCategory}
             deleteFunction={handleDeleteCategory}
             styles={styles}
-            emptyStateTitle={"Your category list is empty."}
-            emptyStateMessage={"Start by adding a new categories."}
-            title="Categories"
+            emptyStateTitle={getString("categoryEmptyStateTitle")}
+            emptyStateMessage={getString("categoryEmptyStateInfo")}
+            title={getString("categories")}
           />
         </Box>
 
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={restaurantList[0]?.category[0]?.product}
+            items={selectedCategory.products}
             addFunction={() => {}}
             editFunction={() => {}}
             deleteFunction={() => {}}
             styles={styles}
-            //emptyStateTitle={getString("noRestaurantsfoundTitle")}
-            //emptyStateMessage={getString("noRestaurantsfoundMessage")}
+            emptyStateTitle={getString("productEmptyStateTitle")}
+            emptyStateMessage={getString("productEmptyStateInfo")}
             title={selectedCategory ? selectedCategory?.name : ""}
+            listView={true}
           />
         </Box>
       </Box>

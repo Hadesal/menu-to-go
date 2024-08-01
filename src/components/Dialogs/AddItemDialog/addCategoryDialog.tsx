@@ -16,6 +16,7 @@ import InputComponent from "../../InputComponent/InputComponent";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
 import { CategoryData } from "../../../DataTypes/CategoryDataTypes";
+import { useTranslation } from "react-i18next";
 
 interface AddCategoryDialogProps {
   isOpen: boolean;
@@ -60,7 +61,9 @@ const AddCategoryDialog = ({
   const [imageError, setImageError] = useState<string | null>(null);
 
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
-
+  const { t } = useTranslation();
+  const getString = t;
+  
   useEffect(() => {
     if (initialData) {
       setDialogData({
@@ -176,7 +179,7 @@ const AddCategoryDialog = ({
       </Box>
       <FormControl sx={{ marginTop: 1 }}>
         <FormLabel focused={false} id="category-type-radio-buttons-group-label">
-          Category type
+          {getString("categoryTypeTitle")}
         </FormLabel>
         <RadioGroup
           aria-labelledby="category-type-radio-buttons-group-label"
@@ -202,7 +205,7 @@ const AddCategoryDialog = ({
                 }}
               />
             }
-            label="Food"
+            label={getString("categoryTypeFood")}
             sx={{ width: "fit-content" }}
           />
           <FormControlLabel
@@ -214,7 +217,7 @@ const AddCategoryDialog = ({
                 }}
               />
             }
-            label="Drinks"
+            label={getString("categoryTypeDrink")}
             sx={{ width: "fit-content" }}
           />
         </RadioGroup>

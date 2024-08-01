@@ -17,6 +17,7 @@ import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 export interface RestaurantState {
   restaurantList: RestaurantData[];
   selectedCategory: any;
+  selectedRestaurant: any;
   loading: boolean;
   error: string | null;
   categoryError: string | null;
@@ -26,6 +27,7 @@ export interface RestaurantState {
 const initialState: RestaurantState = {
   restaurantList: [],
   selectedCategory: {},
+  selectedRestaurant: {},
   loading: false,
   error: null,
   categoryError: null,
@@ -156,6 +158,9 @@ export const RestaurantSlice = createSlice({
     setRestaurantList: (state, action: PayloadAction<RestaurantData[]>) => {
       state.restaurantList = action.payload;
     },
+    setSelectedRestaurant: (state, action: PayloadAction<any>) => {
+      state.selectedRestaurant = action.payload;
+    },
     setSelectedCategory: (state, action: PayloadAction<any>) => {
       state.selectedCategory = action.payload;
     },
@@ -233,6 +238,8 @@ export const RestaurantSlice = createSlice({
         );
         if (restaurant) {
           restaurant.category.push(category);
+
+          state.selectedRestaurant = restaurant;
         }
         console.log(category);
         console.log("restaurant: ", restaurant);
@@ -263,6 +270,9 @@ export const RestaurantSlice = createSlice({
           restaurant.category = restaurant.category.filter(
             (category) => category.id !== categoryId
           );
+
+          // Update the selected restaurant to the updated one
+          state.selectedRestaurant = restaurant || null;
         }
 
         // Update the selected category if it was deleted
@@ -293,7 +303,7 @@ export const RestaurantSlice = createSlice({
                 ? { ...updatedCategory, ...category }
                 : updatedCategory
           );
-
+          
           // Update selectedCategory if it matches the updated category
           if (
             state.selectedCategory &&
@@ -301,6 +311,7 @@ export const RestaurantSlice = createSlice({
           ) {
             state.selectedCategory = { ...state.selectedCategory, ...category };
           }
+          state.selectedRestaurant = restaurant;
         }
         state.loading = false;
         state.successMessage = "Category updated successfully!";
@@ -317,6 +328,7 @@ export const {
   setSelectedCategory,
   clearSuccessMessage,
   clearCategoryErrorMessage,
+  setSelectedRestaurant,
 } = RestaurantSlice.actions;
 
 export default RestaurantSlice.reducer;
