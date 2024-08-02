@@ -4,7 +4,6 @@ import {
   Button,
   CircularProgress,
   Grid,
-  Link,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -14,13 +13,15 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import { handleSignIn } from "../../utils/auth-handlers";
 import { Styles } from "./LoginPage.style";
 import { Email } from "@mui/icons-material";
+import ForgetPasswordDialog from "../../components/Dialogs/ForgetPasswordDialog/ForgetPasswordDialog";
 
 export default function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     password: "",
   });
-
+  const [isForgetPasswordOpen, setIsForgetPasswordOpen] =
+    useState<boolean>(false);
   const [userData, setUserData] = useState<UserSignInData>({
     email: "",
     password: "",
@@ -29,10 +30,10 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      document.getElementById("signInButton").click();
+      document.getElementById("signInButton")?.click();
     }
   };
 
@@ -105,9 +106,21 @@ export default function LoginPage() {
               error={errorMessages.password ? true : false}
               helperText={errorMessages.password}
             />
-            <Link href="" underline="hover" sx={Styles.forget_password_link}>
+            <Button
+              variant="text"
+              sx={Styles.forget_password_link}
+              onClick={() => {
+                setIsForgetPasswordOpen(true);
+              }}
+            >
               Forget Password!
-            </Link>
+            </Button>
+            <ForgetPasswordDialog
+              isOpen={isForgetPasswordOpen}
+              setIsOpen={setIsForgetPasswordOpen}
+              height="50vh"
+              width="60vw"
+            />
             <Button
               id="signInButton"
               variant="contained"

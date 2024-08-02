@@ -15,6 +15,8 @@ export const Styles = {
     padding: 3,
   },
   grid1WrapperBox: {
+    display: "flex",
+    flexDirection: "column",
     width: "100%",
     maxWidth: 400,
   },
@@ -73,9 +75,8 @@ export const Styles = {
   forget_password_link: {
     display: "block",
     marginBottom: 2,
-    textAlign: "right",
+    alignSelf: "end",
     color: "var(--primary-color)",
-    textDecoration: "none",
   },
   grid_item_2: {
     display: { xs: "none", sm: "block", md: "block" },
