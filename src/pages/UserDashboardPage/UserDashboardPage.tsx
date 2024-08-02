@@ -43,7 +43,7 @@ import FeedbackPage from "../FeedbackPage/FeedbackPage";
 import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-import UserDetailsInputComponent from "../../components/UserDetailsInputComponent/UserDetailsInputComponent";
+import UserDetailsInputComponent from "../../components/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
 import CategoryPage from "../CategoryPage/CategoryPage";
 import { userDelete } from "../../redux/slices/userSlice";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
@@ -345,7 +345,7 @@ export default function UserDashboardPage() {
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <Avatar style={{ alignSelf: "center" }}>
-                {userData?.name.split("")[0]}
+                {userData && userData?.name?.split("")[0]}
               </Avatar>
 
               <IconButton

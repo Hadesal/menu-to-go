@@ -1,13 +1,13 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
-import { Styles } from "../Dialogs/LogoutDialog/confirmDialog.style";
+import { Styles } from "../LogoutDialog/confirmDialog.style";
 import { useTranslation } from "react-i18next";
-import InputComponent from "../InputComponent/InputComponent";
+import InputComponent from "../../InputComponent/InputComponent";
 import { useEffect, useState } from "react";
-import { Styles as inputStyles } from "../../pages/LoginPage/LoginPage.style";
-import logo from "../../assets/logo.svg";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import { addRestaurant } from "../../redux/slices/restaurantsSlice";
-import { userUpdate } from "../../redux/slices/userSlice";
+import { Styles as inputStyles } from "../../../pages/LoginPage/LoginPage.style";
+import logo from "../../../assets/logo.svg";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
+import { addRestaurant } from "../../../redux/slices/restaurantsSlice";
+import { userUpdate } from "../../../redux/slices/userSlice";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;

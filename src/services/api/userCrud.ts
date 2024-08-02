@@ -7,7 +7,7 @@ import {
 } from "../../DataTypes/UserDataTypes";
 import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
-const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
+const API_BASE_URL: string = "http://localhost:8080/api/users";
 
 const apiService = axios.create({
   baseURL: API_BASE_URL,
@@ -81,6 +81,41 @@ export const updateUserPassword = async (
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
     return errorResponseObject;
+  }
+};
+export const forgetPassword = async (email: string) => {
+  try {
+    const response = await apiService.post(`/forgot-password?email=${email}`);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      return error.response.data;
+    } else if (error.request) {
+      return { error: "No response was received from the server." };
+    } else {
+      return { error: error.message };
+    }
+  }
+};
+
+export const resetPassword = async (newPassword: string, token: string) => {
+  const passwordResetObject = { token, newPassword };
+  try {
+    const response = await apiService.post(
+      "/reset-password",
+      passwordResetObject
+    );
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    if (error.response) {
+      return error.response.data;
+    } else if (error.request) {
+      return { error: "No response was received from the server." };
+    } else {
+      return { error: error.message };
+    }
   }
 };
 export const getUserById = async (userId: string, userToken: any) => {
