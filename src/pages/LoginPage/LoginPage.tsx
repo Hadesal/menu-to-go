@@ -14,13 +14,18 @@ import { handleSignIn } from "../../utils/auth-handlers";
 import { Styles } from "./LoginPage.style";
 import { Email } from "@mui/icons-material";
 import ForgetPasswordDialog from "../../components/Dialogs/ForgetPasswordDialog/ForgetPasswordDialog";
+import ResetPasswordDialog from "../../components/Dialogs/ResetPasswordDialog/ResetPasswordDialog";
 
 export default function LoginPage() {
+  const [pathToken, setPathToken] = useState<string>("");
+
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     password: "",
   });
   const [isForgetPasswordOpen, setIsForgetPasswordOpen] =
+    useState<boolean>(false);
+  const [isResetPasswordOpen, setIsResetPasswordOpen] =
     useState<boolean>(false);
   const [userData, setUserData] = useState<UserSignInData>({
     email: "",
@@ -36,7 +41,15 @@ export default function LoginPage() {
       document.getElementById("signInButton")?.click();
     }
   };
-
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const token = query.get("token");
+    if (token) {
+      console.log(token);
+      setPathToken(token);
+      setIsResetPasswordOpen(true);
+    }
+  }, []);
   useEffect(() => {
     document.addEventListener("keypress", handleKeyPress);
     return () => {
@@ -120,6 +133,13 @@ export default function LoginPage() {
               setIsOpen={setIsForgetPasswordOpen}
               height="50vh"
               width="60vw"
+            />
+            <ResetPasswordDialog
+              isOpen={isResetPasswordOpen}
+              setIsOpen={setIsResetPasswordOpen}
+              height="50vh"
+              width="60vw"
+              resetPasswordToken={pathToken}
             />
             <Button
               id="signInButton"

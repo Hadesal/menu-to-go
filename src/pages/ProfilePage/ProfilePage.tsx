@@ -1,22 +1,57 @@
-import { Button, Container, Divider, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProfileDetailsSection from "./ProfileDetailsSection";
 import ChangePasswordSection from "./ChangePasswordSection";
 import EditProfileDetailsSection from "./EditProfileDetailsSection";
 import BillingDetailsSection from "./BillingDataSection";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
   const getString = t;
   const [activeTab, setActiveTab] = useState<String>("profileDetails");
+  const navigate = useNavigate();
 
   return (
     <>
       <Container sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography sx={{ marginTop: "1rem" }} variant="h3">
-          {getString("profile")}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <IconButton
+            sx={{
+              background: "#A4755D30",
+              "&:hover": {
+                background: "#A4755D30",
+              },
+            }}
+            aria-label="back"
+            onClick={() => {
+              navigate("/dashboard");
+            }}
+          >
+            <KeyboardBackspaceIcon fontSize="large" color="primary" />
+          </IconButton>
+          <Typography sx={{ marginTop: "1rem" }} variant="h3">
+            {getString("profile")}
+          </Typography>
+        </Box>
+
         <Divider variant="fullWidth" component={"h4"} />
         <Container
           sx={{

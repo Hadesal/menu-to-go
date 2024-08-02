@@ -1,8 +1,10 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
   Divider,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,6 +15,10 @@ import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { userUpdatePassword } from "../../redux/slices/userSlice";
+import CheckIcon from "@mui/icons-material/Check";
+import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+
 const ChangePasswordSection = ({
   setActiveTab,
 }: {
@@ -27,7 +33,9 @@ const ChangePasswordSection = ({
     currentPassword: "",
     newPassword: "",
   });
-
+  const [severity, setSeverity] = useState<any>("");
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>("");
   useEffect(() => {}, [userList]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,16 +46,24 @@ const ChangePasswordSection = ({
   };
 
   const handleSave = () => {
-    console.log(formData);
     dispatch(
       userUpdatePassword({
         updatePasswordObject: formData,
         userId: userData.id,
       })
-    ).then((res) => {
-      console.log(res);
+    ).then((value) => {
+      const response = value.payload;
+      if (response?.body) {
+        setToastMessage(response.body);
+        setSeverity("success");
+        setShowToast(true);
+        setActiveTab("profileDetails");
+      } else if (response?.message) {
+        setToastMessage(response.message);
+        setSeverity("warning");
+        setShowToast(true);
+      }
     });
-    setActiveTab("profileDetails");
   };
   const onCancel = () => {
     setActiveTab("profileDetails");
@@ -60,6 +76,29 @@ const ChangePasswordSection = ({
         flexDirection: "column",
       }}
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowToast(false);
+        }}
+      >
+        <Alert
+          icon={
+            severity === "error" ? (
+              <ErrorOutlineOutlinedIcon fontSize="inherit" />
+            ) : severity === "success" ? (
+              <CheckIcon fontSize="inherit" />
+            ) : (
+              <WarningAmberOutlinedIcon fontSize="inherit" />
+            )
+          }
+          severity={severity}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
       <Container>
         <Typography sx={{ marginLeft: "1vw", color: "#797979" }} variant="h5">
           {getString("changePassword")}
