@@ -37,5 +37,15 @@
   "errorDeleteRestaurant": "En az 1 tane Restoran olmalı, bu Restoranı silebilmek için yeni Restoran oluşturun",
   "update": "Güncelle",
   "updateRestaurant": "Restoranı güncelle",
-  "welcomeBack": "Merhaba, Tekrar Hoş Geldiniz"
+  "welcomeBack": "Merhaba, Tekrar Hoş Geldiniz",
+  "addCategoryText": "Kategori Ekle",
+  "addCategoryInfoText": "Lütfen kategori adını girin",
+  "categoryDeleteText": "Kategori {{categoryName}}'yi kalıcı olarak silmek istediğinizden emin misiniz?",
+  "categoryTypeTitle": "Kategori türü",
+  "categoryTypeFood": "Yiyecek",
+  "categoryTypeDrink": "İçecekler",
+  "categoryEmptyStateTitle": "Kategori listeniz boş.",
+  "categoryEmptyStateInfo": "Yeni bir kategori ekleyerek başlayın.",
+  "productEmptyStateTitle": "Hiç ürününüz yok.",
+  "productEmptyStateInfo": "Yeni bir ürün ekleyerek başlayın."
 }

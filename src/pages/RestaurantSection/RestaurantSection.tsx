@@ -16,16 +16,18 @@ import {
   addRestaurant,
   deleteRestaurant,
   editRestaurant,
+  setSelectedRestaurant,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { useTranslation } from "react-i18next";
+import CategoryPage from "../CategoryPage/CategoryPage";
 interface RestaurantSectionProps {
   label: string;
 }
 
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { restaurantList, loading, error } = useAppSelector(
+  const { restaurantList, loading, error, selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
   const [errorMessage, setErrorMessage] = useState(error);
@@ -39,6 +41,10 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
       setShowToast(true);
     }
   }, [error]);
+
+  useEffect(() => {
+    dispatch(setSelectedRestaurant({}));
+  }, []);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
     dispatch(addRestaurant({ restaurant }));
@@ -61,6 +67,9 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
     }
   };
 
+  if (Object.keys(selectedRestaurant).length !== 0) {
+    return <CategoryPage />;
+  }
   return (
     <Stack spacing={3} sx={styles.stack}>
       <Backdrop

@@ -39,16 +39,26 @@ export const createCategory = async (
   }
 };
 
-export const updateCategory = async (updatedCategory: CategoryData) => {
+export const updateCategory = async (
+  restaurantId,
+  categoryId,
+  updatedCategory: CategoryData
+) => {
   try {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
     const response = await apiService.put(
-      `/${updatedCategory.id}`,
-      updatedCategory
+      `/${categoryId}/${restaurantId}`,
+      updatedCategory,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken.token}`,
+        },
+      }
     );
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 

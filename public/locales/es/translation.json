@@ -60,5 +60,15 @@
   "newPassword": "Nueva contraseña",
   "changePassword": "Cambiar contraseña",
   "billingDataPageDescription": "Datos de Facturación. Estos datos se usarán para la facturación",
-  "fullName": "Nombre completo"
+  "fullName": "Nombre completo",
+  "addCategoryText": "Agregar categoría",
+  "addCategoryInfoText": "Por favor, introduzca el nombre de la categoría",
+  "categoryDeleteText": "¿Estás seguro de que deseas eliminar permanentemente la categoría {{categoryName}}?",
+  "categoryTypeTitle": "Tipo de categoría",
+  "categoryTypeFood": "Comida",
+  "categoryTypeDrink": "Bebidas",
+  "categoryEmptyStateTitle": "Tu lista de categorías está vacía.",
+  "categoryEmptyStateInfo": "Comienza agregando una nueva categoría.",
+  "productEmptyStateTitle": "No tienes ningún producto.",
+  "productEmptyStateInfo": "Comienza agregando un nuevo producto."
 }

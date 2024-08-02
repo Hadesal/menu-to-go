@@ -60,5 +60,15 @@
   "newPassword": "كلمة المرور الجديدة",
   "changePassword": "تغيير كلمة المرور",
   "billingDataPageDescription": "بيانات الفواتير هذه البيانات ستستخدم في الفوترة",
-  "fullName": "الاسم الكامل"
+  "fullName": "الاسم الكامل",
+  "addCategoryText": "أضف فئة",
+  "addCategoryInfoText": "يرجى إدخال اسم الفئة",
+  "categoryDeleteText": "هل أنت متأكد أنك تريد حذف الفئة {{categoryName}} نهائيًا؟",
+  "categoryTypeTitle": "نوع الفئة",
+  "categoryTypeFood": "طعام",
+  "categoryTypeDrink": "مشروبات",
+  "categoryEmptyStateTitle": "قائمة الفئات الخاصة بك فارغة.",
+  "categoryEmptyStateInfo": "ابدأ بإضافة فئات جديدة.",
+  "productEmptyStateTitle": "ليس لديك أي منتجات.",
+  "productEmptyStateInfo": "ابدأ بإضافة منتج جديد."
 }

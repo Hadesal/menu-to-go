@@ -23,11 +23,11 @@ export default function DashboardView() {
       image: RestaurantCardImg,
       label: getString("restaurant"),
     },
-    {
-      id: "categories",
-      image: CategoriesCardImg,
-      label: getString("categories"),
-    },
+    // {
+    //   id: "categories",
+    //   image: CategoriesCardImg,
+    //   label: getString("categories"),
+    // },
     { id: "templates", image: TemplatesCardImg, label: getString("templates") },
     { id: "generateQrCode", image: QRCodeCardImg, label: getString("generateQrCode") },
     { id: "feedback", image: FeedbacksCardImg, label: getString("feedbacks") },

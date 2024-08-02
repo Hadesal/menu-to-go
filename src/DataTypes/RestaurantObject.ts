@@ -5,6 +5,10 @@ export interface RestaurantData {
   table: [];
   userUiPreferences: UserUiPreferences;
 }
+export interface addRestaurantData {
+  name: string;
+}
+
 export interface UserUiPreferences {
   primaryColor: "";
   secondaryColor: "";
