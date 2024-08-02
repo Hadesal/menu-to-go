@@ -50,7 +50,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
       setShowSuccessToast(true);
     }
   }, [successMessage]);
-  
+
   useEffect(() => {
     if (!selectedRestaurant || Object.keys(selectedRestaurant).length === 0) {
       setShowSuccessToast(false);
@@ -59,6 +59,10 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
       dispatch(clearSuccessMessage(null));
     }
   }, [selectedRestaurant, dispatch]);
+
+  useEffect(() => {
+    dispatch(setSelectedRestaurant({}));
+  }, []);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
     dispatch(addRestaurant({ restaurant }));

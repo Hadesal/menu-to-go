@@ -7,7 +7,7 @@ import {
 } from "../../DataTypes/UserDataTypes";
 import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
-const API_BASE_URL: string = "http://localhost:8080/api/users";
+const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
 
 const apiService = axios.create({
   baseURL: API_BASE_URL,
