@@ -1,3 +1,4 @@
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   Alert,
   Backdrop,
@@ -15,19 +16,18 @@ import { useTranslation } from "react-i18next";
 import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "../../components/BoxComponent/categoryBoxComponent";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import {
   addCategory,
+  clearSuccessMessage,
   deleteCategory,
   setSelectedCategory,
-  clearSuccessMessage,
-  clearCategoryErrorMessage,
-  updateCategory,
   setSelectedRestaurant,
+  updateCategory,
+  clearErrorMessage,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
-import styles from "./RestaurantSection.styles";
-import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import Styles from "./CategorySection.styles";
 
 export default function CategoryPage() {
   const {
@@ -35,8 +35,9 @@ export default function CategoryPage() {
     selectedCategory,
     loading,
     successMessage,
-    categoryError,
+    error,
   } = useAppSelector((state) => state.restaurantsData);
+
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
@@ -46,10 +47,10 @@ export default function CategoryPage() {
   const getString = t;
 
   useEffect(() => {
-    if (categoryError) {
+    if (error) {
       setShowToast(true);
     }
-  }, [categoryError]);
+  }, [error]);
 
   useEffect(() => {
     if (successMessage) {
@@ -61,19 +62,17 @@ export default function CategoryPage() {
     setShowSuccessToast(false);
     setShowToast(false);
     dispatch(clearSuccessMessage(null));
-    dispatch(clearCategoryErrorMessage(null));
+    dispatch(clearErrorMessage(null));
   }, []);
 
   const handleAddCategory = (category: CategoryData) => {
-    dispatch(
-      addCategory({ restaurantId: selectedRestaurant?.id as string, category })
-    );
+    dispatch(addCategory({ restaurantId: selectedRestaurant.id, category }));
   };
 
   const handleEditCategory = (category: CategoryData) => {
     dispatch(
       updateCategory({
-        restaurantId: selectedRestaurant?.id,
+        restaurantId: selectedRestaurant.id,
         categoryId: selectedCategory.id,
         category,
       })
@@ -83,14 +82,14 @@ export default function CategoryPage() {
   const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
       deleteCategory({
-        restaurantId: selectedRestaurant?.id as string,
-        categoryId: category?.id as string,
+        restaurantId: selectedRestaurant.id,
+        categoryId: category.id,
       })
     );
   };
 
   return (
-    <Stack spacing={3} sx={styles.stack}>
+    <Stack spacing={3} sx={Styles.stack}>
       <Backdrop
         sx={{
           color: "var(--primary-color)",
@@ -117,7 +116,7 @@ export default function CategoryPage() {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {categoryError}
+          {error}
         </Alert>
       </Snackbar>
 
@@ -147,7 +146,6 @@ export default function CategoryPage() {
           justifyContent: "space-between",
         }}
       >
-        {/* <Typography variant="h5">{getString("categoryPageTitle")}</Typography> */}
         <Box
           sx={{
             display: "flex",
@@ -171,10 +169,9 @@ export default function CategoryPage() {
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
           </IconButton>
-          {/* {getString("categoryPagePreviewMenuText")} */}
           <Typography variant="h5">{selectedRestaurant.name}</Typography>
         </Box>
-        <Button sx={styles.previewMenu} variant="contained">
+        <Button sx={Styles.previewMenu} variant="contained">
           {getString("categoryPagePreviewMenuText")}
         </Button>
       </Box>
@@ -193,7 +190,7 @@ export default function CategoryPage() {
             addFunction={handleAddCategory}
             editFunction={handleEditCategory}
             deleteFunction={handleDeleteCategory}
-            styles={styles}
+            styles={Styles}
             emptyStateTitle={getString("categoryEmptyStateTitle")}
             emptyStateMessage={getString("categoryEmptyStateInfo")}
             title={getString("categories")}
@@ -207,7 +204,7 @@ export default function CategoryPage() {
             addFunction={() => {}}
             editFunction={() => {}}
             deleteFunction={() => {}}
-            styles={styles}
+            styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}
             emptyStateMessage={getString("productEmptyStateInfo")}
             title={selectedCategory ? selectedCategory?.name : ""}

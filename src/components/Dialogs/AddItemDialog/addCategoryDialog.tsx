@@ -19,30 +19,19 @@ import { CategoryData } from "../../../DataTypes/CategoryDataTypes";
 import { useTranslation } from "react-i18next";
 
 interface AddCategoryDialogProps {
-  isOpen: boolean;
-  title: string;
+  isDialogOpen: boolean;
+  dialogTitle: string;
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (data: {
-    name: string;
-    image: string | null;
-    categoryType: string;
-  }) => void;
+  onConfirmClick: (item: CategoryData) => void;
   onCancelClick: () => void;
-  fileUpload?: boolean;
   initialData?: CategoryData;
 }
 
-interface DialogData {
-  name: string;
-  image: string | null;
-  categoryType: string;
-}
-
 const AddCategoryDialog = ({
-  isOpen,
-  title,
+  isDialogOpen: isOpen,
+  dialogTitle: title,
   cancelText,
   confirmText,
   onConfirmClick,
@@ -50,7 +39,7 @@ const AddCategoryDialog = ({
   errorMessage,
   initialData,
 }: AddCategoryDialogProps) => {
-  const [dialogData, setDialogData] = useState<DialogData>({
+  const [dialogData, setDialogData] = useState<CategoryData>({
     name: "",
     image: null,
     categoryType: "",
@@ -63,7 +52,7 @@ const AddCategoryDialog = ({
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const getString = t;
-  
+
   useEffect(() => {
     if (initialData) {
       setDialogData({

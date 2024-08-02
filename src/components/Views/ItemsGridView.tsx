@@ -112,7 +112,7 @@ const ItemsGridView = ({
                   }}
                   aria-label="more"
                   onClick={(event) => {
-                    event.preventDefault();
+                    //event.preventDefault();
                     event.stopPropagation();
                     handleMenuClick(event, index);
                   }}
@@ -127,7 +127,7 @@ const ItemsGridView = ({
                     handleMenuClose(index);
                   }}
                   onClick={(event) => {
-                    event.stopPropagation(); // Stop propagation here if necessary
+                    event.stopPropagation();
                   }}
                   MenuListProps={{
                     "aria-labelledby": `resturantOptions-${index}`,
@@ -136,8 +136,7 @@ const ItemsGridView = ({
                   elevation={1}
                 >
                   <MenuItem
-                    onClick={(event) => {
-                      event.stopPropagation(); // Prevents the click event from propagating
+                    onClick={() => {
                       handleEditClick(item);
                       handleMenuClose(index);
                     }}
@@ -162,7 +161,7 @@ const ItemsGridView = ({
                     />
                     {getString("delete")}
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     onClick={(event) => {
                       event.stopPropagation(); // Prevents the click event from propagating
                       console.log(item);
@@ -170,7 +169,7 @@ const ItemsGridView = ({
                   >
                     <FileCopyIcon fontSize="small" sx={{ marginRight: 1 }} />
                     {getString("duplicate")}
-                  </MenuItem>
+                  </MenuItem> */}
                 </Menu>
                 <Stack direction="column" sx={styles.stackColumn}>
                   <img
@@ -233,7 +232,9 @@ const ItemsGridView = ({
         secondaryActionText={getString("cancel")}
         primaryActionText={getString("delete")}
         title={getString("deleteConfirmText")}
-        subTitle={`${getString("restaurantDeleteText")}`}
+        subTitle={getString("restaurantDeleteText" ,{
+          restaurantName: currentItem.name,
+        })}
       />
     </Grid>
   );

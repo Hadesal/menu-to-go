@@ -1,9 +1,7 @@
 export interface CategoryData {
-  id: string;
+  id?: string;
   name: string;
   image: string | null;
-  products: [];
-  restaurant: object;
-  restaurantId: string;
+  products?: [];
   categoryType: string;
 }

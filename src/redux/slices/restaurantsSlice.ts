@@ -20,7 +20,7 @@ export interface RestaurantState {
   selectedRestaurant: any;
   loading: boolean;
   error: string | null;
-  categoryError: string | null;
+  // categoryError: string | null;
   successMessage: string | null;
 }
 
@@ -30,7 +30,7 @@ const initialState: RestaurantState = {
   selectedRestaurant: {},
   loading: false,
   error: null,
-  categoryError: null,
+  // categoryError: null,
   successMessage: null,
 };
 
@@ -136,6 +136,7 @@ export const updateCategory = createAsyncThunk(
     }
   }
 );
+
 export const deleteCategory = createAsyncThunk(
   "restaurantsData/deleteCategory",
   async (
@@ -167,8 +168,8 @@ export const RestaurantSlice = createSlice({
     clearSuccessMessage: (state, action: PayloadAction<any>) => {
       state.successMessage = action.payload;
     },
-    clearCategoryErrorMessage: (state, action: PayloadAction<any>) => {
-      state.categoryError = action.payload;
+    clearErrorMessage: (state, action: PayloadAction<any>) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -188,25 +189,29 @@ export const RestaurantSlice = createSlice({
       .addCase(addRestaurant.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.successMessage = null;
       })
       .addCase(addRestaurant.fulfilled, (state, action) => {
         console.log(action);
         state.restaurantList.push(action.payload);
         state.loading = false;
+        state.successMessage = "Restaurant created successfully!";
       })
       .addCase(addRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload.details || action.payload;
       })
       .addCase(editRestaurant.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.successMessage = null;
       })
       .addCase(editRestaurant.fulfilled, (state, action) => {
         state.restaurantList = state.restaurantList.map((restaurant) =>
           restaurant.id === action.payload.id ? action.payload : restaurant
         );
         state.loading = false;
+        state.successMessage = "Restaurant updated successfully!";
       })
       .addCase(editRestaurant.rejected, (state, action) => {
         state.loading = false;
@@ -215,12 +220,14 @@ export const RestaurantSlice = createSlice({
       .addCase(deleteRestaurant.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.successMessage = null;
       })
       .addCase(deleteRestaurant.fulfilled, (state, action) => {
         state.restaurantList = state.restaurantList.filter(
           (restaurant) => restaurant.id !== action.payload
         );
         state.loading = false;
+        state.successMessage = "Restaurant deleted successfully!";
       })
       .addCase(deleteRestaurant.rejected, (state, action) => {
         state.loading = false;
@@ -228,7 +235,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addCategory.pending, (state) => {
         state.loading = true;
-        state.categoryError = null;
+        state.error = null;
         state.successMessage = null; // Reset success message on pending
       })
       .addCase(addCategory.fulfilled, (state, action) => {
@@ -254,11 +261,11 @@ export const RestaurantSlice = createSlice({
       .addCase(addCategory.rejected, (state, action) => {
         state.loading = false;
         console.log(action.payload);
-        state.categoryError = action.payload.details || action.payload;
+        state.error = action.payload.details || action.payload;
       })
       .addCase(deleteCategory.pending, (state) => {
         state.loading = true;
-        state.categoryError = null;
+        state.error = null;
         state.successMessage = null; // Set success message
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
@@ -284,11 +291,11 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(deleteCategory.rejected, (state, action) => {
         state.loading = false;
-        state.categoryError = action.payload.details || action.payload;
+        state.error = action.payload.details || action.payload;
       })
       .addCase(updateCategory.pending, (state) => {
         state.loading = true;
-        state.categoryError = null;
+        state.error = null;
         state.successMessage = null; // Set success message
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
@@ -303,7 +310,7 @@ export const RestaurantSlice = createSlice({
                 ? { ...updatedCategory, ...category }
                 : updatedCategory
           );
-          
+
           // Update selectedCategory if it matches the updated category
           if (
             state.selectedCategory &&
@@ -318,7 +325,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(updateCategory.rejected, (state, action) => {
         state.loading = false;
-        state.categoryError = action.payload.details || action.payload;
+        state.error = action.payload.details || action.payload;
       });
   },
 });
@@ -327,7 +334,7 @@ export const {
   setRestaurantList,
   setSelectedCategory,
   clearSuccessMessage,
-  clearCategoryErrorMessage,
+  clearErrorMessage,
   setSelectedRestaurant,
 } = RestaurantSlice.actions;
 

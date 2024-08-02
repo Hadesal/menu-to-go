@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
@@ -16,9 +10,9 @@ import CategoryItemsListView from "../Views/categoryItemsListView";
 interface CategoryBoxComponentProps {
   items: CategoryData[];
   styles: Styles;
-  editFunction: (item) => void;
+  editFunction: (item: CategoryData) => void;
   deleteFunction: (item) => void;
-  addFunction: (item) => void;
+  addFunction: (item: CategoryData) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
@@ -92,11 +86,11 @@ const CategoryBoxComponent = ({
         />
       )}
       <AddCategoryDialog
-        title={getString("addCategoryText")}
+        dialogTitle={getString("addCategoryText")}
         errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
-        isOpen={open}
+        isDialogOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
       />

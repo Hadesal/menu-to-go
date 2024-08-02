@@ -18,6 +18,7 @@ interface Styles {
   paperListView: SxProps<Theme>;
   listItemBox: SxProps<Theme>;
   categoryList: SxProps<Theme>;
+  categoryPaper: SxProps<Theme>;
 }
 
 export default Styles;

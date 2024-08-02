@@ -25,7 +25,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 interface Props {
   items: CategoryData[];
-  editFunction: (item: object) => void;
+  editFunction: (item: CategoryData) => void;
   deleteFunction: (item: object) => void;
   styles: Styles;
 }
@@ -224,11 +224,11 @@ const CategoryItemsListView = ({
         ))}
       </List>
       <AddCategoryDialog
-        title={"Edit category"}
+        dialogTitle={"Edit category"}
         errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("update")}
-        isOpen={open}
+        isDialogOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={editFunction}
         initialData={currentItem}
