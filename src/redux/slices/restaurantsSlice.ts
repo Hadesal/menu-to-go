@@ -199,7 +199,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.details || action.payload;
+        state.error = action.payload.message || action.payload;
       })
       .addCase(editRestaurant.pending, (state) => {
         state.loading = true;
@@ -261,7 +261,7 @@ export const RestaurantSlice = createSlice({
       .addCase(addCategory.rejected, (state, action) => {
         state.loading = false;
         console.log(action.payload);
-        state.error = action.payload.details || action.payload;
+        state.error = action.payload.message || action.payload;
       })
       .addCase(deleteCategory.pending, (state) => {
         state.loading = true;
@@ -291,7 +291,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(deleteCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.details || action.payload;
+        state.error = action.payload.message || action.payload;
       })
       .addCase(updateCategory.pending, (state) => {
         state.loading = true;
@@ -325,7 +325,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(updateCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.details || action.payload;
+        state.error = action.payload.message || action.payload;
       });
   },
 });
