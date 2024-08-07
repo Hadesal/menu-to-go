@@ -1,9 +1,11 @@
 import {
+  Alert,
   Backdrop,
   Box,
   Button,
   CircularProgress,
   Grid,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -15,10 +17,14 @@ import { Styles } from "./LoginPage.style";
 import { Email } from "@mui/icons-material";
 import ForgetPasswordDialog from "../../components/Dialogs/ForgetPasswordDialog/ForgetPasswordDialog";
 import ResetPasswordDialog from "../../components/Dialogs/ResetPasswordDialog/ResetPasswordDialog";
-
+import CheckIcon from "@mui/icons-material/Check";
+import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 export default function LoginPage() {
   const [pathToken, setPathToken] = useState<string>("");
-
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [severity, setSeverity] = useState<any>("");
+  const [toastMessage, setToastMessage] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     password: "",
@@ -49,6 +55,23 @@ export default function LoginPage() {
       setPathToken(token);
       setIsResetPasswordOpen(true);
     }
+    const message = query.get("message");
+    if (message) {
+      const messageToShow = message.split("_").join(" ");
+      if (messageToShow.endsWith("successful")) {
+        setSeverity("success");
+        setToastMessage(messageToShow);
+        setShowToast(true);
+      } else if (messageToShow.endsWith("token")) {
+        setSeverity("warning");
+        setToastMessage(messageToShow);
+        setShowToast(true);
+      } else if (messageToShow.endsWith("expired")) {
+        setSeverity("error");
+        setToastMessage(messageToShow);
+        setShowToast(true);
+      }
+    }
   }, []);
   useEffect(() => {
     document.addEventListener("keypress", handleKeyPress);
@@ -59,6 +82,29 @@ export default function LoginPage() {
 
   return (
     <Box sx={Styles.mainBox}>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowToast(false);
+        }}
+      >
+        <Alert
+          icon={
+            severity === "error" ? (
+              <ErrorOutlineOutlinedIcon fontSize="inherit" />
+            ) : severity === "success" ? (
+              <CheckIcon fontSize="inherit" />
+            ) : (
+              <WarningAmberOutlinedIcon fontSize="inherit" />
+            )
+          }
+          severity={severity}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
       <Backdrop
         sx={{
           color: "var(--primary-color)",
