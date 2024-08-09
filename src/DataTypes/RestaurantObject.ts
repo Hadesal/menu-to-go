@@ -1,7 +1,9 @@
+import { CategoryData } from "./CategoryDataTypes";
+
 export interface RestaurantData {
   id?: string;
   name: string;
-  category: [];
+  category: CategoryData;
   table: [];
   userUiPreferences: UserUiPreferences;
 }

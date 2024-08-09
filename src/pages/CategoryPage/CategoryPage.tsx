@@ -25,9 +25,12 @@ import {
   setSelectedRestaurant,
   updateCategory,
   clearErrorMessage,
+  deleteProduct,
+  addProduct,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import Styles from "./CategorySection.styles";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
   const {
@@ -84,6 +87,27 @@ export default function CategoryPage() {
       deleteCategory({
         restaurantId: selectedRestaurant.id,
         categoryId: category.id,
+      })
+    );
+  };
+
+  const handleAddProduct = (product: ProductData) => {
+    console.log(product);
+    dispatch(
+      addProduct({
+        restaurantId: selectedRestaurant.id,
+        categoryId: selectedCategory.id,
+        product: product,
+      })
+    );
+  };
+  const handleDeleteProduct = (product: { id: string }) => {
+    console.log(product);
+    dispatch(
+      deleteProduct({
+        restaurantId: selectedRestaurant.id,
+        categoryId: selectedCategory.id,
+        productId: product.id,
       })
     );
   };
@@ -201,14 +225,15 @@ export default function CategoryPage() {
           <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedCategory.products}
-            addFunction={() => {}}
+            addFunction={handleAddProduct}
             editFunction={() => {}}
-            deleteFunction={() => {}}
+            deleteFunction={handleDeleteProduct}
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}
             emptyStateMessage={getString("productEmptyStateInfo")}
             title={selectedCategory ? selectedCategory?.name : ""}
             listView={true}
+            product={true}
           />
         </Box>
       </Box>

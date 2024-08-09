@@ -12,17 +12,19 @@ import {
   Menu,
   MenuItem,
   Paper,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import placeHolderImg from "../../assets/Spaghetti-Bolognese-square-FS-0204.jpg";
+import placeHolderImg from "../../assets/catering-item-placeholder-704x520.png";
 import Styles from "../../DataTypes/StylesTypes";
+import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 interface Props {
   items: any[];
   editfunction: (item: object) => void;
-  deleteFunction: (item: object) => void;
+  deleteFunction: (item: ProductData) => void;
   styles: Styles;
 }
 const ItemsListView = ({
@@ -46,8 +48,16 @@ const ItemsListView = ({
     setAnchorEls(newAnchorEls);
   };
   //const [open, setOpen] = useState(false);
-  const [currentItem, setCurrentItem] = useState<any>();
-  //const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [currentItem, setCurrentItem] = useState<ProductData>({
+    details: {},
+    id: "",
+    image: null,
+    isAvailable: true,
+    name: "",
+    price: 0,
+    uniqueProductOrderingName: "",
+  });
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
   const handleMenuClose = (index: number) => {
     const newAnchorEls = [...anchorEls];
@@ -61,8 +71,13 @@ const ItemsListView = ({
   };
 
   const handleDeleteClick = (item) => {
+    console.log(currentItem);
     setCurrentItem(item);
-    //setIsDeleteDialogOpen(true);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setIsDeleteDialogOpen(false);
   };
   return (
     <Container sx={styles.container}>
@@ -90,7 +105,7 @@ const ItemsListView = ({
                 <IconButton
                   sx={{
                     padding: 0.8,
-                    cursor:"grab",
+                    cursor: "grab",
                     "&:hover": {
                       background: "transparent",
                     },
@@ -106,7 +121,7 @@ const ItemsListView = ({
                 </IconButton>
                 <img
                   style={{ borderRadius: "10px" }}
-                  src={placeHolderImg}
+                  src={item.image ? item.image : placeHolderImg}
                   width={60}
                   height={60}
                 />
@@ -192,6 +207,25 @@ const ItemsListView = ({
           </Paper>
         ))}
       </List>
+
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onPrimaryActionClick={() => {
+          deleteFunction(currentItem);
+          setIsDeleteDialogOpen(false);
+        }}
+        onSecondaryActionClick={handleDeleteDialogClose}
+        onClose={handleDeleteDialogClose}
+        width="500px"
+        height="300px"
+        showImg={false}
+        secondaryActionText={getString("cancel")}
+        primaryActionText={getString("delete")}
+        title={getString("deleteConfirmText")}
+        subTitle={getString("productDeleteText", {
+          productName: currentItem.name,
+        })}
+      />
     </Container>
   );
 };

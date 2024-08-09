@@ -22,7 +22,8 @@ interface InputComponentProps {
   helperText?: string;
   variant?: TextFieldVariants;
   InputPropStyle?: object;
-  value?: string;
+  value?: string | number;
+  placeholder?: string;
 }
 
 export default function InputComponent({
@@ -40,6 +41,7 @@ export default function InputComponent({
   variant,
   InputPropStyle,
   value,
+  placeholder,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -71,6 +73,7 @@ export default function InputComponent({
   return (
     <Box sx={boxStyle}>
       <TextField
+        placeholder={placeholder}
         error={error}
         helperText={helperText}
         sx={textFieldStyle}
@@ -84,6 +87,7 @@ export default function InputComponent({
           sx: InputPropStyle,
           endAdornment:
             type === "password" ? endPassowrdAdorment : endAdornment,
+          inputProps: { min: 0 },
         }}
         onKeyDown={onKeyDown}
         onChange={onChange}

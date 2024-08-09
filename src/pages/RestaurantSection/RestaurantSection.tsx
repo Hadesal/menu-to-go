@@ -1,9 +1,7 @@
 import {
-  Alert,
   Backdrop,
   CircularProgress,
   Divider,
-  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
@@ -23,6 +21,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { useTranslation } from "react-i18next";
 import CategoryPage from "../CategoryPage/CategoryPage";
+import ToastNotification from "../../components/ToastNotification/ToastNotification.tsx";
+
 interface RestaurantSectionProps {
   label: string;
 }
@@ -100,41 +100,19 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={showToast}
-        autoHideDuration={6000}
+      <ToastNotification
+        message={errorMessage}
+        severity="error"
+        show={showToast}
         onClose={() => setShowToast(false)}
-      >
-        <Alert
-          onClose={() => setShowToast(false)}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+      />
 
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={showSuccessToast}
-        autoHideDuration={6000}
-        onClose={() => {
-          setShowSuccessToast(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setShowSuccessToast(false);
-          }}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {successMessage}
-        </Alert>
-      </Snackbar>
+      <ToastNotification
+        message={successMessage}
+        severity="success"
+        show={showSuccessToast}
+        onClose={() => setShowSuccessToast(false)}
+      />
 
       <Typography variant="h5">{label}</Typography>
       <Divider />

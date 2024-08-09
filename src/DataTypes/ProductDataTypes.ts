@@ -1,11 +1,13 @@
 export interface ProductData {
-  id: string;
+  id?: string;
   name: string;
   price: number;
-  details: string | null;
-  image: string | null;
-  category: {
-    id: string;
-    name: string;
+  details: {
+    detailsDescription: string;
+    extras: object[];
+    ingredients: object[];
   };
+  isAvailable: true;
+  image: string | null;
+  uniqueProductOrderingName: string;
 }

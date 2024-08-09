@@ -1,7 +1,4 @@
 import SearchIcon from "@mui/icons-material/Search";
-import Styles from "../../DataTypes/StylesTypes";
-import ItemsGridView from "../Views/ItemsGridView";
-import ItemsListView from "../Views/ItemsListView"; // Make sure this import is correct
 import {
   Box,
   Button,
@@ -11,25 +8,32 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
+import { useTranslation } from "react-i18next";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 import {
   addRestaurantData,
   RestaurantData,
 } from "../../DataTypes/RestaurantObject";
+import Styles from "../../DataTypes/StylesTypes";
+import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
+import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
-import { useTranslation } from "react-i18next";
+import ItemsGridView from "../Views/ItemsGridView";
+import ItemsListView from "../Views/ItemsListView"; // Make sure this import is correct
+import { useAppSelector } from "../../utils/hooks";
 
 interface BoxComponentProps {
   items: RestaurantData[];
   styles: Styles;
   editFunction: (item: RestaurantData) => void;
-  deleteFunction: (item: RestaurantData) => void;
+  deleteFunction: (item: ProductData) => void;
   addFunction: (item: addRestaurantData) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
   title?: string;
   listView?: boolean;
+  product: boolean;
 }
 
 const BoxComponent = ({
@@ -43,11 +47,14 @@ const BoxComponent = ({
   emptyStateMessage,
   title,
   listView,
+  product,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState(items);
   const { t } = useTranslation();
   const getString = t;
+
+  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -106,6 +113,7 @@ const BoxComponent = ({
               variant="outlined"
               color="primary"
               onClick={handleClickOpen}
+              disabled={product && !selectedCategory.name}
             >
               Add
             </Button>
@@ -176,7 +184,17 @@ const BoxComponent = ({
         errorMessage={getString("addRestaurantInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
-        isOpen={open}
+        isOpen={product ? false : open}
+        onCancelClick={handleClose}
+        onConfirmClick={addFunction}
+      />
+
+      <AddProductDialog
+        dialogTitle={getString("addCategoryText")}
+        errorMessage={getString("addCategoryInfoText")}
+        cancelText={getString("cancel")}
+        confirmText={getString("add")}
+        isDialogOpen={product ? open : false}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
       />

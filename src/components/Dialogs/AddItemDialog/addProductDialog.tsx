@@ -1,0 +1,363 @@
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  InputLabel,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { ProductData } from "../../../DataTypes/ProductDataTypes";
+import InputComponent from "../../InputComponent/InputComponent";
+import ProductDetailsAccordion from "../ProductDetailsAccordion/ProductDetailsAccordion";
+import { Styles } from "./addItemDialog.styles";
+import FileUploadComponent from "./fileUploadComponent";
+
+interface AddProductDialogProps {
+  isDialogOpen: boolean;
+  dialogTitle: string;
+  cancelText: string;
+  confirmText: string;
+  errorMessage: string;
+  onConfirmClick: (item: ProductData) => void;
+  onCancelClick: () => void;
+  initialData?: ProductData;
+}
+
+const AddProductDialog = ({
+  isDialogOpen: isOpen,
+  dialogTitle: title,
+  cancelText,
+  confirmText,
+  onConfirmClick,
+  onCancelClick,
+  errorMessage,
+  initialData,
+}: AddProductDialogProps) => {
+  const [dialogData, setDialogData] = useState<ProductData>({
+    name: "",
+    price: 0,
+    details: {
+      detailsDescription: "",
+      extras: [],
+      ingredients: [],
+    },
+    isAvailable: true,
+    image: null,
+    uniqueProductOrderingName: "",
+  });
+
+  const [showNameError, setShowNameError] = useState<boolean>(false);
+  const [showPriceError, setShowPriceError] = useState<boolean>(false);
+  const [showDescriptionError, setShowDescriptionError] =
+    useState<boolean>(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const getString = t;
+
+  const [extrasErrors, setExtrasErrors] = useState<
+    { nameError: boolean; priceError: boolean; index: number }[]
+  >([]);
+  const [ingredientsErrors, setIngredientsErrors] = useState<
+    { nameError: boolean; index: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (initialData) {
+      setDialogData({
+        name: initialData.name,
+        price: initialData.price,
+        details: initialData.details,
+        isAvailable: initialData.isAvailable,
+        image: initialData.image,
+        uniqueProductOrderingName: initialData.uniqueProductOrderingName,
+      });
+    }
+  }, [initialData]);
+
+  const handleConfirm = () => {
+    let hasError = false;
+
+    if (dialogData.name.length === 0) {
+      setShowNameError(true);
+      hasError = true;
+    }
+
+    if (dialogData.price === 0) {
+      setShowPriceError(true);
+      hasError = true;
+    }
+
+    if (dialogData.details.detailsDescription.trim().length === 0) {
+      setShowDescriptionError(true);
+    }
+
+    dialogData.details.ingredients.forEach((ingredient, index) => {
+      const errorObject = {
+        nameError: false,
+        index: index,
+      };
+
+      if (ingredient.name.length === 0) {
+        console.log(index + "ingredient")
+        errorObject.nameError = true;
+      }
+      if (errorObject.nameError) {
+        hasError = true;
+        setIngredientsErrors((prevState) => [...prevState, errorObject]);
+      }
+    });
+
+    dialogData.details.extras.forEach((extra, index) => {
+      const errorObject = {
+        nameError: false,
+        priceError: false,
+        index: index,
+      };
+
+      if (extra.name.length === 0) {
+        errorObject.nameError = true;
+      }
+
+      if (extra.price <= 0) {
+        errorObject.priceError = true;
+      }
+
+      if (errorObject.nameError || errorObject.priceError) {
+        hasError = true;
+        setExtrasErrors((prevState) => [...prevState, errorObject]);
+      }
+    });
+
+    if (hasError) {
+      return;
+    }
+
+    if (initialData && dialogData.name === initialData.name) {
+      setIsDataUnchanged(true);
+      return;
+    }
+
+    onConfirmClick(dialogData);
+    handleCancel();
+  };
+
+  const handleCancel = () => {
+    if (!initialData) {
+      setDialogData({
+        name: "",
+        price: 0,
+        details: {
+          detailsDescription: "",
+          extras: [],
+          ingredients: [],
+        },
+        isAvailable: true,
+        image: null,
+        uniqueProductOrderingName: "",
+      });
+    }
+    setImageError(null);
+    setShowNameError(false);
+    setShowPriceError(false);
+    setIsDataUnchanged(false);
+    setShowDescriptionError(false);
+    setExtrasErrors([]);
+    setIngredientsErrors([]);
+    onCancelClick();
+  };
+
+  const handleExtrasChange = (extras: { name: string; price: number }[]) => {
+    setDialogData((prevData) => ({
+      ...prevData,
+      details: {
+        ...prevData.details,
+        extras: extras,
+      },
+    }));
+  };
+
+  const handleIngredientsChange = (
+    ingredients: { name: string; image: string | null }[]
+  ) => {
+    setDialogData((prevData) => ({
+      ...prevData,
+      details: {
+        ...prevData.details,
+        ingredients: ingredients,
+      },
+    }));
+  };
+
+  return (
+    <Dialog
+      disableRestoreFocus
+      PaperProps={{
+        sx: {
+          ...Styles.dialog,
+          width: "56.25rem",
+          maxHeight: "90vh", // Limit the height
+        },
+      }}
+      onClose={handleCancel}
+      open={isOpen}
+    >
+      <DialogTitle sx={Styles.title}>{title}</DialogTitle>
+      <FileUploadComponent
+        image={dialogData.image}
+        onImageChange={(image) =>
+          setDialogData({ ...dialogData, image: image })
+        }
+        error={imageError}
+        setError={setImageError}
+      />
+      <Box sx={Styles.textFieldWrapper}>
+        <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
+          Name
+        </InputLabel>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          required
+          textFieldStyle={Styles.textFieldStyle}
+          InputPropStyle={Styles.inputPropStyle}
+          onChange={(e) => {
+            setDialogData((prevData) => ({
+              ...prevData,
+              name: e.target.value.trim(),
+            }));
+            setShowNameError(e.target.value.trim().length === 0);
+            setIsDataUnchanged(
+              initialData ? e.target.value.trim() === initialData.name : false
+            );
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleConfirm();
+            }
+          }}
+          value={dialogData.name}
+          error={showNameError || isDataUnchanged}
+          helperText={
+            showNameError
+              ? errorMessage
+              : isDataUnchanged
+              ? "Data is unchanged"
+              : " "
+          }
+        />
+      </Box>
+      <Box sx={Styles.textFieldWrapper}>
+        <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
+          Price
+        </InputLabel>
+        <InputComponent
+          id="priceField"
+          type="Number"
+          label=""
+          required
+          textFieldStyle={Styles.textFieldStyle}
+          InputPropStyle={Styles.inputPropStyle}
+          onChange={(e) => {
+            setDialogData((prevData) => ({
+              ...prevData,
+              price: parseInt(e.target.value),
+            }));
+            setShowPriceError(
+              e.target.value === "" || parseInt(e.target.value) <= 0
+            );
+            setIsDataUnchanged(
+              initialData ? e.target.value.trim() === initialData.name : false
+            );
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleConfirm();
+            }
+          }}
+          value={dialogData.price === 0 ? "" : dialogData.price}
+          error={showPriceError || isDataUnchanged}
+          helperText={
+            showPriceError
+              ? "Please enter product price"
+              : isDataUnchanged
+              ? "Data is unchanged"
+              : " "
+          }
+        />
+      </Box>
+      <Box sx={Styles.textFieldWrapper}>
+        <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
+          Description
+        </InputLabel>
+        <TextField
+          id="description"
+          multiline
+          required
+          rows={8}
+          sx={Styles.textArea}
+          variant="outlined"
+          onChange={(e) => {
+            setDialogData((prevData) => ({
+              ...prevData,
+              details: {
+                ...prevData.details,
+                detailsDescription: e.target.value.trim(),
+              },
+            }));
+          }}
+          error={showDescriptionError || isDataUnchanged}
+          helperText={
+            showDescriptionError
+              ? "Please enter product description"
+              : isDataUnchanged
+              ? "Data is unchanged"
+              : " "
+          }
+        />
+      </Box>
+
+      <ProductDetailsAccordion
+        accordionTitle="Ingredients"
+        namePlaceHolder="Ingredient name"
+        onItemsChange={handleIngredientsChange}
+        errors={ingredientsErrors}
+      />
+      <ProductDetailsAccordion
+        accordionTitle="Extras"
+        showPrice={true}
+        namePlaceHolder="Extras name"
+        onItemsChange={handleExtrasChange}
+        errors={extrasErrors}
+      />
+
+      <DialogContent sx={Styles.dialogContent}>
+        <Box sx={{ ...Styles.actionBox, padding: "1rem" }}>
+          <Button
+            variant="outlined"
+            onClick={handleCancel}
+            sx={Styles.cancelButton}
+          >
+            {cancelText}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleConfirm}
+            sx={Styles.logoutButton}
+          >
+            {confirmText}
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default AddProductDialog;
