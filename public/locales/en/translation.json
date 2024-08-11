@@ -25,6 +25,7 @@
   "save": "Save",
   "profile": "Profile",
   "address": "Address",
+  "qrCodePageTitle": "Generate QR Code",
   "city": "City",
   "zipCode": "Zip Code",
   "taxId": "Tax ID",
