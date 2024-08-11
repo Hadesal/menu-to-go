@@ -15,6 +15,7 @@ import {
 import {
   addProduct as ApiAddProduct,
   deleteProduct as ApiDeleteProduct,
+  updateProduct as ApiEditProduct,
 } from "../../services/api/productsCrud";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
@@ -63,7 +64,6 @@ export const addRestaurant = createAsyncThunk(
       const response = await apiCreateRestaurant(restaurant);
       return response;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.response?.data || "Error adding restaurant");
     }
   }
@@ -76,7 +76,6 @@ export const editRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(restaurant);
       const response = await apiUpdateRestaurant(restaurant, restaurant.id);
       return response;
     } catch (error) {
@@ -112,10 +111,8 @@ export const addCategory = createAsyncThunk(
   ) => {
     try {
       const response = await apiCreateCategory(restaurantId, category);
-      console.log(response);
       return { restaurantId, category: response };
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.response?.data || "Error adding category");
     }
   }
@@ -167,14 +164,13 @@ export const addProduct = createAsyncThunk(
   ) => {
     try {
       const productResponseData = await ApiAddProduct(categoryId, product);
-      console.log(productResponseData);
-      console.log(product);
-      return { restaurantId, categoryId, productResponseData}; // Return both IDs for use in the reducer
+      return { restaurantId, categoryId, productResponseData }; // Return both IDs for use in the reducer
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error adding product");
     }
   }
 );
+
 export const deleteProduct = createAsyncThunk(
   "restaurantsData/deleteProduct",
   async (
@@ -190,6 +186,35 @@ export const deleteProduct = createAsyncThunk(
       return { restaurantId, categoryId, productId }; // Return both IDs for use in the reducer
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error deleting product");
+    }
+  }
+);
+
+export const editProduct = createAsyncThunk(
+  "restaurantsData/editProduct",
+  async (
+    {
+      restaurantId,
+      categoryId,
+      productId,
+      updatedProduct,
+    }: {
+      restaurantId: string;
+      categoryId: string;
+      productId: string;
+      updatedProduct: ProductData;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const productResponseData = await ApiEditProduct(
+        categoryId,
+        productId,
+        updatedProduct
+      );
+      return { restaurantId, categoryId, productId, productResponseData }; // Return both IDs for use in the reducer
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error editing product");
     }
   }
 );
@@ -234,7 +259,6 @@ export const RestaurantSlice = createSlice({
         state.successMessage = null;
       })
       .addCase(addRestaurant.fulfilled, (state, action) => {
-        console.log(action);
         state.restaurantList.push(action.payload);
         state.loading = false;
         state.successMessage = "Restaurant created successfully!";
@@ -290,9 +314,6 @@ export const RestaurantSlice = createSlice({
 
           state.selectedRestaurant = restaurant;
         }
-        console.log(category);
-        console.log("restaurant: ", restaurant);
-        console.log("state: ", state.selectedCategory);
         if (Object.keys(state.selectedCategory).length === 0) {
           state.selectedCategory = category;
         }
@@ -302,7 +323,6 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
         state.error = action.payload.message || action.payload;
       })
       .addCase(updateCategory.pending, (state) => {
@@ -375,7 +395,8 @@ export const RestaurantSlice = createSlice({
         state.successMessage = null; // Set success message
       })
       .addCase(addProduct.fulfilled, (state, action) => {
-        const { restaurantId, categoryId, productResponseData } = action.payload;
+        const { restaurantId, categoryId, productResponseData } =
+          action.payload;
         const restaurant = state.restaurantList.find(
           (res) => res.id === restaurantId
         );
@@ -401,6 +422,55 @@ export const RestaurantSlice = createSlice({
         state.successMessage = "Product added successfully!";
       })
       .addCase(addProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.details || action.payload;
+      })
+      .addCase(editProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.successMessage = null; // Set success message
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        const { restaurantId, categoryId, productId, productResponseData } =
+          action.payload;
+        const restaurant = state.restaurantList.find(
+          (res) => res.id === restaurantId
+        );
+
+        if (restaurant) {
+          // Find the category in which the product should be updated
+          const category = restaurant.category.find(
+            (cat) => cat.id === categoryId
+          );
+
+          if (category) {
+            category.products = category.products.map((product) =>
+              product.id === productId
+                ? { ...product, ...productResponseData }
+                : product
+            );
+
+            // If the selected category is the one we just updated, update it too
+            if (
+              state.selectedCategory &&
+              state.selectedCategory.id === categoryId
+            ) {
+              state.selectedCategory.products =
+                state.selectedCategory.products.map((product) =>
+                  product.id === productId
+                    ? { ...product, ...productResponseData }
+                    : product
+                );
+            }
+
+            state.selectedRestaurant = restaurant;
+          }
+        }
+
+        state.loading = false;
+        state.successMessage = "Product edited successfully!";
+      })
+      .addCase(editProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.details || action.payload;
       })

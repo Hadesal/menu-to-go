@@ -25,9 +25,9 @@ import { useAppSelector } from "../../utils/hooks";
 interface BoxComponentProps {
   items: RestaurantData[];
   styles: Styles;
-  editFunction: (item: RestaurantData) => void;
+  editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
-  addFunction: (item: addRestaurantData) => void;
+  addFunction: (item: ProductData) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;

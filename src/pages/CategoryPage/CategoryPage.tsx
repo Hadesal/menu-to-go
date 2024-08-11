@@ -27,6 +27,7 @@ import {
   clearErrorMessage,
   deleteProduct,
   addProduct,
+  editProduct,
 } from "../../redux/slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import Styles from "./CategorySection.styles";
@@ -92,7 +93,6 @@ export default function CategoryPage() {
   };
 
   const handleAddProduct = (product: ProductData) => {
-    console.log(product);
     dispatch(
       addProduct({
         restaurantId: selectedRestaurant.id,
@@ -101,8 +101,17 @@ export default function CategoryPage() {
       })
     );
   };
+  const handleEditProduct = (product: ProductData) => {
+    dispatch(
+      editProduct({
+        restaurantId: selectedRestaurant.id,
+        categoryId: selectedCategory.id,
+        productId: product.id as string,
+        updatedProduct: product,
+      })
+    );
+  };
   const handleDeleteProduct = (product: { id: string }) => {
-    console.log(product);
     dispatch(
       deleteProduct({
         restaurantId: selectedRestaurant.id,
@@ -226,7 +235,7 @@ export default function CategoryPage() {
             CardIcon={RestaurantIcon}
             items={selectedCategory.products}
             addFunction={handleAddProduct}
-            editFunction={() => {}}
+            editFunction={handleEditProduct}  // Passed here
             deleteFunction={handleDeleteProduct}
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}

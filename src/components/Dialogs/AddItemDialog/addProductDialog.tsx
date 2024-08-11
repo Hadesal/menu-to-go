@@ -43,6 +43,10 @@ const AddProductDialog = ({
       detailsDescription: "",
       extras: [],
       ingredients: [],
+      variants: {
+        name: "",
+        variantList: [],
+      },
     },
     isAvailable: true,
     image: null,
@@ -65,13 +69,21 @@ const AddProductDialog = ({
   const [ingredientsErrors, setIngredientsErrors] = useState<
     { nameError: boolean; index: number }[]
   >([]);
+  const [variantsErrors, setVariantsErrors] = useState<
+    { nameError: boolean; index: number }[]
+  >([]);
 
   useEffect(() => {
     if (initialData) {
       setDialogData({
         name: initialData.name,
         price: initialData.price,
-        details: initialData.details,
+        details: {
+          detailsDescription: initialData.details.detailsDescription,
+          extras: initialData.details.extras,
+          ingredients: initialData.details.ingredients,
+          variants: initialData.details.variants,
+        },
         isAvailable: initialData.isAvailable,
         image: initialData.image,
         uniqueProductOrderingName: initialData.uniqueProductOrderingName,
@@ -103,7 +115,6 @@ const AddProductDialog = ({
       };
 
       if (ingredient.name.length === 0) {
-        console.log(index + "ingredient")
         errorObject.nameError = true;
       }
       if (errorObject.nameError) {
@@ -133,14 +144,43 @@ const AddProductDialog = ({
       }
     });
 
+    if (
+      dialogData.details.variants.name.length === 0 &&
+      dialogData.details.variants.variantList.length > 0
+    ) {
+      hasError = true;
+      console.log("Variant name cannot be empty");
+    }
+
+    dialogData.details.variants.variantList.forEach((variant, index) => {
+      const errorObject = {
+        nameError: false,
+        priceError: false,
+        index: index,
+      };
+
+      if (variant.name.length === 0) {
+        errorObject.nameError = true;
+      }
+
+      if (variant.price <= 0) {
+        errorObject.priceError = true;
+      }
+
+      if (errorObject.nameError || errorObject.priceError) {
+        hasError = true;
+        setVariantsErrors((prevState) => [...prevState, errorObject]);
+      }
+    });
+
     if (hasError) {
       return;
     }
 
-    if (initialData && dialogData.name === initialData.name) {
-      setIsDataUnchanged(true);
-      return;
-    }
+    // if (initialData && dialogData.name === initialData.name) {
+    //   setIsDataUnchanged(true);
+    //   return;
+    // }
 
     onConfirmClick(dialogData);
     handleCancel();
@@ -155,6 +195,10 @@ const AddProductDialog = ({
           detailsDescription: "",
           extras: [],
           ingredients: [],
+          variants: {
+            name: "",
+            variantList: [],
+          },
         },
         isAvailable: true,
         image: null,
@@ -168,6 +212,7 @@ const AddProductDialog = ({
     setShowDescriptionError(false);
     setExtrasErrors([]);
     setIngredientsErrors([]);
+    setVariantsErrors([]);
     onCancelClick();
   };
 
@@ -189,6 +234,21 @@ const AddProductDialog = ({
       details: {
         ...prevData.details,
         ingredients: ingredients,
+      },
+    }));
+  };
+  const handleVariantsChange = (variants: {
+    name: string;
+    variants: object[];
+  }) => {
+    setDialogData((prevData) => ({
+      ...prevData,
+      details: {
+        ...prevData.details,
+        variants: {
+          name: variants.name,
+          variantList: variants.variants,
+        },
       },
     }));
   };
@@ -232,9 +292,9 @@ const AddProductDialog = ({
               name: e.target.value.trim(),
             }));
             setShowNameError(e.target.value.trim().length === 0);
-            setIsDataUnchanged(
-              initialData ? e.target.value.trim() === initialData.name : false
-            );
+            // setIsDataUnchanged(
+            //   initialData ? e.target.value.trim() === initialData.name : false
+            // );
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -272,9 +332,11 @@ const AddProductDialog = ({
             setShowPriceError(
               e.target.value === "" || parseInt(e.target.value) <= 0
             );
-            setIsDataUnchanged(
-              initialData ? e.target.value.trim() === initialData.name : false
-            );
+            // setIsDataUnchanged(
+            //   initialData
+            //     ? parseInt(e.target.value.trim()) === initialData.price
+            //     : false
+            // );
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -304,6 +366,7 @@ const AddProductDialog = ({
           rows={8}
           sx={Styles.textArea}
           variant="outlined"
+          value={dialogData.details.detailsDescription}
           onChange={(e) => {
             setDialogData((prevData) => ({
               ...prevData,
@@ -312,6 +375,13 @@ const AddProductDialog = ({
                 detailsDescription: e.target.value.trim(),
               },
             }));
+
+            // setIsDataUnchanged(
+            //   initialData
+            //     ? e.target.value.trim() ===
+            //         initialData.details.detailsDescription
+            //     : false
+            // );
           }}
           error={showDescriptionError || isDataUnchanged}
           helperText={
@@ -329,6 +399,17 @@ const AddProductDialog = ({
         namePlaceHolder="Ingredient name"
         onItemsChange={handleIngredientsChange}
         errors={ingredientsErrors}
+        initialDataList={dialogData.details.ingredients}
+      />
+      <ProductDetailsAccordion
+        accordionTitle="Variants"
+        showPrice={true}
+        namePlaceHolder="Variant name"
+        onVariantsChange={handleVariantsChange}
+        errors={variantsErrors}
+        isVariant={true}
+        initialDataName={dialogData.details.variants?.name}
+        initialDataList={dialogData.details.variants?.variantList}
       />
       <ProductDetailsAccordion
         accordionTitle="Extras"
@@ -336,6 +417,7 @@ const AddProductDialog = ({
         namePlaceHolder="Extras name"
         onItemsChange={handleExtrasChange}
         errors={extrasErrors}
+        initialDataList={dialogData.details.extras}
       />
 
       <DialogContent sx={Styles.dialogContent}>

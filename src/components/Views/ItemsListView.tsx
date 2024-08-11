@@ -20,16 +20,17 @@ import placeHolderImg from "../../assets/catering-item-placeholder-704x520.png";
 import Styles from "../../DataTypes/StylesTypes";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
+import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
 
 interface Props {
   items: any[];
-  editfunction: (item: object) => void;
+  editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
   styles: Styles;
 }
 const ItemsListView = ({
   items,
-  editfunction,
+  editFunction,
   deleteFunction,
   styles,
 }: Props): JSX.Element => {
@@ -58,6 +59,7 @@ const ItemsListView = ({
     uniqueProductOrderingName: "",
   });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
 
   const handleMenuClose = (index: number) => {
     const newAnchorEls = [...anchorEls];
@@ -67,6 +69,7 @@ const ItemsListView = ({
 
   const handleEditClick = (item) => {
     setCurrentItem(item);
+    setIsEditDialogOpen(true);
     //setOpen(true);
   };
 
@@ -78,6 +81,9 @@ const ItemsListView = ({
 
   const handleDeleteDialogClose = () => {
     setIsDeleteDialogOpen(false);
+  };
+  const handleEditDialogClose = () => {
+    setIsEditDialogOpen(false);
   };
   return (
     <Container sx={styles.container}>
@@ -207,7 +213,16 @@ const ItemsListView = ({
           </Paper>
         ))}
       </List>
-
+      <AddProductDialog
+        dialogTitle={"Edit category"}
+        errorMessage={getString("addCategoryInfoText")}
+        cancelText={getString("cancel")}
+        confirmText={getString("add")}
+        isDialogOpen={isEditDialogOpen}
+        onCancelClick={handleEditDialogClose}
+        onConfirmClick={(data) => editFunction({ ...data, id: currentItem.id })}
+        initialData={currentItem}
+      />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {

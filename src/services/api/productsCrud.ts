@@ -53,14 +53,16 @@ export const updateProduct = async (
   updatedProduct: ProductData
 ) => {
   try {
-    const response = await apiService.put(
-      `/${categoryId}/products/${productId}`,
-      updatedProduct
-    );
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+    const response = await apiService.put(`/${categoryId}/products/${productId}`, updatedProduct, {
+      headers: {
+        Authorization: `Bearer ${userToken.token}`,
+      },
+    });
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 
