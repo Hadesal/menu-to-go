@@ -1,9 +1,10 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAppSelector } from "../../utils/hooks";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import EditProfileDetailsSection from "./EditProfileDetailsSection";
 
 const ProfileDetailsSection = ({
   setActiveTab,
@@ -15,6 +16,12 @@ const ProfileDetailsSection = ({
   const { t } = useTranslation();
   const getString = t;
   useEffect(() => {}, [userData]);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (isEditing) {
+    return <EditProfileDetailsSection setIsEditing={setIsEditing} />;
+  }
   return (
     <Box>
       <Container
@@ -25,13 +32,16 @@ const ProfileDetailsSection = ({
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h5">{getString("profileDetailsButton")}</Typography>
+        <Typography variant="h5">
+          {getString("profileDetailsButton")}
+        </Typography>
         <Button
           sx={{ borderRadius: "1rem" }}
           variant="outlined"
           startIcon={<EditOutlinedIcon />}
           onClick={() => {
-            setActiveTab("edit");
+            //setActiveTab("edit");
+            setIsEditing(true);
           }}
         >
           {getString("edit")}

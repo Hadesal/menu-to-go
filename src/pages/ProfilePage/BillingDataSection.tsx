@@ -1,13 +1,15 @@
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useState } from "react";
-import { Box, Container, Divider, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import BillingDataTextSection from "./BillingDataTextSection";
 import BillingDataEditSection from "./BillingDataEditSection";
+import BillingDataTextSection from "./BillingDataTextSection";
 
 const BillingDetailsSection = () => {
   const { t } = useTranslation();
   const getString = t;
-  const [activeSection, setActiveSection] = useState<String>("billingDataText");
+  const [activeSection, setActiveSection] = useState<string>("billingDataText");
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <Box
@@ -17,16 +19,43 @@ const BillingDetailsSection = () => {
         flexDirection: "column",
       }}
     >
-      <Container>
-        <Typography sx={{ marginLeft: "1vw", color: "#797979" }} variant="h5">
-          {getString("billingData")}
-        </Typography>
-        <Divider variant="middle" component={"h5"} />
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          marginBottom: "1rem",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h5">{getString("billingData")} </Typography>
+        <Button
+          sx={{ borderRadius: "1rem" }}
+          variant="outlined"
+          startIcon={<EditOutlinedIcon />}
+          onClick={() => {
+            //setActiveTab("edit");
+            setIsEditing(true);
+          }}
+        >
+          {getString("edit")}
+        </Button>
       </Container>
-      {activeSection === "billingDataText" && (
+      {/* <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          marginBottom: "1rem",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <Typography variant="h5"> {getString("billingData")}</Typography>
+      </Container> */}
+      {!isEditing && (
         <BillingDataTextSection setActiveSection={setActiveSection} />
       )}
-      {activeSection === "editBillingData" && (
+      {isEditing && (
         <BillingDataEditSection setActiveSection={setActiveSection} />
       )}
     </Box>

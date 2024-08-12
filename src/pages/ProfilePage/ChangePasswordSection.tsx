@@ -18,6 +18,7 @@ import { userUpdatePassword } from "../../redux/slices/userSlice";
 import CheckIcon from "@mui/icons-material/Check";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import InputComponent from "../../components/InputComponent/InputComponent";
 
 const ChangePasswordSection = ({
   setActiveTab,
@@ -99,74 +100,75 @@ const ChangePasswordSection = ({
           {toastMessage}
         </Alert>
       </Snackbar>
-      <Container>
-        <Typography sx={{ marginLeft: "1vw", color: "#797979" }} variant="h5">
-          {getString("changePassword")}
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          marginBottom: "1rem",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <Typography variant="h5"> {getString("changePassword")}</Typography>
+      </Container>
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ width: "15%", flexShrink: 0 }}>
+          {getString("oldPassword")} :
         </Typography>
-        <Divider variant="middle" component={"h5"} />
-      </Container>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: "1rem",
-          marginTop: "1rem",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <TextField
-          variant="outlined"
-          value={formData.currentPassword}
-          label={getString("oldPassword")}
+        <InputComponent
           name="currentPassword"
-          autoComplete="password"
+          id="currentPasswordField"
+          type="password"
+          label=""
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={formData.currentPassword as string}
           onChange={handleInputChange}
-          sx={{
-            width: "45vw",
-            marginTop: "1rem",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderRadius: "0.8rem",
-              },
-            },
-          }}
         />
       </Container>
       <Container
         sx={{
           display: "flex",
           flexDirection: "row",
-          marginBottom: "2rem",
           alignItems: "center",
-          justifyContent: "center",
-          marginTop: "1rem",
+          gap: "1rem",
         }}
       >
-        <TextField
-          variant="outlined"
-          value={formData.newPassword}
-          label={getString("newPassword")}
+        <Typography variant="subtitle1" sx={{ width: "15%", flexShrink: 0 }}>
+          {getString("newPassword")} :
+        </Typography>
+        <InputComponent
           name="newPassword"
-          autoComplete="password"
+          id="newPasswordField"
+          type="password"
+          label=""
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={formData.newPassword as string}
           onChange={handleInputChange}
-          sx={{
-            width: "45vw",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderRadius: "0.8rem",
-              },
-            },
-          }}
         />
       </Container>
       <Container
         sx={{
+          width: "100%",
           display: "flex",
           flexDirection: "row",
-          marginBottom: "1rem",
-          alignItems: "center",
           justifyContent: "end",
+          alignItems: "center",
+          padding: 0,
+          marginTop: 2,
         }}
       >
         <Button
@@ -178,7 +180,17 @@ const ChangePasswordSection = ({
           {getString("cancel")}
         </Button>
         <Button
-          sx={{ borderRadius: "1rem", marginRight: "2rem" }}
+          sx={{
+            borderRadius: "1rem",
+            backgroundColor: "var(--primary-color)",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "transparent",
+              borderColor: "var(--primary-color)",
+              //boxShadow: "none",
+              color: "var(--primary-color)",
+            },
+          }}
           variant="outlined"
           startIcon={<DoneOutlineOutlinedIcon />}
           onClick={handleSave}

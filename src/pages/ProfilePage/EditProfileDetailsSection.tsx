@@ -1,17 +1,17 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { UserUpdateData } from "../../DataTypes/UserDataTypes";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
-import { userUpdate } from "../../redux/slices/userSlice";
+import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import { UserUpdateData } from "../../DataTypes/UserDataTypes";
+import { userUpdate } from "../../redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 
 const EditProfileDetailsSection = ({
-  setActiveTab,
+  setIsEditing,
 }: {
-  setActiveTab: Dispatch<SetStateAction<String>>;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation();
   const getString = t;
@@ -55,16 +55,16 @@ const EditProfileDetailsSection = ({
     if (isFormDataChanged(formData, userData)) {
       dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
         () => {
-          setActiveTab("profileDetails");
+          setIsEditing(false);
         }
       );
     } else {
-      setActiveTab("profileDetails");
+      setIsEditing(false);
     }
   };
 
   const onCancel = () => {
-    setActiveTab("profileDetails");
+    setIsEditing(false);
   };
 
   return (
@@ -74,48 +74,10 @@ const EditProfileDetailsSection = ({
           display: "flex",
           flexDirection: "row",
           marginBottom: "1rem",
-          justifyContent: "space-between",
-          alignItems: "center",
           width: "100%",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <Typography variant="h5"> {getString("editPersonalInfo")}</Typography>
-          <Box
-            sx={{
-              width: "fit-content",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "end",
-              alignItems: "center",
-              padding: 0,
-            }}
-          >
-            <Button
-              sx={{ borderRadius: "1rem", marginRight: "2rem" }}
-              variant="outlined"
-              startIcon={<CloseOutlinedIcon />}
-              onClick={onCancel}
-            >
-              {getString("cancel")}
-            </Button>
-            <Button
-              sx={{ borderRadius: "1rem" }}
-              variant="outlined"
-              startIcon={<DoneOutlineOutlinedIcon />}
-              onClick={onSave}
-            >
-              {getString("save")}
-            </Button>
-          </Box>
-        </Box>
+        <Typography variant="h5"> {getString("editPersonalInfo")}</Typography>
       </Container>
       <Container
         sx={{
@@ -191,6 +153,44 @@ const EditProfileDetailsSection = ({
           value={formData.billingData?.phoneNumber as string}
           onChange={handleInputChange}
         />
+      </Container>
+      <Container
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "end",
+          alignItems: "center",
+          padding: 0,
+          marginTop: 2,
+        }}
+      >
+        <Button
+          sx={{ borderRadius: "1rem", marginRight: "2rem" }}
+          variant="outlined"
+          startIcon={<CloseOutlinedIcon />}
+          onClick={onCancel}
+        >
+          {getString("cancel")}
+        </Button>
+        <Button
+          sx={{
+            borderRadius: "1rem",
+            backgroundColor: "var(--primary-color)",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "transparent",
+              borderColor: "var(--primary-color)",
+              //boxShadow: "none",
+              color: "var(--primary-color)",
+            },
+          }}
+          variant="outlined"
+          startIcon={<DoneOutlineOutlinedIcon />}
+          onClick={onSave}
+        >
+          {getString("save")}
+        </Button>
       </Container>
     </Box>
   );

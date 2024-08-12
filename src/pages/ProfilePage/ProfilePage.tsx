@@ -12,12 +12,19 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<string>("profileDetails");
 
   return (
-    <Stack spacing={3} sx={{ width: "95%", margin: "0 auto" , marginTop:"24px" }}>
+    <Stack
+      spacing={3}
+      sx={{ width: "95%", margin: "0 auto", marginTop: "24px" }}
+    >
       <Typography variant="h5">{getString("profile")}</Typography>
       <Divider variant="fullWidth" />
-      <Grid sx={{ margin: 0 }} container spacing={2}>
-        <Grid sx={{ paddingLeft: "0 !important" }} item xs={4}>
-          <Paper sx={{ padding: "0", borderRadius: "5px" }}>
+      <Grid sx={{ margin: 0 , marginTop:"2rem !important" }} container spacing={4}>
+        <Grid
+          sx={{ paddingLeft: "0 !important", paddingTop: "0 !important" }}
+          item
+          xs={4}
+        >
+          <Paper elevation={3} sx={{ padding: "0", borderRadius: "15px" }}>
             <Box
               role="button"
               tabIndex={0}
@@ -27,15 +34,28 @@ const ProfilePage = () => {
               sx={{
                 width: "100%",
                 padding: 2,
+                paddingBottom: 2.5,
+                paddingTop: 2.5,
                 cursor: "pointer",
                 color:
                   activeTab === "profileDetails"
                     ? "var(--primary-color)"
                     : "inherit",
-                borderLeft:
-                  activeTab === "profileDetails"
-                    ? "4px solid var(--primary-color)"
-                    : "4px solid transparent",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: "50%", // Start halfway down
+                  transform: "translateY(-50%)", // Center the line vertically
+                  height: "50%", // Adjust the height of the line
+                  width: "3px",
+                  backgroundColor:
+                    activeTab === "profileDetails"
+                      ? "var(--primary-color)"
+                      : "transparent",
+                  transition: "background-color 0.3s",
+                },
                 borderBottom: "1px solid #BCB8B1",
               }}
             >
@@ -50,15 +70,28 @@ const ProfilePage = () => {
               sx={{
                 width: "100%",
                 padding: 2,
+                paddingBottom: 2.5,
+                paddingTop: 2.5,
                 cursor: "pointer",
                 color:
                   activeTab === "changePassword"
                     ? "var(--primary-color)"
                     : "inherit",
-                borderLeft:
-                  activeTab === "changePassword"
-                    ? "4px solid var(--primary-color)"
-                    : "4px solid transparent",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  height: "50%",
+                  width: "3px",
+                  backgroundColor:
+                    activeTab === "changePassword"
+                      ? "var(--primary-color)"
+                      : "transparent",
+                  transition: "background-color 0.3s",
+                },
                 borderBottom: "1px solid #BCB8B1",
               }}
             >
@@ -73,32 +106,48 @@ const ProfilePage = () => {
               sx={{
                 width: "100%",
                 padding: 2,
+                paddingBottom: 2.5,
+                paddingTop: 2.5,
                 cursor: "pointer",
                 color:
                   activeTab === "billingData"
                     ? "var(--primary-color)"
                     : "inherit",
-                borderLeft:
-                  activeTab === "billingData"
-                    ? "4px solid var(--primary-color)"
-                    : "4px solid transparent",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  height: "50%",
+                  width: "3px",
+                  backgroundColor:
+                    activeTab === "billingData"
+                      ? "var(--primary-color)"
+                      : "transparent",
+                  transition: "background-color 0.3s",
+                },
               }}
             >
               {getString("billingData")}
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={8}>
-          <Paper sx={{ padding: "1rem", borderRadius: "5px" }}>
+        <Grid sx={{ paddingTop: "0 !important" }} item xs={8}>
+          <Paper
+            elevation={3}
+            sx={{ padding: "2rem 1rem", borderRadius: "15px" }}
+          >
             {activeTab === "profileDetails" && (
               <ProfileDetailsSection setActiveTab={setActiveTab} />
             )}
             {activeTab === "changePassword" && (
               <ChangePasswordSection setActiveTab={setActiveTab} />
             )}
-            {activeTab === "edit" && (
+            {/* {activeTab === "edit" && (
               <EditProfileDetailsSection setActiveTab={setActiveTab} />
-            )}
+            )} */}
             {activeTab === "billingData" && <BillingDetailsSection />}
           </Paper>
         </Grid>
