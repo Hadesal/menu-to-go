@@ -22,7 +22,11 @@ interface InputComponentProps {
   helperText?: string;
   variant?: TextFieldVariants;
   InputPropStyle?: object;
-  value?: string;
+  value?: string ;
+  readOnly?: boolean;
+  styleInputProps?: object;
+  name?: string;
+  disabled?: boolean;
 }
 
 export default function InputComponent({
@@ -40,6 +44,10 @@ export default function InputComponent({
   variant,
   InputPropStyle,
   value,
+  readOnly,
+  styleInputProps,
+  name,
+  disabled,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -80,14 +88,20 @@ export default function InputComponent({
         type={showPassword ? "text" : type}
         required={required}
         variant={variant}
+        disabled={disabled}
         InputProps={{
           sx: InputPropStyle,
           endAdornment:
             type === "password" ? endPassowrdAdorment : endAdornment,
+          readOnly: readOnly,
+        }}
+        inputProps={{
+          style: styleInputProps,
         }}
         onKeyDown={onKeyDown}
         onChange={onChange}
         value={value}
+        name={name}
       />
     </Box>
   );

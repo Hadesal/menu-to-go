@@ -6,6 +6,7 @@ import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import { userUpdate } from "../../redux/slices/userSlice";
+import InputComponent from "../../components/InputComponent/InputComponent";
 
 const EditProfileDetailsSection = ({
   setActiveTab,
@@ -23,6 +24,7 @@ const EditProfileDetailsSection = ({
   }, [userData]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log(e.target.name);
     if (name === "phoneNumber") {
       setFormData((prevValue) => ({
         ...prevValue,
@@ -77,104 +79,117 @@ const EditProfileDetailsSection = ({
           width: "100%",
         }}
       >
-        <Typography sx={{ width: "100%", color: "#797979" }} variant="h5">
-          {getString("editPersonalInfo")}
-        </Typography>
-        <Container
-          disableGutters
+        <Box
           sx={{
-            width: "100%",
             display: "flex",
             flexDirection: "row",
-            justifyContent: "end",
-            alignItems: "center",
-            padding: 0,
+            justifyContent: "space-between",
+            width: "100%",
           }}
         >
-          <Button
-            sx={{ borderRadius: "1rem", marginRight: "2rem" }}
-            variant="outlined"
-            startIcon={<CloseOutlinedIcon />}
-            onClick={onCancel}
+          <Typography variant="h5"> {getString("editPersonalInfo")}</Typography>
+          <Box
+            sx={{
+              width: "fit-content",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "end",
+              alignItems: "center",
+              padding: 0,
+            }}
           >
-            {getString("cancel")}
-          </Button>
-          <Button
-            sx={{ borderRadius: "1rem" }}
-            variant="outlined"
-            startIcon={<DoneOutlineOutlinedIcon />}
-            onClick={onSave}
-          >
-            {getString("save")}
-          </Button>
-        </Container>
+            <Button
+              sx={{ borderRadius: "1rem", marginRight: "2rem" }}
+              variant="outlined"
+              startIcon={<CloseOutlinedIcon />}
+              onClick={onCancel}
+            >
+              {getString("cancel")}
+            </Button>
+            <Button
+              sx={{ borderRadius: "1rem" }}
+              variant="outlined"
+              startIcon={<DoneOutlineOutlinedIcon />}
+              onClick={onSave}
+            >
+              {getString("save")}
+            </Button>
+          </Box>
+        </Box>
       </Container>
       <Container
         sx={{
           display: "flex",
           flexDirection: "row",
-          marginBottom: "1rem",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
         }}
       >
-        <TextField
-          variant="outlined"
-          value={formData.name}
-          label={getString("userName")}
+        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+          {getString("userName")} :
+        </Typography>
+        <InputComponent
           name="name"
-          autoComplete="name"
+          id="nameField"
+          type="Name"
+          label=""
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={formData.name as string}
           onChange={handleInputChange}
-          sx={{
-            width: "25vw",
-            marginTop: "1rem",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderRadius: "0.8rem",
-              },
-            },
-          }}
         />
       </Container>
       <Container
         sx={{
           display: "flex",
           flexDirection: "row",
-          marginBottom: "1rem",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
         }}
       >
-        <TextField
-          variant="outlined"
-          value={formData.email}
-          label={getString("email")}
+        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+          {getString("email")}
+          {" :"}
+        </Typography>
+        <InputComponent
           name="email"
-          autoComplete="email"
+          id="emailField"
+          type="email"
+          label=""
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={formData.email as string}
           onChange={handleInputChange}
-          sx={{
-            width: "25vw",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderRadius: "0.8rem",
-              },
-            },
-          }}
+          disabled={true}
         />
       </Container>
-      <Container sx={{ display: " flex", flexDirection: "row" }}>
-        <TextField
-          variant="outlined"
-          value={formData.billingData?.phoneNumber}
-          label={getString("phonenumber")}
-          type="phoneNumber"
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+          {getString("phonenumber")}
+          {" :"}
+        </Typography>
+        <InputComponent
           name="phoneNumber"
-          autoComplete="phoneNumber"
+          id="emailField"
+          type="phoneNumber"
+          label=""
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={formData.billingData?.phoneNumber as string}
           onChange={handleInputChange}
-          sx={{
-            width: "25vw",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderRadius: "0.8rem",
-              },
-            },
-          }}
         />
       </Container>
     </Box>

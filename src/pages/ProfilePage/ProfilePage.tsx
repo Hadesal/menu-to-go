@@ -1,111 +1,109 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { useTranslation } from "react-i18next";
+import { Box, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import ProfileDetailsSection from "./ProfileDetailsSection";
+import { useTranslation } from "react-i18next";
+import BillingDetailsSection from "./BillingDataSection";
 import ChangePasswordSection from "./ChangePasswordSection";
 import EditProfileDetailsSection from "./EditProfileDetailsSection";
-import BillingDetailsSection from "./BillingDataSection";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { useNavigate } from "react-router-dom";
+import ProfileDetailsSection from "./ProfileDetailsSection";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
   const getString = t;
-  const [activeTab, setActiveTab] = useState<String>("profileDetails");
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<string>("profileDetails");
 
   return (
-    <>
-      <Container sx={{ display: "flex", flexDirection: "column" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          <IconButton
-            sx={{
-              background: "#A4755D30",
-              "&:hover": {
-                background: "#A4755D30",
-              },
-            }}
-            aria-label="back"
-            onClick={() => {
-              navigate("/dashboard");
-            }}
-          >
-            <KeyboardBackspaceIcon fontSize="large" color="primary" />
-          </IconButton>
-          <Typography sx={{ marginTop: "1rem" }} variant="h3">
-            {getString("profile")}
-          </Typography>
-        </Box>
-
-        <Divider variant="fullWidth" component={"h4"} />
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "start",
-            marginTop: "2rem",
-            marginBottom: "2rem",
-          }}
-        >
-          <Button
-            sx={{ borderRadius: "1rem", marginRight: "1rem" }}
-            variant={activeTab === "profileDetails" ? "contained" : "outlined"}
-            onClick={() => {
-              setActiveTab("profileDetails");
-            }}
-          >
-            {getString("profileDetailsButton")}
-          </Button>
-
-          <Button
-            sx={{ borderRadius: "1rem" }}
-            variant={activeTab === "changePassword" ? "contained" : "outlined"}
-            onClick={() => {
-              setActiveTab("changePassword");
-            }}
-          >
-            {getString("changePasswordButton")}
-          </Button>
-          <Button
-            sx={{ borderRadius: "1rem", marginLeft: "1rem" }}
-            variant={activeTab === "billingData" ? "contained" : "outlined"}
-            onClick={() => {
-              setActiveTab("billingData");
-            }}
-          >
-            {getString("billingData")}
-          </Button>
-        </Container>
-
-        <Paper sx={{ padding: "1rem" }}>
-          {activeTab === "profileDetails" && (
-            <ProfileDetailsSection setActiveTab={setActiveTab} />
-          )}
-          {activeTab === "changePassword" && (
-            <ChangePasswordSection setActiveTab={setActiveTab} />
-          )}
-          {activeTab === "edit" && (
-            <EditProfileDetailsSection setActiveTab={setActiveTab} />
-          )}
-          {activeTab === "billingData" && <BillingDetailsSection />}
-        </Paper>
-      </Container>
-    </>
+    <Stack spacing={3} sx={{ width: "95%", margin: "0 auto" , marginTop:"24px" }}>
+      <Typography variant="h5">{getString("profile")}</Typography>
+      <Divider variant="fullWidth" />
+      <Grid sx={{ margin: 0 }} container spacing={2}>
+        <Grid sx={{ paddingLeft: "0 !important" }} item xs={4}>
+          <Paper sx={{ padding: "0", borderRadius: "5px" }}>
+            <Box
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveTab("profileDetails");
+              }}
+              sx={{
+                width: "100%",
+                padding: 2,
+                cursor: "pointer",
+                color:
+                  activeTab === "profileDetails"
+                    ? "var(--primary-color)"
+                    : "inherit",
+                borderLeft:
+                  activeTab === "profileDetails"
+                    ? "4px solid var(--primary-color)"
+                    : "4px solid transparent",
+                borderBottom: "1px solid #BCB8B1",
+              }}
+            >
+              {getString("profileDetailsButton")}
+            </Box>
+            <Box
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveTab("changePassword");
+              }}
+              sx={{
+                width: "100%",
+                padding: 2,
+                cursor: "pointer",
+                color:
+                  activeTab === "changePassword"
+                    ? "var(--primary-color)"
+                    : "inherit",
+                borderLeft:
+                  activeTab === "changePassword"
+                    ? "4px solid var(--primary-color)"
+                    : "4px solid transparent",
+                borderBottom: "1px solid #BCB8B1",
+              }}
+            >
+              {getString("changePasswordButton")}
+            </Box>
+            <Box
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveTab("billingData");
+              }}
+              sx={{
+                width: "100%",
+                padding: 2,
+                cursor: "pointer",
+                color:
+                  activeTab === "billingData"
+                    ? "var(--primary-color)"
+                    : "inherit",
+                borderLeft:
+                  activeTab === "billingData"
+                    ? "4px solid var(--primary-color)"
+                    : "4px solid transparent",
+              }}
+            >
+              {getString("billingData")}
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item xs={8}>
+          <Paper sx={{ padding: "1rem", borderRadius: "5px" }}>
+            {activeTab === "profileDetails" && (
+              <ProfileDetailsSection setActiveTab={setActiveTab} />
+            )}
+            {activeTab === "changePassword" && (
+              <ChangePasswordSection setActiveTab={setActiveTab} />
+            )}
+            {activeTab === "edit" && (
+              <EditProfileDetailsSection setActiveTab={setActiveTab} />
+            )}
+            {activeTab === "billingData" && <BillingDetailsSection />}
+          </Paper>
+        </Grid>
+      </Grid>
+    </Stack>
   );
 };
 

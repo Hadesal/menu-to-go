@@ -71,14 +71,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/myprofile"
             element={
               <PrivateRoute>
                 <ProfilePage />
               </PrivateRoute>
             }
-          />
+          /> */}
           <Route
             path="/product"
             element={

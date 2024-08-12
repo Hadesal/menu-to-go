@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useAppSelector } from "../../utils/hooks";
+import InputComponent from "../../components/InputComponent/InputComponent";
 
 const ProfileDetailsSection = ({
   setActiveTab,
@@ -24,7 +25,7 @@ const ProfileDetailsSection = ({
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h5">{getString("personalInfo")}</Typography>
+        <Typography variant="h5">{getString("profileDetailsButton")}</Typography>
         <Button
           sx={{ borderRadius: "1rem" }}
           variant="outlined"
@@ -36,44 +37,84 @@ const ProfileDetailsSection = ({
           {getString("edit")}
         </Button>
       </Container>
+
       <Container
         sx={{
           display: "flex",
           flexDirection: "row",
-          marginBottom: "1rem",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
         }}
       >
-        <Typography variant="subtitle1" sx={{ marginRight: "1rem" }}>
-          {getString("userName")}
-          {" :"}
+        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+          {getString("userName")} :
         </Typography>
-        <Typography variant="subtitle1" color={"#A4755D"}>
-          {userData?.name}
-        </Typography>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          readOnly={true}
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={userData?.name}
+        />
       </Container>
       <Container
         sx={{
           display: "flex",
           flexDirection: "row",
-          marginBottom: "1rem",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
         }}
       >
-        <Typography variant="subtitle1" sx={{ marginRight: "1rem" }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ width: "20%", flexGrow: 0, flexShrink: 0 }}
+        >
           {getString("email")}
           {" :"}
         </Typography>
-        <Typography variant="subtitle1" color={"#A4755D"}>
-          {userData?.email}
-        </Typography>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          readOnly={true}
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={userData?.email}
+        />
       </Container>
-      <Container sx={{ display: " flex", flexDirection: "row" }}>
-        <Typography variant="subtitle1">
+
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{ width: "20%", flexGrow: 0, flexShrink: 0 }}
+        >
           {getString("phonenumber")}
           {" :"}
         </Typography>
-        <Typography variant="subtitle1" color={"#A4755D"}>
-          {userData?.billingData?.phoneNumber}
-        </Typography>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          readOnly={true}
+          textFieldStyle={{ width: "100%", padding: "0" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={userData?.billingData?.phoneNumber}
+        />
       </Container>
     </Box>
   );
