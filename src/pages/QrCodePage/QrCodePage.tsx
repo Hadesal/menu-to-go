@@ -6,6 +6,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   Typography,
 } from "@mui/material";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
@@ -15,7 +16,7 @@ import html2canvas from "html2canvas";
 import { SketchPicker } from "react-color";
 import "./qrcodeStyle.css";
 import QRCodeFrameComponent from "./QRCodeFrameComponent";
-import { start } from "repl";
+import InputFileUpload from "../../components/UploadFileInput/UploadFileInputComponent";
 interface DotsOptionsObject {
   color: String;
   type:
@@ -38,10 +39,6 @@ const QrCodePage = () => {
   const [urlPath, setUrlPath] = useState(
     "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
   );
-  const [dotsColor, setDotsColor] = useState("#000000");
-  const [cornerSquareColor, setCornerSquareColor] = useState("#000000");
-  const [cornerDotsColor, setCornerDotsColor] = useState("#000000");
-  const [qrBackgroundColor, setQrBackgroundColor] = useState("#000000");
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [activeColorPicker, setActiveColorPicker] = useState("");
 
@@ -59,12 +56,9 @@ const QrCodePage = () => {
       color: "#4267b2",
       type: "dot",
     });
-  const [backgroundOptions, setBackgroundOptions] = useState({
-    color: "#ffffff",
-  });
 
   const frameRef = useRef(null);
-
+  const [imageSrc, setImageSrc] = useState(logo);
   const downloadImage = async () => {
     const canvas = await html2canvas(frameRef.current);
     const image = canvas.toDataURL("image/jpeg", 1.0);
@@ -74,14 +68,7 @@ const QrCodePage = () => {
     link.click();
   };
 
-  const handleChangeComplete = (color: { hex: string }) => {
-    setDotsColor(color.hex);
-  };
-  const handleColorChange = (color) => {
-    setDotsColor(color.hex);
-  };
-
-  const updateOptions = (optionName, value) => {
+  const updateOptions = (optionName: string, value: object) => {
     switch (optionName) {
       case "dots":
         setDotsOptions((prev) => ({ ...prev, ...value }));
@@ -92,52 +79,69 @@ const QrCodePage = () => {
       case "cornersDot":
         setCornersDotOptions((prev) => ({ ...prev, ...value }));
         break;
-      case "background":
-        setBackgroundOptions((prev) => ({ ...prev, ...value }));
-        break;
       default:
         break;
     }
   };
 
-  const toggleColorPicker = (optionName) => {
+  const toggleColorPicker = (optionName: string) => {
     setShowColorPicker(!showColorPicker);
     setActiveColorPicker(optionName);
   };
 
   const renderStyleControl = (
-    optionName,
-    options,
-    setOptionsFunc,
-    label,
-    choices
+    optionName: string,
+    options: any,
+    setOptionsFunc: any,
+    label: string,
+    choices: object[]
   ) => {
-    const handleSelectChange = (event) => {
+    const handleSelectChange = (event: any) => {
+      setOptionsFunc;
       updateOptions(optionName, { type: event.target.value });
     };
 
-    const handleColorChange = (color) => {
+    const handleColorChange = (color: any) => {
       updateOptions(optionName, { color: color.hex });
     };
 
     return (
-      <Container sx={{ margin: 0, padding: "0", width: "fit-content" }}>
-        <InputLabel id={`${optionName}-type-label`}>{label}</InputLabel>
-        <Select
-          labelId={`${optionName}-type-label`}
-          id={`${optionName}-type-select`}
-          value={options.type}
-          onChange={handleSelectChange}
-          label={label}
-          sx={{ width: "70%", alignSelf: "start" }}
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "",
+        }}
+      >
+        <Container
+          className="dropdownContainer"
+          sx={{
+            "&.dropdownContainer": {
+              paddingLeft: 0,
+            },
+          }}
         >
-          {choices.map((choice) => (
-            <MenuItem key={choice.value} value={choice.value}>
-              {choice.label}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button onClick={() => toggleColorPicker(optionName)}>
+          <InputLabel id={`${optionName}-type-label`}>{label}</InputLabel>
+          <Select
+            labelId={`${optionName}-type-label`}
+            id={`${optionName}-type-select`}
+            value={options.type}
+            onChange={handleSelectChange}
+            label={label}
+            sx={{ width: "100%", alignSelf: "start" }}
+          >
+            {choices.map((choice: any) => (
+              <MenuItem key={choice.value} value={choice.value}>
+                {choice.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </Container>
+        <Button
+          sx={{ width: "200px", height: "fit-content" }}
+          onClick={() => toggleColorPicker(optionName)}
+        >
           Choose Color
         </Button>
         {showColorPicker && activeColorPicker === optionName && (
@@ -145,8 +149,8 @@ const QrCodePage = () => {
             style={{
               position: "absolute",
               zIndex: 2,
-              left: "45%",
-              top: "20%",
+              left: "55%",
+              top: "30%",
               transform: "translate(-50%, -50%)",
               backgroundColor: "white",
               borderRadius: "8px",
@@ -160,35 +164,51 @@ const QrCodePage = () => {
       </Container>
     );
   };
+  const handlefileUploaded = (e: any) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const src = URL.createObjectURL(file);
+      setImageSrc(src);
+    }
+  };
 
   return (
-    <Container
+    <Stack
+      direction={"row"}
+      spacing={3}
       sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        padding: 0,
-        justifyContent: "space-between",
-        margin: 0,
-        position: "relative",
+        width: "95%",
+        margin: "0 auto",
       }}
     >
       <Container
+        className="qrCodeStyleCardsContainer"
         sx={{
-          margin: 0,
           borderRadius: "2rem",
-          boxShadow: "0 0 40px rgba(2, 5, 1, 0.2)",
+          boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <Typography variant="h5" sx={{ width: "fit-content" }}>
+        <Typography
+          className="qrCodeStyleCardsContainerTitle"
+          variant="h5"
+          sx={{ width: "fit-content", margin: 1 }}
+        >
           Qr Style
         </Typography>
-        <Card sx={{ width: "20vw" }}>
+        {/**Dots Style Card */}
+        <Card
+          className="dotsStyleCard"
+          sx={{ marginBottom: "1rem", width: "100%" }}
+        >
           <CardContent
             sx={{
               display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
+              justifyContent: "space-between",
+              paddingLeft: 0,
             }}
           >
             {renderStyleControl(
@@ -207,6 +227,59 @@ const QrCodePage = () => {
             )}
           </CardContent>
         </Card>
+        {/**Corner square Style Card */}
+        <Card
+          className="cornerSquareStyleCard"
+          sx={{ marginBottom: "1rem", width: "100%" }}
+        >
+          <CardContent
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingLeft: 0,
+            }}
+          >
+            {renderStyleControl(
+              "cornersSquare",
+              cornersSquareOptions,
+              setCornersSquareOptions,
+              "Corner square Style",
+              [
+                { value: "dot", label: "dot" },
+                { value: "square", label: "square" },
+                { value: "extra-rounded", label: "extra-rounded" },
+              ]
+            )}
+          </CardContent>
+        </Card>
+        {/**Corners Dots Style Card */}
+        <Card
+          className="CornersDotsStyleCard"
+          sx={{ marginBottom: "1rem", width: "100%" }}
+        >
+          <CardContent
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingLeft: 0,
+            }}
+          >
+            {renderStyleControl(
+              "cornersDot",
+              cornersDotOptions,
+              setCornersDotOptions,
+              "Corners Dots Style",
+              [
+                { value: "dot", label: "dot" },
+                { value: "square", label: "square" },
+              ]
+            )}
+          </CardContent>
+        </Card>
+        <InputFileUpload
+          label={"Upload Logo"}
+          handlefileUploaded={handlefileUploaded}
+        />
       </Container>
 
       <Container
@@ -214,10 +287,6 @@ const QrCodePage = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignSelf: "center",
-          padding: 0,
-          marginTop: "20vh",
           alignItems: "center",
         }}
       >
@@ -227,10 +296,10 @@ const QrCodePage = () => {
             paddingTop: "30px",
             paddingBottom: "30px",
             borderRadius: "2rem",
-            boxShadow: "0 0 40px rgba(2, 5, 1, 0.2)",
+            boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
+            width: "fit-content",
           }}
           ref={frameRef}
-          className="frame-container"
         >
           <QRCodeFrameComponent
             QRCodeComponent={
@@ -239,8 +308,7 @@ const QrCodePage = () => {
                 dotsOptions={dotsOptions}
                 cornersSquareOptions={cornersSquareOptions}
                 cornersDotOptions={cornersDotOptions}
-                backgroundOptions={backgroundOptions}
-                imageSrc={logo}
+                imageSrc={imageSrc}
               />
             }
           />
@@ -252,8 +320,8 @@ const QrCodePage = () => {
             alignSelf: "center",
             marginLeft: 3,
             marginTop: "5vh",
-            width: "300px",
-            height: "70px",
+            width: "200px",
+            height: "50px",
             borderRadius: "1.5rem",
           }}
           onClick={downloadImage}
@@ -261,8 +329,7 @@ const QrCodePage = () => {
           Download
         </Button>
       </Container>
-      <Container></Container>
-    </Container>
+    </Stack>
   );
 };
 export default QrCodePage;

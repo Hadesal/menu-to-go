@@ -4,13 +4,13 @@ import { Container } from "@mui/material";
 
 const CustomQRCodeComponent = ({
   value = "",
-  size = 500,
+  size = 400,
   margin = 10,
   dotsOptions = {},
   cornersSquareOptions = {},
   cornersDotOptions = {},
-  backgroundOptions = {},
-  imageOptions = { hideBackgroundDots: true, imageSize: 1, margin: 1 },
+  backgroundOptions = { color: "#fff" },
+  imageOptions = { hideBackgroundDots: true, imageSize: 0.7, margin: 1 },
   imageSrc = "",
 }) => {
   const qrCode = new QRCodeStyling({
@@ -39,28 +39,11 @@ const CustomQRCodeComponent = ({
       dotsOptions,
       cornersSquareOptions,
       cornersDotOptions,
-      backgroundOptions,
-      imageOptions,
       image: imageSrc,
     });
     qrCode.append(qrRef.current);
-  }, [
-    value,
-    size,
-    margin,
-    dotsOptions,
-    cornersSquareOptions,
-    cornersDotOptions,
-    backgroundOptions,
-    imageSrc,
-  ]);
+  }, [value, dotsOptions, cornersSquareOptions, cornersDotOptions, imageSrc]);
 
-  return (
-    <Container
-      sx={{ padding: 0 }}
-      style={{ width: "fit-content", height: "fit-content", margin: 0 }}
-      ref={qrRef}
-    />
-  );
+  return <Container sx={{ width: "fit-content", padding: 0 }} ref={qrRef} />;
 };
 export default CustomQRCodeComponent;
