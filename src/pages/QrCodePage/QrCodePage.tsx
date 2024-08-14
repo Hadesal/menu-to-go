@@ -17,6 +17,7 @@ import { SketchPicker } from "react-color";
 import "./qrcodeStyle.css";
 import QRCodeFrameComponent from "./QRCodeFrameComponent";
 import InputFileUpload from "../../components/UploadFileInput/UploadFileInputComponent";
+import Dropzone from "../../components/Dropzone";
 interface DotsOptionsObject {
   color: String;
   type:
@@ -57,8 +58,8 @@ const QrCodePage = () => {
       type: "dot",
     });
 
-  const frameRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(logo);
+  const frameRef = useRef(null);
   const downloadImage = async () => {
     const canvas = await html2canvas(frameRef.current);
     const image = canvas.toDataURL("image/jpeg", 1.0);
@@ -67,7 +68,7 @@ const QrCodePage = () => {
     link.download = "qr-code-frame.jpeg";
     link.click();
   };
-
+  //TODO INTEGRATE REDUX AND SAVE VALUES TO REDUX
   const updateOptions = (optionName: string, value: object) => {
     switch (optionName) {
       case "dots":
@@ -169,6 +170,8 @@ const QrCodePage = () => {
 
     if (file) {
       const src = URL.createObjectURL(file);
+      console.log(file);
+      console.log(src);
       setImageSrc(src);
     }
   };
@@ -276,9 +279,14 @@ const QrCodePage = () => {
             )}
           </CardContent>
         </Card>
-        <InputFileUpload
+        {/* <InputFileUpload
           label={"Upload Logo"}
           handlefileUploaded={handlefileUploaded}
+        /> */}
+        <Dropzone
+          onFileUpload={(file) =>
+            handlefileUploaded({ target: { files: [file] } })
+          }
         />
       </Container>
 

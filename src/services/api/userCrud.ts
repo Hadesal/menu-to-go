@@ -6,6 +6,7 @@ import {
   UserUpdateData,
 } from "../../DataTypes/UserDataTypes";
 import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
+import { QrCodeStyleUpdateDTO } from "../../DataTypes/QrStyleDataType";
 
 const API_BASE_URL: string = "http://52.23.230.198:8080/api/users";
 
@@ -37,16 +38,26 @@ export const login = async (userSignInData: UserSignInData) => {
 };
 export const getUserData = async (userToken: any) => {
   try {
-    if (userToken == null) throw Error;
+    if (!userToken) throw new Error("No user token provided");
     const response = await apiService.get("/token", {
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
     });
+    console.log(response);
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    if (axios.isAxiosError(error)) {
+      const errosResponseObject = error.response;
+      const responseStatus = errosResponseObject?.status;
+      if (responseStatus === 403) {
+        throw new Error("Unauthorized: " + responseStatus);
+      } else {
+        throw new Error(errosResponseObject?.data);
+      }
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
   }
 };
 export const updateUser = async (
@@ -81,6 +92,36 @@ export const updateUserPassword = async (
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
     return errorResponseObject;
+  }
+};
+
+export const createUpdateQrCode = async (
+  userId: string,
+  qrStyleDTO: QrCodeStyleUpdateDTO,
+  userToken: any
+) => {
+  try {
+    const response = await apiService.put(`/${userId}/qrstyle`, qrStyleDTO, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const responseStatus = error.response?.status;
+      if (responseStatus === 403) {
+        throw new Error(
+          "Forbidden: You do not have permission to update this QR code style."
+        );
+      } else if (responseStatus === 404) {
+        throw new Error("User not found.");
+      } else if (responseStatus === 400) {
+        throw new Error("Invalid QR Code Style data.");
+      } else {
+        throw new Error("An unexpected error occurred.");
+      }
+    } else {
+      throw new Error("An unexpected error occurred.");
+    }
   }
 };
 export const forgetPassword = async (email: string) => {

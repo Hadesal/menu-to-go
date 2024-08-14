@@ -5,11 +5,13 @@ import {
   getUserById,
   deleteUser,
   updateUserPassword,
+  createUpdateQrCode,
 } from "../../services/api/userCrud";
 import {
   UpdatePasswordDataType,
   UserUpdateData,
 } from "../../DataTypes/UserDataTypes";
+import { QrCodeStyleUpdateDTO } from "../../DataTypes/QrStyleDataType";
 
 export interface UserState {
   userList: any[];
@@ -106,7 +108,26 @@ export const userDelete = createAsyncThunk(
     }
   }
 );
-
+export const createOrUpdateQrCode = createAsyncThunk(
+  "user/createOrUpdateQrCode",
+  async (
+    {
+      userId,
+      qrCodeStyle,
+    }: { userId: string; qrCodeStyle: QrCodeStyleUpdateDTO },
+    { rejectWithValue }
+  ) => {
+    try {
+      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+      const response = await createUpdateQrCode(userId, qrCodeStyle, userToken);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data || "Error updating QR code style"
+      );
+    }
+  }
+);
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -200,6 +221,27 @@ export const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(userDelete.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createOrUpdateQrCode.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createOrUpdateQrCode.fulfilled, (state, action) => {
+        const updatedUserIndex = state.userList.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        if (updatedUserIndex !== -1) {
+          state.userList[updatedUserIndex] = {
+            ...state.userList[updatedUserIndex],
+            qrCodeStyle: action.payload.qrCodeStyle, // Assuming this is how the QR code style is stored
+          };
+        }
+        state.loading = false;
+        state.message = "QR Code Style updated successfully!";
+      })
+      .addCase(createOrUpdateQrCode.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

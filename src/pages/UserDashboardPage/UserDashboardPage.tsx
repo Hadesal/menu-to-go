@@ -196,7 +196,23 @@ export default function UserDashboardPage() {
     promptBeforeIdle: PROMPT_BEFORE_IDLE,
     throttle: CHECK_INTERVAL,
   });
+  useEffect(() => {
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchAllData(dispatch);
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        localStorage.removeItem("userToken");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchDataAndHandleLoading();
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       setRemaining(Math.ceil(getRemainingTime() / 1000));
@@ -223,20 +239,7 @@ export default function UserDashboardPage() {
       setShowDeleteDialog(true);
     }
   }, [userData?.verified, userData?.createdAt]);
-  useEffect(() => {
-    const fetchDataAndHandleLoading = async () => {
-      setLoading(true);
-      try {
-        await fetchAllData(dispatch);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        //setLoading(false);
-      }
-    };
 
-    fetchDataAndHandleLoading();
-  }, []);
   useEffect(() => {
     if (restaurantList.length < 1) {
       setUserDetailsisOpen(true);
