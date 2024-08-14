@@ -140,10 +140,10 @@ const ProfilePage = () => {
             sx={{ padding: "2rem 1rem", borderRadius: "15px" }}
           >
             {activeTab === "profileDetails" && (
-              <ProfileDetailsSection setActiveTab={setActiveTab} />
+              <ProfileDetailsSection />
             )}
             {activeTab === "changePassword" && (
-              <ChangePasswordSection setActiveTab={setActiveTab} />
+              <ChangePasswordSection  />
             )}
             {/* {activeTab === "edit" && (
               <EditProfileDetailsSection setActiveTab={setActiveTab} />

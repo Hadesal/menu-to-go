@@ -1,52 +1,94 @@
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import {
   Alert,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
-  Divider,
   Snackbar,
-  TextField,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ChangePasswordDataType } from "../../DataTypes/UserDataTypes";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { userUpdatePassword } from "../../redux/slices/userSlice";
-import CheckIcon from "@mui/icons-material/Check";
-import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import { ChangePasswordDataType } from "../../DataTypes/UserDataTypes";
+import { userUpdatePassword } from "../../redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 
-const ChangePasswordSection = ({
-  setActiveTab,
-}: {
-  setActiveTab: Dispatch<SetStateAction<String>>;
-}) => {
-  const { userList } = useAppSelector((state) => state.userData);
+const ChangePasswordSection = () => {
+  const { userList, loading } = useAppSelector((state) => state.userData);
   const userData = userList[0];
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
+
+  // Separate state for form data and errors
   const [formData, setFormData] = useState<ChangePasswordDataType>({
     currentPassword: "",
     newPassword: "",
   });
-  const [severity, setSeverity] = useState<any>("");
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const [severity, setSeverity] = useState<
+    "success" | "warning" | "error" | "info"
+  >("info");
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
-  useEffect(() => {}, [userList]);
+
+  // Handle input field changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevValues) => ({
-      ...prevValues,
+
+    // Update form data
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
+
+    if (value.length > 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
+    } else
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]:
+          name === "currentPassword"
+            ? "Please enter current password"
+            : "Please enter new password",
+      }));
   };
 
+  // Validate form fields and return error messages
+  const validatePasswordForm = () => {
+    const validationErrors: { [key: string]: string } = {};
+
+    if (formData.currentPassword.length === 0) {
+      validationErrors.currentPassword = "Please enter current password";
+    }
+
+    if (formData.newPassword.length === 0) {
+      validationErrors.newPassword = "Please enter new password";
+    }
+
+    return validationErrors;
+  };
+
+  // Handle form submission
   const handleSave = () => {
+    const passwordErrors = validatePasswordForm();
+
+    // If there are validation errors, update state and exit
+    if (Object.keys(passwordErrors).length > 0) {
+      setErrors(passwordErrors);
+      return;
+    }
+
+    // Proceed with password update
     dispatch(
       userUpdatePassword({
         updatePasswordObject: formData,
@@ -54,73 +96,69 @@ const ChangePasswordSection = ({
       })
     ).then((value) => {
       const response = value.payload;
+
+      // Handle API response
       if (response?.body) {
         setToastMessage(response.body);
         setSeverity("success");
-        setShowToast(true);
-        setActiveTab("profileDetails");
+        onReset();
       } else if (response?.message) {
         setToastMessage(response.message);
         setSeverity("warning");
-        setShowToast(true);
       }
+      setShowToast(true);
     });
   };
-  const onCancel = () => {
-    setActiveTab("profileDetails");
+
+  // Reset form data and errors
+  const onReset = () => {
+    setFormData({
+      currentPassword: "",
+      newPassword: "",
+    });
+    setErrors({});
   };
+
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showToast}
         autoHideDuration={6000}
-        onClose={() => {
-          setShowToast(false);
-        }}
+        onClose={() => setShowToast(false)}
       >
         <Alert
-          icon={
-            severity === "error" ? (
-              <ErrorOutlineOutlinedIcon fontSize="inherit" />
-            ) : severity === "success" ? (
-              <CheckIcon fontSize="inherit" />
-            ) : (
-              <WarningAmberOutlinedIcon fontSize="inherit" />
-            )
-          }
+          onClose={() => setShowToast(false)}
           severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
         >
           {toastMessage}
         </Alert>
       </Snackbar>
+
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
           marginBottom: "1rem",
+          display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          width: "100%",
         }}
       >
-        <Typography variant="h5"> {getString("changePassword")}</Typography>
+        <Typography variant="h5">{getString("changePassword")}</Typography>
       </Container>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <Typography variant="subtitle1" sx={{ width: "15%", flexShrink: 0 }}>
+
+      <Container sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <Typography variant="subtitle1" sx={{ flexShrink: 0 }}>
           {getString("oldPassword")} :
         </Typography>
         <InputComponent
@@ -128,23 +166,19 @@ const ChangePasswordSection = ({
           id="currentPasswordField"
           type="password"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          value={formData.currentPassword as string}
+          onChange={handleInputChange}
+          error={!!errors.currentPassword}
+          helperText={errors.currentPassword}
+          textFieldStyle={{ width: "100%" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={formData.currentPassword as string}
-          onChange={handleInputChange}
         />
       </Container>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <Typography variant="subtitle1" sx={{ width: "15%", flexShrink: 0 }}>
+
+      <Container sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <Typography variant="subtitle1" sx={{ flexShrink: 0 }}>
           {getString("newPassword")} :
         </Typography>
         <InputComponent
@@ -152,32 +186,24 @@ const ChangePasswordSection = ({
           id="newPasswordField"
           type="password"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          value={formData.newPassword as string}
+          onChange={handleInputChange}
+          error={!!errors.newPassword}
+          helperText={errors.newPassword}
+          textFieldStyle={{ width: "100%" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={formData.newPassword as string}
-          onChange={handleInputChange}
         />
       </Container>
-      <Container
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "end",
-          alignItems: "center",
-          padding: 0,
-          marginTop: 2,
-        }}
-      >
+
+      <Container sx={{ display: "flex", justifyContent: "end", marginTop: 2 }}>
         <Button
-          sx={{ borderRadius: "1rem", marginRight: "2rem" }}
+          sx={{ borderRadius: "1rem", marginRight: "1rem" }}
           variant="outlined"
-          onClick={onCancel}
-          startIcon={<CloseOutlinedIcon />}
+          onClick={onReset}
         >
-          {getString("cancel")}
+          Reset
         </Button>
         <Button
           sx={{
@@ -187,15 +213,13 @@ const ChangePasswordSection = ({
             "&:hover": {
               backgroundColor: "transparent",
               borderColor: "var(--primary-color)",
-              //boxShadow: "none",
               color: "var(--primary-color)",
             },
           }}
           variant="outlined"
-          startIcon={<DoneOutlineOutlinedIcon />}
           onClick={handleSave}
         >
-          {getString("save")}
+          Change Password
         </Button>
       </Container>
     </Box>

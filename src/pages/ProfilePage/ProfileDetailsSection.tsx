@@ -1,16 +1,12 @@
-import { Box, Button, Container, Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useAppSelector } from "../../utils/hooks";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import { useAppSelector } from "../../utils/hooks";
 import EditProfileDetailsSection from "./EditProfileDetailsSection";
 
-const ProfileDetailsSection = ({
-  setActiveTab,
-}: {
-  setActiveTab: Dispatch<SetStateAction<String>>;
-}) => {
+const ProfileDetailsSection = () => {
   const { userList } = useAppSelector((state) => state.userData);
   const userData = userList[0];
   const { t } = useTranslation();
