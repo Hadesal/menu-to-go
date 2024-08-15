@@ -210,6 +210,7 @@ const ProductDetailsAccordion = ({
     setItems(updatedItems);
     onItemsChange(updatedItems);
   };
+  
   const handleVariantItemChange = (
     index: number,
     itemData: { name: string; price: number }
@@ -389,24 +390,28 @@ const ProductDetailsAccordion = ({
             </NestedAccordion>
           </>
         )}
-        {items.map((item, index) => {
-          const { nameError, priceError } = getItemError(index, false);
-          return (
-            <ProductDetailsAccordionItem
-              key={index}
-              onDelete={() => handleDeleteItem(index, false)}
-              onItemChange={(itemData) =>
-                handleItemChange(index, itemData, false)
-              }
-              namePlaceHolder={namePlaceHolder}
-              showPrice={showPrice}
-              name={item.name}
-              price={item.price as number}
-              nameError={nameError}
-              priceError={priceError}
-            />
-          );
-        })}
+        {!isVariant && (
+          <>
+            {items.map((item, index) => {
+              const { nameError, priceError } = getItemError(index);
+              return (
+                <ProductDetailsAccordionItem
+                  key={index}
+                  onDelete={() => handleDeleteItem(index, false)}
+                  onItemChange={(itemData) =>
+                    handleItemChange(index, itemData)
+                  }
+                  namePlaceHolder={namePlaceHolder}
+                  showPrice={showPrice}
+                  name={item.name}
+                  price={item.price as number}
+                  nameError={nameError}
+                  priceError={priceError}
+                />
+              );
+            })}
+          </>
+        )}
       </MainAccordionDetails>
     </MainAccordion>
   );
