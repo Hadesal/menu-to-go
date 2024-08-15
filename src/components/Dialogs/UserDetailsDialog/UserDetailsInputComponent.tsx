@@ -42,8 +42,8 @@ const UserDetailsInputComponent = ({
         ...prevState,
         restaurantName: restaurantList.length > 0 ? restaurantList[0].name : "",
         country:
-          userData?.billingData.country !== ""
-            ? userData?.billingData.country
+          userData?.billingData?.country !== ""
+            ? userData?.billingData?.country
             : "",
         currency: userData?.currency !== "" ? userData?.currency : "",
       };
@@ -52,7 +52,7 @@ const UserDetailsInputComponent = ({
   const handleUserDetails = () => {
     dispatch(
       addRestaurant({
-        restaurant: { name: userDetails.restaurantName, table: [] },
+        restaurant: { name: userDetails?.restaurantName, table: [] },
       })
     );
     dispatch(

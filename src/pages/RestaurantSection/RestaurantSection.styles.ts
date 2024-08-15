@@ -1,7 +1,11 @@
 const styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
-  paper: { padding: 3, borderRadius: "20px" },
+  paper: {
+    padding: 3,
+    borderRadius: "20px",
+    boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
+  },
   searchField: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {

@@ -44,8 +44,9 @@ import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 import UserDetailsInputComponent from "../../components/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
-import CategoryPage from "../CategoryPage/CategoryPage";
 import { userDelete } from "../../redux/slices/userSlice";
+import QrCodePage from "../QrCodePage/QrCodePage";
+import ProfilePage from "../ProfilePage/ProfilePage";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
@@ -163,7 +164,13 @@ export default function UserDashboardPage() {
     localStorage.removeItem("userToken");
     localStorage.removeItem("expireTime");
   };
-
+  const handleIfTokenNotExists = () => {
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+      navigate("/login");
+      dispatch(resetActiveTab());
+    }
+  };
   const handleLogoutDialogCancel = () => {
     setShowLogoutDialog(false);
   };
@@ -195,7 +202,24 @@ export default function UserDashboardPage() {
     promptBeforeIdle: PROMPT_BEFORE_IDLE,
     throttle: CHECK_INTERVAL,
   });
+  useEffect(() => {
+    handleIfTokenNotExists();
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchAllData(dispatch);
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        localStorage.removeItem("userToken");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchDataAndHandleLoading();
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       setRemaining(Math.ceil(getRemainingTime() / 1000));
@@ -212,7 +236,7 @@ export default function UserDashboardPage() {
     const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
     if (daysDifference >= 3) {
       if (userData?.verified === false) {
-        console.log("Account should be deleted due to lack of verification.");
+        console.log("Account is being deleted due to lack of verification.");
         dispatch(userDelete(userData.id));
         navigate("/login");
       }
@@ -222,20 +246,7 @@ export default function UserDashboardPage() {
       setShowDeleteDialog(true);
     }
   }, [userData?.verified, userData?.createdAt]);
-  useEffect(() => {
-    const fetchDataAndHandleLoading = async () => {
-      setLoading(true);
-      try {
-        await fetchAllData(dispatch);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        //setLoading(false);
-      }
-    };
 
-    fetchDataAndHandleLoading();
-  }, []);
   useEffect(() => {
     if (restaurantList.length < 1) {
       setUserDetailsisOpen(true);
@@ -372,7 +383,8 @@ export default function UserDashboardPage() {
                   <MenuItem
                     key={option.id}
                     onClick={() => {
-                      navigate(`/${option.id}`);
+                      dispatch(setActiveTab(option.id));
+                      setAnchorElProfile(null);
                     }}
                   >
                     {option.optionName}
@@ -522,9 +534,10 @@ export default function UserDashboardPage() {
         {activeTab === "restaurant" && (
           <RestaurantSection label={getString("restaurant")} />
         )}
+        {activeTab === "myprofile" && <ProfilePage />}
         {/* {activeTab === "categories" && <CategoryPage />} */}
         {activeTab === "templates" && <h1> Templates view</h1>}
-        {activeTab === "generateQrCode" && <h1> Generate qr code view</h1>}
+        {activeTab === "generateQrCode" && <QrCodePage />}
         {activeTab === "feedback" && <FeedbackPage />}
         {activeTab === "contactUs" && <ContactPage />}
       </Box>

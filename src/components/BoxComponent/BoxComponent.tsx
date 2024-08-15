@@ -9,25 +9,21 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
-import {
-  addRestaurantData,
-  RestaurantData,
-} from "../../DataTypes/RestaurantObject";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import Styles from "../../DataTypes/StylesTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
-import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import ItemsGridView from "../Views/ItemsGridView";
 import ItemsListView from "../Views/ItemsListView"; // Make sure this import is correct
 import { useAppSelector } from "../../utils/hooks";
+import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 
 interface BoxComponentProps {
   items: RestaurantData[];
   styles: Styles;
-  editFunction: (item: ProductData) => void;
-  deleteFunction: (item: ProductData) => void;
-  addFunction: (item: ProductData) => void;
+  editFunction: (item: any) => void;
+  deleteFunction: (item: any) => void;
+  addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
@@ -54,7 +50,7 @@ const BoxComponent = ({
   const { t } = useTranslation();
   const getString = t;
 
-  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -113,7 +109,7 @@ const BoxComponent = ({
               variant="outlined"
               color="primary"
               onClick={handleClickOpen}
-              disabled={product && !selectedCategory.name}
+              disabled={product && !selectedCategory?.name}
             >
               Add
             </Button>

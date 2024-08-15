@@ -25,6 +25,7 @@
   "save": "Save",
   "profile": "Profile",
   "address": "Address",
+  "qrCodePageTitle": "Generate QR Code",
   "city": "City",
   "zipCode": "Zip Code",
   "taxId": "Tax ID",
@@ -78,5 +79,18 @@
   "categoryEmptyStateInfo": "Start by adding a new categories.",
   "productEmptyStateTitle": "You don't have any products.",
   "productEmptyStateInfo": "Start by adding a new product.",
-  "productDeleteText": "Are you sure you want to permanently delete product {{productName}}?"
+  "productDeleteText": "Are you sure you want to permanently delete product {{productName}}?",
+  "noDataChanged": "No data has been changed.",
+  "dotsStyle": "Dots Style",
+  "cornerSquareStyle": "Corner Square Style",
+  "cornersDotsStyle": "Corners Dots Style",
+  "qrStyle": "QR Style",
+  "download": "Download",
+  "menu": "Menu",
+  "to-go": "-To-Go",
+  "helpUsToImprove": "Help us to improve",
+  "pleaseTellUsInFewWords": "Please tell us in few Words",
+  "feedBack": "We'd love your feedback on your experience on",
+  "experienceQuestion": "How was your experience?",
+  "reset": "Reset"
 }

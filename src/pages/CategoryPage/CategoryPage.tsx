@@ -18,30 +18,30 @@ import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "../../components/BoxComponent/categoryBoxComponent";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import {
-  addCategory,
   clearSuccessMessage,
+  setSelectedRestaurant,
+  clearErrorMessage,
+} from "../../redux/slices/restaurantsSlice";
+import {
+  createProduct as addProduct,
+  modifyProduct as editProduct,
+  removeProduct as deleteProduct,
+} from "../../redux/slices/productSlice";
+import {
+  addCategory,
   deleteCategory,
   setSelectedCategory,
-  setSelectedRestaurant,
   updateCategory,
-  clearErrorMessage,
-  deleteProduct,
-  addProduct,
-  editProduct,
-} from "../../redux/slices/restaurantsSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+} from "../../redux/slices/categorySlice";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import Styles from "./CategorySection.styles";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
-  const {
-    selectedRestaurant,
-    selectedCategory,
-    loading,
-    successMessage,
-    error,
-  } = useAppSelector((state) => state.restaurantsData);
-
+  const { selectedRestaurant, loading, successMessage, error } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
@@ -70,14 +70,14 @@ export default function CategoryPage() {
   }, []);
 
   const handleAddCategory = (category: CategoryData) => {
-    dispatch(addCategory({ restaurantId: selectedRestaurant.id, category }));
+    dispatch(addCategory({ restaurantId: selectedRestaurant?.id, category }));
   };
 
   const handleEditCategory = (category: CategoryData) => {
     dispatch(
       updateCategory({
-        restaurantId: selectedRestaurant.id,
-        categoryId: selectedCategory.id,
+        restaurantId: selectedRestaurant?.id,
+        categoryId: selectedCategory?.id,
         category,
       })
     );
@@ -86,7 +86,7 @@ export default function CategoryPage() {
   const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
       deleteCategory({
-        restaurantId: selectedRestaurant.id,
+        restaurantId: selectedRestaurant?.id,
         categoryId: category.id,
       })
     );
@@ -95,8 +95,7 @@ export default function CategoryPage() {
   const handleAddProduct = (product: ProductData) => {
     dispatch(
       addProduct({
-        restaurantId: selectedRestaurant.id,
-        categoryId: selectedCategory.id,
+        categoryId: selectedCategory?.id,
         product: product,
       })
     );
@@ -104,8 +103,7 @@ export default function CategoryPage() {
   const handleEditProduct = (product: ProductData) => {
     dispatch(
       editProduct({
-        restaurantId: selectedRestaurant.id,
-        categoryId: selectedCategory.id,
+        categoryId: selectedCategory?.id,
         productId: product.id as string,
         updatedProduct: product,
       })
@@ -114,8 +112,7 @@ export default function CategoryPage() {
   const handleDeleteProduct = (product: { id: string }) => {
     dispatch(
       deleteProduct({
-        restaurantId: selectedRestaurant.id,
-        categoryId: selectedCategory.id,
+        categoryId: selectedCategory?.id,
         productId: product.id,
       })
     );
@@ -202,7 +199,7 @@ export default function CategoryPage() {
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
           </IconButton>
-          <Typography variant="h5">{selectedRestaurant.name}</Typography>
+          <Typography variant="h5">{selectedRestaurant?.name}</Typography>
         </Box>
         <Button sx={Styles.previewMenu} variant="contained">
           {getString("categoryPagePreviewMenuText")}
@@ -233,9 +230,9 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedCategory.products}
+            items={selectedCategory?.products}
             addFunction={handleAddProduct}
-            editFunction={handleEditProduct}  // Passed here
+            editFunction={handleEditProduct}
             deleteFunction={handleDeleteProduct}
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}

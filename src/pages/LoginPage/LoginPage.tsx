@@ -51,7 +51,6 @@ export default function LoginPage() {
     const query = new URLSearchParams(window.location.search);
     const token = query.get("token");
     if (token) {
-      console.log(token);
       setPathToken(token);
       setIsResetPasswordOpen(true);
     }
