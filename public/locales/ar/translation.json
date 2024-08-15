@@ -70,5 +70,6 @@
   "categoryEmptyStateTitle": "قائمة الفئات الخاصة بك فارغة.",
   "categoryEmptyStateInfo": "ابدأ بإضافة فئات جديدة.",
   "productEmptyStateTitle": "ليس لديك أي منتجات.",
-  "productEmptyStateInfo": "ابدأ بإضافة منتج جديد."
+  "productEmptyStateInfo": "ابدأ بإضافة منتج جديد.",
+  "reset": "إعادة تعيين"
 }

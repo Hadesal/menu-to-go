@@ -51,22 +51,22 @@ export const getUserData = async (userToken: any) => {
 };
 export const updateUser = async (
   updatedUser: UserUpdateData,
-  userId: String,
-  userToken: any
+  userId: string
 ) => {
   try {
-    const response = await apiService.put("/" + userId, updatedUser, {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+    const response = await apiService.put(`/${userId}`, updatedUser, {
       headers: { Authorization: `Bearer ${userToken.token}` },
     });
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 export const updateUserPassword = async (
   updatePasswordObject: UpdatePasswordDataType,
-  userId: String,
+  userId: string,
   token: any
 ) => {
   try {

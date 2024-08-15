@@ -373,9 +373,8 @@ export default function UserDashboardPage() {
                   <MenuItem
                     key={option.id}
                     onClick={() => {
-                      console.log("Profile");
                       dispatch(setActiveTab(option.id));
-                      //navigate(`/${option.id}`);
+                      setAnchorElProfile(null)
                     }}
                   >
                     {option.optionName}

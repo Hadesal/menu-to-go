@@ -70,5 +70,6 @@
   "categoryEmptyStateTitle": "Votre liste de catégories est vide.",
   "categoryEmptyStateInfo": "Commencez par ajouter une nouvelle catégorie.",
   "productEmptyStateTitle": "Vous n'avez aucun produit.",
-  "productEmptyStateInfo": "Commencez par ajouter un nouveau produit."
+  "productEmptyStateInfo": "Commencez par ajouter un nouveau produit.",
+  "reset": "Réinitialiser"
 }

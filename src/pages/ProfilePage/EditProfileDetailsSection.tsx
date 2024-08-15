@@ -1,6 +1,15 @@
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -16,15 +25,20 @@ const EditProfileDetailsSection = ({
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
-  const { userList } = useAppSelector((state) => state.userData);
+  const { userList, loading } = useAppSelector((state) => state.userData);
   const userData = userList[0];
   const [formData, setFormData] = useState<UserUpdateData>(userData);
+  const [severity, setSeverity] = useState<
+    "success" | "warning" | "error" | "info"
+  >("info");
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>("");
+
   useEffect(() => {
     setFormData(userData);
   }, [userData]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(e.target.name);
     if (name === "phoneNumber") {
       setFormData((prevValue) => ({
         ...prevValue,
@@ -53,13 +67,31 @@ const EditProfileDetailsSection = ({
 
   const onSave = () => {
     if (isFormDataChanged(formData, userData)) {
+      if (formData.name.length === 0) {
+        setToastMessage("Data has not been changed");
+        setShowToast(true);
+        setSeverity("warning");
+        return;
+      }
       dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
-        () => {
-          setIsEditing(false);
+        (value) => {
+          const response = value.payload;
+          // Handle API response
+          if (response?.body) {
+            setToastMessage(response.body);
+            setSeverity("success");
+          } else if (response?.message) {
+            setToastMessage(response.message);
+            setSeverity("warning");
+          }
+          setShowToast(true);
         }
       );
     } else {
-      setIsEditing(false);
+      setToastMessage("Data has not been changed");
+      setShowToast(true);
+      setSeverity("warning");
+      return;
     }
   };
 
@@ -69,6 +101,30 @@ const EditProfileDetailsSection = ({
 
   return (
     <Box>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => setShowToast(false)}
+      >
+        <Alert
+          onClose={() => setShowToast(false)}
+          severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
       <Container
         sx={{
           display: "flex",
@@ -81,15 +137,13 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
-          {getString("userName")} :
-        </Typography>
+        <Typography variant="subtitle1">{getString("userName")} :</Typography>
         <InputComponent
           name="name"
           id="nameField"
@@ -105,13 +159,13 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+        <Typography variant="subtitle1">
           {getString("email")}
           {" :"}
         </Typography>
@@ -131,13 +185,13 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
+        <Typography variant="subtitle1">
           {getString("phonenumber")}
           {" :"}
         </Typography>

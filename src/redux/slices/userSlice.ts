@@ -47,9 +47,8 @@ export const userUpdate = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 
-      const response = await updateUser(updatedUser, userId, userToken);
+      const response = await updateUser(updatedUser, userId);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error updating user");

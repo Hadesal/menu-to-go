@@ -70,5 +70,7 @@
   "categoryEmptyStateTitle": "Tu lista de categorías está vacía.",
   "categoryEmptyStateInfo": "Comienza agregando una nueva categoría.",
   "productEmptyStateTitle": "No tienes ningún producto.",
-  "productEmptyStateInfo": "Comienza agregando un nuevo producto."
+  "productEmptyStateInfo": "Comienza agregando un nuevo producto.",
+  "reset": "Restablecer"
+
 }

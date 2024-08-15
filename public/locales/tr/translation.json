@@ -47,5 +47,6 @@
   "categoryEmptyStateTitle": "Kategori listeniz boş.",
   "categoryEmptyStateInfo": "Yeni bir kategori ekleyerek başlayın.",
   "productEmptyStateTitle": "Hiç ürününüz yok.",
-  "productEmptyStateInfo": "Yeni bir ürün ekleyerek başlayın."
+  "productEmptyStateInfo": "Yeni bir ürün ekleyerek başlayın.",
+  "reset": "Sıfırla"
 }
