@@ -4,7 +4,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import CategoriesCardImg from "../../../assets/categories-card.svg";
 import ContactCardImg from "../../../assets/contactus-card.svg";
 import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
 import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
