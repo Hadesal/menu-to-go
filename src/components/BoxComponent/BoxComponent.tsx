@@ -12,19 +12,16 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
-import {
-  addRestaurantData,
-  RestaurantData,
-} from "../../DataTypes/RestaurantObject";
+import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import { useTranslation } from "react-i18next";
 
 interface BoxComponentProps {
   items: RestaurantData[];
   styles: Styles;
-  editFunction: (item: RestaurantData) => void;
-  deleteFunction: (item: RestaurantData) => void;
-  addFunction: (item: addRestaurantData) => void;
+  editFunction: (item: any) => void;
+  deleteFunction: (item: any) => void;
+  addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;

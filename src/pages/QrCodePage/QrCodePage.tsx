@@ -8,18 +8,23 @@ import {
   Select,
   Stack,
   Typography,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "../../assets/logo.svg";
 import html2canvas from "html2canvas";
 import { SketchPicker } from "react-color";
 import "./qrcodeStyle.css";
 import QRCodeFrameComponent from "./QRCodeFrameComponent";
-import InputFileUpload from "../../components/UploadFileInput/UploadFileInputComponent";
 import Dropzone from "../../components/Dropzone";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { useTranslation } from "react-i18next";
+import { createOrUpdateQrCode } from "../../redux/slices/userSlice";
+
 interface DotsOptionsObject {
-  color: String;
+  color: string;
   type:
     | "dots"
     | "rounded"
@@ -29,46 +34,99 @@ interface DotsOptionsObject {
     | "extra-rounded";
 }
 interface CornerSquareOptionsObject {
-  color: String;
+  color: string;
   type: "dot" | "square" | "extra-rounded";
 }
 interface CornerDotsOptionsObject {
-  color: String;
+  color: string;
   type: "dot" | "square";
 }
+
 const QrCodePage = () => {
-  const [urlPath, setUrlPath] = useState(
-    "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
+  const dispatch = useAppDispatch();
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
+  const { qrCodeStyle, id } = userData;
+  const { t } = useTranslation();
+  const getString = t;
+  const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = useState(false);
+  const [urlPath, setUrlPath] = useState<string>(
+    qrCodeStyle.generalUrlPath
+      ? qrCodeStyle.generalUrlPath
+      : "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
   );
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [activeColorPicker, setActiveColorPicker] = useState("");
-
-  const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>({
-    color: "#77675",
-    type: "rounded",
-  });
+  const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>(
+    qrCodeStyle?.dotsOptions
+      ? qrCodeStyle.dotsOptions
+      : {
+          color: "#77675",
+          type: "rounded",
+        }
+  );
   const [cornersSquareOptions, setCornersSquareOptions] =
-    useState<CornerSquareOptionsObject>({
-      color: "#000000",
-      type: "extra-rounded",
-    });
+    useState<CornerSquareOptionsObject>(
+      qrCodeStyle?.cornersSquareOptions
+        ? qrCodeStyle.cornersSquareOptions
+        : {
+            color: "#000000",
+            type: "extra-rounded",
+          }
+    );
   const [cornersDotOptions, setCornersDotOptions] =
-    useState<CornerDotsOptionsObject>({
-      color: "#4267b2",
-      type: "dot",
-    });
+    useState<CornerDotsOptionsObject>(
+      qrCodeStyle?.cornersDotOptions
+        ? qrCodeStyle.cornersDotOptions
+        : {
+            color: "#4267b2",
+            type: "dot",
+          }
+    );
 
-  const [imageSrc, setImageSrc] = useState(logo);
+  const [imageSrc, setImageSrc] = useState<string>(
+    qrCodeStyle?.imageSrc ? qrCodeStyle.imageSrc : logo
+  );
   const frameRef = useRef(null);
+
+  useEffect(() => {}, [userData]);
+  const handlePushNewQrStyle = () => {
+    const newQrStyleObject = {
+      dotsOptions,
+      cornersSquareOptions,
+      cornersDotOptions,
+      imageSrc,
+      generalUrlPath: urlPath,
+    };
+    const hasChanged =
+      JSON.stringify(newQrStyleObject.dotsOptions) !==
+        JSON.stringify(qrCodeStyle.dotsOptions) ||
+      JSON.stringify(newQrStyleObject.cornersSquareOptions) !==
+        JSON.stringify(qrCodeStyle.cornersSquareOptions) ||
+      JSON.stringify(newQrStyleObject.cornersDotOptions) !==
+        JSON.stringify(qrCodeStyle.cornersDotOptions) ||
+      newQrStyleObject.imageSrc !== qrCodeStyle.imageSrc ||
+      newQrStyleObject.generalUrlPath !== urlPath;
+    if (!hasChanged) {
+      setErrorMessage(getString("noDataChanged"));
+      setOpen(true);
+
+      return;
+    }
+
+    dispatch(
+      createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
+    );
+  };
   const downloadImage = async () => {
     const canvas = await html2canvas(frameRef.current);
     const image = canvas.toDataURL("image/jpeg", 1.0);
     const link = document.createElement("a");
     link.href = image;
-    link.download = "qr-code-frame.jpeg";
+    link.download = "qr-code.jpeg";
     link.click();
   };
-  //TODO INTEGRATE REDUX AND SAVE VALUES TO REDUX
   const updateOptions = (optionName: string, value: object) => {
     switch (optionName) {
       case "dots":
@@ -83,6 +141,13 @@ const QrCodePage = () => {
       default:
         break;
     }
+  };
+
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   const toggleColorPicker = (optionName: string) => {
@@ -169,10 +234,11 @@ const QrCodePage = () => {
     const file = e.target.files[0];
 
     if (file) {
-      const src = URL.createObjectURL(file);
-      console.log(file);
-      console.log(src);
-      setImageSrc(src);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrc(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -185,6 +251,16 @@ const QrCodePage = () => {
         margin: "0 auto",
       }}
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       <Container
         className="qrCodeStyleCardsContainer"
         sx={{
@@ -200,7 +276,7 @@ const QrCodePage = () => {
           variant="h5"
           sx={{ width: "fit-content", margin: 1 }}
         >
-          Qr Style
+          {getString("qrStyle")}
         </Typography>
         {/**Dots Style Card */}
         <Card
@@ -218,7 +294,7 @@ const QrCodePage = () => {
               "dots",
               dotsOptions,
               setDotsOptions,
-              "Dots Style",
+              getString("dotsStyle"),
               [
                 { value: "dots", label: "Dots" },
                 { value: "rounded", label: "Rounded" },
@@ -246,7 +322,7 @@ const QrCodePage = () => {
               "cornersSquare",
               cornersSquareOptions,
               setCornersSquareOptions,
-              "Corner square Style",
+              getString("cornerSquareStyle"),
               [
                 { value: "dot", label: "dot" },
                 { value: "square", label: "square" },
@@ -271,7 +347,7 @@ const QrCodePage = () => {
               "cornersDot",
               cornersDotOptions,
               setCornersDotOptions,
-              "Corners Dots Style",
+              getString("cornersDotsStyle"),
               [
                 { value: "dot", label: "dot" },
                 { value: "square", label: "square" },
@@ -279,15 +355,27 @@ const QrCodePage = () => {
             )}
           </CardContent>
         </Card>
-        {/* <InputFileUpload
-          label={"Upload Logo"}
-          handlefileUploaded={handlefileUploaded}
-        /> */}
+
         <Dropzone
           onFileUpload={(file) =>
             handlefileUploaded({ target: { files: [file] } })
           }
         />
+
+        <Button
+          variant="contained"
+          sx={{
+            justifySelf: "end",
+            alignSelf: "end",
+            margin: 2,
+            width: "200px",
+            height: "50px",
+            borderRadius: "1.5rem",
+          }}
+          onClick={handlePushNewQrStyle}
+        >
+          {getString("save")}
+        </Button>
       </Container>
 
       <Container
@@ -334,7 +422,7 @@ const QrCodePage = () => {
           }}
           onClick={downloadImage}
         >
-          Download
+          {getString("download")}
         </Button>
       </Container>
     </Stack>

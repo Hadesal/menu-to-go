@@ -18,26 +18,24 @@ import BoxComponent from "../../components/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "../../components/BoxComponent/categoryBoxComponent";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import {
-  addCategory,
   clearSuccessMessage,
-  deleteCategory,
-  setSelectedCategory,
   setSelectedRestaurant,
-  updateCategory,
   clearErrorMessage,
 } from "../../redux/slices/restaurantsSlice";
+import {
+  addCategory,
+  deleteCategory,
+  setSelectedCategory,
+  updateCategory,
+} from "../../redux/slices/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 import Styles from "./CategorySection.styles";
 
 export default function CategoryPage() {
-  const {
-    selectedRestaurant,
-    selectedCategory,
-    loading,
-    successMessage,
-    error,
-  } = useAppSelector((state) => state.restaurantsData);
-
+  const { selectedRestaurant, loading, successMessage, error } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
@@ -66,14 +64,14 @@ export default function CategoryPage() {
   }, []);
 
   const handleAddCategory = (category: CategoryData) => {
-    dispatch(addCategory({ restaurantId: selectedRestaurant.id, category }));
+    dispatch(addCategory({ restaurantId: selectedRestaurant?.id, category }));
   };
 
   const handleEditCategory = (category: CategoryData) => {
     dispatch(
       updateCategory({
-        restaurantId: selectedRestaurant.id,
-        categoryId: selectedCategory.id,
+        restaurantId: selectedRestaurant?.id,
+        categoryId: selectedCategory?.id,
         category,
       })
     );
@@ -82,7 +80,7 @@ export default function CategoryPage() {
   const handleDeleteCategory = (category: { id: string }) => {
     dispatch(
       deleteCategory({
-        restaurantId: selectedRestaurant.id,
+        restaurantId: selectedRestaurant?.id,
         categoryId: category.id,
       })
     );
@@ -169,7 +167,7 @@ export default function CategoryPage() {
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
           </IconButton>
-          <Typography variant="h5">{selectedRestaurant.name}</Typography>
+          <Typography variant="h5">{selectedRestaurant?.name}</Typography>
         </Box>
         <Button sx={Styles.previewMenu} variant="contained">
           {getString("categoryPagePreviewMenuText")}
@@ -200,7 +198,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedCategory.products}
+            items={selectedCategory?.products}
             addFunction={() => {}}
             editFunction={() => {}}
             deleteFunction={() => {}}

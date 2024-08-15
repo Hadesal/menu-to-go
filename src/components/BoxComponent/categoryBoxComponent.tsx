@@ -11,7 +11,7 @@ interface CategoryBoxComponentProps {
   items: CategoryData[];
   styles: Styles;
   editFunction: (item: CategoryData) => void;
-  deleteFunction: (item) => void;
+  deleteFunction: (item: any) => void;
   addFunction: (item: CategoryData) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;

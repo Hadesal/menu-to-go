@@ -1,6 +1,5 @@
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Card,
@@ -19,11 +18,8 @@ import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../utils/hooks";
-import {
-  setSelectedCategory,
-  setSelectedRestaurant,
-} from "../../redux/slices/restaurantsSlice";
-
+import { setSelectedRestaurant } from "../../redux/slices/restaurantsSlice";
+import { setSelectedCategory } from "../../redux/slices/categorySlice";
 interface GridViewProps {
   items: any[];
   deleteFunction: (item: object) => void;
@@ -232,7 +228,7 @@ const ItemsGridView = ({
         secondaryActionText={getString("cancel")}
         primaryActionText={getString("delete")}
         title={getString("deleteConfirmText")}
-        subTitle={getString("restaurantDeleteText" ,{
+        subTitle={getString("restaurantDeleteText", {
           restaurantName: currentItem.name,
         })}
       />

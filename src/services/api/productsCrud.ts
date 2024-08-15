@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
+import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
 const API_Product_BASE_URL = "http://52.23.230.198:8080/api/categories";
 

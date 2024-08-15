@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
-import { setSelectedCategory } from "../../redux/slices/restaurantsSlice";
+import { setSelectedCategory } from "../../redux/slices/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 
@@ -41,7 +41,7 @@ const CategoryItemsListView = ({
     new Array(items.length).fill(null)
   );
 
-  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
   const dispatch = useAppDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   //const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
@@ -91,7 +91,7 @@ const CategoryItemsListView = ({
 
   return (
     <Container sx={{ ...styles.container, padding: "0 !important" }}>
-      <List sx={{...styles.categoryList , paddingBottom:0}}>
+      <List sx={{ ...styles.categoryList, paddingBottom: 0 }}>
         {items.map((item, index) => (
           <ListItem
             onClick={() => {
@@ -105,7 +105,7 @@ const CategoryItemsListView = ({
               cursor: "pointer",
               borderRadius: index === items.length - 1 ? "0 0 16px 16px" : "0",
               background:
-                selectedCategory.id === item.id
+                selectedCategory?.id === item.id
                   ? "var(--primary-color)"
                   : "initial",
             }}
@@ -120,7 +120,13 @@ const CategoryItemsListView = ({
             >
               <ListItemText
                 primary={
-                  <Box sx={{display:"flex" , flexDirection:"row", alignItems:"center"}}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <IconButton
                       sx={{
                         padding: 0.8,
@@ -134,7 +140,7 @@ const CategoryItemsListView = ({
                       <DragIndicatorIcon
                         sx={{
                           color:
-                            selectedCategory.id === item.id
+                            selectedCategory?.id === item.id
                               ? "white"
                               : "var(--primary-color)",
                         }}
@@ -146,7 +152,7 @@ const CategoryItemsListView = ({
                       variant="body1"
                       style={{
                         color:
-                          selectedCategory.id === item.id
+                          selectedCategory?.id === item.id
                             ? "white"
                             : "var(--primary-color)",
                       }}
@@ -154,12 +160,12 @@ const CategoryItemsListView = ({
                       {item.name}
                       <Typography
                         color={
-                          selectedCategory.id === item.id ? "white" : "#BCB8B1"
+                          selectedCategory?.id === item.id ? "white" : "#BCB8B1"
                         }
-                        sx={{marginLeft:1}}
+                        sx={{ marginLeft: 1 }}
                         component="span"
                       >
-                        ({item.products.length})
+                        ({item?.products?.length})
                       </Typography>
                     </Typography>
                   </Box>
@@ -179,7 +185,7 @@ const CategoryItemsListView = ({
               <MoreVertIcon
                 sx={{
                   color:
-                    selectedCategory.id === item.id
+                    selectedCategory?.id === item.id
                       ? "white"
                       : "var(--primary-color)",
                 }}
