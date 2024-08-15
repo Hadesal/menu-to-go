@@ -45,7 +45,11 @@ export const updateCategory = createAsyncThunk(
       restaurantId,
       categoryId,
       category,
-    }: { restaurantId: string; categoryId: string; category: CategoryData },
+    }: {
+      restaurantId: string;
+      categoryId: string | undefined;
+      category: CategoryData;
+    },
     { rejectWithValue }
   ) => {
     try {

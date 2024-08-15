@@ -39,7 +39,10 @@ export const fetchProducts = createAsyncThunk(
 export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (
-    { categoryId, product }: { categoryId: string; product: ProductData },
+    {
+      categoryId,
+      product,
+    }: { categoryId: string | undefined; product: ProductData },
     { rejectWithValue }
   ) => {
     try {
@@ -73,7 +76,11 @@ export const modifyProduct = createAsyncThunk(
       categoryId,
       productId,
       updatedProduct,
-    }: { categoryId: string; productId: string; updatedProduct: ProductData },
+    }: {
+      categoryId: string | undefined;
+      productId: string;
+      updatedProduct: ProductData;
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -92,7 +99,10 @@ export const modifyProduct = createAsyncThunk(
 export const removeProduct = createAsyncThunk(
   "products/removeProduct",
   async (
-    { categoryId, productId }: { categoryId: string; productId: string },
+    {
+      categoryId,
+      productId,
+    }: { categoryId: string | undefined; productId: string },
     { rejectWithValue }
   ) => {
     try {
