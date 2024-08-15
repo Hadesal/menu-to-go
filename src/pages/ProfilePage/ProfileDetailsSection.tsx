@@ -46,15 +46,13 @@ const ProfileDetailsSection = () => {
 
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography variant="subtitle1" sx={{ width: "20%", flexShrink: 0 }}>
-          {getString("userName")} :
-        </Typography>
+        <Typography variant="subtitle1">{getString("userName")} :</Typography>
         <InputComponent
           id="nameField"
           type="Name"
@@ -69,16 +67,13 @@ const ProfileDetailsSection = () => {
       </Container>
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography
-          variant="subtitle1"
-          sx={{ width: "20%", flexGrow: 0, flexShrink: 0 }}
-        >
+        <Typography variant="subtitle1">
           {getString("email")}
           {" :"}
         </Typography>
@@ -97,16 +92,13 @@ const ProfileDetailsSection = () => {
 
       <Container
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
           alignItems: "center",
-          gap: "1rem", // Optional: adjust spacing between Typography and InputComponent
+          gap: "1rem",
         }}
       >
-        <Typography
-          variant="subtitle1"
-          sx={{ width: "20%", flexGrow: 0, flexShrink: 0 }}
-        >
+        <Typography variant="subtitle1">
           {getString("phonenumber")}
           {" :"}
         </Typography>

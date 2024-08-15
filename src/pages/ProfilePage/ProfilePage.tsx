@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import BillingDetailsSection from "./BillingDataSection";
 import ChangePasswordSection from "./ChangePasswordSection";
-import EditProfileDetailsSection from "./EditProfileDetailsSection";
 import ProfileDetailsSection from "./ProfileDetailsSection";
 
 const ProfilePage = () => {
@@ -18,7 +17,7 @@ const ProfilePage = () => {
     >
       <Typography variant="h5">{getString("profile")}</Typography>
       <Divider variant="fullWidth" />
-      <Grid sx={{ margin: 0 , marginTop:"2rem !important" }} container spacing={4}>
+      <Grid sx={{ margin: 0 , marginTop:"2rem !important" , width:"100% !important" }} container spacing={4}>
         <Grid
           sx={{ paddingLeft: "0 !important", paddingTop: "0 !important" }}
           item

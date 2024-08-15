@@ -203,7 +203,7 @@ const ChangePasswordSection = () => {
           variant="outlined"
           onClick={onReset}
         >
-          Reset
+          {getString("reset")}
         </Button>
         <Button
           sx={{
@@ -219,7 +219,7 @@ const ChangePasswordSection = () => {
           variant="outlined"
           onClick={handleSave}
         >
-          Change Password
+          {getString("changePassword")}
         </Button>
       </Container>
     </Box>

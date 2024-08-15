@@ -33,7 +33,7 @@
   "personalInfo": "Persönliche Informationen",
   "editPersonalInfo": "Persönliche Informationen bearbeiten",
   "phonenumber": "Telefonnummer",
-  "profileDetailsButton": "Profildetails",
+  "profileDetailsButton": "Profilangaben",
   "changePasswordButton": "Passwort ändern",
   "companyName": "Firmenname",
   "search": "suchen",
@@ -90,5 +90,6 @@
   "helpUsToImprove": "Helfen Sie uns, uns zu verbessern",
   "pleaseTellUsInFewWords": "Bitte sagen Sie uns in wenigen Worten",
   "feedBack": "Wir würden uns über Ihr Feedback zu Ihrer Erfahrung auf",
-  "experienceQuestion": "Wie war Ihre Erfahrung?"
+  "experienceQuestion": "Wie war Ihre Erfahrung?",
+  "reset": "Zurücksetzen"
 }
