@@ -14,7 +14,6 @@ import InputComponent from "../../InputComponent/InputComponent";
 import ProductDetailsAccordion from "../ProductDetailsAccordion/ProductDetailsAccordion";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
-
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   dialogTitle: string;
@@ -216,30 +215,38 @@ const AddProductDialog = ({
     onCancelClick();
   };
 
-  const handleExtrasChange = (extras: { name: string; price: number }[]) => {
-    setDialogData((prevData) => ({
-      ...prevData,
-      details: {
-        ...prevData.details,
-        extras: extras,
-      },
-    }));
-  };
-
-  const handleIngredientsChange = (
-    ingredients: { name: string; image: string | null }[]
+  const handleExtrasChange = (
+    extras: { name: string; price?: number; image?: string | null }[]
   ) => {
     setDialogData((prevData) => ({
       ...prevData,
       details: {
         ...prevData.details,
-        ingredients: ingredients,
+        extras: extras.map((extra) => ({
+          ...extra,
+          price: extra.price ?? 0,
+        })),
+      },
+    }));
+  };
+
+  const handleIngredientsChange = (
+    ingredients: { name: string; price?: number; image?: string | null }[]
+  ) => {
+    setDialogData((prevData) => ({
+      ...prevData,
+      details: {
+        ...prevData.details,
+        ingredients: ingredients.map((ingredient) => ({
+          ...ingredient,
+          image: ingredient.image ?? "",
+        })),
       },
     }));
   };
   const handleVariantsChange = (variants: {
     name: string;
-    variants: object[];
+    variants: { name: string; price?: number; image?: string | null }[];
   }) => {
     setDialogData((prevData) => ({
       ...prevData,
@@ -247,7 +254,10 @@ const AddProductDialog = ({
         ...prevData.details,
         variants: {
           name: variants.name,
-          variantList: variants.variants,
+          variantList: variants.variants.map((variant) => ({
+            ...variant,
+            price: variant.price ?? 0,
+          })),
         },
       },
     }));
@@ -400,6 +410,7 @@ const AddProductDialog = ({
         onItemsChange={handleIngredientsChange}
         errors={ingredientsErrors}
         initialDataList={dialogData.details.ingredients}
+        isVariant={false}
       />
       <ProductDetailsAccordion
         accordionTitle="Variants"
@@ -418,6 +429,7 @@ const AddProductDialog = ({
         onItemsChange={handleExtrasChange}
         errors={extrasErrors}
         initialDataList={dialogData.details.extras}
+        isVariant={false}
       />
 
       <DialogContent sx={Styles.dialogContent}>

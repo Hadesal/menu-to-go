@@ -4,14 +4,27 @@ export interface ProductData {
   price: number;
   details: {
     detailsDescription: string;
-    extras: object[];
-    ingredients: object[];
+    extras: ExtraData[];
+    ingredients: IngredientData[];
     variants: {
       name: string;
-      variantList: object[];
+      variantList: VariantData[];
     };
   };
   isAvailable: true;
   image: string | null;
   uniqueProductOrderingName: string;
+}
+export interface ExtraData {
+  name: string;
+  price: number;
+}
+export interface IngredientData {
+  name: string;
+  price?: number;
+  image: string;
+}
+export interface VariantData {
+  name: string;
+  price: number;
 }

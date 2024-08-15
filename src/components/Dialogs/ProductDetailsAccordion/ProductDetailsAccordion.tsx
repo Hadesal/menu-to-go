@@ -28,7 +28,7 @@ interface ProductDetailsAccordionProps {
 
   isVariant: boolean;
   initialDataName?: string;
-  initialDataList: [];
+  initialDataList: object[] | [];
 }
 
 // Styled components for the main accordion
@@ -148,8 +148,8 @@ const ProductDetailsAccordion = ({
   const [expanded, setExpanded] = useState(false);
   const [variantsOptionsExpanded, setVariantsOptionsExpanded] = useState(false);
   const [newErrors, setNewErrors] = useState(errors);
-
-  const handleAddItem = () => {
+  const handleAddItem = (e: any) => {
+    e.stopPropagation();
     if (isVariant) {
       const newVariantItem = {
         ...variants,
@@ -210,7 +210,7 @@ const ProductDetailsAccordion = ({
     setItems(updatedItems);
     onItemsChange(updatedItems);
   };
-  
+
   const handleVariantItemChange = (
     index: number,
     itemData: { name: string; price: number }
@@ -286,10 +286,7 @@ const ProductDetailsAccordion = ({
               }}
               variant="outlined"
               color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAddItem();
-              }}
+              onClick={handleAddItem}
             >
               Add
             </Button>
@@ -398,9 +395,7 @@ const ProductDetailsAccordion = ({
                 <ProductDetailsAccordionItem
                   key={index}
                   onDelete={() => handleDeleteItem(index, false)}
-                  onItemChange={(itemData) =>
-                    handleItemChange(index, itemData)
-                  }
+                  onItemChange={(itemData) => handleItemChange(index, itemData)}
                   namePlaceHolder={namePlaceHolder}
                   showPrice={showPrice}
                   name={item.name}
