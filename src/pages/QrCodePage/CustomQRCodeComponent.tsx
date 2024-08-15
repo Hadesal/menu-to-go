@@ -5,7 +5,7 @@ import { Container } from "@mui/material";
 const CustomQRCodeComponent = ({
   value = "",
   size = 400,
-  margin = 10,
+  margin = 0,
   dotsOptions = {},
   cornersSquareOptions = {},
   cornersDotOptions = {},

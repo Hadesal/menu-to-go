@@ -44,7 +44,6 @@ import RestaurantSection from "../RestaurantSection/RestaurantSection";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
 import UserDetailsInputComponent from "../../components/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
-import CategoryPage from "../CategoryPage/CategoryPage";
 import { userDelete } from "../../redux/slices/userSlice";
 import QrCodePage from "../QrCodePage/QrCodePage";
 import ProfilePage from "../ProfilePage/ProfilePage";
@@ -165,7 +164,13 @@ export default function UserDashboardPage() {
     localStorage.removeItem("userToken");
     localStorage.removeItem("expireTime");
   };
-
+  const handleIfTokenNotExists = () => {
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+      navigate("/login");
+      dispatch(resetActiveTab());
+    }
+  };
   const handleLogoutDialogCancel = () => {
     setShowLogoutDialog(false);
   };
@@ -198,6 +203,7 @@ export default function UserDashboardPage() {
     throttle: CHECK_INTERVAL,
   });
   useEffect(() => {
+    handleIfTokenNotExists();
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
       try {
@@ -230,7 +236,7 @@ export default function UserDashboardPage() {
     const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
     if (daysDifference >= 3) {
       if (userData?.verified === false) {
-        console.log("Account should be deleted due to lack of verification.");
+        console.log("Account is being deleted due to lack of verification.");
         dispatch(userDelete(userData.id));
         navigate("/login");
       }
@@ -378,7 +384,7 @@ export default function UserDashboardPage() {
                     key={option.id}
                     onClick={() => {
                       dispatch(setActiveTab(option.id));
-                      setAnchorElProfile(null)
+                      setAnchorElProfile(null);
                     }}
                   >
                     {option.optionName}

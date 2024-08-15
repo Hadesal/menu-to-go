@@ -45,11 +45,10 @@ export const fetchUserData = createAsyncThunk(
 export const userUpdate = createAsyncThunk(
   "user/update",
   async (
-    { updatedUser, userId }: { updatedUser: UserUpdateData; userId: String },
+    { updatedUser, userId }: { updatedUser: UserUpdateData; userId: string },
     { rejectWithValue }
   ) => {
     try {
-
       const response = await updateUser(updatedUser, userId);
       return response;
     } catch (error: any) {
@@ -144,8 +143,6 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         action.payload.forEach((newUser) => {
-          console.log(newUser);
-
           const existingUserIndex = state.userList.findIndex(
             (user) => user.id === newUser.id
           );

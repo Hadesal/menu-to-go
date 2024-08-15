@@ -8,7 +8,6 @@ import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
 // Define your custom theme
 const theme = createTheme({
   typography: {
@@ -34,6 +33,10 @@ const theme = createTheme({
 });
 
 function App() {
+  window.history.pushState(null, null, window.location.href); // Push the current state
+  window.onpopstate = function () {
+    window.history.go(1); // On back press, go forward in the history
+  };
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>

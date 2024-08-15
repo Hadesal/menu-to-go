@@ -4,18 +4,19 @@ import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
 
 const API_Product_BASE_URL = "http://52.23.230.198:8080/api/categories";
 
-const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Product_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
 export const getAllProductsByCategoryId = async (categoryId: string) => {
   try {
-    const response = await apiService.get(`/${categoryId}/products`);
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+    const response = await apiService.get(`/${categoryId}/products`, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -25,7 +26,11 @@ export const getAllProductsByCategoryId = async (categoryId: string) => {
 
 export const addProduct = async (categoryId: string, product: ProductData) => {
   try {
-    const response = await apiService.post(`/${categoryId}/products`, product);
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+
+    const response = await apiService.post(`/${categoryId}/products`, product, {
+      headers: { Authorization: `Bearer ${userToken.token}` },
+    });
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -35,8 +40,13 @@ export const addProduct = async (categoryId: string, product: ProductData) => {
 
 export const getProductById = async (categoryId: string, productId: string) => {
   try {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+
     const response = await apiService.get(
-      `/${categoryId}/products/${productId}`
+      `/${categoryId}/products/${productId}`,
+      {
+        headers: { Authorization: `Bearer ${userToken.token}` },
+      }
     );
     return response.data;
   } catch (error: any) {
@@ -51,9 +61,14 @@ export const updateProduct = async (
   updatedProduct: ProductData
 ) => {
   try {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+
     const response = await apiService.put(
       `/${categoryId}/products/${productId}`,
-      updatedProduct
+      updatedProduct,
+      {
+        headers: { Authorization: `Bearer ${userToken.token}` },
+      }
     );
     return response.data;
   } catch (error: any) {
@@ -64,8 +79,13 @@ export const updateProduct = async (
 
 export const deleteProduct = async (categoryId: string, productId: string) => {
   try {
+    const userToken = JSON.parse(localStorage.getItem("userToken") as string);
+
     const response = await apiService.delete(
-      `/${categoryId}/products/${productId}`
+      `/${categoryId}/products/${productId}`,
+      {
+        headers: { Authorization: `Bearer ${userToken.token}` },
+      }
     );
     return response.data;
   } catch (error: any) {

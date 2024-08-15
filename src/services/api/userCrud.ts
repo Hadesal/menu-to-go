@@ -44,7 +44,6 @@ export const getUserData = async (userToken: any) => {
         Authorization: `Bearer ${userToken}`,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

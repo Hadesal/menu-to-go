@@ -2,77 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
+  background: #ffffff;
   width: fit-content;
-  padding: 20px;
-  margin: 3;
+  padding: inherit;
   border: 2px dashed #aaa;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.qr-code-frame-elegant {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  background: #f9f9f9;
-  padding: 20px;
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.qr-code-frame-modern {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  background: #e0e0e0;
-  padding: 15px;
-  margin: 10px;
-  border: none;
-  border-radius: 8px;
-}
-
-.qr-code-frame-bold {
-  display: flex;
-  justify-content: center;
-  width: fit-content;
-  align-items: center;
-  background: #0047ab; /* Navy Blue */
-  color: #ffffff;
-  padding: 25px;
-  margin: 10px;
-  border: 3px solid #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.qr-code-frame-minimalist {
-  display: flex;
-  justify-content: center;
-  width: fit-content;
-  align-items: center;
-  background: transparent;
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid #666;
-  border-radius: 5px;
-}
-
-.qr-code-frame-vintage {
-  display: flex;
-  justify-content: center;
-  width: fit-content;
-  align-items: center;
-  background: #f7f1e3;
-  padding: 20px;
-  margin: 8px;
-  border: 1px solid #d3c0a8;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(102, 51, 0, 0.1);
 }
 
 .dropzone {
