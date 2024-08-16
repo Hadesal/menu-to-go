@@ -32,10 +32,12 @@ import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust th
 import Styles from "./CategorySection.styles";
 
 export default function CategoryPage() {
-  const { selectedRestaurant, loading, successMessage, error } = useAppSelector(
+  const { selectedRestaurant, loading } = useAppSelector(
     (state) => state.restaurantsData
   );
-  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
+  const { selectedCategory, successMessage, error } = useAppSelector(
+    (state) => state.categoriesData
+  );
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
