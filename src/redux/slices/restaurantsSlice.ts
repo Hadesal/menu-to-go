@@ -126,7 +126,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message || action.payload;
+        state.error = action?.payload.message || action.payload;
       })
       .addCase(editRestaurant.pending, (state) => {
         state.loading = true;

@@ -24,7 +24,10 @@ export const getAllProductsByCategoryId = async (categoryId: string) => {
   }
 };
 
-export const addProduct = async (categoryId: string, product: ProductData) => {
+export const addProduct = async (
+  categoryId: string | undefined,
+  product: ProductData
+) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 
@@ -33,8 +36,8 @@ export const addProduct = async (categoryId: string, product: ProductData) => {
     });
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 
@@ -56,7 +59,7 @@ export const getProductById = async (categoryId: string, productId: string) => {
 };
 
 export const updateProduct = async (
-  categoryId: string,
+  categoryId: string | undefined,
   productId: string,
   updatedProduct: ProductData
 ) => {
@@ -72,12 +75,15 @@ export const updateProduct = async (
     );
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };
 
-export const deleteProduct = async (categoryId: string, productId: string) => {
+export const deleteProduct = async (
+  categoryId: string | undefined,
+  productId: string
+) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 
@@ -89,7 +95,7 @@ export const deleteProduct = async (categoryId: string, productId: string) => {
     );
     return response.data;
   } catch (error: any) {
-    const errorResponseObject: ErrorResponseObject = error.response.data;
-    return errorResponseObject;
+    const errorResponseObject: ErrorResponseObject = error;
+    return Promise.reject(errorResponseObject);
   }
 };

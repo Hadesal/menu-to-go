@@ -53,7 +53,7 @@ export const getAllRestaurantsByUserId = async (userId: string) => {
 
 export const updateRestaurant = async (
   updatedRestaurant: RestaurantData,
-  restaurantId: string
+  restaurantId: string | undefined
 ) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);

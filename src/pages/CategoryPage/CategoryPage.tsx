@@ -23,13 +23,19 @@ import {
   clearErrorMessage,
 } from "../../redux/slices/restaurantsSlice";
 import {
+  createProduct as addProduct,
+  modifyProduct as editProduct,
+  removeProduct as deleteProduct,
+} from "../../redux/slices/productSlice";
+import {
   addCategory,
   deleteCategory,
   setSelectedCategory,
   updateCategory,
 } from "../../redux/slices/categorySlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import Styles from "./CategorySection.styles";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
   const { selectedRestaurant, loading } = useAppSelector(
@@ -92,6 +98,33 @@ export default function CategoryPage() {
       })
     );
   };
+
+  const handleAddProduct = (product: ProductData) => {
+    dispatch(
+      addProduct({
+        categoryId: selectedCategory?.id,
+        product: product,
+      })
+    );
+  };
+  const handleEditProduct = (product: ProductData) => {
+    dispatch(
+      editProduct({
+        categoryId: selectedCategory?.id,
+        productId: product.id as string,
+        updatedProduct: product,
+      })
+    );
+  };
+  const handleDeleteProduct = (product: { id: string }) => {
+    dispatch(
+      deleteProduct({
+        categoryId: selectedCategory?.id,
+        productId: product.id,
+      })
+    );
+  };
+
   return (
     <Stack spacing={3} sx={Styles.stack}>
       <Backdrop
@@ -205,14 +238,15 @@ export default function CategoryPage() {
           <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedCategory?.products}
-            addFunction={() => {}}
-            editFunction={() => {}}
-            deleteFunction={() => {}}
+            addFunction={handleAddProduct}
+            editFunction={handleEditProduct}
+            deleteFunction={handleDeleteProduct}
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}
             emptyStateMessage={getString("productEmptyStateInfo")}
             title={selectedCategory ? selectedCategory?.name : ""}
             listView={true}
+            product={true}
           />
         </Box>
       </Box>

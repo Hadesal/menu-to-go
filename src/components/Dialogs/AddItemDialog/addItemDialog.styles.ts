@@ -19,6 +19,13 @@ export const Styles = {
   textFieldWrapper: {
     marginTop: "1rem",
   },
+  textArea: {
+    width: "100%",
+    marginTop: "1rem",
+    "& .MuiInputBase-root": {
+      borderRadius: "1rem",
+    },
+  },
   textFieldStyle: {
     width: "100%",
     marginTop: "0.5rem",
@@ -33,6 +40,7 @@ export const Styles = {
   dialogContent: {
     alignContent: "center",
     padding: 0,
+    overflowY: "initial",
   },
   fileUpload: {
     display: "flex",
