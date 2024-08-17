@@ -1,7 +1,9 @@
+import { ProductData } from "./ProductDataTypes";
+
 export interface CategoryData {
   id?: string;
   name: string;
   image: string | null;
-  products?: [];
+  products?: ProductData[];
   categoryType: string;
 }

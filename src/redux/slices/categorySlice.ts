@@ -5,6 +5,12 @@ import {
   updateCategory as apiUpdateCategory,
 } from "../../services/api/categoryCrud";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import {
+  createProduct,
+  fetchProducts,
+  modifyProduct,
+  removeProduct,
+} from "./productSlice";
 
 export interface CategoryState {
   selectedCategory: CategoryData | null;
@@ -143,6 +149,81 @@ export const CategorySlice = createSlice({
       .addCase(deleteCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message || action.payload;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        const { categoryId, product } = action.payload;
+
+        if (
+          state.selectedCategory &&
+          state.selectedCategory.id === categoryId
+        ) {
+          state.selectedCategory.products = [
+            ...(state.selectedCategory.products || []),
+            product,
+          ];
+        }
+
+        if (state.selectedCategory && state.selectedRestaurant) {
+          const restaurantCategory = state.selectedRestaurant.categories.find(
+            (category) => category.id === categoryId
+          );
+
+          if (restaurantCategory) {
+            restaurantCategory.products = [
+              ...(restaurantCategory.products || []),
+              product,
+            ];
+          }
+        }
+
+        state.loading = false;
+        state.successMessage = "Product added successfully!";
+      })
+      .addCase(removeProduct.fulfilled, (state, action) => {
+        const { categoryId, productId } = action.payload;
+
+        if (
+          state.selectedCategory &&
+          state.selectedCategory.id === categoryId
+        ) {
+          if (state.selectedCategory.products) {
+            state.selectedCategory.products =
+              state.selectedCategory.products.filter((p) => p.id !== productId);
+          }
+          state.successMessage = "Product deleted successfully!";
+        }
+
+        state.loading = false;
+      })
+      .addCase(modifyProduct.fulfilled, (state, action) => {
+        const { categoryId, productId, product } = action.payload;
+
+        if (
+          state.selectedCategory &&
+          state.selectedCategory.id === categoryId
+        ) {
+          if (state.selectedCategory.products) {
+            state.selectedCategory.products =
+              state.selectedCategory.products.map((prod) =>
+                prod.id === productId ? product : prod
+              );
+          }
+        }
+
+        if (state.selectedCategory && state.selectedRestaurant) {
+          const restaurantCategory = state.selectedRestaurant.categories.find(
+            (category) => category.id === categoryId
+          );
+
+          if (restaurantCategory && restaurantCategory.products) {
+            restaurantCategory.products = restaurantCategory.products.map(
+              (prod) => (prod.id === productId ? product : prod)
+            );
+          }
+        }
+
+        state.loading = false;
+        state.successMessage = "Product updated successfully!";
       });
   },
 });

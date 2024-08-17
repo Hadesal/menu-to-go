@@ -29,7 +29,7 @@ export const fetchProducts = createAsyncThunk(
   async (categoryId: string, { rejectWithValue }) => {
     try {
       const response = await getAllProductsByCategoryId(categoryId);
-      return response;
+      return { categoryId, products: response };
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error fetching products");
     }
@@ -47,7 +47,7 @@ export const createProduct = createAsyncThunk(
   ) => {
     try {
       const response = await addProduct(categoryId, product);
-      return response;
+      return { categoryId, product: response };
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error creating product");
     }
@@ -62,7 +62,7 @@ export const fetchProductById = createAsyncThunk(
   ) => {
     try {
       const response = await getProductById(categoryId, productId);
-      return response;
+      return { categoryId, productId, product: response };
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error fetching product");
     }
@@ -89,7 +89,7 @@ export const modifyProduct = createAsyncThunk(
         productId,
         updatedProduct
       );
-      return response;
+      return { categoryId, productId, product: response };
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error updating product");
     }
@@ -107,7 +107,7 @@ export const removeProduct = createAsyncThunk(
   ) => {
     try {
       const response = await deleteProduct(categoryId, productId);
-      return productId;
+      return { categoryId, productId, product: response };
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Error deleting product");
     }

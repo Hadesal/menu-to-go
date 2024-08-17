@@ -62,11 +62,6 @@ export default function CategoryPage() {
     if (successMessage) {
       setShowSuccessToast(true);
     }
-    console.log("selectedRestaurant: ", selectedRestaurant);
-    console.log(
-      "selectedRestaurant.categories: ",
-      selectedRestaurant.categories
-    );
   }, [successMessage, selectedRestaurant]);
 
   useEffect(() => {

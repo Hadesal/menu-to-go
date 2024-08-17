@@ -36,7 +36,6 @@ const CategoryItemsListView = ({
   styles,
 }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
-
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );

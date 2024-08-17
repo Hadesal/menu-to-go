@@ -7,6 +7,9 @@ import {
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
 import { addCategory, deleteCategory } from "./categorySlice";
+import { createProduct, modifyProduct, removeProduct } from "./productSlice";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 export interface RestaurantState {
   restaurantList: RestaurantData[];
   selectedRestaurant: any;
@@ -191,6 +194,63 @@ export const RestaurantSlice = createSlice({
           state.successMessage =
             "Category deleted and restaurant updated successfully!";
         }
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        const { categoryId, product } = action.payload;
+
+        const foundCategory = state.selectedRestaurant?.categories?.find(
+          (category: CategoryData) => category.id === categoryId
+        );
+
+        if (foundCategory) {
+          foundCategory.products = [...(foundCategory.products || []), product];
+
+          state.selectedRestaurant.categories =
+            state.selectedRestaurant.categories.map((category: CategoryData) =>
+              category.id === categoryId ? foundCategory : category
+            );
+        }
+
+        state.loading = false;
+        state.successMessage = "Product added successfully!";
+      })
+      .addCase(removeProduct.fulfilled, (state, action) => {
+        const { categoryId, productId } = action.payload;
+        const foundCategory = state.selectedRestaurant?.categories?.find(
+          (category: CategoryData) => category.id === categoryId
+        );
+        if (foundCategory) {
+          foundCategory.products = foundCategory.products.filter(
+            (prod: ProductData) => prod.id !== productId
+          );
+          state.selectedRestaurant.categories =
+            state.selectedRestaurant.categories.map((category: CategoryData) =>
+              category.id === categoryId ? foundCategory : category
+            );
+        }
+        state.loading = false;
+        state.successMessage = "Product deleted successfully!";
+      })
+      .addCase(modifyProduct.fulfilled, (state, action) => {
+        const { categoryId, productId, product } = action.payload;
+
+        const foundCategory = state.selectedRestaurant?.categories?.find(
+          (category: CategoryData) => category.id === categoryId
+        );
+
+        if (foundCategory) {
+          foundCategory.products = foundCategory.products.map(
+            (prod: ProductData) => (prod.id === productId ? product : prod)
+          );
+
+          state.selectedRestaurant.categories =
+            state.selectedRestaurant.categories.map((category: CategoryData) =>
+              category.id === categoryId ? foundCategory : category
+            );
+        }
+
+        state.loading = false;
+        state.successMessage = "Product updated successfully!";
       });
   },
 });
