@@ -38,12 +38,15 @@ import Styles from "./CategorySection.styles";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
-  const { selectedRestaurant, loading } = useAppSelector(
-    (state) => state.restaurantsData
-  );
+  const {
+    selectedRestaurant,
+    loading,
+    error: restaurantError,
+  } = useAppSelector((state) => state.restaurantsData);
   const { selectedCategory, successMessage, error } = useAppSelector(
     (state) => state.categoriesData
   );
+  const { error: productError } = useAppSelector((state) => state.productsData);
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
@@ -55,8 +58,10 @@ export default function CategoryPage() {
   useEffect(() => {
     if (error) {
       setShowToast(true);
+    } else if (productError) {
+      setShowToast(true);
     }
-  }, [error]);
+  }, [error, productError]);
 
   useEffect(() => {
     if (successMessage) {
@@ -95,12 +100,13 @@ export default function CategoryPage() {
   };
 
   const handleAddProduct = (product: ProductData) => {
-    dispatch(
+    const a = dispatch(
       addProduct({
         categoryId: selectedCategory?.id,
         product: product,
       })
     );
+    console.log(a);
   };
   const handleEditProduct = (product: ProductData) => {
     dispatch(
@@ -148,7 +154,7 @@ export default function CategoryPage() {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {error}
+          {error || productError?.message}
         </Alert>
       </Snackbar>
 

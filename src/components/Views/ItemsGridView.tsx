@@ -52,7 +52,9 @@ const ItemsGridView = ({
     setIsDeleteDialogOpen(false);
   };
   useEffect(() => {}, [items]);
-
+  useEffect(() => {
+    setAnchorEls(new Array(items.length).fill(null));
+  }, [items.length]);
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number

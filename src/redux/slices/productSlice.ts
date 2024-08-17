@@ -49,7 +49,11 @@ export const createProduct = createAsyncThunk(
       const response = await addProduct(categoryId, product);
       return { categoryId, product: response };
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Error creating product");
+      const errorResponseObject = error.response?.data || {
+        message: "An unexpected error occurred",
+        details: "Please try again later.",
+      };
+      return rejectWithValue(errorResponseObject);
     }
   }
 );

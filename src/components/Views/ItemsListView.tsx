@@ -23,6 +23,7 @@ import { ProductData } from "../../DataTypes/ProductDataTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
 
 interface Props {
+  CardIcon: string;
   items: any[];
   editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
@@ -33,6 +34,7 @@ const ItemsListView = ({
   editFunction,
   deleteFunction,
   styles,
+  CardIcon,
 }: Props): JSX.Element => {
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)

@@ -51,7 +51,6 @@ const BoxComponent = ({
   const getString = t;
 
   const { selectedCategory } = useAppSelector((state) => state.categoriesData);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -59,11 +58,9 @@ const BoxComponent = ({
   useEffect(() => {
     setFilteredItems(items);
   }, [items]);
-
   const handleClose = () => {
     setOpen(false);
   };
-
   const findNameProperty = (obj: any): string | null => {
     if (obj !== null && typeof obj === "object") {
       for (const key in obj) {
