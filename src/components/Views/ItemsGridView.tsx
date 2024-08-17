@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
@@ -51,6 +51,7 @@ const ItemsGridView = ({
   const handleDeleteDialogClose = () => {
     setIsDeleteDialogOpen(false);
   };
+  useEffect(() => {}, [items]);
 
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -75,7 +76,6 @@ const ItemsGridView = ({
     setCurrentItem(item);
     setIsDeleteDialogOpen(true);
   };
-
   return (
     <Grid container spacing={4}>
       {items.map((item: any, index: number) => (
@@ -88,7 +88,7 @@ const ItemsGridView = ({
                 dispatch(setSelectedRestaurant(item));
                 dispatch(
                   setSelectedCategory(
-                    item.category.length !== 0 ? item.category[0] : {}
+                    item.categories.length !== 0 ? item.categories[0] : {}
                   )
                 );
               }}

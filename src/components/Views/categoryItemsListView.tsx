@@ -11,7 +11,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
@@ -88,6 +88,7 @@ const CategoryItemsListView = ({
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {}, [items]);
 
   return (
     <Container sx={{ ...styles.container, padding: "0 !important" }}>

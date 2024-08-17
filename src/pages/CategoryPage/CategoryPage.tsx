@@ -56,7 +56,12 @@ export default function CategoryPage() {
     if (successMessage) {
       setShowSuccessToast(true);
     }
-  }, [successMessage]);
+    console.log("selectedRestaurant: ", selectedRestaurant);
+    console.log(
+      "selectedRestaurant.categories: ",
+      selectedRestaurant.categories
+    );
+  }, [successMessage, selectedRestaurant]);
 
   useEffect(() => {
     setShowSuccessToast(false);
@@ -87,7 +92,6 @@ export default function CategoryPage() {
       })
     );
   };
-
   return (
     <Stack spacing={3} sx={Styles.stack}>
       <Backdrop
@@ -186,7 +190,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 1 }}>
           <CategoryBoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedRestaurant?.category}
+            items={selectedRestaurant.categories}
             addFunction={handleAddCategory}
             editFunction={handleEditCategory}
             deleteFunction={handleDeleteCategory}

@@ -5,6 +5,6 @@ export interface RestaurantAllData {
   id: string;
   name: string;
   userUiPreferences: UserUiPreferences;
-  category: CategoryData[];
+  categories: CategoryData[];
   tables: [];
 }

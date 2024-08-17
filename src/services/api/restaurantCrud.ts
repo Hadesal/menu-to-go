@@ -18,6 +18,7 @@ export const getRestaurantById = async (restaurantId: string) => {
         Authorization: `Bearer ${userToken.token}`,
       },
     });
+
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;

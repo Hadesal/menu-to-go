@@ -30,7 +30,7 @@ const initialState: MenuState = {
     id: "",
     name: "",
     userUiPreferences: initialUserUiPreferences,
-    category: [],
+    categories: [],
     tables: [],
   },
   selectedProduct: {},
@@ -68,7 +68,7 @@ export const MenuSlice = createSlice({
       })
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload;
-        state.selectedProduct = state.restaurantData.category[0].products[2];
+        state.selectedProduct = state?.restaurantData?.categories[0]?.products[2];
         state.loading = false;
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {

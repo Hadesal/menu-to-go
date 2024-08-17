@@ -6,7 +6,7 @@ import {
   deleteRestaurant as apiDeleteRestaurant,
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
-
+import { addCategory, deleteCategory } from "./categorySlice";
 export interface RestaurantState {
   restaurantList: RestaurantData[];
   selectedRestaurant: any;
@@ -159,6 +159,38 @@ export const RestaurantSlice = createSlice({
       .addCase(deleteRestaurant.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(addCategory.fulfilled, (state, action) => {
+        const { restaurantId, category } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (restaurant) => restaurant.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.categories = [...restaurant.categories, category];
+
+          if (state.selectedRestaurant.id === restaurantId) {
+            state.selectedRestaurant = { ...restaurant };
+          }
+          state.successMessage = "Category added successfully!";
+        }
+      })
+
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        const { restaurantId, categoryId } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (restaurant) => restaurant.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.categories = restaurant.categories.filter(
+            (category) => category.id !== categoryId
+          );
+
+          if (state.selectedRestaurant.id === restaurantId) {
+            state.selectedRestaurant = { ...restaurant };
+          }
+          state.successMessage =
+            "Category deleted and restaurant updated successfully!";
+        }
       });
   },
 });
