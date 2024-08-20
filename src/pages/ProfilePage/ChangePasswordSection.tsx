@@ -157,8 +157,15 @@ const ChangePasswordSection = () => {
         <Typography variant="h5">{getString("changePassword")}</Typography>
       </Container>
 
-      <Container sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-        <Typography variant="subtitle1" sx={{ flexShrink: 0 }}>
+      <Container
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
+        <Typography variant="subtitle1">
           {getString("oldPassword")} :
         </Typography>
         <InputComponent
@@ -177,8 +184,15 @@ const ChangePasswordSection = () => {
         />
       </Container>
 
-      <Container sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-        <Typography variant="subtitle1" sx={{ flexShrink: 0 }}>
+      <Container
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "150px 1fr",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
+        <Typography variant="subtitle1">
           {getString("newPassword")} :
         </Typography>
         <InputComponent
