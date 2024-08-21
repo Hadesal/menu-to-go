@@ -1,5 +1,3 @@
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import {
   Alert,
   Backdrop,

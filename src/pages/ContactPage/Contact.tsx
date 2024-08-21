@@ -1,16 +1,21 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
-import Form from "../../components/Form/Form";
 import { useTranslation } from "react-i18next";
+import Form from "../../components/Form/Form";
+import { useAppSelector } from "../../utils/hooks";
 
 interface FormData {
   name?: string;
   email?: string;
   message: string;
   sentiments?: string;
+  typeOfInquiry?: string;
 }
 
 export default function ContactPage() {
+  const { userList } = useAppSelector((state) => state.userData);
+  const userData = userList[0];
+
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -19,20 +24,25 @@ export default function ContactPage() {
   const { t } = useTranslation();
   const getString = t;
 
-
   const sendEmail = (
     formValues: FormData,
     setFormValuesLocal: React.Dispatch<React.SetStateAction<FormData>>
   ) => {
     setLoading(true);
+
     emailjs
       .send(
         import.meta.env.VITE_REACT_APP_SERVICE_ID,
         import.meta.env.VITE_REACT_APP_TEMPLATE_ID,
         {
-          user_name: formValues.name,
-          user_email: formValues.email,
+          user_name: userData.name,
+          user_email: userData.email,
+          inquiry_type:
+            formValues.sentiments === ""
+              ? formValues.typeOfInquiry
+              : `${formValues.typeOfInquiry} (${formValues.sentiments})`,
           message: formValues.message,
+          ticket_number: Math.floor(1000 + Math.random() * 9000).toString(),
         },
         import.meta.env.VITE_REACT_APP_PUBLIC_ID
       )
@@ -43,9 +53,8 @@ export default function ContactPage() {
           setSeverity("success");
           setShowToast(true);
           setFormValuesLocal({
-            name: "",
-            email: "",
             message: "",
+            typeOfInquiry: "General Inquiry",
           });
         },
         () => {
@@ -69,7 +78,7 @@ export default function ContactPage() {
         </>
       }
       textFiledLabel=""
-      handleSubmit={sendEmail} // Pass formValues to sendEmail
+      handleSubmit={sendEmail}
       loading={loading}
       toastMessage={toastMessage}
       severity={severity}

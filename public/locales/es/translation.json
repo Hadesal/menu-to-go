@@ -5,8 +5,8 @@
   "toastFail": "No se pudo enviar su solicitud. Por favor, intente de nuevo.",
   "errorDeleteRestaurant": "Debe haber al menos un restaurante, cree un nuevo restaurante para poder eliminar este",
   "contactUs": "Contáctenos",
-  "haveQuestionText": "¿Tiene alguna pregunta? No dude en contactarnos.",
-  "happyToHelpText": "¡Estamos felices de ayudarte!",
+  "haveQuestionText": "¿Tiene una pregunta, comentario o solicitud?",
+  "happyToHelpText": "Estamos aquí para ayudar y escuchar.",
   "categories": "Categorías",
   "detailsText": "Por favor, complete los campos a continuación para completar su cuenta. Puede editar esto más tarde en su configuración.",
   "completeAccount": "Complete su cuenta",
@@ -91,5 +91,7 @@
   "pleaseTellUsInFewWords": "Dinos en pocas palabras",
   "feedBack": "Nos encantaría recibir tus comentarios sobre tu experiencia en",
   "experienceQuestion": "¿Cómo fue tu experiencia?",
-  "reset": "Restablecer"
+  "reset": "Restablecer",
+  "SubmitMessage": "Enviar mensaje",
+  "TypeofInquiry": "Tipo de consulta"
 }

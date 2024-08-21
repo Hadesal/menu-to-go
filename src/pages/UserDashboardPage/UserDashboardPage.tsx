@@ -102,11 +102,6 @@ export default function UserDashboardPage() {
       label: getString("generateQrCode"),
     },
     {
-      id: "feedback",
-      icon: <QuestionAnswerIcon />,
-      label: getString("feedbacks"),
-    },
-    {
       id: "contactUs",
       icon: <SupportAgentIcon />,
       label: getString("contactUs"),
@@ -535,10 +530,8 @@ export default function UserDashboardPage() {
           <RestaurantSection label={getString("restaurant")} />
         )}
         {activeTab === "myprofile" && <ProfilePage />}
-        {/* {activeTab === "categories" && <CategoryPage />} */}
         {activeTab === "templates" && <h1> Templates view</h1>}
         {activeTab === "generateQrCode" && <QrCodePage />}
-        {activeTab === "feedback" && <FeedbackPage />}
         {activeTab === "contactUs" && <ContactPage />}
       </Box>
     </Box>

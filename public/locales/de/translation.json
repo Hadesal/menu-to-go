@@ -5,8 +5,8 @@
   "toastFail": "Ihre Anfrage konnte nicht eingereicht werden. Bitte versuchen Sie es erneut.",
   "errorDeleteRestaurant": "Es muss mindestens ein Restaurant geben, erstellen Sie ein neues Restaurant, um dieses löschen zu können",
   "contactUs": "Kontaktieren Sie uns",
-  "haveQuestionText": "Haben Sie eine Frage? Zögern Sie nicht, uns zu kontaktieren.",
-  "happyToHelpText": "Wir helfen Ihnen gerne weiter!",
+  "haveQuestionText": "Haben Sie eine Frage, Feedback oder eine Anfrage?",
+  "happyToHelpText": "Wir sind hier, um zu helfen und zuzuhören.",
   "categories": "Kategorien",
   "detailsText": "Bitte füllen Sie die folgenden Felder aus, um Ihr Konto zu vervollständigen. Sie können dies später in Ihren Einstellungen bearbeiten.",
   "completeAccount": "Vervollständigen Sie Ihr Konto",
@@ -91,5 +91,8 @@
   "pleaseTellUsInFewWords": "Bitte sagen Sie uns in wenigen Worten",
   "feedBack": "Wir würden uns über Ihr Feedback zu Ihrer Erfahrung auf",
   "experienceQuestion": "Wie war Ihre Erfahrung?",
-  "reset": "Zurücksetzen"
+  "reset": "Zurücksetzen",
+  "SubmitMessage": "Nachricht senden",
+  "TypeofInquiry": "Art der Anfrage"
+
 }
