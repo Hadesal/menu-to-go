@@ -99,7 +99,6 @@ export default function MenuCategories({
       {categoriesData(categoryTag).map((category, index) => (
         <Box
           onClick={() => {
-            console.log(category);
             dispatch(setSelectedCategory(category));
           }}
           key={index}

@@ -7,6 +7,7 @@ export const Styles = {
   box: {
     paddingTop: "2rem",
     paddingLeft: "1rem",
+    paddingRight:"1rem"
   },
   iconButton: {
     marginBottom: 5,

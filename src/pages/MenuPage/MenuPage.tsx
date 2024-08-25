@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Typography } from "@mui/material";
+import { Box, Container, Divider, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import MenuCategories from "../../components/MenuCategories/MenuCategories";
 import MenuHeader from "../../components/MenuHeader/MenuHeader";
@@ -43,17 +43,13 @@ export default function MenuPage() {
     fetchDataAndHandleLoading();
   }, [dispatch]);
 
-  //   selectedCategory?.products.map((category) => {
-  //     console.log(category.name);
-  // });
-
   // Show splash screen while loading
   if (loading) {
     return <SplashScreen />;
   }
 
   return (
-    <Container sx={Styles.container} maxWidth="sm">
+    <Container disableGutters={true} sx={Styles.container} maxWidth="sm">
       <Box sx={Styles.box}>
         <MenuHeader />
         <Paper
@@ -114,6 +110,7 @@ export default function MenuPage() {
           selectedCategory={selectedCategory.name}
         />
       </Box>
+      <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
 
       <Typography
         color={"var(--primary-color)"}

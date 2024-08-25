@@ -1,10 +1,9 @@
-
 export const Styles = {
   categoriesContainer: {
     marginTop: "2rem",
     display: "flex",
     flexDirection: "row",
-    gap: "1rem",
+    gap: "1.5rem",
     overflowX: "auto",
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
@@ -15,7 +14,7 @@ export const Styles = {
   },
   categoryBox: {
     display: "flex",
-    width: 150,
+    maxWidth: 150,
     flexDirection: "column",
     alignItems: "center",
     boxSizing: "border-box",
