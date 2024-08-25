@@ -2,8 +2,8 @@ import { Box } from "@mui/material";
 import ExtrasItem from "./ExtrasItem";
 
 interface Extras {
-  extrasName: string;
-  extrasPrice: string;
+  name: string;
+  price: string;
 }
 
 interface ExtrasListProps {

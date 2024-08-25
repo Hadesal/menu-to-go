@@ -5,15 +5,15 @@ import { Styles } from "./confirmDialog.style";
 interface ConfirmDialogProps {
   isOpen: boolean;
   onPrimaryActionClick: () => void;
-  onSecondaryActionClick: () => void;
+  onSecondaryActionClick?: () => void;
   onClose?: () => void; // Optional onClose prop
   width?: string;
   height?: string;
   title: string;
   subTitle: string;
   showImg: boolean;
-  secondaryActionText: string;
-  primaryActionText: string;
+  secondaryActionText?: string;
+  primaryActionText?: string;
 }
 
 const ConfirmDialog = ({
@@ -29,7 +29,8 @@ const ConfirmDialog = ({
   primaryActionText,
   onClose,
 }: ConfirmDialogProps) => {
-  const handleSecondaryAction = () => onSecondaryActionClick();
+  const handleSecondaryAction = () =>
+    onSecondaryActionClick ? onSecondaryActionClick() : () => {};
   const handlePrimaryAction = () => onPrimaryActionClick();
 
   return (
@@ -65,20 +66,24 @@ const ConfirmDialog = ({
           {subTitle}
         </Typography>
         <Box sx={Styles.actionBox} justifyContent={"center"}>
-          <Button
-            variant="outlined"
-            onClick={handleSecondaryAction}
-            sx={Styles.secondaryActionButton}
-          >
-            {secondaryActionText}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handlePrimaryAction}
-            sx={Styles.primaryActionButton}
-          >
-            {primaryActionText}
-          </Button>
+          {secondaryActionText && (
+            <Button
+              variant="outlined"
+              onClick={handleSecondaryAction}
+              sx={Styles.secondaryActionButton}
+            >
+              {secondaryActionText}
+            </Button>
+          )}
+          {primaryActionText && (
+            <Button
+              variant="contained"
+              onClick={handlePrimaryAction}
+              sx={Styles.primaryActionButton}
+            >
+              {primaryActionText}
+            </Button>
+          )}
         </Box>
       </DialogContent>
     </Dialog>

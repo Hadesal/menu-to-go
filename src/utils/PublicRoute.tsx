@@ -10,7 +10,6 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
   const token = localStorage.getItem("userToken");
 
   const getRedirectPath = () => {
-    console.log(location.pathname);
     if (location.pathname.startsWith("/dashboard")) {
       return "/dashboard";
     } else if (location.pathname.startsWith("/menu")) {

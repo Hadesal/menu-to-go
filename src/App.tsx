@@ -1,7 +1,6 @@
 // src/App.js
 import { createTheme, ThemeProvider } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -34,11 +33,15 @@ const theme = createTheme({
 });
 
 function App() {
+  window.history.pushState(null, null, window.location.href); // Push the current state
+  window.onpopstate = function () {
+    window.history.go(1); // On back press, go forward in the history
+  };
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route
             path="/register"
             element={
@@ -71,6 +74,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          {/* <Route
+            path="/myprofile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          /> */}
           <Route
             path="/product"
             element={

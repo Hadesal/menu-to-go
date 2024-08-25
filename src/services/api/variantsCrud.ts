@@ -3,23 +3,20 @@ import { VariantsData } from "../../DataTypes/ProductDetailsDataTypes";
 
 const API_Variants_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
 
+const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Variants_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken.token}`,
   },
 });
 
 export const getAllVariantsByProductDetailsId = async (
-  productDetailsId: number,
-  token: string
+  productDetailsId: number
 ) => {
   try {
-    const response = await apiService.get(`/${productDetailsId}/variants`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiService.get(`/${productDetailsId}/variants`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error.response.data;
@@ -29,18 +26,12 @@ export const getAllVariantsByProductDetailsId = async (
 
 export const addVariants = async (
   productDetailsId: number,
-  variants: VariantsData,
-  token: string
+  variants: VariantsData
 ) => {
   try {
     const response = await apiService.post(
       `/${productDetailsId}/variants`,
-      variants,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      variants
     );
     return response.data;
   } catch (error: any) {
@@ -51,17 +42,11 @@ export const addVariants = async (
 
 export const getVariantsByIdAndProductDetailsId = async (
   productDetailsId: number,
-  id: number,
-  token: string
+  id: number
 ) => {
   try {
     const response = await apiService.get(
-      `/${productDetailsId}/variants/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${productDetailsId}/variants/${id}`
     );
     return response.data;
   } catch (error: any) {
@@ -73,18 +58,12 @@ export const getVariantsByIdAndProductDetailsId = async (
 export const updateVariants = async (
   productDetailsId: number,
   id: number,
-  updatedVariants: VariantsData,
-  token: string
+  updatedVariants: VariantsData
 ) => {
   try {
     const response = await apiService.put(
       `/${productDetailsId}/variants/${id}`,
-      updatedVariants,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      updatedVariants
     );
     return response.data;
   } catch (error: any) {
@@ -93,19 +72,10 @@ export const updateVariants = async (
   }
 };
 
-export const deleteVariants = async (
-  productDetailsId: number,
-  id: number,
-  token: string
-) => {
+export const deleteVariants = async (productDetailsId: number, id: number) => {
   try {
     const response = await apiService.delete(
-      `/${productDetailsId}/variants/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/${productDetailsId}/variants/${id}`
     );
     return response.data;
   } catch (error: any) {

@@ -19,6 +19,13 @@ export const Styles = {
   textFieldWrapper: {
     marginTop: "1rem",
   },
+  textArea: {
+    width: "100%",
+    marginTop: "1rem",
+    "& .MuiInputBase-root": {
+      borderRadius: "1rem",
+    },
+  },
   textFieldStyle: {
     width: "100%",
     marginTop: "0.5rem",
@@ -33,19 +40,20 @@ export const Styles = {
   dialogContent: {
     alignContent: "center",
     padding: 0,
+    overflowY: "initial",
   },
   fileUpload: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "1rem",
+    marginTop: "0",
   },
   imageWrapper: {
     textAlign: "center",
   },
   imageContainer: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     borderRadius: "50%",
     backgroundColor: "#E0E0E0",
     display: "flex",
@@ -67,8 +75,8 @@ export const Styles = {
     position: "absolute",
     width: "30px",
     height: "30px",
-    top: 70,
-    right: -10,
+    top: 110,
+    right: 0,
     backgroundColor: "#A4755D",
     borderRadius: "50%",
     ":hover": { backgroundColor: "#A4755D" },

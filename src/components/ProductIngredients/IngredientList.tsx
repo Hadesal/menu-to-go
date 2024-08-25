@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 import IngredientItem from "./IngredientItem";
 import { Styles } from "./ProductIngredients.styles";
+import { useAppSelector } from "../../utils/hooks";
 
 interface Ingredient {
-  ingredientImg: string;
-  ingredientName: string;
+  img: string;
+  name: string;
 }
 
 interface IngredientListProps {
@@ -16,13 +17,21 @@ export default function IngredientList({
   ingredients,
   listView,
 }: IngredientListProps) {
+  const { restaurantData } = useAppSelector((state) => state.menuData);
+
   return (
     <Box sx={listView ? Styles.listContainer : Styles.cardContainer}>
       {listView ? (
         <ul style={Styles.ingredientList}>
           {ingredients.map((ingredient, index) => (
-            <li key={index} style={Styles.ingredientListItem}>
-              {ingredient.ingredientName}
+            <li
+              key={index}
+              style={{
+                ...Styles.ingredientListItem,
+                fontFamily: restaurantData.userUiPreferences.fontType,
+              }}
+            >
+              {ingredient.name}
             </li>
           ))}
         </ul>

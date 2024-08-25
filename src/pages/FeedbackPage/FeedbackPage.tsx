@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Form from "../../components/Form/Form";
+import { useTranslation } from "react-i18next";
 
 // interface FormData {
 //   name?: string;
@@ -13,7 +14,8 @@ export default function FeedbackPage() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [severity, setSeverity] = useState<"success" | "error">("success");
-
+  const { t } = useTranslation();
+  const getString = t;
   const handleSubmit = (formValues) => {
     console.log(formValues);
   };
@@ -23,7 +25,7 @@ export default function FeedbackPage() {
       feedback={true}
       title={
         <>
-          Help us to improve{" "}
+          {getString("helpUsToImprove")}{" "}
           <span style={{ fontFamily: "Lucida Calligraphy" }}>
             <span style={{ color: "black" }}>Menu</span>
             -To-Go
@@ -32,7 +34,7 @@ export default function FeedbackPage() {
       }
       subTitle={
         <>
-          We'd love your feedback on your experience on{" "}
+          {getString("feedBack")}{" "}
           <span
             style={{
               color: "var(--primary-color)",
@@ -43,10 +45,10 @@ export default function FeedbackPage() {
             -To-Go
           </span>
           <br />
-          How was your experience?
+          {getString("experienceQuestion")}
         </>
       }
-      textFiledLabel="Please tell us in few Words"
+      textFiledLabel={getString("pleaseTellUsInFewWords")}
       handleSubmit={handleSubmit}
       loading={loading}
       toastMessage={toastMessage}

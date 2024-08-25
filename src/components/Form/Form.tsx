@@ -12,15 +12,17 @@ import {
   Button,
   CircularProgress,
   Fab,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import InputComponent from "../../components/InputComponent/InputComponent";
-import { validateEmail } from "../../utils/validator";
 import { Styles } from "./Form.styles";
+import { useTranslation } from "react-i18next";
 
 interface FormProps {
   feedback: boolean;
@@ -43,6 +45,7 @@ interface FormData {
   email?: string;
   message: string;
   sentiments?: string;
+  typeOfInquiry?: string;
 }
 
 const sentiments = [
@@ -64,16 +67,15 @@ export default function Form({
   handleSubmit,
   setShowToast,
 }: FormProps) {
+  const { t } = useTranslation();
+  const getString = t;
   const [formValuesLocal, setFormValuesLocal] = useState<FormData>({
-    name: "",
-    email: "",
     message: "",
     sentiments: "",
+    typeOfInquiry: "General Inquiry",
   });
 
   const [formErrors, setFormErrors] = useState<FormData>({
-    name: "",
-    email: "",
     message: "",
   });
 
@@ -100,10 +102,6 @@ export default function Form({
         : "";
     } else {
       errors = {
-        name: !formValuesLocal.name?.trim() ? "Please enter your name." : "",
-        email: validateEmail(
-          formValuesLocal.email !== undefined ? formValuesLocal.email : ""
-        ),
         message: !formValuesLocal.message ? "Message is required." : "",
       };
     }
@@ -164,12 +162,35 @@ export default function Form({
       </Typography>
 
       <Box sx={Styles.formWrapper}>
-        {feedback && (
+        <Box sx={Styles.selectWrapper}>
+          <InputLabel sx={Styles.selectLabel} id="select-label">
+            {getString("TypeofInquiry")}
+          </InputLabel>
+          <Select
+            sx={Styles.select}
+            labelId="select-label"
+            id="typeOfInquiry"
+            value={formValuesLocal.typeOfInquiry}
+            onChange={(event) => {
+              setFormValuesLocal((prevValues) => ({
+                ...prevValues,
+                typeOfInquiry: event.target.value,
+              }));
+              setSelectedSentiment("");
+            }}
+          >
+            <MenuItem value={"General Inquiry"}>General Inquiry</MenuItem>
+            <MenuItem value={"Feedback"}>Feedback</MenuItem>
+            <MenuItem value={"Feature Request"}>Feature Request</MenuItem>
+            <MenuItem value={"Bug Report"}> Bug Report</MenuItem>
+          </Select>
+        </Box>
+        {formValuesLocal.typeOfInquiry === "Feedback" && (
           <Stack
             direction="row"
             justifyContent="center"
             spacing={10}
-            mt={2}
+            mt={5}
             mb={4}
           >
             {sentiments.map((sentiment) => {
@@ -197,36 +218,6 @@ export default function Form({
             })}
           </Stack>
         )}
-        {!feedback && (
-          <Box sx={Styles.formContainer}>
-            <InputComponent
-              id="name"
-              type="name"
-              label="Name"
-              InputPropStyle={Styles.InputPropStyle}
-              required
-              textFieldStyle={Styles.textFieldStyle}
-              boxStyle={Styles.textFieldBoxStyle}
-              onChange={handleInputChange}
-              error={Boolean(formErrors.name)}
-              helperText={formErrors.name}
-              value={formValuesLocal.name}
-            />
-            <InputComponent
-              id="email"
-              type="email"
-              label="Email"
-              InputPropStyle={Styles.InputPropStyle}
-              required
-              textFieldStyle={Styles.textFieldStyle}
-              boxStyle={Styles.textFieldBoxStyle}
-              onChange={handleInputChange}
-              error={Boolean(formErrors.email)}
-              helperText={formErrors.email}
-              value={formValuesLocal.email}
-            />
-          </Box>
-        )}
       </Box>
       <TextField
         id="message"
@@ -244,7 +235,7 @@ export default function Form({
       />
 
       <Button variant="contained" sx={Styles.button} onClick={handleFormSubmit}>
-        Submit Message
+        {getString("SubmitMessage")}
       </Button>
 
       {!feedback && (

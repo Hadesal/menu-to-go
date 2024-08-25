@@ -1,7 +1,11 @@
 const styles = {
-  stack: { padding: 3 },
-  typography: { width: "fit-content" },
-  paper: { padding: 3, borderRadius: "20px" },
+  stack: { width: "95%", margin: "0 auto" },
+  typography: { width: "80%" },
+  paper: {
+    padding: 3,
+    borderRadius: "20px",
+    boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
+  },
   searchField: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
@@ -13,13 +17,13 @@ const styles = {
   addButton: { borderRadius: 10, width: "8vw", height: "5vh" },
   gridPaper: {
     borderRadius: "20px",
-    width: "14vw",
+    //width: "14vw",
     " & .MuiPaper-root.MuiPaper-elevation1.MuiCard-root.css-1sayfjc-MuiPaper-root-MuiCard-root":
       {
         height: "22vh",
       },
   },
-  card: { height: "17vh", borderRadius: "20px" },
+  card: { borderRadius: "20px", padding: 1 },
   cardContent: { height: "100%" },
   stackColumn: {
     display: "flex",

@@ -1,10 +1,13 @@
 import { Box, Paper, Typography } from "@mui/material";
 import BulletImage from "../../assets/tabler_point.svg";
 import { Styles } from "./ProductVariants.styles";
+import { useAppSelector } from "../../utils/hooks";
+import PlusIcon from "../ProductExtras/PlusIcon";
+import BulletIcon from "./BulletIcon";
 
 interface Variant {
-  variantName: string;
-  variantPrice: string;
+  name: string;
+  price: string;
 }
 
 interface VariantListProps {
@@ -12,6 +15,8 @@ interface VariantListProps {
 }
 
 export default function VariantList({ variants }: VariantListProps) {
+  const { restaurantData } = useAppSelector((state) => state.menuData);
+
   return (
     <Box>
       <Paper sx={Styles.VariantsListWrapper} elevation={3}>
@@ -26,21 +31,32 @@ export default function VariantList({ variants }: VariantListProps) {
               }}
             >
               <Box sx={Styles.VariantBox}>
-                <Box
-                  component="img"
-                  src={BulletImage}
-                  alt="Bullet"
-                  sx={Styles.bulletImage}
-                />
+                <Box sx={{ marginRight: "0.5rem" }}>
+                  <BulletIcon
+                    width={10}
+                    height={10}
+                    color={restaurantData.userUiPreferences.primaryColor}
+                    style={Styles.bulletImage}
+                  />
+                </Box>
+
                 <Typography
-                  color="var(--primary-color)"
-                  sx={Styles.VariantName}
+                  color={restaurantData.userUiPreferences.primaryColor}
+                  sx={{
+                    ...Styles.VariantName,
+                    fontFamily: restaurantData.userUiPreferences.fontType,
+                  }}
                 >
-                  {variant.variantName}
+                  {variant.name}
                 </Typography>
               </Box>
-              <Typography sx={Styles.VariantName}>
-                {variant.variantPrice}
+              <Typography
+                sx={{
+                  ...Styles.VariantName,
+                  fontFamily: restaurantData.userUiPreferences.fontType,
+                }}
+              >
+                {variant.price}$
               </Typography>
             </Box>
           ))}
