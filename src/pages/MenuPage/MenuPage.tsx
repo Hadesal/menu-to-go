@@ -1,25 +1,58 @@
-import React, { useState } from "react";
-import { Box, Container, Paper } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Paper, Typography } from "@mui/material";
 import MenuHeader from "../../components/MenuHeader/MenuHeader";
 import MenuFooter from "../../components/MenuFooter/MenuFooter";
 import MenuCategories from "../../components/MenuCategories/MenuCategories";
 import MenuProductsCard from "../../components/MenuProductsCard/MenuProductsCard";
 import { Styles } from "../ProductPage/ProductPage.styles";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { fetchMenuData } from "../../utils/MenuDataFetching";
+import SplashScreen from "../SplashScreen/SplashScreen";
+import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 
 const menuSelections = [
   {
-    id: "restaurant",
-    Label: "Restaurant",
+    id: "food",
+    Label: "Food",
   },
   {
-    id: "café",
-    Label: "Café",
+    id: "drinks",
+    Label: "Drinks",
   },
 ];
 
 export default function MenuPage() {
-  const [selectedMenuCategory, setSelectedMenuCategory] =
-    useState("Restaurant");
+  const [loading, setLoading] = useState(true);
+  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Food");
+  const dispatch = useAppDispatch();
+
+  const { restaurantData, selectedCategory } = useAppSelector(
+    (state) => state.menuData
+  );
+
+  useEffect(() => {
+    const fetchDataAndHandleLoading = async () => {
+      setLoading(true);
+      const result = await fetchMenuData(dispatch);
+
+      if (result.success) {
+        setLoading(false);
+      } else {
+        console.error("Error fetching data:", result.error);
+      }
+    };
+
+    fetchDataAndHandleLoading();
+  }, [dispatch]);
+
+  //   selectedCategory?.products.map((category) => {
+  //     console.log(category.name);
+  // });
+
+  // Show splash screen while loading
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   return (
     <Container sx={Styles.container} maxWidth="sm">
@@ -74,9 +107,12 @@ export default function MenuPage() {
               </Box>
             ))}
           </Box>
-          <Box></Box>
         </Paper>
-        <MenuCategories categoryTag="food" />
+        <MenuCategories
+          categories={restaurantData.categories}
+          categoryTag="Food"
+          selectedCategory={selectedCategory.name}
+        />
       </Box>
       <Box
         maxWidth="sm"
@@ -90,6 +126,13 @@ export default function MenuPage() {
         }}
       />
 
+      <Typography
+      color={"var(--primary-color)"}
+        sx={{ paddingLeft: "1rem", paddingTop: "2rem" , fontWeight:500 }}
+        variant="h6"
+      >
+        {selectedCategory.name}
+      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -97,7 +140,7 @@ export default function MenuPage() {
           flexWrap: "wrap",
           paddingTop: "2rem",
           paddingLeft: "1rem",
-          gap: 4,
+          gap: 2,
           overflowY: "scroll",
           height: "400px",
           scrollbarWidth: "none", // For Firefox
@@ -108,9 +151,15 @@ export default function MenuPage() {
           },
         }}
       >
-        <MenuProductsCard />
-        <MenuProductsCard />
-        <MenuProductsCard />
+        {selectedCategory?.products.length === 0 ? (
+          <Box>
+            <Typography>No products</Typography>
+          </Box>
+        ) : (
+          selectedCategory?.products.map((product, index) => (
+            <MenuProductsCard product={product} />
+          ))
+        )}
       </Box>
       <MenuFooter />
     </Container>

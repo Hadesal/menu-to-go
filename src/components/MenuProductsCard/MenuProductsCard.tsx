@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import VegtableEggImg from "../../assets/vegtableegg.jpg";
 import SmoothieBowlImg from "../../assets/smoothiebowl.jpg";
+import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
 
 const products = [
   {
@@ -24,15 +25,15 @@ const products = [
   },
 ];
 
-export default function MenuProductsCard() {
+export default function MenuProductsCard({ product }) {
   return (
-    <Card sx={{ width: "145px", height: "200px", borderRadius: "16px" }}>
+    <Card sx={{flex:1, height: "200px", borderRadius: "16px" }}>
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
-          image={VegtableEggImg}
-          alt="Vegtable Egg"
+          image={product.image ? product.image : PlaceHolder}
+          alt={product.name}
         />
         <CardContent
           sx={{
@@ -42,20 +43,21 @@ export default function MenuProductsCard() {
             marginTop: "0.5rem",
             justifyContent: "space-between",
             color: "#A4755D",
+            lineHeight: "1rem",
           }}
         >
           <Typography
-            sx={{ fontSize: "14px", lineHeight: "12px", fontWeight: 400 }}
+            sx={{ fontSize: "14px", fontWeight: 400 }}
             gutterBottom
             component="div"
           >
-            Vegetable Egg
+            {product.name}
           </Typography>
           <Typography
-            sx={{ fontSize: "14px", lineHeight: "12px", fontWeight: 500 }}
+            sx={{ fontSize: "14px", fontWeight: 500 }}
             component="div"
           >
-            50$
+            {product.price}$
           </Typography>
         </CardContent>
       </CardActionArea>

@@ -7,6 +7,7 @@ import { UserUiPreferences } from "../../DataTypes/userUiPreferences";
 export interface MenuState {
   restaurantData: RestaurantAllData;
   selectedProduct: object;
+  selectedCategory: object;
   loading: boolean;
   error: string | null;
 }
@@ -34,6 +35,7 @@ const initialState: MenuState = {
     tables: [],
   },
   selectedProduct: {},
+  selectedCategory: {},
   loading: false,
   error: null,
 };
@@ -59,6 +61,9 @@ export const MenuSlice = createSlice({
     setSelectedProduct: (state, action: PayloadAction<object>) => {
       state.selectedProduct = action.payload;
     },
+    setSelectedCategory: (state, action: PayloadAction<object>) => {
+      state.selectedCategory = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -68,8 +73,11 @@ export const MenuSlice = createSlice({
       })
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload;
-        state.selectedProduct = state?.restaurantData?.categories[0]?.products[2];
+        state.selectedProduct =
+          state?.restaurantData?.categories[0]?.products[2];
         state.loading = false;
+
+        state.selectedCategory = state?.restaurantData.categories[0];
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {
         state.loading = false;
@@ -78,6 +86,6 @@ export const MenuSlice = createSlice({
   },
 });
 
-export const { setSelectedProduct } = MenuSlice.actions;
+export const { setSelectedProduct, setSelectedCategory } = MenuSlice.actions;
 
 export default MenuSlice.reducer;

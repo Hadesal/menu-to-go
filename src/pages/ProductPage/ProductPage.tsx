@@ -1,14 +1,11 @@
 import { Box, Container, IconButton } from "@mui/material";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import { useEffect, useState } from "react";
 import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
-import { fetchMenuData } from "../../utils/MenuDataFetching";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import SplashScreen from "../SplashScreen/SplashScreen";
+import { useAppSelector } from "../../utils/hooks";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
 
@@ -19,32 +16,32 @@ function hexToRgba(hex, alpha = 1) {
 }
 
 export default function ProductPage() {
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
+  // const dispatch = useAppDispatch();
+  // const [loading, setLoading] = useState(true);
 
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
   );
 
-  useEffect(() => {
-    const fetchDataAndHandleLoading = async () => {
-      setLoading(true);
-      const result = await fetchMenuData(dispatch);
+  // useEffect(() => {
+  //   const fetchDataAndHandleLoading = async () => {
+  //     setLoading(true);
+  //     const result = await fetchMenuData(dispatch);
 
-      if (result.success) {
-        setLoading(false);
-      } else {
-        console.error("Error fetching data:", result.error);
-      }
-    };
+  //     if (result.success) {
+  //       setLoading(false);
+  //     } else {
+  //       console.error("Error fetching data:", result.error);
+  //     }
+  //   };
 
-    fetchDataAndHandleLoading();
-  }, [dispatch]);
+  //   fetchDataAndHandleLoading();
+  // }, [dispatch]);
 
   // Show splash screen while loading
-  if (loading) {
-    return <SplashScreen />;
-  }
+  // if (loading) {
+  //   return <SplashScreen />;
+  // }
   
   const backgroundColor = hexToRgba(
     restaurantData.userUiPreferences.primaryColor,

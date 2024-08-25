@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Avatar } from "@mui/material";
+import { Box, Avatar, Typography } from "@mui/material";
 import { Styles } from "./MenuCategories.styles";
 import VeganFoodImg from "../../assets/veganfood.jpg";
 import BreakfastImg from "../../assets/breakfast.jpg";
@@ -10,6 +10,9 @@ import MeatImg from "../../assets/meat.jpg";
 import FreshJuice from "../../assets/freshjuice.jpg";
 import SodaDrinks from "../../assets/sodadrinks.jpg";
 import WarmDrinks from "../../assets/warmdrinks.jpg";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
+import { setSelectedCategory } from "../../redux/slices/menuSlice";
 
 const categories = [
   {
@@ -68,19 +71,23 @@ const categories = [
   },
 ];
 
-export default function MenuCategories({ categoryTag }) {
-  const [selectedCategory, setSelectedCategory] = useState("Vegan");
+export default function MenuCategories({
+  categories,
+  categoryTag,
+  selectedCategory,
+}) {
+  const dispatch = useAppDispatch();
 
   const categoriesData = (categoryTag: string) => {
     let categoriesDataArray = [];
 
-    if (categoryTag === "food") {
+    if (categoryTag === "Food") {
       categoriesDataArray = categories.filter((category) => {
-        return category.tag === "food";
+        return category.categoryType === "Food";
       });
     } else {
       categoriesDataArray = categories.filter((category) => {
-        return category.tag === "drinks";
+        return category.categoryType === "Drinks";
       });
     }
 
@@ -90,15 +97,31 @@ export default function MenuCategories({ categoryTag }) {
   return (
     <Box sx={Styles.categoriesContainer}>
       {categoriesData(categoryTag).map((category, index) => (
-        <Box key={index} sx={Styles.categoryBox}>
-          <Avatar
+        <Box
+          onClick={() => {
+            console.log(category);
+            dispatch(setSelectedCategory(category));
+          }}
+          key={index}
+          sx={Styles.categoryBox}
+        >
+          {/* <Avatar
             style={Styles.categoryAvatarStyle}
             sx={Styles.categoryAvatar}
-            alt={category.label}
-            src={category.img}
+            alt={category.name}
+            src={category.image}
+          /> */}
+          <img
+            src={category.image ? category.image : PlaceHolder}
+            alt="Product Image"
+            style={Styles.categoryImage}
+            width={50}
+            height={50}
           />
-          <Box sx={Styles.categoryLabel}>{category.label}</Box>
-          {category.label === selectedCategory && (
+          <Typography variant="h6" sx={Styles.categoryLabel}>
+            {category.name}
+          </Typography>
+          {category.name === selectedCategory && (
             <Box sx={Styles.selectedCategoryIndicator} />
           )}
         </Box>

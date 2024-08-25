@@ -1,9 +1,10 @@
+
 export const Styles = {
   categoriesContainer: {
     marginTop: "2rem",
     display: "flex",
     flexDirection: "row",
-    gap: "1.4rem",
+    gap: "1rem",
     overflowX: "auto",
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
@@ -13,7 +14,12 @@ export const Styles = {
     },
   },
   categoryBox: {
-    width: 56,
+    display: "flex",
+    width: 150,
+    flexDirection: "column",
+    alignItems: "center",
+    boxSizing: "border-box",
+    textAlign: "center",
   },
   categoryAvatarStyle: {
     alignSelf: "center",
@@ -26,9 +32,13 @@ export const Styles = {
     color: "#D9B18F",
     fontSize: "14px",
     fontWeight: 400,
-    lineHeight: "12px",
+    lineHeight: "1rem",
     textAlign: "center",
     marginTop: "0.8rem",
+    overflowWrap: "break-word", // Ensure long words break to fit
+    wordBreak: "break-word", // Ensure long words break to fit
+    width: "100%", // Ensure text fits within the box
+    boxSizing: "border-box", // Include padding in the width
   },
   selectedCategoryIndicator: {
     background: "#A4755D",
@@ -36,5 +46,9 @@ export const Styles = {
     width: "57px",
     height: "4px",
     marginTop: "0.5rem",
+  },
+
+  categoryImage: {
+    borderRadius: "50%",
   },
 };
