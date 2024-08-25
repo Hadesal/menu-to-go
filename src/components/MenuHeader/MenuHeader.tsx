@@ -13,10 +13,10 @@ export default function MenuHeader() {
           variant="h4"
           color="var(--primary-color)"
         >
-          {title ? title.split("-")[0] : "MENU"}
+          {title ? title.split("-")[0] : "Menu"}
         </Typography>
         <Typography sx={Styles.titleSecondary} variant="h4">
-          {title ? title : "-TO-GO"}
+          {title ? title : "-To-Go"}
         </Typography>
       </Box>
       <Box
