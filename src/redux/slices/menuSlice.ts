@@ -8,6 +8,7 @@ export interface MenuState {
   restaurantData: RestaurantAllData;
   selectedProduct: object;
   selectedCategory: object;
+  selectedCategoryType: string;
   loading: boolean;
   error: string | null;
 }
@@ -36,6 +37,7 @@ const initialState: MenuState = {
   },
   selectedProduct: {},
   selectedCategory: {},
+  selectedCategoryType: "Food",
   loading: false,
   error: null,
 };
@@ -64,6 +66,9 @@ export const MenuSlice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<object>) => {
       state.selectedCategory = action.payload;
     },
+    setSelectedCategoryType: (state, action: PayloadAction<string>) => {
+      state.selectedCategoryType = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -86,6 +91,10 @@ export const MenuSlice = createSlice({
   },
 });
 
-export const { setSelectedProduct, setSelectedCategory } = MenuSlice.actions;
+export const {
+  setSelectedProduct,
+  setSelectedCategory,
+  setSelectedCategoryType,
+} = MenuSlice.actions;
 
 export default MenuSlice.reducer;

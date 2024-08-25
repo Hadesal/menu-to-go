@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
 import { Box, Container, Paper, Typography } from "@mui/material";
-import MenuHeader from "../../components/MenuHeader/MenuHeader";
-import MenuFooter from "../../components/MenuFooter/MenuFooter";
+import { useEffect, useState } from "react";
 import MenuCategories from "../../components/MenuCategories/MenuCategories";
+import MenuHeader from "../../components/MenuHeader/MenuHeader";
 import MenuProductsCard from "../../components/MenuProductsCard/MenuProductsCard";
-import { Styles } from "../ProductPage/ProductPage.styles";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { fetchMenuData } from "../../utils/MenuDataFetching";
+import { Styles } from "../ProductPage/ProductPage.styles";
 import SplashScreen from "../SplashScreen/SplashScreen";
-import { display } from "html2canvas/dist/types/css/property-descriptors/display";
+import { setSelectedCategoryType } from "../../redux/slices/menuSlice";
+import MenuFooter from "../../components/MenuFooter/MenuFooter";
 
 const menuSelections = [
   {
@@ -23,12 +23,10 @@ const menuSelections = [
 
 export default function MenuPage() {
   const [loading, setLoading] = useState(true);
-  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Food");
   const dispatch = useAppDispatch();
 
-  const { restaurantData, selectedCategory } = useAppSelector(
-    (state) => state.menuData
-  );
+  const { restaurantData, selectedCategory, selectedCategoryType } =
+    useAppSelector((state) => state.menuData);
 
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
@@ -81,17 +79,19 @@ export default function MenuPage() {
             {menuSelections.map((selection, index) => (
               <Box
                 key={index}
-                onClick={() => setSelectedMenuCategory(selection.Label)}
+                onClick={() =>
+                  dispatch(setSelectedCategoryType(selection.Label))
+                }
                 sx={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   background:
-                    selection.Label === selectedMenuCategory
+                    selection.Label === selectedCategoryType
                       ? "#A4755D"
                       : "transparent",
                   color:
-                    selection.Label === selectedMenuCategory
+                    selection.Label === selectedCategoryType
                       ? "#F9FDFE"
                       : "#797979",
                   borderRadius: "22px",
@@ -110,25 +110,14 @@ export default function MenuPage() {
         </Paper>
         <MenuCategories
           categories={restaurantData.categories}
-          categoryTag="Food"
+          categoryTag={selectedCategoryType}
           selectedCategory={selectedCategory.name}
         />
       </Box>
-      <Box
-        maxWidth="sm"
-        sx={{
-          background: "#D9B18F4D",
-          height: "1px",
-          marginTop: "1rem",
-          position: "fixed",
-          width: "100%",
-          index: 99,
-        }}
-      />
 
       <Typography
-      color={"var(--primary-color)"}
-        sx={{ paddingLeft: "1rem", paddingTop: "2rem" , fontWeight:500 }}
+        color={"var(--primary-color)"}
+        sx={{ paddingLeft: "1rem", paddingTop: "2rem", fontWeight: 500 }}
         variant="h6"
       >
         {selectedCategory.name}
@@ -143,6 +132,7 @@ export default function MenuPage() {
           gap: 2,
           overflowY: "scroll",
           height: "400px",
+          paddingBottom: "150px",
           scrollbarWidth: "none", // For Firefox
           msOverflowStyle: "none", // For Internet Explorer and Edge
           "&::-webkit-scrollbar": {
@@ -157,7 +147,7 @@ export default function MenuPage() {
           </Box>
         ) : (
           selectedCategory?.products.map((product, index) => (
-            <MenuProductsCard product={product} />
+            <MenuProductsCard key={index} product={product} />
           ))
         )}
       </Box>

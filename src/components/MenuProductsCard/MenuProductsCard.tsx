@@ -1,33 +1,27 @@
-import React, { useState } from "react";
 import {
-  Box,
-  Avatar,
   Card,
-  CardMedia,
-  CardContent,
   CardActionArea,
+  CardContent,
+  CardMedia,
   Typography,
 } from "@mui/material";
-import VegtableEggImg from "../../assets/vegtableegg.jpg";
-import SmoothieBowlImg from "../../assets/smoothiebowl.jpg";
+import { useNavigate } from "react-router-dom";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
-
-const products = [
-  {
-    id: "vegtableEgg",
-    label: "Vegtable Egg",
-    img: VegtableEggImg,
-  },
-  {
-    id: "smoothieBowl",
-    label: "Smoothie Bowl",
-    img: SmoothieBowlImg,
-  },
-];
+import { setSelectedProduct } from "../../redux/slices/menuSlice";
+import { useAppDispatch } from "../../utils/hooks";
 
 export default function MenuProductsCard({ product }) {
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
   return (
-    <Card sx={{flex:1, height: "200px", borderRadius: "16px" }}>
+    <Card
+      onClick={() => {
+        dispatch(setSelectedProduct(product));
+        navigate("/product");
+      }}
+      sx={{ width: "170px", height: "200px", borderRadius: "16px" }}
+    >
       <CardActionArea>
         <CardMedia
           component="img"

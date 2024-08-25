@@ -8,6 +8,7 @@ import VariantList from "../../components/ProductVariants/ProductVariants";
 import { useAppSelector } from "../../utils/hooks";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
+import { useNavigate } from "react-router-dom";
 
 // Utility function to convert hex to rgba
 function hexToRgba(hex, alpha = 1) {
@@ -16,33 +17,12 @@ function hexToRgba(hex, alpha = 1) {
 }
 
 export default function ProductPage() {
-  // const dispatch = useAppDispatch();
-  // const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
   );
 
-  // useEffect(() => {
-  //   const fetchDataAndHandleLoading = async () => {
-  //     setLoading(true);
-  //     const result = await fetchMenuData(dispatch);
-
-  //     if (result.success) {
-  //       setLoading(false);
-  //     } else {
-  //       console.error("Error fetching data:", result.error);
-  //     }
-  //   };
-
-  //   fetchDataAndHandleLoading();
-  // }, [dispatch]);
-
-  // Show splash screen while loading
-  // if (loading) {
-  //   return <SplashScreen />;
-  // }
-  
   const backgroundColor = hexToRgba(
     restaurantData.userUiPreferences.primaryColor,
     0.19
@@ -52,7 +32,7 @@ export default function ProductPage() {
     <Container sx={{ ...Styles.container }} maxWidth="sm">
       <Box sx={Styles.box}>
         <IconButton
-          onClick={() => console.log("go back")}
+          onClick={() => navigate("/menu")}
           sx={{
             ...Styles.iconButton,
             background: backgroundColor,
