@@ -3,7 +3,7 @@ export const Styles = {
     marginTop: "2rem",
     display: "flex",
     flexDirection: "row",
-    gap: "1.5rem",
+    gap: "0.5rem",
     overflowX: "auto",
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
@@ -14,7 +14,8 @@ export const Styles = {
   },
   categoryBox: {
     display: "flex",
-    maxWidth: 150,
+    minWidth: 100,
+    // border:"1px solid black",
     flexDirection: "column",
     alignItems: "center",
     boxSizing: "border-box",
@@ -23,14 +24,9 @@ export const Styles = {
   categoryAvatarStyle: {
     alignSelf: "center",
   },
-  categoryAvatar: {
-    width: 56,
-    height: 56,
-  },
   categoryLabel: {
-    color: "#D9B18F",
-    fontSize: "14px",
-    fontWeight: 400,
+    fontSize: "16px",
+    fontWeight: 500,
     lineHeight: "1rem",
     textAlign: "center",
     marginTop: "0.8rem",
@@ -42,7 +38,7 @@ export const Styles = {
   selectedCategoryIndicator: {
     background: "#A4755D",
     borderRadius: "8px",
-    width: "57px",
+    width: 70,
     height: "4px",
     marginTop: "0.5rem",
   },

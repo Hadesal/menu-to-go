@@ -2,12 +2,12 @@
 export const Styles = {
   container: {
     background: "#F9FDFE",
-    paddingLeft: "0",
+    overflow:"hidden"
   },
   box: {
     paddingTop: "2rem",
     paddingLeft: "1rem",
-    paddingRight:"1rem"
+    paddingRight: "1rem",
   },
   iconButton: {
     marginBottom: 5,

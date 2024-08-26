@@ -148,7 +148,7 @@ export default function MenuPage() {
           ))
         )}
       </Box>
-      <MenuFooter />
+      {/* <MenuFooter /> */}
     </Container>
   );
 }

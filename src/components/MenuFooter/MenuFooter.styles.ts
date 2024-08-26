@@ -1,7 +1,7 @@
 export const Styles = {
   footerContainer: {
     position: "absolute",
-    bottom: 0,
+    // bottom: 0,
     // height: "25%",
     width: "100%",
     background: "#A4755D",
