@@ -60,6 +60,8 @@ export default function CategoryPage() {
       setShowToast(true);
     } else if (productError) {
       setShowToast(true);
+    } else if (restaurantError) {
+      setShowToast(true);
     }
   }, [error, productError]);
 
@@ -100,13 +102,12 @@ export default function CategoryPage() {
   };
 
   const handleAddProduct = (product: ProductData) => {
-    const a = dispatch(
+    dispatch(
       addProduct({
         categoryId: selectedCategory?.id,
         product: product,
       })
     );
-    console.log(a);
   };
   const handleEditProduct = (product: ProductData) => {
     dispatch(
@@ -154,7 +155,9 @@ export default function CategoryPage() {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {error || productError?.message}
+          {error || productError?.message || restaurantError?.message
+            ? restaurantError?.message
+            : restaurantError}
         </Alert>
       </Snackbar>
 
