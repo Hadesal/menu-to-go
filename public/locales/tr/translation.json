@@ -5,8 +5,8 @@
   "toastFail": "İsteğiniz gönderilemedi. Lütfen tekrar deneyin.",
   "errorDeleteRestaurant": "En az bir restoran olmalıdır, bu restoranı silebilmek için yeni bir restoran oluşturun",
   "contactUs": "Bize Ulaşın",
-  "haveQuestionText": "Bir sorunuz mu var? Bize ulaşmaktan çekinmeyin.",
-  "happyToHelpText": "Size yardımcı olmaktan mutluluk duyarız!",
+  "haveQuestionText": "Bir sorunuz, geri bildiriminiz veya talebiniz mi var?",
+  "happyToHelpText": "Yardımcı olmak ve dinlemek için buradayız.",
   "categories": "Kategoriler",
   "detailsText": "Hesabınızı tamamlamak için aşağıdaki alanları doldurun. Bunu daha sonra ayarlarınızdan düzenleyebilirsiniz.",
   "completeAccount": "Hesabınızı Tamamlayın",
@@ -91,5 +91,7 @@
   "pleaseTellUsInFewWords": "Lütfen birkaç kelimeyle bize bildirin",
   "feedBack": "Deneyiminiz hakkında geri bildiriminizi almak isteriz",
   "experienceQuestion": "Deneyiminiz nasıldı?",
-  "reset": "Sıfırla"
+  "reset": "Sıfırla",
+  "SubmitMessage": "Mesajı Gönder",
+  "TypeofInquiry": "Soru Türü"
 }

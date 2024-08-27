@@ -5,8 +5,8 @@
   "toastFail": "Failed to submit your request. Please try again.",
   "errorDeleteRestaurant": "There must be at least 1 one Restaurant, create new Restaurant to be able to delete this Restaurant ",
   "contactUs": "Contact Us",
-  "haveQuestionText": "Have a question? Feel free to contact us.",
-  "happyToHelpText": "We are happy to help you!",
+  "haveQuestionText": "Have a question, feedback, or request?",
+  "happyToHelpText": "We're here to help and listen.",
   "categories": "Categories",
   "detailsText": "Please fill in the fields below to complete your account. You can edit this later in your settings.",
   "completeAccount": "Complete Your Account",
@@ -92,5 +92,7 @@
   "pleaseTellUsInFewWords": "Please tell us in few Words",
   "feedBack": "We'd love your feedback on your experience on",
   "experienceQuestion": "How was your experience?",
-  "reset": "Reset"
+  "reset": "Reset",
+  "SubmitMessage": "Submit Message",
+  "TypeofInquiry": "Type of Inquiry"
 }

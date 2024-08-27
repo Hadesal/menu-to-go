@@ -32,6 +32,19 @@ export const Styles = {
     bottom: 30,
     right: 50,
   },
+
+  selectLabel: {
+    textAlign: "left",
+  },
+  selectWrapper: {
+    width: "100%",
+    marginTop: "1rem",
+  },
+  select: {
+    width: "100%",
+    borderRadius: "1rem",
+    marginTop: "0.5rem",
+  },
   textArea: {
     width: "100%",
     marginTop: "1rem",
