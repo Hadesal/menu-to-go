@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ProductDetailsData } from "../../DataTypes/ProductDetailsDataTypes.ts";
 
-const API_ProductDetails_BASE_URL = "http://52.23.230.198:8080/api/products";
+const API_ProductDetails_BASE_URL = "http://localhost:8080/api/products";
 
 const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({

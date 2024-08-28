@@ -8,7 +8,7 @@ interface ErrorResponseObject {
   timestamp: string;
 }
 
-const API_Extra_BASE_URL = "http://52.23.230.198:8080/api/productDetails";
+const API_Extra_BASE_URL = "http://localhost:8080/api/productDetails";
 const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Extra_BASE_URL,

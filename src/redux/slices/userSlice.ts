@@ -106,6 +106,7 @@ export const userDelete = createAsyncThunk(
     }
   }
 );
+
 export const createOrUpdateQrCode = createAsyncThunk(
   "user/createOrUpdateQrCode",
   async (
@@ -118,7 +119,7 @@ export const createOrUpdateQrCode = createAsyncThunk(
     try {
       const userToken = JSON.parse(localStorage.getItem("userToken") as string);
       const response = await createUpdateQrCode(userId, qrCodeStyle, userToken);
-      return response;
+      return { userId, qrCodeStyle: response.qrCodeStyle };
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data || "Error updating QR code style"
@@ -126,6 +127,7 @@ export const createOrUpdateQrCode = createAsyncThunk(
     }
   }
 );
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -231,7 +233,7 @@ export const userSlice = createSlice({
         if (updatedUserIndex !== -1) {
           state.userList[updatedUserIndex] = {
             ...state.userList[updatedUserIndex],
-            qrCodeStyle: action.payload.qrCodeStyle, // Assuming this is how the QR code style is stored
+            qrCodeStyle: action.payload.qrCodeStyle,
           };
         }
         state.loading = false;
