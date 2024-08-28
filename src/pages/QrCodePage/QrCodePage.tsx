@@ -43,50 +43,44 @@ const QrCodePage = () => {
   const dispatch = useAppDispatch();
   const { userList } = useAppSelector((state) => state.userData);
   const userData = userList[0];
-  const { qrCodeStyle, id } = userData;
+  const { qrCodeStyle: qrCodeStyleObject, id } = userData;
   const { t } = useTranslation();
   const getString = t;
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [urlPath, setUrlPath] = useState<string>(
-    qrCodeStyle.generalUrlPath
-      ? qrCodeStyle.generalUrlPath
-      : "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
+    "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
   );
-  const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>(
-    qrCodeStyle?.dotsOptions
-      ? qrCodeStyle.dotsOptions
-      : {
-          color: "#77675",
-          type: "rounded",
-        }
-  );
+  const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>({
+    color: "#77675",
+    type: "rounded",
+  });
   const [cornersSquareOptions, setCornersSquareOptions] =
-    useState<CornerSquareOptionsObject>(
-      qrCodeStyle?.cornersSquareOptions
-        ? qrCodeStyle.cornersSquareOptions
-        : {
-            color: "#000000",
-            type: "extra-rounded",
-          }
-    );
+    useState<CornerSquareOptionsObject>({
+      color: "#000000",
+      type: "extra-rounded",
+    });
   const [cornersDotOptions, setCornersDotOptions] =
-    useState<CornerDotsOptionsObject>(
-      qrCodeStyle?.cornersDotOptions
-        ? qrCodeStyle.cornersDotOptions
-        : {
-            color: "#4267b2",
-            type: "dot",
-          }
-    );
+    useState<CornerDotsOptionsObject>({
+      color: "#4267b2",
+      type: "dot",
+    });
 
-  const [imageSrc, setImageSrc] = useState<string>(
-    qrCodeStyle?.imageSrc ? qrCodeStyle.imageSrc : logo
-  );
+  const [imageSrc, setImageSrc] = useState<string>(logo);
   const frameRef = useRef(null);
 
-  useEffect(() => {}, [userData]);
+  useEffect(() => {
+    if (userData && userData.qrCodeStyle) {
+      setUrlPath(qrCodeStyleObject.generalUrlPath);
+      setDotsOptions(qrCodeStyleObject.dotsOptions);
+      setCornersSquareOptions(qrCodeStyleObject.cornersSquareOptions);
+      setCornersDotOptions(qrCodeStyleObject.cornersDotOptions);
+      setImageSrc(qrCodeStyleObject.imageSrc);
+    }
+  }, [userData, qrCodeStyleObject]);
+  useEffect(() => {}, [dispatch]);
   const handlePushNewQrStyle = () => {
+    console.log(dotsOptions);
     const newQrStyleObject = {
       dotsOptions,
       cornersSquareOptions,
@@ -94,15 +88,22 @@ const QrCodePage = () => {
       imageSrc,
       generalUrlPath: urlPath,
     };
+    if (!newQrStyleObject) {
+      setErrorMessage(getString("noQrCodeStyleObject"));
+      setOpen(true);
+      return;
+    }
+    console.log(newQrStyleObject);
     const hasChanged =
       JSON.stringify(newQrStyleObject.dotsOptions) !==
-        JSON.stringify(qrCodeStyle.dotsOptions) ||
+        JSON.stringify(qrCodeStyleObject?.dotsOptions || {}) ||
       JSON.stringify(newQrStyleObject.cornersSquareOptions) !==
-        JSON.stringify(qrCodeStyle.cornersSquareOptions) ||
+        JSON.stringify(qrCodeStyleObject?.cornersSquareOptions || {}) ||
       JSON.stringify(newQrStyleObject.cornersDotOptions) !==
-        JSON.stringify(qrCodeStyle.cornersDotOptions) ||
-      newQrStyleObject.imageSrc !== qrCodeStyle.imageSrc ||
-      newQrStyleObject.generalUrlPath !== urlPath;
+        JSON.stringify(qrCodeStyleObject?.cornersDotOptions || {}) ||
+      newQrStyleObject.imageSrc !== (qrCodeStyleObject?.imageSrc || "") ||
+      newQrStyleObject.generalUrlPath !==
+        (qrCodeStyleObject?.generalUrlPath || "");
     if (!hasChanged) {
       setErrorMessage(getString("noDataChanged"));
       setOpen(true);
@@ -112,7 +113,7 @@ const QrCodePage = () => {
 
     dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
-    );
+    ).unwrap();
   };
   const downloadImage = async () => {
     const canvas = await html2canvas(frameRef.current, {

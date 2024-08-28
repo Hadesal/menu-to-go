@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import { ErrorResponseObject } from "../../DataTypes/ErrorResponsObject";
-const API_Category_BASE_URL = "http://52.23.230.198:8080/api/categories";
+const API_Category_BASE_URL = "http://localhost:8080/api/categories";
 //const userToken = JSON.parse(localStorage.getItem("userToken") as string);
 const apiService = axios.create({
   baseURL: API_Category_BASE_URL,

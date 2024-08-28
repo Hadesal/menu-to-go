@@ -3,7 +3,7 @@ import QRCodeStyling from "qr-code-styling";
 import { Container } from "@mui/material";
 
 const CustomQRCodeComponent = ({
-  value = "",
+  value = "google.com",
   size = 400,
   margin = 0,
   dotsOptions = {},
