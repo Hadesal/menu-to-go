@@ -9,16 +9,17 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
   const location = useLocation();
   const token = localStorage.getItem("userToken");
 
-  const getRedirectPath = () => {
-    if (location.pathname.startsWith("/dashboard")) {
-      return "/dashboard";
-    } else if (location.pathname.startsWith("/menu")) {
-      return "/menu";
-    }
-    return "/dashboard";
-  };
+  // Always allow access to the MenuPage
+  if (location.pathname === "/menu") {
+    return <>{children}</>;
+  }
 
-  return token ? <Navigate to={getRedirectPath()} /> : <>{children}</>;
+  // Redirect authenticated users away from other public routes (like login/register)
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default PublicRoute;

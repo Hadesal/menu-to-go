@@ -58,19 +58,19 @@ function App() {
               </PublicRoute>
             }
           />
+            <Route
+              path="/menu"
+              element={
+                <PublicRoute>
+                  <MenuPage />
+                </PublicRoute>
+              }
+            />
           <Route
             path="/dashboard"
             element={
               <PrivateRoute>
                 <UserDashboardPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/menu"
-            element={
-              <PrivateRoute>
-                <MenuPage />
               </PrivateRoute>
             }
           />
@@ -82,14 +82,14 @@ function App() {
               </PrivateRoute>
             }
           /> */}
-          <Route
+          {/* <Route
             path="/product"
             element={
               <PrivateRoute>
                 <ProductPage />
               </PrivateRoute>
             }
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -5,27 +5,24 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
 import { setSelectedProduct } from "../../redux/slices/menuSlice";
-import { useAppDispatch } from "../../utils/hooks";
-
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 export default function MenuProductsCard({ product }) {
-  const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
+  const { restaurantData } = useAppSelector((state) => state.menuData);
   return (
     <Card
       onClick={() => {
         dispatch(setSelectedProduct(product));
-        navigate("/product");
       }}
-      sx={{ width: "170px", height: "200px", borderRadius: "16px" }}
+      sx={{ height: "200px", borderRadius: "16px" }}
     >
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
+          width="100%"
           image={product.image ? product.image : PlaceHolder}
           alt={product.name}
         />
@@ -41,15 +38,25 @@ export default function MenuProductsCard({ product }) {
           }}
         >
           <Typography
-            sx={{ fontSize: "14px", fontWeight: 400 }}
+            sx={{
+              fontSize: "14px",
+              fontWeight: 400,
+              fontFamily: restaurantData.userUiPreferences.fontType,
+            }}
             gutterBottom
             component="div"
+            color={restaurantData.userUiPreferences.primaryColor}
           >
             {product.name}
           </Typography>
           <Typography
-            sx={{ fontSize: "14px", fontWeight: 500 }}
+            sx={{
+              fontSize: "14px",
+              fontWeight: 500,
+              fontFamily: restaurantData.userUiPreferences.fontType,
+            }}
             component="div"
+            color={restaurantData.userUiPreferences.primaryColor}
           >
             {product.price}$
           </Typography>
