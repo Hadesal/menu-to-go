@@ -9,6 +9,7 @@ import { Styles } from "../ProductPage/ProductPage.styles";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import { setSelectedCategoryType } from "../../redux/slices/menuSlice";
 import MenuFooter from "../../components/MenuFooter/MenuFooter";
+import { useParams } from "react-router-dom";
 
 const menuSelections = [
   {
@@ -24,14 +25,13 @@ const menuSelections = [
 export default function MenuPage() {
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
-
   const { restaurantData, selectedCategory, selectedCategoryType } =
     useAppSelector((state) => state.menuData);
-
+  const { id } = useParams();
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
-      const result = await fetchMenuData(dispatch);
+      const result = await fetchMenuData(id as string, dispatch);
 
       if (result.success) {
         setLoading(false);
