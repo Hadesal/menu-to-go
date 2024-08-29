@@ -78,6 +78,9 @@ export default function MenuPage() {
   const showMenuSelection =
     categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
 
+  if(Object.keys(selectedCategory).length === 0){
+    return <Typography>no data for the resturant </Typography>
+  }  
   return (
     <Container disableGutters={true} sx={Styles.container} maxWidth="sm">
       <Box sx={Styles.box}>
