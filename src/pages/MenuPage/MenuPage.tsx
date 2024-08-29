@@ -3,6 +3,7 @@ import {
   Container,
   Divider,
   Grid,
+  Stack,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ import MenuFooter from "../../components/MenuFooter/MenuFooter";
 import ProductPage from "../ProductPage/ProductPage";
 import MenuSelection from "../../components/MenuSelection/MenuSelection";
 import { useParams } from "react-router-dom";
+import emptyData from "../../assets/Animation - 1724972864386.json";
+import Lottie from "lottie-react";
 
 // Define menu selection options
 const menuSelections = [
@@ -78,9 +81,28 @@ export default function MenuPage() {
   const showMenuSelection =
     categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
 
-  if(Object.keys(selectedCategory).length === 0){
-    return <Typography>no data for the resturant </Typography>
-  }  
+  if (Object.keys(selectedCategory).length === 0) {
+    return (
+      <>
+        {/* <Box sx={{ height: "100%", display: "flex", justifyContent: "center" , alignItems:"center" }}>
+          
+          <Typography>Menu has no data </Typography>
+        </Box> */}
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "100vh"}}
+        >
+          <Lottie
+            animationData={emptyData}
+            style={{ width: 200, height: 200 }}
+          />
+          <Typography>Menu has no data</Typography>
+          <Typography>check again later</Typography>
+        </Stack>
+      </>
+    );
+  }
   return (
     <Container disableGutters={true} sx={Styles.container} maxWidth="sm">
       <Box sx={Styles.box}>
