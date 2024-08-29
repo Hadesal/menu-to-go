@@ -28,7 +28,7 @@ export const getRestaurantById = async (restaurantId: string) => {
 
 export const getRestaurantByIdOpenApi = async (restaurantId: string) => {
   try {
-    const response = await apiService.get(`/${restaurantId}`);
+    const response = await apiService.get(`/id/${restaurantId}`);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error;

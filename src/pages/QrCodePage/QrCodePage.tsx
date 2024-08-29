@@ -8,6 +8,10 @@ import {
   Alert,
   Snackbar,
   Divider,
+  InputLabel,
+  Select,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
 import { useEffect, useRef, useState } from "react";
@@ -48,9 +52,7 @@ const QrCodePage = () => {
   const getString = t;
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const [urlPath, setUrlPath] = useState<string>(
-    "https://www.youtube.com/watch?v=-XqDJZ3zeWs"
-  );
+  const { restaurantList } = useAppSelector((state) => state.restaurantsData);
   const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>({
     color: "#77675",
     type: "rounded",
@@ -65,10 +67,14 @@ const QrCodePage = () => {
       color: "#4267b2",
       type: "dot",
     });
-
+  const [selectedRestaurant, setSelectedRestaurant] = useState(
+    restaurantList[0]
+  );
+  const [urlPath, setUrlPath] = useState<string>(
+    `http://localhost:5173/menu/${selectedRestaurant.id}`
+  );
   const [imageSrc, setImageSrc] = useState<string>(logo);
   const frameRef = useRef(null);
-
   useEffect(() => {
     if (userData && userData.qrCodeStyle) {
       setUrlPath(qrCodeStyleObject.generalUrlPath);
@@ -77,10 +83,10 @@ const QrCodePage = () => {
       setCornersDotOptions(qrCodeStyleObject.cornersDotOptions);
       setImageSrc(qrCodeStyleObject.imageSrc);
     }
+    setSelectedRestaurant(restaurantList[0]);
   }, [userData, qrCodeStyleObject]);
   useEffect(() => {}, [dispatch]);
   const handlePushNewQrStyle = () => {
-    console.log(dotsOptions);
     const newQrStyleObject = {
       dotsOptions,
       cornersSquareOptions,
@@ -93,7 +99,6 @@ const QrCodePage = () => {
       setOpen(true);
       return;
     }
-    console.log(newQrStyleObject);
     const hasChanged =
       JSON.stringify(newQrStyleObject.dotsOptions) !==
         JSON.stringify(qrCodeStyleObject?.dotsOptions || {}) ||
@@ -114,6 +119,11 @@ const QrCodePage = () => {
     dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
     ).unwrap();
+  };
+  const handleOnRestaurantChange = (event: any) => {
+    const selectedRestaurant = event.target.value;
+    setSelectedRestaurant(selectedRestaurant);
+    setUrlPath(`http://localhost:5173/menu/${selectedRestaurant.id}`);
   };
   const downloadImage = async () => {
     const canvas = await html2canvas(frameRef.current, {
@@ -164,12 +174,48 @@ const QrCodePage = () => {
 
   return (
     <>
-      <Typography
-        sx={{ width: "fit-content", margin: 5, marginBottom: 2, marginTop: 3 }}
-        variant="h5"
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
       >
-        {getString("qrStyle")}
-      </Typography>
+        <Typography
+          sx={{
+            width: "fit-content",
+            margin: 5,
+            marginBottom: 2,
+            marginTop: 3,
+          }}
+          variant="h5"
+        >
+          {getString("qrStyle")}
+        </Typography>
+        <div
+          style={{
+            width: "25%",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <InputLabel id="restaurantDropdownLabel">Restaurant</InputLabel>
+          <Select
+            labelId="restaurantDropdownLabel"
+            id="restaurantDropdownId"
+            value={selectedRestaurant}
+            onChange={handleOnRestaurantChange}
+            sx={{ width: "100%", alignSelf: "end" }}
+          >
+            {restaurantList &&
+              restaurantList.map((restaurantItem, key) => (
+                <MenuItem key={key} value={restaurantItem}>
+                  {restaurantItem.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </div>
+      </div>
       <Divider sx={{ marginBottom: 3 }} />
 
       <Stack

@@ -74,6 +74,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/menu/:id"
+            element={
+              <PrivateRoute>
+                <MenuPage />
+              </PrivateRoute>
+            }
+          />
           {/* <Route
             path="/myprofile"
             element={

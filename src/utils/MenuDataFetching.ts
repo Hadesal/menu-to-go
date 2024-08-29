@@ -1,10 +1,13 @@
 import { fetchRestaurantData } from "../redux/slices/menuSlice";
 import { AppDispatch } from "../redux/store"; // Adjust the path as needed
 
-export const fetchMenuData = async (dispatch: AppDispatch) => {
+export const fetchMenuData = async (
+  restaurantId: string,
+  dispatch: AppDispatch
+) => {
   const resultAction = await dispatch(
     fetchRestaurantData({
-      restaurantID: "589d5969-ee36-40ea-801a-1aac49c24e32",
+      restaurantID: restaurantId,
     })
   );
 

@@ -33,7 +33,6 @@ const StyleControl: React.FC<StyleControlProps> = ({
     setShowColorPicker((prev) => !prev);
   };
 
-  // Close the color picker when clicking outside of it or on the button again
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -64,7 +63,7 @@ const StyleControl: React.FC<StyleControlProps> = ({
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: "",
-        position: "relative", // Add relative positioning for the parent container
+        position: "relative",
       }}
     >
       <Container

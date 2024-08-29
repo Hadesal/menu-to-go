@@ -16,6 +16,7 @@ import SplashScreen from "../SplashScreen/SplashScreen";
 import MenuFooter from "../../components/MenuFooter/MenuFooter";
 import ProductPage from "../ProductPage/ProductPage";
 import MenuSelection from "../../components/MenuSelection/MenuSelection";
+import { useParams } from "react-router-dom";
 
 // Define menu selection options
 const menuSelections = [
@@ -40,10 +41,11 @@ export default function MenuPage() {
     selectedProduct,
   } = useAppSelector((state) => state.menuData);
 
+  const { id } = useParams();
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
-      const result = await fetchMenuData(dispatch);
+      const result = await fetchMenuData(id as string, dispatch);
 
       if (result.success) {
         setLoading(false);
