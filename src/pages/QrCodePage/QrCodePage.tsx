@@ -196,7 +196,9 @@ const QrCodePage = () => {
         <div
           style={{
             width: "25%",
-            marginBottom: "1.5rem",
+            margin: 5,
+            marginBottom: 5,
+            marginTop: 3,
           }}
         >
           <InputLabel id="restaurantDropdownLabel">Restaurant</InputLabel>
@@ -249,6 +251,7 @@ const QrCodePage = () => {
             alignItems: "center",
             display: "flex",
             flexDirection: "column",
+            padding: 3,
           }}
         >
           {/**Dots Style Card */}

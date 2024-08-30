@@ -52,6 +52,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   }, [successMessage]);
 
   useEffect(() => {
+    console.log(selectedRestaurant);
     if (!selectedRestaurant || Object.keys(selectedRestaurant).length === 0) {
       setShowSuccessToast(false);
       setShowToast(false);
