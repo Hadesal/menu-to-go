@@ -299,7 +299,7 @@ const AddProductDialog = ({
           onChange={(e) => {
             setDialogData((prevData) => ({
               ...prevData,
-              name: e.target.value.trim(),
+              name: e.target.value,
             }));
             setShowNameError(e.target.value.trim().length === 0);
             // setIsDataUnchanged(
@@ -382,7 +382,7 @@ const AddProductDialog = ({
               ...prevData,
               details: {
                 ...prevData.details,
-                detailsDescription: e.target.value.trim(),
+                detailsDescription: e.target.value,
               },
             }));
 

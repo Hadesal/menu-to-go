@@ -210,7 +210,7 @@ const ItemsGridView = ({
         onConfirmClick={(newRestaurantName) => {
           const newRestaurant = {
             ...currentItem,
-            name: newRestaurantName.name.trim(),
+            name: newRestaurantName.name,
           };
           editFunction(newRestaurant);
         }}

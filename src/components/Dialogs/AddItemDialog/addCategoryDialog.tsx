@@ -142,11 +142,11 @@ const AddCategoryDialog = ({
           onChange={(e) => {
             setDialogData({
               ...dialogData,
-              name: e.target.value.trim(),
+              name: e.target.value,
             });
             setShowError(e.target.value.trim().length === 0);
             setIsDataUnchanged(
-              initialData ? e.target.value.trim() === initialData.name : false
+              initialData ? e.target.value === initialData.name : false
             );
           }}
           onKeyDown={(e) => {
@@ -180,7 +180,7 @@ const AddCategoryDialog = ({
               categoryType: e.target.value,
             });
             setIsDataUnchanged(
-              initialData ? e.target.value.trim() === initialData.name : false
+              initialData ? e.target.value === initialData.name : false
             );
             setShowCategoryError(false);
           }}

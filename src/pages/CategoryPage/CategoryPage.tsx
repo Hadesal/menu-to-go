@@ -118,6 +118,14 @@ export default function CategoryPage() {
       })
     );
   };
+  const handleDuplicateProduct = (product: ProductData) => {
+    dispatch(
+      addProduct({
+        categoryId: selectedCategory?.id,
+        product: product,
+      })
+    );
+  };
   const handleDeleteProduct = (product: { id: string }) => {
     dispatch(
       deleteProduct({
@@ -245,6 +253,7 @@ export default function CategoryPage() {
             addFunction={handleAddProduct}
             editFunction={handleEditProduct}
             deleteFunction={handleDeleteProduct}
+            duplicateFunction={handleDuplicateProduct}
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}
             emptyStateMessage={getString("productEmptyStateInfo")}

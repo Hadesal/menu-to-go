@@ -30,6 +30,7 @@ interface BoxComponentProps {
   title?: string;
   listView?: boolean;
   product: boolean;
+  duplicateFunction?: (item: any, newItemName: string) => void;
 }
 
 const BoxComponent = ({
@@ -41,6 +42,7 @@ const BoxComponent = ({
   addFunction,
   emptyStateTitle,
   emptyStateMessage,
+  duplicateFunction,
   title,
   listView,
   product,
@@ -155,6 +157,7 @@ const BoxComponent = ({
             items={filteredItems}
             editFunction={editFunction}
             deleteFunction={deleteFunction}
+            duplicateFunction={duplicateFunction}
             styles={styles}
           />
         ) : (
@@ -190,6 +193,7 @@ const BoxComponent = ({
         isDialogOpen={product ? open : false}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
+        existingProduct
       />
     </Paper>
   );

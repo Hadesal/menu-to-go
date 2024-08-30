@@ -21,6 +21,7 @@ import Styles from "../../DataTypes/StylesTypes";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
 interface Props {
   CardIcon: string;
@@ -28,6 +29,7 @@ interface Props {
   editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
   styles: Styles;
+  duplicateFunction?: (item: any) => void;
 }
 const ItemsListView = ({
   items,
@@ -35,13 +37,16 @@ const ItemsListView = ({
   deleteFunction,
   styles,
   CardIcon,
+  duplicateFunction,
 }: Props): JSX.Element => {
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
   const { t } = useTranslation();
   const getString = t;
-
+  const [isDuplicateProductDialogOpen, setIsDuplicateProductDialogOpen] =
+    useState<boolean>(false);
+  // const [selectedProduct, setSelectedProduct] = useState<ProductData | undefiend>();
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
@@ -69,13 +74,16 @@ const ItemsListView = ({
     setAnchorEls(newAnchorEls);
   };
 
-  const handleEditClick = (item) => {
+  const handleEditClick = (item: any) => {
     setCurrentItem(item);
     setIsEditDialogOpen(true);
     //setOpen(true);
   };
+  const handleOnDuplicateProductDialogCancel = () => {
+    setIsDuplicateProductDialogOpen(false);
+  };
 
-  const handleDeleteClick = (item) => {
+  const handleDeleteClick = (item: any) => {
     console.log(currentItem);
     setCurrentItem(item);
     setIsDeleteDialogOpen(true);
@@ -184,6 +192,22 @@ const ItemsListView = ({
                   disableScrollLock={true}
                   elevation={1}
                 >
+                  {duplicateFunction && (
+                    <MenuItem
+                      onClick={() => {
+                        setIsDuplicateProductDialogOpen(true);
+                        setCurrentItem(item);
+                        handleMenuClose(index);
+                      }}
+                    >
+                      <ContentCopyOutlinedIcon
+                        aria-label="duplicate"
+                        fontSize="small"
+                        sx={{ marginRight: 1 }}
+                      />
+                      {getString("duplicate")}
+                    </MenuItem>
+                  )}
                   <MenuItem
                     onClick={() => {
                       handleEditClick(item);
@@ -224,6 +248,20 @@ const ItemsListView = ({
         onCancelClick={handleEditDialogClose}
         onConfirmClick={(data) => editFunction({ ...data, id: currentItem.id })}
         initialData={currentItem}
+      />
+      <AddProductDialog
+        dialogTitle={getString("DuplicateProduct")}
+        cancelText={getString("cancel")}
+        confirmText={getString("add")}
+        isDialogOpen={isDuplicateProductDialogOpen}
+        onCancelClick={handleOnDuplicateProductDialogCancel}
+        initialData={currentItem}
+        onConfirmClick={(item) => {
+          if (item && duplicateFunction) {
+            duplicateFunction(item);
+          }
+        }}
+        errorMessage={getString("duplicateProductError")}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

@@ -42,7 +42,7 @@ const AddRestaurantDialog = ({
       setDialogData({ name: initialData.name });
     }
   }, [initialData]);
-  
+
   const handleConfirm = () => {
     if (dialogData.name.length === 0) {
       setShowError(true);
@@ -95,11 +95,11 @@ const AddRestaurantDialog = ({
           onChange={(e) => {
             setDialogData({
               ...dialogData,
-              name: e.target.value.trim(),
+              name: e.target.value,
             });
             setShowError(e.target.value.trim().length === 0);
             setIsNameUnchanged(
-              initialData ? e.target.value.trim() === initialData.name : false
+              initialData ? e.target.value === initialData.name : false
             );
           }}
           onKeyDown={(e) => {
