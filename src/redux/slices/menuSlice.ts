@@ -78,11 +78,10 @@ export const MenuSlice = createSlice({
       })
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload;
-        state.selectedProduct =
-          state?.restaurantData?.categories[0]?.products[2];
         state.loading = false;
-
-        state.selectedCategory = state?.restaurantData.categories[0];
+        if (state?.restaurantData.categories.length !== 0) {
+          state.selectedCategory = state?.restaurantData.categories[0];
+        }
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {
         state.loading = false;

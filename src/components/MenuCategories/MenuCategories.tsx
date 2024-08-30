@@ -11,65 +11,9 @@ import SodaDrinks from "../../assets/sodadrinks.jpg";
 import VeganFoodImg from "../../assets/veganfood.jpg";
 import WarmDrinks from "../../assets/warmdrinks.jpg";
 import { setSelectedCategory } from "../../redux/slices/menuSlice";
-import { useAppDispatch } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { Styles } from "./MenuCategories.styles";
-
-const categories = [
-  {
-    id: "vegan",
-    label: "Vegan",
-    img: VeganFoodImg,
-    tag: "food",
-  },
-  {
-    id: "breakfast",
-    label: "Breakfast",
-    img: BreakfastImg,
-    tag: "food",
-  },
-  {
-    id: "pasta",
-    label: "Pasta",
-    img: PastaImg,
-    tag: "food",
-  },
-  {
-    id: "pizza",
-    label: "Pizza",
-    img: PizzaImg,
-    tag: "food",
-  },
-  {
-    id: "meat",
-    label: "Meat",
-    img: MeatImg,
-    tag: "food",
-  },
-  {
-    id: "chocken",
-    label: "Chicken",
-    img: ChickenImg,
-    tag: "food",
-  },
-  {
-    id: "sodadrinks",
-    label: "Soda Drinks",
-    img: SodaDrinks,
-    tag: "food",
-  },
-  {
-    id: "freshjuice",
-    label: "Fresh Juice",
-    img: FreshJuice,
-    tag: "drinks",
-  },
-  {
-    id: "warmdrinks",
-    label: "Warm Drinks",
-    img: WarmDrinks,
-    tag: "drinks",
-  },
-];
+import { adjustBrightness } from "../../utils/colors";
 
 export default function MenuCategories({
   categories,
@@ -77,6 +21,7 @@ export default function MenuCategories({
   selectedCategory,
 }) {
   const dispatch = useAppDispatch();
+  const { restaurantData } = useAppSelector((state) => state.menuData);
 
   const categoriesData = (categoryTag: string) => {
     let categoriesDataArray = [];
@@ -87,7 +32,9 @@ export default function MenuCategories({
       });
     } else {
       categoriesDataArray = categories.filter((category) => {
-        return category.categoryType === "Drinks";
+        return (
+          category.categoryType === "Drinks"
+        );
       });
     }
 
@@ -95,7 +42,6 @@ export default function MenuCategories({
   };
 
   useEffect(() => {
-    console.log("categoriesData" + JSON.stringify(categoriesData));
     dispatch(setSelectedCategory(categoriesData(categoryTag)[0]));
   }, [categoryTag]);
 
@@ -122,8 +68,12 @@ export default function MenuCategories({
               ...Styles.categoryLabel,
               color:
                 category.name === selectedCategory
-                  ? "var(--primary-color)"
-                  : "#D9B18F",
+                  ? restaurantData.userUiPreferences.primaryColor
+                  : adjustBrightness(
+                      restaurantData.userUiPreferences.primaryColor,
+                      50
+                    ),
+              fontFamily: restaurantData.userUiPreferences.fontType,
             }}
           >
             {category.name}

@@ -1,8 +1,6 @@
-
 export const Styles = {
   container: {
     background: "#F9FDFE",
-    overflow:"hidden"
   },
   box: {
     paddingTop: "2rem",

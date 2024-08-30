@@ -5,8 +5,8 @@ export const Styles = {
   },
   backgroundBluredDivStyle: {
     backgroundColor: "#D9B18F",
-    width: "100px",
-    height: "100px",
+    width: "70px",
+    height: "70px",
     filter: "blur(46px)",
     position: "absolute",
     top: 0,

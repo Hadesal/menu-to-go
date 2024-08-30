@@ -5,19 +5,14 @@ import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ExtrasList from "../../components/ProductExtras/ExtrasList";
 import IngredientList from "../../components/ProductIngredients/IngredientList";
 import VariantList from "../../components/ProductVariants/ProductVariants";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
-import { useNavigate } from "react-router-dom";
-
-// Utility function to convert hex to rgba
-function hexToRgba(hex, alpha = 1) {
-  const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+import { setSelectedProduct } from "../../redux/slices/menuSlice";
+import { hexToRgba } from "../../utils/colors";
 
 export default function ProductPage() {
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
@@ -29,10 +24,10 @@ export default function ProductPage() {
   );
 
   return (
-    <Container sx={{ ...Styles.container }} maxWidth="sm">
+    <Container disableGutters={true} sx={{ ...Styles.container }} maxWidth="sm">
       <Box sx={Styles.box}>
         <IconButton
-          onClick={() => navigate("/menu")}
+          onClick={() => dispatch(setSelectedProduct({}))}
           sx={{
             ...Styles.iconButton,
             background: backgroundColor,

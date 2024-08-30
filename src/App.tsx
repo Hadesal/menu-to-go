@@ -58,6 +58,14 @@ function App() {
               </PublicRoute>
             }
           />
+            <Route
+              path="/menu"
+              element={
+                <PublicRoute>
+                  <MenuPage />
+                </PublicRoute>
+              }
+            />
           <Route
             path="/dashboard"
             element={
@@ -82,14 +90,14 @@ function App() {
               </PrivateRoute>
             }
           /> */}
-          <Route
+          {/* <Route
             path="/product"
             element={
               <PrivateRoute>
                 <ProductPage />
               </PrivateRoute>
             }
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

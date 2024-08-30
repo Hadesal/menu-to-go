@@ -1,4 +1,11 @@
-import { Box, Container, Divider, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import MenuCategories from "../../components/MenuCategories/MenuCategories";
 import MenuHeader from "../../components/MenuHeader/MenuHeader";
@@ -7,10 +14,14 @@ import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { fetchMenuData } from "../../utils/MenuDataFetching";
 import { Styles } from "../ProductPage/ProductPage.styles";
 import SplashScreen from "../SplashScreen/SplashScreen";
-import { setSelectedCategoryType } from "../../redux/slices/menuSlice";
 import MenuFooter from "../../components/MenuFooter/MenuFooter";
+import ProductPage from "../ProductPage/ProductPage";
+import MenuSelection from "../../components/MenuSelection/MenuSelection";
 import { useParams } from "react-router-dom";
+import emptyData from "../../assets/Animation - 1724972864386.json";
+import Lottie from "lottie-react";
 
+// Define menu selection options
 const menuSelections = [
   {
     id: "food",
@@ -25,8 +36,14 @@ const menuSelections = [
 export default function MenuPage() {
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
-  const { restaurantData, selectedCategory, selectedCategoryType } =
-    useAppSelector((state) => state.menuData);
+
+  const {
+    restaurantData,
+    selectedCategory,
+    selectedCategoryType,
+    selectedProduct,
+  } = useAppSelector((state) => state.menuData);
+
   const { id } = useParams();
   useEffect(() => {
     const fetchDataAndHandleLoading = async () => {
@@ -48,64 +65,51 @@ export default function MenuPage() {
     return <SplashScreen />;
   }
 
+  if (Object.keys(selectedProduct).length !== 0) {
+    return <ProductPage />;
+  }
+
+  // Filter categories to include only those with products
+  const filteredCategories = restaurantData.categories.filter(
+    (category) => category.products.length > 0
+  );
+
+  // Determine if menu selection should be shown
+  const categoryLabels = filteredCategories.map(
+    (category) => category.categoryType
+  );
+  const showMenuSelection =
+    categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
+
+  if (Object.keys(selectedCategory).length === 0) {
+    return (
+      <>
+        {/* <Box sx={{ height: "100%", display: "flex", justifyContent: "center" , alignItems:"center" }}>
+          
+          <Typography>Menu has no data </Typography>
+        </Box> */}
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "100vh"}}
+        >
+          <Lottie
+            animationData={emptyData}
+            style={{ width: 200, height: 200 }}
+          />
+          <Typography>Menu has no data</Typography>
+          <Typography>check again later</Typography>
+        </Stack>
+      </>
+    );
+  }
   return (
     <Container disableGutters={true} sx={Styles.container} maxWidth="sm">
       <Box sx={Styles.box}>
         <MenuHeader />
-        <Paper
-          sx={{
-            display: "flex",
-            borderRadius: "29px",
-            height: "64px",
-            background: "#FCFDFD",
-            position: "relative",
-          }}
-          elevation={6}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              gap: "44px",
-            }}
-          >
-            {menuSelections.map((selection, index) => (
-              <Box
-                key={index}
-                onClick={() =>
-                  dispatch(setSelectedCategoryType(selection.Label))
-                }
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  background:
-                    selection.Label === selectedCategoryType
-                      ? "#A4755D"
-                      : "transparent",
-                  color:
-                    selection.Label === selectedCategoryType
-                      ? "#F9FDFE"
-                      : "#797979",
-                  borderRadius: "22px",
-                  padding: "1rem",
-                  width: "140px",
-                  height: "48px",
-                  fontWeight: "500",
-                  lineHeight: "16px",
-                  cursor: "pointer", // Add cursor to indicate clickable items
-                }}
-              >
-                {selection.Label}
-              </Box>
-            ))}
-          </Box>
-        </Paper>
+        {showMenuSelection && <MenuSelection menuSelections={menuSelections} />}
         <MenuCategories
-          categories={restaurantData.categories}
+          categories={filteredCategories}
           categoryTag={selectedCategoryType}
           selectedCategory={selectedCategory.name}
         />
@@ -113,42 +117,54 @@ export default function MenuPage() {
       <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
 
       <Typography
-        color={"var(--primary-color)"}
-        sx={{ paddingLeft: "1rem", paddingTop: "2rem", fontWeight: 500 }}
+        color={restaurantData.userUiPreferences.primaryColor}
+        sx={{
+          paddingLeft: "1rem",
+          paddingTop: "2rem",
+          fontWeight: 500,
+          fontFamily: restaurantData.userUiPreferences.fontType,
+        }}
         variant="h6"
       >
         {selectedCategory.name}
       </Typography>
-      <Box
+      <Grid
+        spacing={2}
+        container
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          paddingTop: "2rem",
-          paddingLeft: "1rem",
-          gap: 2,
+          marginTop: "1rem",
+          width: "100%",
           overflowY: "scroll",
           height: "400px",
-          paddingBottom: "150px",
-          scrollbarWidth: "none", // For Firefox
-          msOverflowStyle: "none", // For Internet Explorer and Edge
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          paddingBottom: "1rem",
           "&::-webkit-scrollbar": {
-            // For WebKit (Chrome, Safari)
             display: "none",
           },
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+          marginLeft: 0,
+          marginBottom: 3,
         }}
       >
-        {selectedCategory?.products.length === 0 ? (
-          <Box>
-            <Typography>No products</Typography>
-          </Box>
-        ) : (
-          selectedCategory?.products.map((product, index) => (
+        {selectedCategory?.products.map((product, index) => (
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            key={index}
+            sx={{
+              paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
+              paddingTop: index < 2 ? "0 !important" : "0px",
+            }}
+          >
             <MenuProductsCard key={index} product={product} />
-          ))
-        )}
-      </Box>
-      {/* <MenuFooter /> */}
+          </Grid>
+        ))}
+      </Grid>
+
+      <MenuFooter />
     </Container>
   );
 }

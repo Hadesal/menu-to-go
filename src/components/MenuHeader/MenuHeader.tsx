@@ -24,8 +24,8 @@ export default function MenuHeader() {
           ...Styles.backgroundBluredDivStyle2,
           top: 40,
           right: 0,
-          width: 100,
-          height: 100,
+          width: 70,
+          height: 70,
         }}
       ></Box>
     </Box>
