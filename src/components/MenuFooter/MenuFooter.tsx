@@ -8,10 +8,19 @@ import FacebookIcon from "../../assets/facebookvector.svg";
 import InstagramIcon from "../../assets/instagramvector.svg";
 import GmailIcon from "../../assets/gmailvector.svg";
 import Button from "@mui/material/Button";
+import { useAppSelector } from "../../utils/hooks";
 
 export default function MenuFooter() {
+  const { restaurantData } = useAppSelector((state) => state.menuData);
   return (
-    <Box component={"footer"} sx={Styles.footerContainer} maxWidth="sm">
+    <Box
+      component={"footer"}
+      sx={{
+        ...Styles.footerContainer,
+        backgroundColor: restaurantData.userUiPreferences.primaryColor,
+      }}
+      maxWidth="sm"
+    >
       <Box>
         <Box
           component={"img"}
@@ -38,9 +47,21 @@ export default function MenuFooter() {
         </Box>
         <Box sx={Styles.socialMediaIconsContainer}>
           <Box>
-            <Box component={"img"} sx={Styles.socialMediaIcon} src={FacebookIcon} />
-            <Box component={"img"} sx={{ ...Styles.socialMediaIcon, mx: 1 }} src={InstagramIcon} />
-            <Box component={"img"} sx={{ ...Styles.socialMediaIcon, mx: 1 }} src={GmailIcon} />
+            <Box
+              component={"img"}
+              sx={Styles.socialMediaIcon}
+              src={FacebookIcon}
+            />
+            <Box
+              component={"img"}
+              sx={{ ...Styles.socialMediaIcon, mx: 1 }}
+              src={InstagramIcon}
+            />
+            <Box
+              component={"img"}
+              sx={{ ...Styles.socialMediaIcon, mx: 1 }}
+              src={GmailIcon}
+            />
           </Box>
 
           <Box sx={Styles.contactInfo}>
@@ -48,9 +69,7 @@ export default function MenuFooter() {
             <Box component={"span"}>+10025568852</Box>
           </Box>
           <Box sx={{ mt: 1 }}>
-            <Button sx={Styles.policyButton}>
-              Policy
-            </Button>
+            <Button sx={Styles.policyButton}>Policy</Button>
           </Box>
         </Box>
       </Box>

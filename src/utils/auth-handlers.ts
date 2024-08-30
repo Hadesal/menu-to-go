@@ -91,7 +91,7 @@ const handleSignup = async (
   });
 
   setLoading(false);
-  navigate("/menu");
+  navigate("/login");
 };
 
 const handleSignIn = async (

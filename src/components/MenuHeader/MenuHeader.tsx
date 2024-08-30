@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { Styles } from "./MenuHeader.styles";
+import { useAppSelector } from "../../utils/hooks";
 
 export default function MenuHeader() {
   const title: string = "";
-
+  const { restaurantData } = useAppSelector((state) => state.menuData);
   return (
     <Box sx={Styles.container}>
       <Box sx={Styles.backgroundBluredDivStyle}></Box>
@@ -11,7 +12,7 @@ export default function MenuHeader() {
         <Typography
           sx={Styles.titlePrimary}
           variant="h4"
-          color="var(--primary-color)"
+          color={restaurantData.userUiPreferences.primaryColor}
         >
           {title ? title.split("-")[0] : "Menu"}
         </Typography>
