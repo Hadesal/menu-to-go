@@ -20,6 +20,7 @@ import MenuSelection from "../../components/MenuSelection/MenuSelection";
 import { useParams } from "react-router-dom";
 import emptyData from "../../assets/Animation - 1724972864386.json";
 import Lottie from "lottie-react";
+import MenuProductsList from "../../components/MenuProductsCard/MenuProductsList";
 
 // Define menu selection options
 const menuSelections = [
@@ -81,17 +82,16 @@ export default function MenuPage() {
   const showMenuSelection =
     categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
 
-  if (Object.keys(selectedCategory).length === 0) {
+  if (
+    filteredCategories.length === 0 ||
+    (selectedCategory && Object.keys(selectedCategory).length === 0)
+  ) {
     return (
       <>
-        {/* <Box sx={{ height: "100%", display: "flex", justifyContent: "center" , alignItems:"center" }}>
-          
-          <Typography>Menu has no data </Typography>
-        </Box> */}
         <Stack
           justifyContent="center"
           alignItems="center"
-          sx={{ height: "100vh"}}
+          sx={{ height: "100vh" }}
         >
           <Lottie
             animationData={emptyData}
@@ -128,41 +128,79 @@ export default function MenuPage() {
       >
         {selectedCategory.name}
       </Typography>
-      <Grid
-        spacing={2}
-        container
-        sx={{
-          marginTop: "1rem",
-          width: "100%",
-          overflowY: "scroll",
-          height: "400px",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          paddingBottom: "1rem",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
-          marginLeft: 0,
-          marginBottom: 3,
-        }}
-      >
-        {selectedCategory?.products.map((product, index) => (
-          <Grid
-            item
-            xs={6}
-            sm={6}
-            key={index}
-            sx={{
-              paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
-              paddingTop: index < 2 ? "0 !important" : "0px",
-            }}
-          >
-            <MenuProductsCard key={index} product={product} />
-          </Grid>
-        ))}
-      </Grid>
+      {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
+        <Grid
+          spacing={2}
+          container
+          sx={{
+            marginTop: "1rem",
+            width: "100%",
+            overflowY: "scroll",
+            height: "400px",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            paddingBottom: "1rem",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+            paddingLeft: "1rem",
+            paddingRight: "1rem",
+            marginLeft: 0,
+            marginBottom: 5,
+          }}
+        >
+          {selectedCategory?.products.map((product, index) => (
+            <Grid
+              item
+              xs={6}
+              sm={6}
+              key={index}
+              sx={{
+                paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
+                paddingTop: index < 2 ? "0 !important" : "0px",
+              }}
+            >
+              <MenuProductsCard key={index} product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Grid
+          spacing={2}
+          container
+          sx={{
+            marginTop: "1rem",
+            width: "100%",
+            overflowY: "scroll",
+            height: "400px",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            paddingBottom: "1rem",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+            paddingLeft: "1rem",
+            paddingRight: "1rem",
+            marginLeft: 0,
+            marginBottom: 5,
+          }}
+        >
+          {selectedCategory?.products.map((product, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              key={index}
+              sx={{
+                paddingLeft: "0 !important",
+                // paddingTop: index < 2 ? "0 !important" : "0px",
+              }}
+            >
+              <MenuProductsList key={index} product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       <MenuFooter />
     </Container>

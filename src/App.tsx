@@ -7,6 +7,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
+// Define your custom theme
 const theme = createTheme({
   typography: {
     fontFamily: ["Poppins", "Arial", "sans-serif"].join(","),
@@ -57,14 +58,6 @@ function App() {
             }
           />
           <Route
-            path="/menu"
-            element={
-              <PublicRoute>
-                <MenuPage />
-              </PublicRoute>
-            }
-          />
-          <Route
             path="/dashboard"
             element={
               <PrivateRoute>
@@ -75,27 +68,11 @@ function App() {
           <Route
             path="/menu/:id"
             element={
-              <PrivateRoute>
+              <PublicRoute>
                 <MenuPage />
-              </PrivateRoute>
+              </PublicRoute>
             }
           />
-          {/* <Route
-            path="/myprofile"
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            }
-          /> */}
-          {/* <Route
-            path="/product"
-            element={
-              <PrivateRoute>
-                <ProductPage />
-              </PrivateRoute>
-            }
-          /> */}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -10,7 +10,7 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
   const token = localStorage.getItem("userToken");
 
   // Always allow access to the MenuPage
-  if (location.pathname === "/menu") {
+  if (location.pathname.startsWith("/menu")) {
     return <>{children}</>;
   }
 
