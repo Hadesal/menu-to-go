@@ -115,6 +115,7 @@ const QrCodePage = () => {
 
       return;
     }
+    console.log(restaurantList);
 
     dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
