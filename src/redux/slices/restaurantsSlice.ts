@@ -6,7 +6,11 @@ import {
   deleteRestaurant as apiDeleteRestaurant,
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
-import { addCategory, deleteCategory , setSelectedCategory } from "./categorySlice";
+import {
+  addCategory,
+  deleteCategory,
+  setSelectedCategory,
+} from "./categorySlice";
 import { createProduct, modifyProduct, removeProduct } from "./productSlice";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
@@ -129,7 +133,11 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(addRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action?.payload.message || action.payload;
+        // state.error = action?.payload.message || action.payload;
+        state.error =
+          action.payload?.message === "Restaurant with this name already exists"
+            ? action.payload?.message
+            : "Failed to create restaurant!";
       })
       .addCase(editRestaurant.pending, (state) => {
         state.loading = true;
@@ -145,7 +153,8 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(editRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        // state.error = action.payload as string;
+        state.error = "Failed to create restaurant!";
       })
       .addCase(deleteRestaurant.pending, (state) => {
         state.loading = true;
@@ -161,7 +170,8 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(deleteRestaurant.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        // state.error = action.payload as string;
+        state.error = "Failed to create restaurant!";
       })
       .addCase(addCategory.fulfilled, (state, action) => {
         const { restaurantId, category } = action.payload;
