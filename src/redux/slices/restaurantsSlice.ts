@@ -9,7 +9,7 @@ import {
 import {
   addCategory,
   deleteCategory,
-  setSelectedCategory,
+  updateCategory,
 } from "./categorySlice";
 import { createProduct, modifyProduct, removeProduct } from "./productSlice";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
@@ -187,7 +187,26 @@ export const RestaurantSlice = createSlice({
           state.successMessage = "Category added successfully!";
         }
       })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        const { restaurantId, categoryId, category } = action.payload;
+        const restaurant = state.restaurantList.find(
+          (restaurant) => restaurant.id === restaurantId
+        );
 
+        if (restaurant) {
+          // Update the specific category
+          restaurant.categories = restaurant.categories.map((cat) =>
+            cat.id === categoryId ? { ...cat, ...category } : cat
+          );
+
+          // If the updated restaurant is the selected one, update selectedRestaurant
+          if (state.selectedRestaurant.id === restaurantId) {
+            state.selectedRestaurant = { ...restaurant };
+          }
+
+          state.successMessage = "Category updated successfully!";
+        }
+      })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         const { restaurantId, categoryId } = action.payload;
         const restaurant = state.restaurantList.find(
