@@ -161,7 +161,12 @@ export const ProductSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = "Failed to create product!";
+        console.log(action);
+        state.error =
+          action.payload?.message ===
+          `A product with the name '${action.meta.arg.product.name}' already exists.`
+            ? action.payload?.message
+            : "Failed to create product!";
       })
       .addCase(fetchProductById.pending, (state) => {
         state.loading = true;

@@ -114,7 +114,7 @@ export const CategorySlice = createSlice({
         state.loading = false;
         // state.error = action.payload.message || action.payload;
         state.error =
-          action.payload?.message === "Category with name 'r' already exists"
+          action.payload?.message === `Category with name '${action.meta.arg.category.name}' already exists`
             ? action.payload?.message
             : "Failed to create category!";
       })
