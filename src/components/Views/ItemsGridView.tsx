@@ -17,7 +17,7 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { setSelectedRestaurant } from "../../redux/slices/restaurantsSlice";
 import { setSelectedCategory } from "../../redux/slices/categorySlice";
 interface GridViewProps {
@@ -38,6 +38,8 @@ const ItemsGridView = ({
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
+  const { restaurantList } = useAppSelector((state) => state.restaurantsData);
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<RestaurantData>({ name: "" });
@@ -215,6 +217,7 @@ const ItemsGridView = ({
           editFunction(newRestaurant);
         }}
         initialData={currentItem}
+        data={restaurantList}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

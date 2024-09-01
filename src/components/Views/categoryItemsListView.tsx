@@ -39,7 +39,9 @@ const CategoryItemsListView = ({
   const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
     new Array(items.length).fill(null)
   );
-
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
+  );
   const { selectedCategory } = useAppSelector((state) => state.categoriesData);
   const dispatch = useAppDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -238,6 +240,7 @@ const CategoryItemsListView = ({
         onCancelClick={handleClose}
         onConfirmClick={editFunction}
         initialData={currentItem}
+        data={selectedRestaurant.categories}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

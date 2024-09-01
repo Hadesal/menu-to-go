@@ -52,6 +52,7 @@ const BoxComponent = ({
   const { t } = useTranslation();
   const getString = t;
 
+  const { restaurantList } = useAppSelector((state) => state.restaurantsData);
   const { selectedCategory } = useAppSelector((state) => state.categoriesData);
   const handleClickOpen = () => {
     setOpen(true);
@@ -183,6 +184,7 @@ const BoxComponent = ({
         isOpen={product ? false : open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
+        data={restaurantList}
       />
 
       <AddProductDialog
@@ -194,6 +196,7 @@ const BoxComponent = ({
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
         existingProduct
+        data={selectedCategory?.products}
       />
     </Paper>
   );

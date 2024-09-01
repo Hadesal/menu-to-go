@@ -20,6 +20,7 @@ interface AddAddRestaurantDialogProps {
   onConfirmClick: (data: addRestaurantData) => void;
   onCancelClick: () => void;
   initialData?: { name: string };
+  data?: object[];
 }
 
 const AddRestaurantDialog = ({
@@ -31,17 +32,21 @@ const AddRestaurantDialog = ({
   onCancelClick,
   errorMessage,
   initialData,
+  data,
 }: AddAddRestaurantDialogProps) => {
   const [dialogData, setDialogData] = useState<addRestaurantData>({ name: "" });
 
   const [showError, setShowError] = useState<boolean>(false);
   const [isNameUnchanged, setIsNameUnchanged] = useState<boolean>(false);
+  const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (initialData) {
-      setDialogData({ name: initialData.name });
+    if (isOpen) {
+      if (initialData) {
+        setDialogData({ name: initialData.name });
+      }
     }
-  }, [initialData]);
+  }, [isOpen, initialData]);
 
   const handleConfirm = () => {
     if (dialogData.name.length === 0) {
@@ -52,6 +57,21 @@ const AddRestaurantDialog = ({
     if (initialData && dialogData.name === initialData.name) {
       setIsNameUnchanged(true);
       return;
+    }
+
+    // Check if the name already exists in the data
+    if (data) {
+      if (initialData?.name !== dialogData.name) {
+        const existingItem = data.find(
+          (item) =>
+            dialogData.name.toLocaleLowerCase() ===
+            item.name.toLocaleLowerCase()
+        );
+        if (existingItem) {
+          setIsNameDuplicate(true); // Set duplicate flag
+          hasError = true;
+        }
+      }
     }
 
     onConfirmClick(dialogData);
@@ -66,6 +86,7 @@ const AddRestaurantDialog = ({
     }
     setShowError(false);
     setIsNameUnchanged(false);
+    setIsNameDuplicate(false);
     onCancelClick();
   };
 
@@ -98,6 +119,7 @@ const AddRestaurantDialog = ({
               name: e.target.value,
             });
             setShowError(e.target.value.trim().length === 0);
+            setIsNameDuplicate(false);
             setIsNameUnchanged(
               initialData ? e.target.value === initialData.name : false
             );
@@ -109,13 +131,15 @@ const AddRestaurantDialog = ({
             }
           }}
           value={dialogData.name}
-          error={showError || isNameUnchanged}
+          error={showError || isNameUnchanged || isNameDuplicate}
           helperText={
             showError
               ? errorMessage
               : isNameUnchanged
               ? "Name is unchanged"
-              : " "
+              : isNameDuplicate
+              ? "A restaurant with the same name already exists"
+              : ""
           }
         />
       </Box>

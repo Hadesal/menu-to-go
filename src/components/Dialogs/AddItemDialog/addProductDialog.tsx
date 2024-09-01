@@ -23,6 +23,7 @@ interface AddProductDialogProps {
   onConfirmClick: (item: ProductData) => void;
   onCancelClick: () => void;
   initialData?: ProductData;
+  data: object[];
 }
 
 const AddProductDialog = ({
@@ -34,6 +35,7 @@ const AddProductDialog = ({
   onCancelClick,
   errorMessage,
   initialData,
+  data,
 }: AddProductDialogProps) => {
   const [dialogData, setDialogData] = useState<ProductData>({
     name: "",
@@ -71,6 +73,7 @@ const AddProductDialog = ({
   const [variantsErrors, setVariantsErrors] = useState<
     { nameError: boolean; index: number }[]
   >([]);
+  const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialData) {
@@ -96,6 +99,21 @@ const AddProductDialog = ({
     if (dialogData.name.length === 0) {
       setShowNameError(true);
       hasError = true;
+    }
+
+    // Check if the name already exists in the data
+    if (data) {
+      if (initialData?.name !== dialogData.name) {
+        const existingItem = data.find(
+          (item) =>
+            dialogData.name.toLocaleLowerCase() ===
+            item.name.toLocaleLowerCase()
+        );
+        if (existingItem) {
+          setIsNameDuplicate(true); // Set duplicate flag
+          hasError = true;
+        }
+      }
     }
 
     if (dialogData.price === 0) {
@@ -209,6 +227,7 @@ const AddProductDialog = ({
     setShowPriceError(false);
     setIsDataUnchanged(false);
     setShowDescriptionError(false);
+    setIsNameDuplicate(false);
     setExtrasErrors([]);
     setIngredientsErrors([]);
     setVariantsErrors([]);
@@ -302,6 +321,7 @@ const AddProductDialog = ({
               name: e.target.value,
             }));
             setShowNameError(e.target.value.trim().length === 0);
+            setIsNameDuplicate(false);
             // setIsDataUnchanged(
             //   initialData ? e.target.value.trim() === initialData.name : false
             // );
@@ -313,13 +333,15 @@ const AddProductDialog = ({
             }
           }}
           value={dialogData.name}
-          error={showNameError || isDataUnchanged}
+          error={showNameError || isDataUnchanged || isNameDuplicate}
           helperText={
             showNameError
               ? errorMessage
               : isDataUnchanged
               ? "Data is unchanged"
-              : " "
+              : isNameDuplicate
+              ? "A product with the same name already exists"
+              : ""
           }
         />
       </Box>

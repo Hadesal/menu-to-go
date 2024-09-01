@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -27,6 +28,7 @@ interface AddCategoryDialogProps {
   onConfirmClick: (item: CategoryData) => void;
   onCancelClick: () => void;
   initialData?: CategoryData;
+  data?: object[];
 }
 
 const AddCategoryDialog = ({
@@ -38,6 +40,7 @@ const AddCategoryDialog = ({
   onCancelClick,
   errorMessage,
   initialData,
+  data,
 }: AddCategoryDialogProps) => {
   const [dialogData, setDialogData] = useState<CategoryData>({
     name: "",
@@ -52,16 +55,19 @@ const AddCategoryDialog = ({
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const getString = t;
+  const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (initialData) {
-      setDialogData({
-        name: initialData.name,
-        image: initialData.image,
-        categoryType: initialData.categoryType,
-      });
+    if (isOpen) {
+      if (initialData) {
+        setDialogData({
+          name: initialData.name,
+          image: initialData.image,
+          categoryType: initialData.categoryType,
+        });
+      }
     }
-  }, [initialData]);
+  }, [isOpen, initialData]);
 
   const handleConfirm = () => {
     let hasError = false;
@@ -76,6 +82,21 @@ const AddCategoryDialog = ({
       hasError = true;
     }
 
+    // Check if the name already exists in the data
+    if (data) {
+      if (initialData?.name !== dialogData.name) {
+        const existingItem = data.find(
+          (item) =>
+            dialogData.name.toLocaleLowerCase() ===
+            item.name.toLocaleLowerCase()
+        );
+        if (existingItem) {
+          setIsNameDuplicate(true); // Set duplicate flag
+          hasError = true;
+        }
+      }
+    }
+
     if (hasError) {
       return;
     }
@@ -83,7 +104,8 @@ const AddCategoryDialog = ({
     if (
       initialData &&
       dialogData.name === initialData.name &&
-      dialogData.categoryType === initialData.categoryType
+      dialogData.categoryType === initialData.categoryType &&
+      dialogData.image === initialData.image
     ) {
       setIsDataUnchanged(true);
       return;
@@ -105,6 +127,7 @@ const AddCategoryDialog = ({
     setShowError(false);
     setShowCategoryError(false);
     setIsDataUnchanged(false);
+    setIsNameDuplicate(false);
     onCancelClick();
   };
 
@@ -124,12 +147,18 @@ const AddCategoryDialog = ({
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
         image={dialogData.image}
-        onImageChange={(image) =>
-          setDialogData({ ...dialogData, image: image })
-        }
+        onImageChange={(image) => {
+          setDialogData({ ...dialogData, image: image });
+          setIsDataUnchanged(initialData ? image === initialData.image : false);
+        }}
         error={imageError}
         setError={setImageError}
       />
+      {isDataUnchanged && (
+        <Alert severity="error">
+          No updates detected. Please modify the category to save changes.
+        </Alert>
+      )}
       <Box sx={Styles.textFieldWrapper}>
         <InputLabel sx={Styles.textFieldLabelStyle}>Name</InputLabel>
         <InputComponent
@@ -145,6 +174,7 @@ const AddCategoryDialog = ({
               name: e.target.value,
             });
             setShowError(e.target.value.trim().length === 0);
+            setIsNameDuplicate(false);
             setIsDataUnchanged(
               initialData ? e.target.value === initialData.name : false
             );
@@ -156,13 +186,13 @@ const AddCategoryDialog = ({
             }
           }}
           value={dialogData.name}
-          error={showError || isDataUnchanged}
+          error={showError || isNameDuplicate}
           helperText={
             showError
               ? errorMessage
-              : isDataUnchanged
-              ? "Data is unchanged"
-              : " "
+              : isNameDuplicate
+              ? "A category with the same name already exists"
+              : ""
           }
         />
       </Box>
@@ -180,7 +210,7 @@ const AddCategoryDialog = ({
               categoryType: e.target.value,
             });
             setIsDataUnchanged(
-              initialData ? e.target.value === initialData.name : false
+              initialData ? e.target.value === initialData.categoryType : false
             );
             setShowCategoryError(false);
           }}

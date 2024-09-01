@@ -6,6 +6,7 @@ import Styles from "../../DataTypes/StylesTypes";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import CategoryItemsListView from "../Views/categoryItemsListView";
+import { useAppSelector } from "../../utils/hooks";
 
 interface CategoryBoxComponentProps {
   items: CategoryData[];
@@ -34,6 +35,9 @@ const CategoryBoxComponent = ({
   const [filteredItems, setFilteredItems] = useState(items);
   const { t } = useTranslation();
   const getString = t;
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
+  );
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -93,6 +97,7 @@ const CategoryBoxComponent = ({
         isDialogOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
+        data={selectedRestaurant.categories}
       />
     </Paper>
   );

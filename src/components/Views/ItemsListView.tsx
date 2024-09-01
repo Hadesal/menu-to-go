@@ -22,6 +22,7 @@ import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import { useAppSelector } from "../../utils/hooks";
 
 interface Props {
   CardIcon: string;
@@ -67,6 +68,7 @@ const ItemsListView = ({
   });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
 
   const handleMenuClose = (index: number) => {
     const newAnchorEls = [...anchorEls];
@@ -248,6 +250,7 @@ const ItemsListView = ({
         onCancelClick={handleEditDialogClose}
         onConfirmClick={(data) => editFunction({ ...data, id: currentItem.id })}
         initialData={currentItem}
+        data={selectedCategory.products}
       />
       <AddProductDialog
         dialogTitle={getString("DuplicateProduct")}
@@ -262,6 +265,7 @@ const ItemsListView = ({
           }
         }}
         errorMessage={getString("duplicateProductError")}
+        data={selectedCategory.products}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
