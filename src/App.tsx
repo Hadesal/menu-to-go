@@ -14,7 +14,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#a4755d", // Your custom primary color
+      main: "#a4755d",
     },
     secondary: {
       main: "#d9b18f",

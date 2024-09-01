@@ -21,7 +21,9 @@ body {
   flex-direction: column;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 

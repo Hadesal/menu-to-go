@@ -47,6 +47,7 @@ import UserDetailsInputComponent from "../../components/Dialogs/UserDetailsDialo
 import { userDelete } from "../../redux/slices/userSlice";
 import QrCodePage from "../QrCodePage/QrCodePage";
 import ProfilePage from "../ProfilePage/ProfilePage";
+import TemplatePage from "../TemplatePage/TemplatePage";
 const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
 const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
 const CHECK_INTERVAL = 1000; // 1 second in milliseconds
@@ -530,7 +531,7 @@ export default function UserDashboardPage() {
           <RestaurantSection label={getString("restaurant")} />
         )}
         {activeTab === "myprofile" && <ProfilePage />}
-        {activeTab === "templates" && <h1> Templates view</h1>}
+        {activeTab === "templates" && <TemplatePage />}
         {activeTab === "generateQrCode" && <QrCodePage />}
         {activeTab === "contactUs" && <ContactPage />}
       </Box>
