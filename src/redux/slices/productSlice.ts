@@ -161,7 +161,6 @@ export const ProductSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        console.log(action.payload.message || action.payload);
         state.error = "Failed to create product!";
       })
       .addCase(fetchProductById.pending, (state) => {

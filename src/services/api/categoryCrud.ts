@@ -80,13 +80,11 @@ export const deleteCategory = async (categoryId: string) => {
 export const getAllCategoriesByRestaurantId = async (restaurantId: string) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-    console.log(userToken);
     const response = await apiService.get(`/restaurant/${restaurantId}`, {
       headers: {
         Authorization: `Bearer ${userToken.token}`,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error;
@@ -98,13 +96,11 @@ export const getAllCategoriesByRestaurantIdOpenApi = async (
 ) => {
   try {
     const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-    console.log(userToken);
     const response = await apiService.get(`/restaurant/${restaurantId}`, {
       headers: {
         Authorization: `Bearer ${userToken.token}`,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error: any) {
     const errorResponseObject: ErrorResponseObject = error;

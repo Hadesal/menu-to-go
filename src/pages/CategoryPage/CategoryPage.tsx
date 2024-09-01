@@ -109,7 +109,6 @@ export default function CategoryPage() {
 
     // Check if the deleteCategory action was fulfilled successfully
     if (deleteCategory.fulfilled.match(result)) {
-      console.log("fulfilled");
       // Dispatch the action to set the selected category
       dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
     }
