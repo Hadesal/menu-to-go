@@ -161,7 +161,6 @@ export const ProductSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        console.log(action);
         state.error =
           action.payload?.message ===
           `A product with the name '${action.meta.arg.product.name}' already exists.`
