@@ -7,7 +7,6 @@ import {
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import {
   createProduct,
-  fetchProducts,
   modifyProduct,
   removeProduct,
 } from "./productSlice";
@@ -95,8 +94,8 @@ export const CategorySlice = createSlice({
     clearSuccessMessage: (state) => {
       state.successMessage = null;
     },
-    clearErrorMessage: (state) => {
-      state.error = null;
+    clearErrorMessage: (state, action: PayloadAction<any>) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -113,7 +112,11 @@ export const CategorySlice = createSlice({
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message || action.payload;
+        // state.error = action.payload.message || action.payload;
+        state.error =
+          action.payload?.message === "Category with name 'r' already exists"
+            ? action.payload?.message
+            : "Failed to create category!";
       })
       .addCase(updateCategory.pending, (state) => {
         state.loading = true;
@@ -132,7 +135,8 @@ export const CategorySlice = createSlice({
       })
       .addCase(updateCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message || action.payload;
+        // state.error = action.payload.message || action.payload;
+        state.error = "Failed to update category";
       })
       .addCase(deleteCategory.pending, (state) => {
         state.loading = true;
@@ -148,7 +152,8 @@ export const CategorySlice = createSlice({
       })
       .addCase(deleteCategory.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message || action.payload;
+        // state.error = action.payload.message || action.payload;
+        state.error = "Failed to delete category.";
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         const { categoryId, product } = action.payload;

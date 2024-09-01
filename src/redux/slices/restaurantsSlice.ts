@@ -6,7 +6,7 @@ import {
   deleteRestaurant as apiDeleteRestaurant,
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
-import { addCategory, deleteCategory } from "./categorySlice";
+import { addCategory, deleteCategory , setSelectedCategory } from "./categorySlice";
 import { createProduct, modifyProduct, removeProduct } from "./productSlice";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import { ProductData } from "../../DataTypes/ProductDataTypes";

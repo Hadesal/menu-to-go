@@ -131,8 +131,8 @@ export const ProductSlice = createSlice({
     clearSuccessMessage: (state) => {
       state.successMessage = null;
     },
-    clearErrorMessage: (state) => {
-      state.error = null;
+    clearErrorMessage: (state, action: PayloadAction<any>) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -161,7 +161,8 @@ export const ProductSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        console.log(action.payload.message || action.payload);
+        state.error = "Failed to create product!";
       })
       .addCase(fetchProductById.pending, (state) => {
         state.loading = true;
@@ -173,7 +174,8 @@ export const ProductSlice = createSlice({
       })
       .addCase(fetchProductById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        // state.error = action.payload as string;
+        state.error = "Failed to fetch product!";
       })
       .addCase(modifyProduct.pending, (state) => {
         state.loading = true;
@@ -189,7 +191,8 @@ export const ProductSlice = createSlice({
       })
       .addCase(modifyProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        // state.error = action.payload as string;
+        state.error = "Failed to update product!";
       })
       .addCase(removeProduct.pending, (state) => {
         state.loading = true;
@@ -205,7 +208,8 @@ export const ProductSlice = createSlice({
       })
       .addCase(removeProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        // state.error = action.payload as string;
+        state.error = "Failed to delete product!";
       });
   },
 });

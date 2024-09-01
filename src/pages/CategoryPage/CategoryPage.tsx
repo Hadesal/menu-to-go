@@ -26,12 +26,14 @@ import {
   createProduct as addProduct,
   modifyProduct as editProduct,
   removeProduct as deleteProduct,
+  clearErrorMessage as clearProductErrorMessage,
 } from "../../redux/slices/productSlice";
 import {
   addCategory,
   deleteCategory,
   setSelectedCategory,
   updateCategory,
+  clearErrorMessage as clearCategoryErrorMessage,
 } from "../../redux/slices/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import Styles from "./CategorySection.styles";
@@ -41,12 +43,17 @@ export default function CategoryPage() {
   const {
     selectedRestaurant,
     loading,
-    error: restaurantError,
+    // error: restaurantError,
   } = useAppSelector((state) => state.restaurantsData);
-  const { selectedCategory, successMessage, error } = useAppSelector(
-    (state) => state.categoriesData
+  const {
+    selectedCategory,
+    successMessage,
+    loading: categoryLoading,
+    error: categoryError,
+  } = useAppSelector((state) => state.categoriesData);
+  const { error: productError, loading: productLoading } = useAppSelector(
+    (state) => state.productsData
   );
-  const { error: productError } = useAppSelector((state) => state.productsData);
   const dispatch = useAppDispatch();
 
   const [showToast, setShowToast] = useState(false);
@@ -56,14 +63,10 @@ export default function CategoryPage() {
   const getString = t;
 
   useEffect(() => {
-    if (error) {
-      setShowToast(true);
-    } else if (productError) {
-      setShowToast(true);
-    } else if (restaurantError) {
+    if (categoryError || productError) {
       setShowToast(true);
     }
-  }, [error, productError]);
+  }, [categoryError, productError]);
 
   useEffect(() => {
     if (successMessage) {
@@ -76,10 +79,14 @@ export default function CategoryPage() {
     setShowToast(false);
     dispatch(clearSuccessMessage(null));
     dispatch(clearErrorMessage(null));
+    dispatch(clearCategoryErrorMessage(null));
+    dispatch(clearProductErrorMessage(null));
   }, []);
 
   const handleAddCategory = (category: CategoryData) => {
-    dispatch(addCategory({ restaurantId: selectedRestaurant?.id, category }));
+    dispatch(
+      addCategory({ restaurantId: selectedRestaurant?.id, category })
+    )
   };
 
   const handleEditCategory = (category: CategoryData) => {
@@ -92,13 +99,20 @@ export default function CategoryPage() {
     );
   };
 
-  const handleDeleteCategory = (category: { id: string }) => {
-    dispatch(
+  const handleDeleteCategory = async (category: { id: string }) => {
+    const result = await dispatch(
       deleteCategory({
         restaurantId: selectedRestaurant?.id,
         categoryId: category.id,
       })
     );
+
+    // Check if the deleteCategory action was fulfilled successfully
+    if (deleteCategory.fulfilled.match(result)) {
+      console.log("fulfilled");
+      // Dispatch the action to set the selected category
+      dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
+    }
   };
 
   const handleAddProduct = (product: ProductData) => {
@@ -135,6 +149,13 @@ export default function CategoryPage() {
     );
   };
 
+  const handleCloseErrorToast = () => {
+    setShowToast(false);
+    setShowSuccessToast(false);
+    dispatch(clearCategoryErrorMessage(null));
+    dispatch(clearProductErrorMessage(null));
+  };
+
   return (
     <Stack spacing={3} sx={Styles.stack}>
       <Backdrop
@@ -142,7 +163,7 @@ export default function CategoryPage() {
           color: "var(--primary-color)",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
-        open={loading}
+        open={loading || productLoading || categoryLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -152,20 +173,18 @@ export default function CategoryPage() {
         open={showToast}
         autoHideDuration={6000}
         onClose={() => {
-          setShowToast(false);
+          handleCloseErrorToast();
         }}
       >
         <Alert
           onClose={() => {
-            setShowToast(false);
+            handleCloseErrorToast();
           }}
           severity="error"
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {error || productError?.message || restaurantError?.message
-            ? restaurantError?.message
-            : restaurantError}
+          {categoryError || productError}
         </Alert>
       </Snackbar>
 
