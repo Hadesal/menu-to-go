@@ -76,7 +76,7 @@ const AddProductDialog = ({
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (initialData) {
+    if (isOpen && initialData) {
       setDialogData({
         name: initialData.name,
         price: initialData.price,
@@ -91,7 +91,7 @@ const AddProductDialog = ({
         uniqueProductOrderingName: initialData.uniqueProductOrderingName,
       });
     }
-  }, [initialData]);
+  }, [initialData , isOpen]);
 
   const handleConfirm = () => {
     let hasError = false;

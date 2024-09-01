@@ -41,10 +41,8 @@ const AddRestaurantDialog = ({
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpen) {
-      if (initialData) {
-        setDialogData({ name: initialData.name });
-      }
+    if (isOpen && initialData) {
+      setDialogData({ name: initialData.name });
     }
   }, [isOpen, initialData]);
 

@@ -58,14 +58,12 @@ const AddCategoryDialog = ({
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpen) {
-      if (initialData) {
-        setDialogData({
-          name: initialData.name,
-          image: initialData.image,
-          categoryType: initialData.categoryType,
-        });
-      }
+    if (isOpen && initialData) {
+      setDialogData({
+        name: initialData.name,
+        image: initialData.image,
+        categoryType: initialData.categoryType,
+      });
     }
   }, [isOpen, initialData]);
 
@@ -138,7 +136,7 @@ const AddCategoryDialog = ({
         sx: {
           ...Styles.dialog,
           width: "56.25rem",
-          height: "37.5rem",
+          height: isDataUnchanged ? "39.5rem" : "36.5rem",
         },
       }}
       onClose={handleCancel}
@@ -155,8 +153,8 @@ const AddCategoryDialog = ({
         setError={setImageError}
       />
       {isDataUnchanged && (
-        <Alert severity="error">
-          No updates detected. Please modify the category to save changes.
+        <Alert sx={{ marginTop: 3 }} severity="error">
+          No updates detected. Please modify the category to update.
         </Alert>
       )}
       <Box sx={Styles.textFieldWrapper}>
