@@ -93,6 +93,14 @@
   "experienceQuestion": "Wie war Ihre Erfahrung?",
   "reset": "Zurücksetzen",
   "SubmitMessage": "Nachricht senden",
-  "TypeofInquiry": "Art der Anfrage"
-
+  "TypeofInquiry": "Art der Anfrage",
+  "customizeYourMenu": "Passen Sie Ihr Menü an",
+  "Text": "Text",
+  "Background": "Hintergrund",
+  "text&background": "Text & Hintergrund",
+  "colors": "Farben",
+  "applyAccentColor": "Akzentfarbe anwenden",
+  "font": "Schriftart",
+  "categoryShape": "Kategorienform",
+  "contactLinks": "Kontaktlinks"
 }

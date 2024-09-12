@@ -1,6 +1,5 @@
 import {
   Paper,
-  Box,
   Card,
   CardContent,
   Container,
@@ -15,13 +14,30 @@ import { useTranslation } from "react-i18next";
 const ContactLinksComponent = () => {
   const { t } = useTranslation();
   const getString = t;
+
   return (
     <>
-      <Paper elevation={6} sx={{ borderRadius: "2rem" }}>
-        <Card sx={{ borderRadius: "2rem" }}>
+      <Paper
+        elevation={6}
+        sx={{
+          marginTop: "1rem",
+          borderRadius: "2rem",
+          width: "100%",
+        }}
+      >
+        <Card
+          sx={{
+            borderRadius: "2rem",
+          }}
+        >
           <CardContent>
             <Typography
-              sx={{ marginTop: "1rem", color: "#797979" }}
+              sx={{
+                marginTop: "1rem",
+                color: "#797979",
+                textAlign: "left",
+                fontSize: { xs: "1rem", md: "1.25rem" },
+              }}
               variant="h6"
             >
               {getString("contactLinks")}
@@ -29,23 +45,41 @@ const ContactLinksComponent = () => {
             <Container
               sx={{
                 display: "flex",
-                margin: 0,
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "center", sm: "flex-start" },
+                justifyContent: { xs: "center", sm: "space-between" },
+                gap: { xs: "1rem", sm: "0" },
                 marginTop: "1rem",
-                paddingLeft: {
-                  xs: 0,
-                  sm: 0,
-                  md: 0,
-                },
-                justifyContent: "space-around",
+                padding: 0,
               }}
             >
-              <Button startIcon={<FacebookOutlinedIcon />} variant="outlined">
+              <Button
+                startIcon={<FacebookOutlinedIcon />}
+                variant="outlined"
+                sx={{
+                  width: { xs: "100%", sm: "auto" },
+                  marginBottom: { xs: "1rem", sm: "0" },
+                }}
+              >
                 Facebook
               </Button>
-              <Button startIcon={<CiTwitter />} variant="outlined">
+              <Button
+                startIcon={<CiTwitter />}
+                variant="outlined"
+                sx={{
+                  width: { xs: "100%", sm: "auto" },
+                  marginBottom: { xs: "1rem", sm: "0" },
+                }}
+              >
                 Twitter
               </Button>
-              <Button startIcon={<FaInstagram />} variant="outlined">
+              <Button
+                startIcon={<FaInstagram />}
+                variant="outlined"
+                sx={{
+                  width: { xs: "100%", sm: "auto" },
+                }}
+              >
                 Instagram
               </Button>
             </Container>
@@ -55,4 +89,5 @@ const ContactLinksComponent = () => {
     </>
   );
 };
+
 export default ContactLinksComponent;

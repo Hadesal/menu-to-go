@@ -93,5 +93,14 @@
   "experienceQuestion": "كيف كانت تجربتك؟",
   "reset": "إعادة تعيين",
   "SubmitMessage": "إرسال الرسالة",
-  "TypeofInquiry": "نوع الاستفسار"
+  "TypeofInquiry": "نوع الاستفسار",
+  "customizeYourMenu": "خصص قائمتك",
+  "Text": "النص",
+  "Background": "الخلفية",
+  "text&background": "النص والخلفية",
+  "colors": "الألوان",
+  "applyAccentColor": "تطبيق لون التمييز",
+  "font": "الخط",
+  "categoryShape": "شكل الفئة",
+  "contactLinks": "روابط الاتصال"
 }

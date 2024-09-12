@@ -94,5 +94,14 @@
   "experienceQuestion": "How was your experience?",
   "reset": "Reset",
   "SubmitMessage": "Submit Message",
-  "TypeofInquiry": "Type of Inquiry"
+  "TypeofInquiry": "Type of Inquiry",
+  "customizeYourMenu": "Customize Your Menu",
+  "Text": "Text",
+  "Background": "Background",
+  "text&background": "Text & Background",
+  "colors": "Colors",
+  "applyAccentColor": "Apply Accent Color",
+  "font": "Font",
+  "categoryShape": "Category Shape",
+  "contactLinks": "Contact Links"
 }

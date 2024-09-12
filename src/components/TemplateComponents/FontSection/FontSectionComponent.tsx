@@ -6,11 +6,32 @@ const FontSectionComponent = () => {
   const getString = t;
   return (
     <>
-      <Paper elevation={6} sx={{ borderRadius: "2rem" }}>
-        <Card sx={{ borderRadius: "2rem" }}>
-          <CardContent>
+      <Paper
+        elevation={6}
+        sx={{
+          borderRadius: "2rem",
+          marginTop: "1rem",
+          marginBottom: "1rem",
+        }}
+      >
+        <Card
+          sx={{
+            borderRadius: "2rem",
+          }}
+        >
+          <CardContent
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
             <Typography
-              sx={{ marginBottom: "1rem", marginTop: "1rem", color: "#797979" }}
+              sx={{
+                marginBottom: "1rem",
+                marginTop: "1rem",
+                color: "#797979",
+              }}
               variant="h5"
             >
               {getString("font")}
@@ -18,22 +39,18 @@ const FontSectionComponent = () => {
             <Container
               sx={{
                 display: "flex",
-                paddingLeft: {
-                  xs: 0,
-                  sm: 0,
-                  md: 0,
-                },
               }}
             >
               <Card
                 sx={{
-                  width: "5rem",
-                  height: "5rem",
+                  width: { xs: "4rem", sm: "5rem" },
+                  height: { xs: "4rem", sm: "5rem" },
                   borderRadius: "1rem",
                   border: "solid",
                   borderWidth: "2px",
                   marginRight: "1rem",
                   marginLeft: "1rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <CardContent>
@@ -43,12 +60,13 @@ const FontSectionComponent = () => {
               </Card>
               <Card
                 sx={{
-                  width: "5rem",
-                  height: "5rem",
+                  width: { xs: "4rem", sm: "5rem" },
+                  height: { xs: "4rem", sm: "5rem" },
                   borderRadius: "1rem",
                   border: "solid",
                   borderWidth: "2px",
                   marginRight: "1rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <CardContent sx={{ borderRadius: "1rem" }}>
@@ -58,12 +76,13 @@ const FontSectionComponent = () => {
               </Card>
               <Card
                 sx={{
-                  width: "5rem",
-                  height: "5rem",
+                  width: { xs: "4rem", sm: "5rem" },
+                  height: { xs: "4rem", sm: "5rem" },
                   borderRadius: "1rem",
                   border: "solid",
                   borderWidth: "2px",
                   marginRight: "1rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <CardContent>
