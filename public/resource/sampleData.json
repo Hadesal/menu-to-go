@@ -1,0 +1,129 @@
+{
+  "categories": [
+    {
+      "name": "Pizza",
+      "image": "https://cdn.pixabay.com/photo/2021/06/22/19/49/pizza-6357221_960_720.jpg",
+      "categoryType": "Main Course",
+      "productList": [
+        {
+          "name": "Margherita Pizza",
+          "price": 12.99,
+          "image": "https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_960_720.jpg",
+          "uniqueProductOrderingName": "MP123",
+          "isAvailable": true,
+          "details": {
+            "detailsDescription": "A classic Margherita pizza topped with fresh tomatoes, mozzarella, and basil.",
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small"
+                },
+                {
+                  "name": "Medium"
+                },
+                {
+                  "name": "Large"
+                }
+              ]
+            },
+            "ingredients": [
+              {
+                "name": "Tomato Sauce",
+                "image": "https://cdn.pixabay.com/photo/2017/02/14/10/19/tomatoes-2068723_960_720.jpg"
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "image": "https://cdn.pixabay.com/photo/2016/03/27/18/10/cheese-1284157_960_720.jpg"
+              },
+              {
+                "name": "Basil",
+                "image": "https://cdn.pixabay.com/photo/2017/05/23/23/36/basil-2338878_960_720.jpg"
+              }
+            ],
+            "extras": [
+              {
+                "name": "Extra Cheese",
+                "price": 1.5
+              },
+              {
+                "name": "Pepperoni",
+                "price": 2.0
+              }
+            ]
+          }
+        },
+        {
+          "name": "Pepperoni Pizza",
+          "price": 14.99,
+          "image": "https://cdn.pixabay.com/photo/2016/02/19/11/19/pizza-1209748_960_720.jpg",
+          "uniqueProductOrderingName": "PP456",
+          "isAvailable": false,
+          "details": {
+            "detailsDescription": "A delicious pizza topped with spicy pepperoni slices and mozzarella.",
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small"
+                },
+                {
+                  "name": "Medium"
+                },
+                {
+                  "name": "Large"
+                }
+              ]
+            },
+            "ingredients": [
+              {
+                "name": "Pepperoni",
+                "image": "https://cdn.pixabay.com/photo/2017/01/19/18/29/pepperoni-1997017_960_720.jpg"
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "image": "https://cdn.pixabay.com/photo/2016/03/27/18/10/cheese-1284157_960_720.jpg"
+              }
+            ],
+            "extras": [
+              {
+                "name": "Extra Pepperoni",
+                "price": 2.5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Drinks",
+      "image": "https://cdn.pixabay.com/photo/2017/05/23/23/43/beer-2338991_960_720.jpg",
+      "categoryType": "Beverages",
+
+      "productList": [
+        {
+          "name": "Coca Cola",
+          "image": "https://cdn.pixabay.com/photo/2017/01/20/13/33/coca-cola-1998414_960_720.jpg",
+          "uniqueProductOrderingName": "CC789",
+          "isAvailable": true,
+          "details": {
+            "detailsDescription": "Chilled Coca Cola served in a can.",
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "330ml"
+                },
+                {
+                  "name": "500ml"
+                }
+              ]
+            },
+            "ingredients": [],
+            "extras": []
+          }
+        }
+      ]
+    }
+  ]
+}

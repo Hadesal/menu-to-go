@@ -23,7 +23,11 @@ export default function DashboardView() {
       label: getString("restaurant"),
     },
     { id: "templates", image: TemplatesCardImg, label: getString("templates") },
-    { id: "generateQrCode", image: QRCodeCardImg, label: getString("generateQrCode") },
+    {
+      id: "generateQrCode",
+      image: QRCodeCardImg,
+      label: getString("generateQrCode"),
+    },
     { id: "contactUs", image: ContactCardImg, label: getString("contactUs") },
   ];
   const { userList } = useAppSelector((state) => state.userData);
@@ -48,7 +52,7 @@ export default function DashboardView() {
           }}
         >
           {/* FIXME: we need a user object */}
-          {userList[0].name}
+          {userList[0]?.name}
         </Typography>
       </Box>
       <Box
