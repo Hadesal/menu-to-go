@@ -1,22 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import { RestaurantData, ViewType } from "../../DataTypes/RestaurantObject";
 import {
   createRestaurant as apiCreateRestaurant,
   updateRestaurant as apiUpdateRestaurant,
   deleteRestaurant as apiDeleteRestaurant,
   getAllRestaurantsByUserId as apiFetchRestaurants,
 } from "../../services/api/restaurantCrud";
-import {
-  addCategory,
-  deleteCategory,
-  updateCategory,
-} from "./categorySlice";
+import { addCategory, deleteCategory, updateCategory } from "./categorySlice";
 import { createProduct, modifyProduct, removeProduct } from "./productSlice";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 export interface RestaurantState {
   restaurantList: RestaurantData[];
-  selectedRestaurant: any;
+  selectedRestaurant: RestaurantData;
   loading: boolean;
   error: string | null;
   successMessage: string | null;
@@ -24,7 +21,25 @@ export interface RestaurantState {
 
 const initialState: RestaurantState = {
   restaurantList: [],
-  selectedRestaurant: {},
+  selectedRestaurant: {
+    id: "",
+    name: "",
+    categories: [],
+    table: [],
+    userUiPreferences: {
+      primaryColor: "",
+      secondaryColor: "",
+      fontType: "",
+      categoryShape: "",
+      contactLinks: {
+        facebook: "",
+        twitter: "",
+        instagram: "",
+      },
+      ingredientViewType: ViewType.GRID,
+      itemsViewType: ViewType.GRID,
+    },
+  },
   loading: false,
   error: null,
   successMessage: null,
@@ -97,7 +112,7 @@ export const RestaurantSlice = createSlice({
     setRestaurantList: (state, action: PayloadAction<RestaurantData[]>) => {
       state.restaurantList = action.payload;
     },
-    setSelectedRestaurant: (state, action: PayloadAction<any>) => {
+    setSelectedRestaurant: (state, action: PayloadAction<RestaurantData>) => {
       state.selectedRestaurant = action.payload;
     },
     clearSuccessMessage: (state, action: PayloadAction<any>) => {
@@ -181,7 +196,7 @@ export const RestaurantSlice = createSlice({
         if (restaurant) {
           restaurant.categories = [...restaurant.categories, category];
 
-          if (state.selectedRestaurant.id === restaurantId) {
+          if (state.selectedRestaurant?.id === restaurantId) {
             state.selectedRestaurant = { ...restaurant };
           }
           state.successMessage = "Category added successfully!";
@@ -200,7 +215,7 @@ export const RestaurantSlice = createSlice({
           );
 
           // If the updated restaurant is the selected one, update selectedRestaurant
-          if (state.selectedRestaurant.id === restaurantId) {
+          if (state.selectedRestaurant?.id === restaurantId) {
             state.selectedRestaurant = { ...restaurant };
           }
 
@@ -217,7 +232,7 @@ export const RestaurantSlice = createSlice({
             (category) => category.id !== categoryId
           );
 
-          if (state.selectedRestaurant.id === restaurantId) {
+          if (state.selectedRestaurant?.id === restaurantId) {
             state.selectedRestaurant = { ...restaurant };
           }
           state.successMessage =
@@ -235,7 +250,7 @@ export const RestaurantSlice = createSlice({
           foundCategory.products = [...(foundCategory.products || []), product];
 
           state.selectedRestaurant.categories =
-            state.selectedRestaurant.categories.map((category: CategoryData) =>
+            state.selectedRestaurant?.categories.map((category: CategoryData) =>
               category.id === categoryId ? foundCategory : category
             );
         }
@@ -253,7 +268,7 @@ export const RestaurantSlice = createSlice({
             (prod: ProductData) => prod.id !== productId
           );
           state.selectedRestaurant.categories =
-            state.selectedRestaurant.categories.map((category: CategoryData) =>
+            state.selectedRestaurant?.categories.map((category: CategoryData) =>
               category.id === categoryId ? foundCategory : category
             );
         }

@@ -55,7 +55,7 @@ const ColorsSection = () => {
         elevation={6}
         sx={{
           borderRadius: "2rem",
-          marginTop: "3rem",
+          marginTop: "1rem",
           width: "100%",
           height: "fit-content",
         }}

@@ -22,7 +22,7 @@ export interface UserUiPreferences {
     instagram: "";
   };
   ingredientViewType: ViewType.GRID;
-  itemsViewType: ViewType;
+  itemsViewType: ViewType.GRID;
 }
 
 export enum ViewType {

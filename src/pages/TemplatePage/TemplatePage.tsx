@@ -12,6 +12,7 @@ import FontSectionComponent from "../../components/TemplateComponents/FontSectio
 import CategoryShapesComponent from "../../components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
 import ContactLinksComponent from "../../components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
 import { useEffect, useState } from "react";
+import ChooseViewTypeSection from "../../components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
 export default function TemplatePage() {
   const { t } = useTranslation();
   const getString = t;
@@ -55,6 +56,7 @@ export default function TemplatePage() {
             marginBottom: { xs: "2rem", md: 0 },
           }}
         >
+          <ChooseViewTypeSection/>
           <ColorsSection />
           <FontSectionComponent />
           <CategoryShapesComponent />

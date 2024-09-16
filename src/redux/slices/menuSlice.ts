@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "../../services/api/restaurantCrud";
 import { RestaurantAllData } from "../../DataTypes/ResturantAllData";
 import { UserUiPreferences } from "../../DataTypes/userUiPreferences";
+import { ViewType } from "../../DataTypes/RestaurantObject";
 
 export interface MenuState {
   restaurantData: RestaurantAllData;
@@ -23,8 +24,8 @@ const initialUserUiPreferences: UserUiPreferences = {
     twitter: "",
     instagram: "",
   },
-  ingredientViewType: "GRID",
-  itemsViewType: "GRID",
+  ingredientViewType: ViewType.GRID,
+  itemsViewType: ViewType.GRID,
 };
 
 const initialState: MenuState = {
@@ -69,6 +70,9 @@ export const MenuSlice = createSlice({
     setSelectedCategoryType: (state, action: PayloadAction<string>) => {
       state.selectedCategoryType = action.payload;
     },
+    setUserUiPreferences: (state, action: PayloadAction<UserUiPreferences>) => {
+      state.restaurantData.userUiPreferences = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -94,6 +98,7 @@ export const {
   setSelectedProduct,
   setSelectedCategory,
   setSelectedCategoryType,
+  setUserUiPreferences,
 } = MenuSlice.actions;
 
 export default MenuSlice.reducer;
