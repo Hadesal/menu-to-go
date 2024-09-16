@@ -7,22 +7,23 @@ export interface RestaurantData {
   table: [];
   userUiPreferences: UserUiPreferences;
 }
+
 export interface addRestaurantData {
   name: string;
 }
 
 export interface UserUiPreferences {
-  primaryColor: "";
-  secondaryColor: "";
-  fontType: "";
-  categoryShape: "";
+  primaryColor: string;
+  secondaryColor: string;
+  fontType: string;
+  categoryShape: string;
   contactLinks: {
-    facebook: "";
-    twitter: "";
-    instagram: "";
+    facebook: string;
+    twitter: string;
+    instagram: string;
   };
-  ingredientViewType: ViewType.GRID;
-  itemsViewType: ViewType.GRID;
+  ingredientViewType: ViewType;
+  itemsViewType: ViewType;
 }
 
 export enum ViewType {

@@ -1,4 +1,3 @@
-
 export interface UserUiPreferences {
   primaryColor: string;
   secondaryColor: string;

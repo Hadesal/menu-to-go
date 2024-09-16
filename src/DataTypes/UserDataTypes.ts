@@ -1,52 +1,55 @@
 export interface CountryData {
-  name: String;
-  dialCode: String;
-  countryCode: String;
+  name: string;
+  dialCode: string;
+  countryCode: string;
 }
 
 export interface UserSignupData {
-  name: String;
-  email: String;
-  password: String;
+  name: string;
+  email: string;
+  password: string;
   agreedTermsAndConditions: boolean;
 }
+
 export interface UserSignupApiData {
-  name: String;
-  email: String;
-  password: String;
+  name: string;
+  email: string;
+  password: string;
 }
+
 export interface UserSignInData {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 }
+
 export interface UserUpdateData {
-  id: String;
-  name: String;
-  email: String;
-  password: String;
-  image?: String;
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  image?: string;
   billingData?: BillingDataType;
-  currency?: String;
+  currency?: string;
 }
 
 export interface ChangePasswordDataType {
-  currentPassword: String;
-  newPassword: String;
+  currentPassword: string;
+  newPassword: string;
 }
 
 export interface BillingDataType {
-  fullName: String;
-  email: String;
-  phoneNumber: String;
-  companyName: String;
-  country: String;
-  address: String;
-  taxId: String;
-  city: String;
-  zipCode: String;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  companyName: string;
+  country: string;
+  address: string;
+  taxId: string;
+  city: string;
+  zipCode: string;
 }
 
 export interface UpdatePasswordDataType {
-  currentPassword: String;
-  newPassword: String;
+  currentPassword: string;
+  newPassword: string;
 }
