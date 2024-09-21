@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RestaurantData, ViewType } from "../../DataTypes/RestaurantObject";
+import {
+  RestaurantData,
+  UserUiPreferences,
+  ViewType,
+} from "../../DataTypes/RestaurantObject";
 import {
   createRestaurant as apiCreateRestaurant,
   updateRestaurant as apiUpdateRestaurant,
@@ -32,7 +36,6 @@ const initialState: RestaurantState = {
         secondaryColor: "#D9B18F",
         effectedSpace: "Text & Background",
       },
-
       fontType: "",
       categoryShape: "",
       contactLinks: {
@@ -125,6 +128,12 @@ export const RestaurantSlice = createSlice({
     clearErrorMessage: (state, action: PayloadAction<any>) => {
       state.error = action.payload;
     },
+    updateRestaurantUserUiPreferences: (
+      state,
+      action: PayloadAction<UserUiPreferences>
+    ) => {
+      state.selectedRestaurant.userUiPreferences = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -134,6 +143,7 @@ export const RestaurantSlice = createSlice({
       })
       .addCase(fetchAllRestaurants.fulfilled, (state, action) => {
         state.restaurantList = action.payload;
+        state.selectedRestaurant = action.payload[0];
         state.loading = false;
       })
       .addCase(fetchAllRestaurants.rejected, (state, action) => {
@@ -308,6 +318,7 @@ export const {
   setSelectedRestaurant,
   clearSuccessMessage,
   clearErrorMessage,
+  updateRestaurantUserUiPreferences,
 } = RestaurantSlice.actions;
 
 export default RestaurantSlice.reducer;

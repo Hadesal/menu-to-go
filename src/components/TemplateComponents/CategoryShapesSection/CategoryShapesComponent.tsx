@@ -7,10 +7,25 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
+import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
 
 const CategoryShapesComponent = () => {
   const { t } = useTranslation();
   const getString = t;
+  const dispatch = useAppDispatch();
+  const { userUiPreferences } = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant
+  );
+
+  const handleChangeShape = (shapeType: string) => {
+    dispatch(
+      updateRestaurantUserUiPreferences({
+        ...userUiPreferences,
+        categoryShape: shapeType,
+      })
+    );
+  };
   return (
     <>
       <Paper
@@ -47,10 +62,17 @@ const CategoryShapesComponent = () => {
                   height: "5vw",
                   borderRadius: "50%",
                   border: "solid",
+                  cursor: "pointer",
                   borderWidth: "2px",
-                  borderColor: "#BCB8B1",
+                  borderColor:
+                    userUiPreferences.categoryShape === "circle"
+                      ? "#A4755D"
+                      : "#BCB8B1",
                   marginRight: { xs: "1rem", sm: "2rem" },
                   marginBottom: "1rem",
+                }}
+                onClick={() => {
+                  handleChangeShape("circle");
                 }}
               />
               <Box
@@ -60,9 +82,16 @@ const CategoryShapesComponent = () => {
                   borderRadius: "15%",
                   border: "solid",
                   borderWidth: "2px",
-                  borderColor: "#BCB8B1",
+                  cursor: "pointer",
+                  borderColor:
+                    userUiPreferences.categoryShape === "rounded"
+                      ? "#A4755D"
+                      : "#BCB8B1",
                   marginRight: { xs: "1rem", sm: "2rem" },
                   marginBottom: "1rem",
+                }}
+                onClick={() => {
+                  handleChangeShape("rounded");
                 }}
               />
               <Box
@@ -70,9 +99,16 @@ const CategoryShapesComponent = () => {
                   width: "5vw",
                   height: "5vw",
                   border: "solid",
+                  cursor: "pointer",
                   borderWidth: "2px",
-                  borderColor: "#BCB8B1",
+                  borderColor:
+                    userUiPreferences.categoryShape === "square"
+                      ? "#A4755D"
+                      : "#BCB8B1",
                   marginBottom: "1rem",
+                }}
+                onClick={() => {
+                  handleChangeShape("square");
                 }}
               />
             </Container>

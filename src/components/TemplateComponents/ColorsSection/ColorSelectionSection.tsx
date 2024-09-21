@@ -2,9 +2,8 @@ import { Typography, Container, Button } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useTranslation } from "react-i18next";
-import { Colors } from "../../../DataTypes/RestaurantObject";
-import { setUserUiPreferences } from "../../../redux/slices/menuSlice";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
+import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
 const defaultColorsList = [
   { id: 0, color: "#A4755D" },
   { id: 1, color: "#D9B18F" },
@@ -24,9 +23,6 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
   const dispatch = useAppDispatch();
   const { userUiPreferences } = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant
-  );
-  const [selectedColors, setSelectedColors] = useState<Colors>(
-    userUiPreferences.colors
   );
 
   useEffect(() => {
@@ -49,19 +45,14 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [buttonRef, colorPickerRef]);
+  }, [buttonRef, colorPickerRef, userUiPreferences]);
 
   const handleColorChange = (newColor: string, type: string) => {
-    setSelectedColors((prev) => ({
-      ...prev,
-      [type === "Text" ? "secondaryColor" : "primaryColor"]: newColor,
-    }));
-
     dispatch(
-      setUserUiPreferences({
+      updateRestaurantUserUiPreferences({
         ...userUiPreferences,
         colors: {
-          ...selectedColors,
+          ...userUiPreferences.colors,
           [type === "Text" ? "secondaryColor" : "primaryColor"]: newColor,
         },
       })
@@ -92,32 +83,36 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
           marginBottom: "1rem",
         }}
       >
-        {defaultColorsList.map((item, index) => (
-          <Button
-            key={index}
-            id={`${type}ColorStylingButtonId`}
-            onClick={() => handleColorChange(item.color, type)}
-            className="colorStylingButton"
-            variant="contained"
-            sx={{
-              background: item.color,
-              minWidth: 0,
-              width: { xs: "2rem", sm: "2.5rem" },
-              height: { xs: "2rem", sm: "2.5rem" },
-              borderRadius: "2rem",
-              cursor: "pointer",
-              border:
-                (type === "Text"
-                  ? selectedColors.secondaryColor
-                  : selectedColors.primaryColor) === item.color
-                  ? "solid"
-                  : "none",
-              borderColor: "#d57e2e",
-              marginLeft: "1rem",
-              marginBottom: "1rem",
-            }}
-          />
-        ))}
+        {defaultColorsList.map((item, index) => {
+          console.log(item);
+          console.log(userUiPreferences.colors);
+          return (
+            <Button
+              key={index}
+              id={`${type}ColorStylingButtonId`}
+              onClick={() => handleColorChange(item.color, type)}
+              className="colorStylingButton"
+              variant="contained"
+              sx={{
+                background: item.color,
+                minWidth: 0,
+                width: { xs: "2rem", sm: "2.5rem" },
+                height: { xs: "2rem", sm: "2.5rem" },
+                borderRadius: "2rem",
+                cursor: "pointer",
+                border:
+                  (type === "Text"
+                    ? userUiPreferences.colors?.secondaryColor
+                    : userUiPreferences.colors?.primaryColor) === item.color
+                    ? "solid"
+                    : "none",
+                borderColor: "#d57e2e",
+                marginLeft: "1rem",
+                marginBottom: "1rem",
+              }}
+            />
+          );
+        })}
         <Button
           ref={buttonRef}
           sx={{
@@ -152,8 +147,8 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
             <HexColorPicker
               color={
                 type === "Text"
-                  ? selectedColors.secondaryColor
-                  : selectedColors.primaryColor
+                  ? userUiPreferences.colors?.secondaryColor
+                  : userUiPreferences.colors?.primaryColor
               }
               onChange={(newColor) => handleColorChange(newColor, type)}
             />

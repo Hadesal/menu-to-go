@@ -1,28 +1,23 @@
 import { useTranslation } from "react-i18next";
 import {
-  Button,
   Card,
   CardContent,
-  Checkbox,
   Container,
   FormControlLabel,
-  FormGroup,
   Paper,
   Radio,
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { HexColorPicker } from "react-colorful";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
 import { Colors } from "../../../DataTypes/RestaurantObject";
-import { setUserUiPreferences } from "../../../redux/slices/menuSlice";
 import ColorSelectionSection from "./ColorSelectionSection";
+import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
 
 const ColorsSection = () => {
   const { t } = useTranslation();
   const getString = t;
-
   const radioList = [
     getString("Text"),
     getString("Background"),
@@ -34,20 +29,22 @@ const ColorsSection = () => {
     (state) => state.restaurantsData.selectedRestaurant
   );
   const [selectedColors, setSelectedColors] = useState<Colors>(
-    userUiPreferences.colors
+    userUiPreferences?.colors
   );
   useEffect(() => {}, [selectedColors]);
 
   const handleEffectedSpace = async (effectedSpace: string) => {
     setSelectedColors((prev) => ({ ...prev, effectedSpace: effectedSpace }));
-    const updatedUserUiPreferences = {
-      ...userUiPreferences,
-      colors: {
-        ...userUiPreferences.colors,
-        effectedSpace: effectedSpace,
-      },
-    };
-    dispatch(setUserUiPreferences(updatedUserUiPreferences));
+
+    dispatch(
+      updateRestaurantUserUiPreferences({
+        ...userUiPreferences,
+        colors: {
+          ...userUiPreferences.colors,
+          effectedSpace: effectedSpace,
+        },
+      })
+    );
   };
 
   return (
@@ -69,9 +66,9 @@ const ColorsSection = () => {
           }}
         >
           <CardContent>
-            {selectedColors.effectedSpace === "Background" ? (
+            {selectedColors?.effectedSpace === "Background" ? (
               <ColorSelectionSection type="Background" />
-            ) : selectedColors.effectedSpace === "Text" ? (
+            ) : selectedColors?.effectedSpace === "Text" ? (
               <ColorSelectionSection type="Text" />
             ) : (
               <>
@@ -79,7 +76,6 @@ const ColorsSection = () => {
                 <ColorSelectionSection type="Text" />
               </>
             )}
-
             <Typography
               variant="body1"
               sx={{
@@ -112,7 +108,7 @@ const ColorsSection = () => {
                           color: "#A4755D",
                           "& .MuiSvgIcon-root": { fontSize: 25 },
                         }}
-                        checked={selectedColors.effectedSpace === value}
+                        checked={selectedColors?.effectedSpace === value}
                         value={value}
                         onChange={(radioEl) => {
                           handleEffectedSpace(radioEl.target.value);

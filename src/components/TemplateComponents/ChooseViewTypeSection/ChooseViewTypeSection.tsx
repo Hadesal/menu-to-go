@@ -12,7 +12,7 @@ import listViewImage from "../../../assets/listViewImage.png";
 import { useTranslation } from "react-i18next";
 import { ViewType } from "../../../DataTypes/RestaurantObject";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { setUserUiPreferences } from "../../../redux/slices/menuSlice";
+import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
 
 interface MenuViewType {
   id: string;
@@ -45,7 +45,7 @@ export default function ChooseViewTypeSection() {
       ...userUiPreferences,
       itemsViewType: selectedView,
     };
-    dispatch(setUserUiPreferences(newUserUiPreferences));
+    dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
   };
   return (
     <>

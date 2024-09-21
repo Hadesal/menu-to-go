@@ -111,7 +111,7 @@ const BoxComponent = ({
               onClick={handleClickOpen}
               disabled={product && !selectedCategory?.name}
             >
-              Add
+              {getString("add")}
             </Button>
           </>
         </Stack>
@@ -134,7 +134,7 @@ const BoxComponent = ({
                 color="primary"
                 onClick={handleClickOpen}
               >
-                Add
+                {getString("add")}
               </Button>
             </Box>
             <TextField
