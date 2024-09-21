@@ -17,7 +17,7 @@ export default function MenuFooter() {
       component={"footer"}
       sx={{
         ...Styles.footerContainer,
-        backgroundColor: restaurantData.userUiPreferences.primaryColor,
+        backgroundColor: restaurantData.userUiPreferences.colors.primaryColor,
       }}
       maxWidth="sm"
     >

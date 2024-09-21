@@ -16,8 +16,9 @@ import ChooseViewTypeSection from "../../components/TemplateComponents/ChooseVie
 export default function TemplatePage() {
   const { t } = useTranslation();
   const getString = t;
+  const [bigScreen, setBigScreen] = useState<number>(2000);
   useEffect(() => {
-    console.log(window.innerWidth);
+    setBigScreen(window.innerWidth);
   }, []);
   return (
     <>
@@ -43,20 +44,24 @@ export default function TemplatePage() {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-around",
           padding: 0,
           margin: 0,
+          minWidth: "inherit !important",
+          maxWidth: "inherit !important",
         }}
       >
         <Container
           sx={{
-            width: "55%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            width: bigScreen > 2000 ? "40%" : "50%",
+            marginRight: "inherit !important",
+            marginLeft: "inherit !important",
             marginBottom: { xs: "2rem", md: 0 },
           }}
         >
-          <ChooseViewTypeSection/>
+          <ChooseViewTypeSection />
           <ColorsSection />
           <FontSectionComponent />
           <CategoryShapesComponent />
@@ -66,18 +71,16 @@ export default function TemplatePage() {
         <Paper
           elevation={6}
           sx={{
-            width: "45%",
             marginTop: { xs: "1rem", md: "3rem" },
             padding: 0,
-            margin: 0,
             borderRadius: "2rem",
+            width: bigScreen > 2000 ? "29vw" : "37vw",
           }}
         >
           <Card
             title={"Embedded Content"}
             id="menuLiveViewContainerid"
             sx={{
-              width: "100%",
               height: "100%",
               padding: 0,
               margin: 0,

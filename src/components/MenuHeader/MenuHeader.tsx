@@ -12,7 +12,7 @@ export default function MenuHeader() {
         <Typography
           sx={Styles.titlePrimary}
           variant="h4"
-          color={restaurantData.userUiPreferences.primaryColor}
+          color={restaurantData.userUiPreferences.colors.primaryColor}
         >
           {title ? title.split("-")[0] : "Menu"}
         </Typography>

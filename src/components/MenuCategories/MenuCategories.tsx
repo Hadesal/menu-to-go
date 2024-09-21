@@ -32,9 +32,7 @@ export default function MenuCategories({
       });
     } else {
       categoriesDataArray = categories.filter((category) => {
-        return (
-          category.categoryType === "Drinks"
-        );
+        return category.categoryType === "Drinks";
       });
     }
 
@@ -68,9 +66,9 @@ export default function MenuCategories({
               ...Styles.categoryLabel,
               color:
                 category.name === selectedCategory
-                  ? restaurantData.userUiPreferences.primaryColor
+                  ? restaurantData.userUiPreferences.colors.primaryColor
                   : adjustBrightness(
-                      restaurantData.userUiPreferences.primaryColor,
+                      restaurantData.userUiPreferences.colors.primaryColor,
                       50
                     ),
               fontFamily: restaurantData.userUiPreferences.fontType,

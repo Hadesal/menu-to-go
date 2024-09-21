@@ -19,7 +19,7 @@ export default function ExtrasItem({ extras }: ExtrasItemProps) {
   return (
     <Paper elevation={2} sx={Styles.ExtrasItemWrapper}>
       <PlusIcon
-        color={restaurantData.userUiPreferences.primaryColor}
+        color={restaurantData.userUiPreferences.colors.primaryColor}
         width={14}
         height={14}
         style={Styles.bulletImage}

@@ -1,5 +1,5 @@
 // src/components/MenuSelection/MenuSelection.tsx
-import React from 'react';
+import React from "react";
 import { Box, Paper } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { setSelectedCategoryType } from "../../redux/slices/menuSlice";
@@ -51,7 +51,7 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
               alignItems: "center",
               background:
                 selection.Label === selectedCategoryType
-                  ? restaurantData.userUiPreferences.primaryColor
+                  ? restaurantData.userUiPreferences.colors.primaryColor
                   : "transparent",
               color:
                 selection.Label === selectedCategoryType

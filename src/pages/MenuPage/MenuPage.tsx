@@ -117,7 +117,7 @@ export default function MenuPage() {
       <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
 
       <Typography
-        color={restaurantData.userUiPreferences.primaryColor}
+        color={restaurantData.userUiPreferences.colors.primaryColor}
         sx={{
           paddingLeft: "1rem",
           paddingTop: "2rem",

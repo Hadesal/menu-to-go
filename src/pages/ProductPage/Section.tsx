@@ -12,7 +12,7 @@ const Section = ({ name, children }: Section) => {
   return (
     <Box sx={Styles.sectionWrapper}>
       <Typography
-        color={restaurantData.userUiPreferences.primaryColor}
+        color={restaurantData.userUiPreferences.colors.primaryColor}
         variant="h6"
         sx={{
           ...Styles.sectionName,

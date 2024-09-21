@@ -27,8 +27,12 @@ const initialState: RestaurantState = {
     categories: [],
     table: [],
     userUiPreferences: {
-      primaryColor: "",
-      secondaryColor: "",
+      colors: {
+        primaryColor: "#A4755D",
+        secondaryColor: "#D9B18F",
+        effectedSpace: "Text & Background",
+      },
+
       fontType: "",
       categoryShape: "",
       contactLinks: {

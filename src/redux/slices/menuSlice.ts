@@ -2,8 +2,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "../../services/api/restaurantCrud";
 import { RestaurantAllData } from "../../DataTypes/ResturantAllData";
-import { UserUiPreferences } from "../../DataTypes/userUiPreferences";
-import { ViewType } from "../../DataTypes/RestaurantObject";
+import { UserUiPreferences, ViewType } from "../../DataTypes/RestaurantObject";
 
 export interface MenuState {
   restaurantData: RestaurantAllData;
@@ -15,8 +14,11 @@ export interface MenuState {
 }
 
 const initialUserUiPreferences: UserUiPreferences = {
-  primaryColor: "",
-  secondaryColor: "",
+  colors: {
+    effectedSpace: "Background",
+    primaryColor: "#A4755D",
+    secondaryColor: "#D9B18F",
+  },
   fontType: "",
   categoryShape: "",
   contactLinks: {

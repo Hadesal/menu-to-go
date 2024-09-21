@@ -45,7 +45,7 @@ export default function MenuProductsCard({ product }) {
             }}
             gutterBottom
             component="div"
-            color={restaurantData.userUiPreferences.primaryColor}
+            color={restaurantData.userUiPreferences.colors.primaryColor}
           >
             {product.name}
           </Typography>
@@ -56,7 +56,7 @@ export default function MenuProductsCard({ product }) {
               fontFamily: restaurantData.userUiPreferences.fontType,
             }}
             component="div"
-            color={restaurantData.userUiPreferences.primaryColor}
+            color={restaurantData.userUiPreferences.colors.primaryColor}
           >
             {product.price}$
           </Typography>

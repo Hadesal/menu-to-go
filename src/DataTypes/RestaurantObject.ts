@@ -13,8 +13,7 @@ export interface addRestaurantData {
 }
 
 export interface UserUiPreferences {
-  primaryColor: string;
-  secondaryColor: string;
+  colors: Colors;
   fontType: string;
   categoryShape: string;
   contactLinks: {
@@ -29,4 +28,9 @@ export interface UserUiPreferences {
 export enum ViewType {
   GRID = "GRID",
   LIST = "LIST",
+}
+export interface Colors {
+  primaryColor: string;
+  secondaryColor: string;
+  effectedSpace: string;
 }

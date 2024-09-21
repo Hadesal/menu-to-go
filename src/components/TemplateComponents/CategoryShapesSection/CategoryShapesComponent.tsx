@@ -30,7 +30,7 @@ const CategoryShapesComponent = () => {
               }}
               variant="h6"
             >
-              {getString("catgoryShape")}
+              {getString("categoryShape")}
             </Typography>
             <Container
               sx={{

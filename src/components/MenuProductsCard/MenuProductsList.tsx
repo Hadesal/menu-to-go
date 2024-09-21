@@ -57,7 +57,7 @@ export default function MenuProductsList({ product }) {
                 fontFamily: restaurantData.userUiPreferences.fontType,
               }}
               component="div"
-              color={restaurantData.userUiPreferences.primaryColor}
+              color={restaurantData.userUiPreferences.colors.primaryColor}
             >
               {product.name}
             </Typography>
@@ -65,7 +65,7 @@ export default function MenuProductsList({ product }) {
               sx={{
                 fontSize: "16px",
                 fontWeight: 500,
-                color: restaurantData.userUiPreferences.primaryColor,
+                color: restaurantData.userUiPreferences.colors.primaryColor,
               }}
             >
               {product.price}$
@@ -79,10 +79,10 @@ export default function MenuProductsList({ product }) {
               color: "#BCB8B1",
               marginTop: 1,
               width: "250px",
-              height: "20px", 
-              overflow: "hidden", 
-              whiteSpace: "nowrap", 
-              textOverflow: "ellipsis", 
+              height: "20px",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
             }}
           >
             {product.details.ingredients

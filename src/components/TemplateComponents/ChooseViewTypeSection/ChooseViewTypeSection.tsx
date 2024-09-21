@@ -73,7 +73,7 @@ export default function ChooseViewTypeSection() {
             <Container
               sx={{
                 display: "flex",
-                justifyContent: "space-around",
+                justifyContent: "space-evenly",
                 padding: 0,
                 marginTop: "1rem",
               }}
@@ -100,8 +100,8 @@ export default function ChooseViewTypeSection() {
                   }}
                   sx={{
                     margin: 0,
-                    width: "12vw",
-                    height: "12vw",
+                    width: "11.7vw",
+                    height: "11.7vw",
                   }}
                 >
                   <img

@@ -35,13 +35,13 @@ export default function VariantList({ variants }: VariantListProps) {
                   <BulletIcon
                     width={10}
                     height={10}
-                    color={restaurantData.userUiPreferences.primaryColor}
+                    color={restaurantData.userUiPreferences.colors.primaryColor}
                     style={Styles.bulletImage}
                   />
                 </Box>
 
                 <Typography
-                  color={restaurantData.userUiPreferences.primaryColor}
+                  color={restaurantData.userUiPreferences.colors.primaryColor}
                   sx={{
                     ...Styles.VariantName,
                     fontFamily: restaurantData.userUiPreferences.fontType,

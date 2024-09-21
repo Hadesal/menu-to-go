@@ -19,7 +19,7 @@ export default function ProductPage() {
   );
 
   const backgroundColor = hexToRgba(
-    restaurantData.userUiPreferences.primaryColor,
+    restaurantData.userUiPreferences.colors.primaryColor,
     0.19
   );
 
@@ -39,7 +39,7 @@ export default function ProductPage() {
         >
           <NavigateBeforeIcon
             fontSize="large"
-            sx={{ color: restaurantData.userUiPreferences.primaryColor }}
+            sx={{ color: restaurantData.userUiPreferences.colors.primaryColor }}
           />
         </IconButton>
         <ProductDetails

@@ -47,7 +47,7 @@ const ContactLinksComponent = () => {
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: { xs: "center", sm: "flex-start" },
-                justifyContent: { xs: "center", sm: "space-between" },
+                justifyContent: { xs: "center", sm: "space-evenly" },
                 gap: { xs: "1rem", sm: "0" },
                 marginTop: "1rem",
                 padding: 0,

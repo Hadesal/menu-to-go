@@ -30,14 +30,20 @@ export default function ProductDetails({
       />
       <Box sx={Styles.ProductDetailsWrapper}>
         <Typography
-          sx={{ ...Styles.title, fontFamily: restaurantData.userUiPreferences.fontType}}
-          color={restaurantData.userUiPreferences.primaryColor}
+          sx={{
+            ...Styles.title,
+            fontFamily: restaurantData.userUiPreferences.fontType,
+          }}
+          color={restaurantData.userUiPreferences.colors.primaryColor}
           variant="h5"
         >
           {productName}
         </Typography>
         <Typography
-          sx={{...Styles.subTitle, fontFamily: restaurantData.userUiPreferences.fontType }}
+          sx={{
+            ...Styles.subTitle,
+            fontFamily: restaurantData.userUiPreferences.fontType,
+          }}
           variant="body2"
         >
           {productDescription}

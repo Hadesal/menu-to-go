@@ -1,5 +1,5 @@
 import { CategoryData } from "./CategoryDataTypes";
-import { UserUiPreferences } from "./userUiPreferences";
+import { UserUiPreferences } from "./RestaurantObject";
 
 export interface RestaurantAllData {
   id: string;
