@@ -84,8 +84,6 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
         }}
       >
         {defaultColorsList.map((item, index) => {
-          console.log(item);
-          console.log(userUiPreferences.colors);
           return (
             <Button
               key={index}

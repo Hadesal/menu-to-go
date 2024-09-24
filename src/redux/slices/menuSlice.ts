@@ -72,9 +72,6 @@ export const MenuSlice = createSlice({
     setSelectedCategoryType: (state, action: PayloadAction<string>) => {
       state.selectedCategoryType = action.payload;
     },
-    setUserUiPreferences: (state, action: PayloadAction<UserUiPreferences>) => {
-      state.restaurantData.userUiPreferences = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -100,7 +97,6 @@ export const {
   setSelectedProduct,
   setSelectedCategory,
   setSelectedCategoryType,
-  setUserUiPreferences,
 } = MenuSlice.actions;
 
 export default MenuSlice.reducer;

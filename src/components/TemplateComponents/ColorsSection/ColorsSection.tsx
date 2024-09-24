@@ -9,9 +9,7 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { Colors } from "../../../DataTypes/RestaurantObject";
 import ColorSelectionSection from "./ColorSelectionSection";
 import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
 
@@ -28,14 +26,8 @@ const ColorsSection = () => {
   const { userUiPreferences } = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant
   );
-  const [selectedColors, setSelectedColors] = useState<Colors>(
-    userUiPreferences?.colors
-  );
-  useEffect(() => {}, [selectedColors]);
 
   const handleEffectedSpace = async (effectedSpace: string) => {
-    setSelectedColors((prev) => ({ ...prev, effectedSpace: effectedSpace }));
-
     dispatch(
       updateRestaurantUserUiPreferences({
         ...userUiPreferences,
@@ -66,9 +58,10 @@ const ColorsSection = () => {
           }}
         >
           <CardContent>
-            {selectedColors?.effectedSpace === "Background" ? (
+            {userUiPreferences &&
+            userUiPreferences.colors?.effectedSpace === "Background" ? (
               <ColorSelectionSection type="Background" />
-            ) : selectedColors?.effectedSpace === "Text" ? (
+            ) : userUiPreferences.colors?.effectedSpace === "Text" ? (
               <ColorSelectionSection type="Text" />
             ) : (
               <>
@@ -108,7 +101,9 @@ const ColorsSection = () => {
                           color: "#A4755D",
                           "& .MuiSvgIcon-root": { fontSize: 25 },
                         }}
-                        checked={selectedColors?.effectedSpace === value}
+                        checked={
+                          userUiPreferences.colors?.effectedSpace === value
+                        }
                         value={value}
                         onChange={(radioEl) => {
                           handleEffectedSpace(radioEl.target.value);

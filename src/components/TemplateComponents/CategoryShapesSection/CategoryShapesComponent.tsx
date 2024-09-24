@@ -65,6 +65,7 @@ const CategoryShapesComponent = () => {
                   cursor: "pointer",
                   borderWidth: "2px",
                   borderColor:
+                    userUiPreferences &&
                     userUiPreferences.categoryShape === "circle"
                       ? "#A4755D"
                       : "#BCB8B1",

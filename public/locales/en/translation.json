@@ -104,5 +104,9 @@
   "font": "Font",
   "categoryShape": "Category Shape",
   "contactLinks": "Contact Links",
-  "viewType": "View Type"
+  "viewType": "View Type",
+  "ok": "Ok",
+  "twitterLink": "Enter Your Twitter Link",
+  "facebookLink": "Enter Your Facebook Link",
+  "instagramLink": "Enter Your Instagram Link"
 }
