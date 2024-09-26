@@ -8,6 +8,7 @@ import logo from "../../../assets/logo.svg";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
 import { addRestaurant } from "../../../redux/slices/restaurantsSlice";
 import { userUpdate } from "../../../redux/slices/userSlice";
+import { fetchAllData } from "../../../utils/DashboaredDataFetching";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -48,14 +49,14 @@ const UserDetailsInputComponent = ({
         currency: userData?.currency !== "" ? userData?.currency : "",
       };
     });
-  }, []);
-  const handleUserDetails = () => {
-    dispatch(
+  }, [restaurantList, userData?.billingData?.country, userData?.currency]);
+  const handleUserDetails = async () => {
+    await dispatch(
       addRestaurant({
         restaurant: { name: userDetails?.restaurantName, table: [] },
       })
     );
-    dispatch(
+    await dispatch(
       userUpdate({
         updatedUser: {
           ...userData,
@@ -68,7 +69,7 @@ const UserDetailsInputComponent = ({
         userId: userData.id,
       })
     );
-    console.log(userDetails);
+    await fetchAllData(dispatch);
   };
   return (
     <Dialog
