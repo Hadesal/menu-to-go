@@ -24,6 +24,7 @@ import {
   setSelectedRestaurant,
 } from "../../redux/slices/restaurantsSlice";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
+
 export default function TemplatePage() {
   const { t } = useTranslation();
   const getString = t;
@@ -32,7 +33,6 @@ export default function TemplatePage() {
     (state) => state.restaurantsData
   );
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     setBigScreen(window.innerWidth);
   }, []);
@@ -48,6 +48,7 @@ export default function TemplatePage() {
   const handleSaveChanges = () => {
     dispatch(editRestaurant({ restaurant: selectedRestaurant }));
   };
+
   return (
     <>
       <Container

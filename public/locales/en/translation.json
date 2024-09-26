@@ -100,7 +100,7 @@
   "Background": "Background",
   "text&background": "Text & Background",
   "colors": "Colors",
-  "applyAccentColor": "Apply Accent Color",
+  "effectedSpace": "Choose space to apply selected color for",
   "font": "Font",
   "categoryShape": "Category Shape",
   "contactLinks": "Contact Links",
@@ -108,5 +108,6 @@
   "ok": "Ok",
   "twitterLink": "Enter Your Twitter Link",
   "facebookLink": "Enter Your Facebook Link",
-  "instagramLink": "Enter Your Instagram Link"
+  "instagramLink": "Enter Your Instagram Link",
+  "chooseEffectedSpaceError": "Please choose space to save"
 }

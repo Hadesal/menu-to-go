@@ -77,7 +77,7 @@ const ColorsSection = () => {
                 textAlign: "left",
               }}
             >
-              {getString("applyAccentColor")}
+              {getString("effectedSpace")}
             </Typography>
             <Container
               id="checkBoxesContainerid"
