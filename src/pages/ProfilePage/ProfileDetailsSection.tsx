@@ -36,7 +36,6 @@ const ProfileDetailsSection = () => {
           variant="outlined"
           startIcon={<EditOutlinedIcon />}
           onClick={() => {
-            //setActiveTab("edit");
             setIsEditing(true);
           }}
         >
@@ -46,72 +45,66 @@ const ProfileDetailsSection = () => {
 
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">{getString("userName")} :</Typography>
-        <InputComponent
-          id="nameField"
-          type="Name"
-          label=""
-          readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
-          InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
-          boxStyle={{ flexGrow: 1 }}
-          value={userData?.name}
-        />
-      </Container>
-      <Container
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <Typography variant="subtitle1">
-          {getString("email")}
-          {" :"}
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("userName")}
         </Typography>
         <InputComponent
           id="nameField"
           type="Name"
           label=""
           readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={userData?.name}
+          disabled={true}
+        />
+      </Container>
+      <Container
+        sx={{
+          marginTop: "0.5rem",
+        }}
+      >
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("email")}
+        </Typography>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          readOnly={true}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={userData?.email}
+          disabled={true}
         />
       </Container>
 
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
           {getString("phonenumber")}
-          {" :"}
         </Typography>
         <InputComponent
           id="nameField"
           type="Name"
           label=""
           readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.billingData?.phoneNumber}
+          value={userData?.billingData?.phoneNumber.trim()}
+          disabled={true}
         />
       </Container>
     </Box>

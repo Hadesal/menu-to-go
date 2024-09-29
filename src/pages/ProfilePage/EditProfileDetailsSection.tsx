@@ -1,5 +1,7 @@
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import PhoneInput from "react-phone-input-2";
+import "./ProfilePage.css";
 import {
   Alert,
   Backdrop,
@@ -39,7 +41,8 @@ const EditProfileDetailsSection = ({
   }, [userData]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "phoneNumber") {
+    console.log(value);
+    if (name === "") {
       setFormData((prevValue) => ({
         ...prevValue,
         billingData: {
@@ -67,26 +70,46 @@ const EditProfileDetailsSection = ({
 
   const onSave = () => {
     if (isFormDataChanged(formData, userData)) {
-      if (formData.name.length === 0) {
-        setToastMessage("Data has not been changed");
+      if (formData.name.trim().length === 0) {
+        setToastMessage("User name cannot be empty");
         setShowToast(true);
         setSeverity("warning");
         return;
       }
-      dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
-        (value) => {
-          const response = value.payload;
-          // Handle API response
-          if (response?.body) {
-            setToastMessage(response.body);
-            setSeverity("success");
-          } else if (response?.message) {
-            setToastMessage(response.message);
-            setSeverity("warning");
-          }
-          setShowToast(true);
+      // Updated regex to match either "+" or country codes like +20, +43, etc.
+      const onlyCountryCode = /^\+(\d+)?$/;
+
+      // Check if phone number is only a "+" or a country code and set it to an empty string
+      const updatedPhoneNumber = onlyCountryCode.test(
+        formData.billingData?.phoneNumber || ""
+      )
+        ? ""
+        : formData.billingData?.phoneNumber;
+
+      // Update formData with the cleaned phone number before saving
+      const updatedFormData = {
+        ...formData,
+        billingData: {
+          ...formData.billingData,
+          phoneNumber: updatedPhoneNumber,
+        },
+      };
+
+      dispatch(
+        userUpdate({ updatedUser: updatedFormData, userId: userData.id })
+      ).then((value) => {
+        const response = value.payload;
+        // Handle API response
+        if (response && typeof response === "object" && !response.message) {
+          setToastMessage("User updated successfully!");
+          setSeverity("success");
+          onCancel();
+        } else if (response?.message) {
+          setToastMessage(response.message);
+          setSeverity("warning");
         }
-      );
+        setShowToast(true);
+      });
     } else {
       setToastMessage("Data has not been changed");
       setShowToast(true);
@@ -137,19 +160,18 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">{getString("userName")} :</Typography>
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("userName")}
+        </Typography>
         <InputComponent
           name="name"
           id="nameField"
           type="Name"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
@@ -159,53 +181,54 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
           {getString("email")}
-          {" :"}
         </Typography>
         <InputComponent
           name="email"
           id="emailField"
           type="email"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={formData.email as string}
-          onChange={handleInputChange}
+          // onChange={handleInputChange}
           disabled={true}
         />
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
           {getString("phonenumber")}
-          {" :"}
         </Typography>
-        <InputComponent
-          name="phoneNumber"
-          id="emailField"
-          type="phoneNumber"
-          label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
-          InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
-          boxStyle={{ flexGrow: 1 }}
+        <PhoneInput
+          country=""
+          enableAreaCodes={true}
           value={formData.billingData?.phoneNumber as string}
-          onChange={handleInputChange}
+          onChange={(_, __, ___, formattedValue) => {
+            setFormData((prevValue) => ({
+              ...prevValue,
+              billingData: {
+                ...prevValue.billingData!,
+                phoneNumber: formattedValue,
+              },
+            }));
+          }}
+          specialLabel=""
+          containerStyle={{
+            marginTop: "0.5rem",
+          }}
+          inputStyle={{
+            width: "100%",
+          }}
         />
       </Container>
       <Container
@@ -235,7 +258,6 @@ const EditProfileDetailsSection = ({
             "&:hover": {
               backgroundColor: "transparent",
               borderColor: "var(--primary-color)",
-              //boxShadow: "none",
               color: "var(--primary-color)",
             },
           }}

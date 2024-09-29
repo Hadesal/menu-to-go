@@ -25,7 +25,7 @@ export interface UserSignInData {
 export interface UserUpdateData {
   id: string;
   name: string;
-  email: string;
+  email?: string;
   password: string;
   image?: string;
   billingData?: BillingDataType;
