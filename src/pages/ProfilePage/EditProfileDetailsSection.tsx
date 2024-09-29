@@ -19,11 +19,15 @@ import { UserUpdateData } from "../../DataTypes/UserDataTypes";
 import { userUpdate } from "../../redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
 
-const EditProfileDetailsSection = ({
-  setIsEditing,
-}: {
+// Define props interface
+interface EditProfileDetailsSectionProps {
+  setToastVisible: Dispatch<SetStateAction<boolean>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
-}) => {
+}
+const EditProfileDetailsSection = ({
+  setToastVisible,
+  setIsEditing,
+}: EditProfileDetailsSectionProps) => {
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
@@ -58,8 +62,12 @@ const EditProfileDetailsSection = ({
     }
   };
 
-  const isFormDataChanged = (formData: any, userData: any) => {
-    if (formData.phoneNumber !== userData.phoneNumber) return true;
+  const isFormDataChanged = (
+    formData: UserUpdateData,
+    userData: UserUpdateData
+  ) => {
+    if (formData.billingData?.phoneNumber !== userData.billingData?.phoneNumber)
+      return true;
     for (const key in formData) {
       if (formData[key] !== userData[key]) {
         return true;
@@ -100,18 +108,24 @@ const EditProfileDetailsSection = ({
       ).then((value) => {
         const response = value.payload;
         // Handle API response
-        if (response && typeof response === "object" && !response.message) {
-          setToastMessage("User updated successfully!");
-          setSeverity("success");
+        if (!response.message) {
+          setToastVisible(true);
           onCancel();
-        } else if (response?.message) {
-          setToastMessage(response.message);
-          setSeverity("warning");
+        } else {
+          let errorMessage = response.message;
+          if (response.status === 500) {
+            errorMessage = getString("updateUserError");
+          } else if (response.message === "User not found") {
+            errorMessage = getString("userNotFound");
+          }
+
+          setToastMessage(errorMessage);
+          setSeverity("error");
         }
         setShowToast(true);
       });
     } else {
-      setToastMessage("Data has not been changed");
+      setToastMessage(getString("dataNotChanged"));
       setShowToast(true);
       setSeverity("warning");
       return;
@@ -197,7 +211,6 @@ const EditProfileDetailsSection = ({
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={formData.email as string}
-          // onChange={handleInputChange}
           disabled={true}
         />
       </Container>

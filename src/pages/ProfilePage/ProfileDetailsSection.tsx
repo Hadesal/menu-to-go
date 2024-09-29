@@ -1,5 +1,12 @@
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -14,12 +21,33 @@ const ProfileDetailsSection = () => {
   useEffect(() => {}, [userData]);
 
   const [isEditing, setIsEditing] = useState(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   if (isEditing) {
-    return <EditProfileDetailsSection setIsEditing={setIsEditing} />;
+    return (
+      <EditProfileDetailsSection
+        setToastVisible={setShowToast}
+        setIsEditing={setIsEditing}
+      />
+    );
   }
   return (
     <Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => setShowToast(false)}
+      >
+        <Alert
+          onClose={() => setShowToast(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {getString("userUpdateSuccess")}
+        </Alert>
+      </Snackbar>
       <Container
         sx={{
           display: "flex",

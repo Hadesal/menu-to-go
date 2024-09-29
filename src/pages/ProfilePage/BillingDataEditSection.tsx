@@ -19,11 +19,15 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserUpdateData } from "../../DataTypes/UserDataTypes";
 import { userUpdate } from "../../redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-const BillingDataEditSection = ({
-  setIsEditing,
-}: {
+
+interface BillingDataEditSectionProps {
+  setToastVisible: Dispatch<SetStateAction<boolean>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
-}) => {
+}
+const BillingDataEditSection = ({
+  setToastVisible,
+  setIsEditing,
+}: BillingDataEditSectionProps) => {
   const { t } = useTranslation();
   const getString = t;
   const { userList, loading } = useAppSelector((state) => state.userData);
@@ -84,18 +88,23 @@ const BillingDataEditSection = ({
       ).then((value) => {
         const response = value.payload;
         // Handle API response
-        if (response && typeof response === "object" && !response.message) {
-          setToastMessage("Billing Data updated successfully!");
-          setSeverity("success");
+        if (!response.message) {
+          setToastVisible(true);
           onCancel();
-        } else if (response?.message) {
-          setToastMessage(response.message);
-          setSeverity("warning");
+        } else {
+          let errorMessage = response.message;
+          if (response.status === 500) {
+            errorMessage = getString("updateUserError");
+          } else if (response.message === "User not found") {
+            errorMessage = getString("userNotFound");
+          }
+          setToastMessage(errorMessage);
+          setSeverity("error");
         }
         setShowToast(true);
       });
     } else {
-      setToastMessage("Data has not been changed");
+      setToastMessage(getString("dataNotChanged"));
       setShowToast(true);
       setSeverity("warning");
       return;
@@ -150,9 +159,7 @@ const BillingDataEditSection = ({
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h5">
-              Edit {getString("billingData")}{" "}
-            </Typography>
+            <Typography variant="h5">{getString("editBillingData")}</Typography>
           </Container>
           <Typography variant="subtitle1" sx={{ color: "#797979" }}>
             {getString("billingDataPageDescription")}
