@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 //import burger from "../../assets/burger.jpg";
 import { Styles } from "./ProductDetails.styles";
 // import PlaceHolder from "../../assets/food-placeholder-1.jpg"; // Importing the image as a default export
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
 
 interface productDetailsProps {

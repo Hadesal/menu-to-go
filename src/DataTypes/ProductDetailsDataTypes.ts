@@ -1,4 +1,4 @@
-export interface ExtraData {
+export interface ExtrasData {
   id: string;
   name: string;
   price: number;
@@ -22,7 +22,7 @@ export interface ProductDetailsData {
   detailsDescription: string | null;
   variants: VariantsData;
   ingredients: IngredientData[];
-  extras: ExtraData[];
+  extras: ExtrasData[];
 }
 
 export interface VariantsData {

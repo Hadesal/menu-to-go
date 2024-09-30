@@ -13,15 +13,14 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CategoryData } from "../../DataTypes/CategoryDataTypes";
-import Styles from "../../DataTypes/StylesTypes";
-import { setSelectedCategory } from "../../redux/slices/categorySlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
-
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import Styles from "@dataTypes/StylesTypes";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import ConfirmDialog from "@components/Dialogs/LogoutDialog/confirmDialog";
 import EditIcon from "@mui/icons-material/Edit";
-import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
+import AddCategoryDialog from "@components/Dialogs/AddItemDialog/addCategoryDialog";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { setSelectedCategory } from "@redux/slices/restaurantsSlice";
 
 interface Props {
   items: CategoryData[];
@@ -42,7 +41,7 @@ const CategoryItemsListView = ({
   const { selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
-  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
+  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const dispatch = useAppDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   //const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
@@ -240,7 +239,7 @@ const CategoryItemsListView = ({
         onCancelClick={handleClose}
         onConfirmClick={editFunction}
         initialData={currentItem}
-        data={selectedRestaurant.categories}
+        data={selectedRestaurant ? selectedRestaurant.categories : undefined}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserSignInData } from "../../DataTypes/UserDataTypes";
+import { UserSignInDataType } from "../../DataTypes/UserDataTypes";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { handleSignIn } from "../../utils/auth-handlers";
 import { Styles } from "./LoginPage.style";
@@ -33,7 +33,7 @@ export default function LoginPage() {
     useState<boolean>(false);
   const [isResetPasswordOpen, setIsResetPasswordOpen] =
     useState<boolean>(false);
-  const [userData, setUserData] = useState<UserSignInData>({
+  const [userData, setUserData] = useState<UserSignInDataType>({
     email: "",
     password: "",
   });

@@ -7,20 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import MenuCategories from "../../components/MenuCategories/MenuCategories";
-import MenuHeader from "../../components/MenuHeader/MenuHeader";
-import MenuProductsCard from "../../components/MenuProductsCard/MenuProductsCard";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import { fetchMenuData } from "../../utils/MenuDataFetching";
-import { Styles } from "../ProductPage/ProductPage.styles";
-import SplashScreen from "../SplashScreen/SplashScreen";
-import MenuFooter from "../../components/MenuFooter/MenuFooter";
-import ProductPage from "../ProductPage/ProductPage";
-import MenuSelection from "../../components/MenuSelection/MenuSelection";
+import MenuCategories from "@components/MenuCategories/MenuCategories";
+import MenuHeader from "@components/MenuHeader/MenuHeader";
+import MenuProductsCard from "@components/MenuProductsCard/MenuProductsCard";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
+import { Styles } from "@pages/ProductPage/ProductPage.styles";
+import SplashScreen from "@pages/SplashScreen/SplashScreen";
+import MenuFooter from "@components/MenuFooter/MenuFooter";
+import ProductPage from "@pages/ProductPage/ProductPage";
+import MenuSelection from "@components/MenuSelection/MenuSelection";
 import { useParams } from "react-router-dom";
-import emptyData from "../../assets/Animation - 1724972864386.json";
+import emptyData from "@assets/Animation - 1724972864386.json";
 import Lottie from "lottie-react";
-import MenuProductsList from "../../components/MenuProductsCard/MenuProductsList";
+import MenuProductsList from "@components/MenuProductsCard/MenuProductsList";
 
 // Define menu selection options
 const menuSelections = [
@@ -72,7 +72,7 @@ export default function MenuPage() {
 
   // Filter categories to include only those with products
   const filteredCategories = restaurantData.categories.filter(
-    (category) => category.products.length > 0
+    (category) => category.products!.length > 0
   );
 
   // Determine if menu selection should be shown
@@ -149,7 +149,7 @@ export default function MenuPage() {
             marginBottom: 5,
           }}
         >
-          {selectedCategory?.products.map((product, index) => (
+          {selectedCategory.products!.map((product, index) => (
             <Grid
               item
               xs={6}
@@ -185,7 +185,7 @@ export default function MenuPage() {
             marginBottom: 5,
           }}
         >
-          {selectedCategory?.products.map((product, index) => (
+          {selectedCategory?.products!.map((product, index) => (
             <Grid
               item
               xs={12}

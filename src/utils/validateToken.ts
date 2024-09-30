@@ -1,20 +1,34 @@
-export const isTokenValid = (onLogout: () => void) => {
-  const tokenData = localStorage.getItem("userToken");
-  if (tokenData) {
-    const { loginTime } = JSON.parse(tokenData);
-    const currentTime = Date.now();
-    // Token validity duration set to 1 minute (60000 milliseconds) for testing
-    const tokenValidityDuration = 60000; // 1 minute in milliseconds
-    const isTokenStillValid = currentTime - loginTime < tokenValidityDuration;
+interface TokenData {
+  loginTime: number;
+}
 
-    if (isTokenStillValid) {
-      console.log("Token is valid");
+export const isTokenValid = (
+  onLogout: () => void,
+  tokenValidityDuration: number = 60000 // Default to 1 minute for testing
+): boolean => {
+  try {
+    const tokenData = localStorage.getItem("userToken");
+
+    if (tokenData) {
+      const { loginTime }: TokenData = JSON.parse(tokenData);
+      const currentTime = Date.now();
+      const isTokenStillValid = currentTime - loginTime < tokenValidityDuration;
+
+      if (isTokenStillValid) {
+        console.log("Token is valid");
+        return true;
+      } else {
+        console.log("Token has expired");
+        onLogout();
+        return false;
+      }
     } else {
-      console.log("Token has expired");
-      //localStorage.removeItem("userToken");
-      onLogout();
+      console.log("No token found");
+      return false;
     }
-  } else {
-    console.log("No token found");
+  } catch (error) {
+    console.error("Failed to validate token:", error);
+    onLogout(); // If something goes wrong, force logout
+    return false;
   }
 };

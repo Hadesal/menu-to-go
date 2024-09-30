@@ -1,15 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { Styles } from "./ProductIngredients.styles";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
-import { useAppSelector } from "../../utils/hooks";
-
-interface Ingredient {
-  img: string;
-  name: string;
-}
+import { useAppSelector } from "../../redux/reduxHooks";
+import { IngredientData } from "@dataTypes/ProductDetailsDataTypes";
 
 interface IngredientItemProps {
-  ingredient: Ingredient;
+  ingredient: IngredientData;
 }
 
 export default function IngredientItem({ ingredient }: IngredientItemProps) {
@@ -18,7 +14,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
   return (
     <Box sx={Styles.IngredientItemContainer}>
       <img
-        src={ingredient.img ? ingredient.img : PlaceHolder}
+        src={ingredient.image ? ingredient.image : PlaceHolder}
         alt={ingredient.name}
         style={{ borderRadius: "8px", backgroundSize: "contain" }}
         width={50}

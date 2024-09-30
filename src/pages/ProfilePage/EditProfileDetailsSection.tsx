@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import {
@@ -13,9 +14,9 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { UserUpdateData } from "../../DataTypes/UserDataTypes";
-import { userUpdate } from "../../redux/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks"; // Adjust the import path
+import { UserDataType } from "../../DataTypes/UserDataTypes";
+import { updateUser } from "../../redux/thunks/userThunks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 
 const EditProfileDetailsSection = ({
   setIsEditing,
@@ -25,9 +26,9 @@ const EditProfileDetailsSection = ({
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
-  const { userList, loading } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
-  const [formData, setFormData] = useState<UserUpdateData>(userData);
+  const { user, loading } = useAppSelector((state) => state.userData);
+
+  const [formData, setFormData] = useState<UserDataType>(user!);
   const [severity, setSeverity] = useState<
     "success" | "warning" | "error" | "info"
   >("info");
@@ -35,8 +36,8 @@ const EditProfileDetailsSection = ({
   const [toastMessage, setToastMessage] = useState<string>("");
 
   useEffect(() => {
-    setFormData(userData);
-  }, [userData]);
+    setFormData(user!);
+  }, [user]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "phoneNumber") {
@@ -66,22 +67,22 @@ const EditProfileDetailsSection = ({
   };
 
   const onSave = () => {
-    if (isFormDataChanged(formData, userData)) {
+    if (isFormDataChanged(formData, user)) {
       if (formData.name.length === 0) {
         setToastMessage("Data has not been changed");
         setShowToast(true);
         setSeverity("warning");
         return;
       }
-      dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
+      dispatch(updateUser({ updatedUser: formData, userId: user!.id })).then(
         (value) => {
           const response = value.payload;
           // Handle API response
           if (response?.body) {
-            setToastMessage(response.body);
+            setToastMessage(response?.body);
             setSeverity("success");
           } else if (response?.message) {
-            setToastMessage(response.message);
+            setToastMessage(response?.message);
             setSeverity("warning");
           }
           setShowToast(true);

@@ -9,9 +9,9 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import ColorSelectionSection from "./ColorSelectionSection";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 
 const ColorsSection = () => {
   const { t } = useTranslation();
@@ -23,16 +23,16 @@ const ColorsSection = () => {
   ];
 
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
   const handleEffectedSpace = async (effectedSpace: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
+        ...userUiPreferences!,
         colors: {
-          ...userUiPreferences.colors,
+          ...userUiPreferences!.colors,
           effectedSpace: effectedSpace,
         },
       })
@@ -59,9 +59,9 @@ const ColorsSection = () => {
         >
           <CardContent>
             {userUiPreferences &&
-            userUiPreferences.colors?.effectedSpace === "Background" ? (
+            userUiPreferences?.colors?.effectedSpace === "Background" ? (
               <ColorSelectionSection type="Background" />
-            ) : userUiPreferences.colors?.effectedSpace === "Text" ? (
+            ) : userUiPreferences?.colors?.effectedSpace === "Text" ? (
               <ColorSelectionSection type="Text" />
             ) : (
               <>
@@ -102,7 +102,7 @@ const ColorsSection = () => {
                           "& .MuiSvgIcon-root": { fontSize: 25 },
                         }}
                         checked={
-                          userUiPreferences.colors?.effectedSpace === value
+                          userUiPreferences?.colors?.effectedSpace === value
                         }
                         value={value}
                         onChange={(radioEl) => {

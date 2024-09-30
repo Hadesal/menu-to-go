@@ -1,5 +1,5 @@
-import React, { SetStateAction, useState } from "react";
-import logo from "../../../assets/logo.svg";
+import { SetStateAction, useState } from "react";
+import logo from "@assets/logo.svg";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,10 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import InputComponent from "../../InputComponent/InputComponent";
-import { Styles } from "../LogoutDialog/confirmDialog.style";
-import { Styles as inputStyles } from "../../../pages/LoginPage/LoginPage.style";
-import { forgetPassword } from "../../../services/api/userCrud";
+import InputComponent from "@components/InputComponent/InputComponent";
+import { Styles } from "@components/Dialogs/LogoutDialog/confirmDialog.style";
+import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
+import { forgetPassword } from "@api/userCrud";
 import CheckIcon from "@mui/icons-material/Check";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";

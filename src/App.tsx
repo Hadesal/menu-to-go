@@ -1,48 +1,27 @@
 // src/App.js
-import { createTheme, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import MenuPage from "./pages/MenuPage/MenuPage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
-import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
-import PrivateRoute from "./utils/PrivateRoute";
-import PublicRoute from "./utils/PublicRoute";
+import LoginPage from "@pages/LoginPage/LoginPage";
+import MenuPage from "@pages/MenuPage/MenuPage";
+import RegisterPage from "@pages/RegisterPage/RegisterPage";
+import UserDashboardPage from "@pages/UserDashboardPage/UserDashboardPage";
+import PrivateRoute from "@routes/PrivateRoute";
+import PublicRoute from "@routes/PublicRoute";
+import theme from "./theme/theme";
+import { ROUTES } from "@constants/constants";
 // Define your custom theme
-const theme = createTheme({
-  typography: {
-    fontFamily: ["Poppins", "Arial", "sans-serif"].join(","),
-  },
-  palette: {
-    primary: {
-      main: "#a4755d",
-    },
-    secondary: {
-      main: "#d9b18f",
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 767,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
 
-function App() {
-  window.history.pushState(null, null, window.location.href); // Push the current state
-  window.onpopstate = function () {
-    window.history.go(1); // On back press, go forward in the history
-  };
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route
-            path="/register"
+            path={ROUTES.ROOT}
+            element={<Navigate to={ROUTES.DASHBOARD} replace />}
+          />
+          <Route
+            path={ROUTES.REGISTER}
             element={
               <PublicRoute>
                 <RegisterPage />
@@ -50,7 +29,7 @@ function App() {
             }
           />
           <Route
-            path="/login"
+            path={ROUTES.LOGIN}
             element={
               <PublicRoute>
                 <LoginPage />
@@ -58,7 +37,7 @@ function App() {
             }
           />
           <Route
-            path="/dashboard"
+            path={ROUTES.DASHBOARD}
             element={
               <PrivateRoute>
                 <UserDashboardPage />
@@ -66,7 +45,7 @@ function App() {
             }
           />
           <Route
-            path="/menu/:id"
+            path={ROUTES.MENU}
             element={
               <PublicRoute>
                 <MenuPage />
@@ -77,6 +56,6 @@ function App() {
       </BrowserRouter>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

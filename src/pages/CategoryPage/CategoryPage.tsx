@@ -13,46 +13,44 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import RestaurantIcon from "../../assets/restaurant-icon.jpg";
-import BoxComponent from "../../components/BoxComponent/BoxComponent";
-import CategoryBoxComponent from "../../components/BoxComponent/categoryBoxComponent";
-import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import RestaurantIcon from "@assets/restaurant-icon.jpg";
+import BoxComponent from "@components/BoxComponent/BoxComponent";
+import CategoryBoxComponent from "@components/BoxComponent/categoryBoxComponent";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import {
   clearSuccessMessage,
   setSelectedRestaurant,
-  clearErrorMessage,
-} from "../../redux/slices/restaurantsSlice";
-import {
-  createProduct as addProduct,
-  modifyProduct as editProduct,
-  removeProduct as deleteProduct,
-  clearErrorMessage as clearProductErrorMessage,
-} from "../../redux/slices/productSlice";
-import {
-  addCategory,
-  deleteCategory,
+  clearRestaurantError,
   setSelectedCategory,
-  updateCategory,
-  clearErrorMessage as clearCategoryErrorMessage,
-} from "../../redux/slices/categorySlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+} from "@slices/restaurantsSlice";
+import {
+  addProductToCategory as addProduct,
+  updateProductInCategory as editProduct,
+  removeProductFromCategory as deleteProduct,
+} from "@redux/thunks/productThunks";
+import {
+  addCategoryToRestaurant as addCategory,
+  removeCategoryFromRestaurant as deleteCategory,
+  editCategoryInRestaurant as updateCategory,
+} from "@redux/thunks/categoryThunks";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import Styles from "./CategorySection.styles";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
   const {
     selectedRestaurant,
-    loading,
+    restaurantLoading,
     // error: restaurantError,
   } = useAppSelector((state) => state.restaurantsData);
   const {
     selectedCategory,
     successMessage,
-    loading: categoryLoading,
+    categoryLoading,
     error: categoryError,
-  } = useAppSelector((state) => state.categoriesData);
-  const { error: productError, loading: productLoading } = useAppSelector(
-    (state) => state.productsData
+  } = useAppSelector((state) => state.restaurantsData);
+  const { error: productError, productLoading } = useAppSelector(
+    (state) => state.restaurantsData
   );
   const dispatch = useAppDispatch();
 
@@ -77,82 +75,124 @@ export default function CategoryPage() {
   useEffect(() => {
     setShowSuccessToast(false);
     setShowToast(false);
-    dispatch(clearSuccessMessage(null));
-    dispatch(clearErrorMessage(null));
-    dispatch(clearCategoryErrorMessage(null));
-    dispatch(clearProductErrorMessage(null));
+    dispatch(clearSuccessMessage());
+    dispatch(clearRestaurantError());
   }, []);
+  useEffect(() => {
+    if (categoryError || productError) {
+      setShowToast(true);
+    }
+  }, [categoryError, productError]);
 
+  useEffect(() => {
+    if (successMessage) {
+      setShowSuccessToast(true);
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    return () => {
+      // Clear success and error messages on unmount
+      dispatch(clearSuccessMessage());
+      dispatch(clearRestaurantError());
+    };
+  }, [dispatch]);
   const handleAddCategory = (category: CategoryData) => {
-    dispatch(
-      addCategory({ restaurantId: selectedRestaurant?.id, category })
-    )
+    if (selectedRestaurant?.id) {
+      dispatch(
+        addCategory({
+          restaurantId: selectedRestaurant.id,
+          categoryData: category,
+        })
+      ).then((result) => {
+        if (addCategory.fulfilled.match(result)) {
+          dispatch(setSelectedCategory(category));
+        }
+      });
+    }
   };
 
   const handleEditCategory = (category: CategoryData) => {
-    dispatch(
-      updateCategory({
-        restaurantId: selectedRestaurant?.id,
-        categoryId: selectedCategory?.id,
-        category,
-      })
-    );
+    if (selectedRestaurant?.id && selectedCategory?.id) {
+      dispatch(
+        updateCategory({
+          restaurantId: selectedRestaurant.id,
+          categoryId: selectedCategory.id,
+          updatedCategory: category,
+        })
+      );
+    } else {
+      console.error("No restaurant or category selected");
+    }
   };
 
   const handleDeleteCategory = async (category: { id: string }) => {
-    const result = await dispatch(
-      deleteCategory({
-        restaurantId: selectedRestaurant?.id,
-        categoryId: category.id,
-      })
-    );
+    if (selectedRestaurant?.id) {
+      const result = await dispatch(
+        deleteCategory({
+          restaurantId: selectedRestaurant.id,
+          categoryId: category.id,
+        })
+      );
 
-    // Check if the deleteCategory action was fulfilled successfully
-    if (deleteCategory.fulfilled.match(result)) {
-      // Dispatch the action to set the selected category
-      dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
+      if (deleteCategory.fulfilled.match(result)) {
+        dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
+      }
+    } else {
+      console.error("No restaurant selected");
     }
   };
 
   const handleAddProduct = (product: ProductData) => {
-    dispatch(
-      addProduct({
-        categoryId: selectedCategory?.id,
-        product: product,
-      })
-    );
-  };
-  const handleEditProduct = (product: ProductData) => {
-    dispatch(
-      editProduct({
-        categoryId: selectedCategory?.id,
-        productId: product.id as string,
-        updatedProduct: product,
-      })
-    );
+    if (selectedCategory?.id) {
+      dispatch(
+        addProduct({
+          categoryId: selectedCategory.id,
+          productData: product,
+        })
+      );
+    } else {
+      console.error("No category selected");
+    }
   };
   const handleDuplicateProduct = (product: ProductData) => {
     dispatch(
       addProduct({
-        categoryId: selectedCategory?.id,
-        product: product,
+        categoryId: selectedCategory!.id as string,
+        productData: product,
       })
     );
   };
+  const handleEditProduct = (product: ProductData) => {
+    if (selectedCategory?.id && product?.id) {
+      dispatch(
+        editProduct({
+          categoryId: selectedCategory.id,
+          productId: product.id,
+          updatedProduct: product,
+        })
+      );
+    } else {
+      console.error("No category or product selected");
+    }
+  };
+
   const handleDeleteProduct = (product: { id: string }) => {
-    dispatch(
-      deleteProduct({
-        categoryId: selectedCategory?.id,
-        productId: product.id,
-      })
-    );
+    if (selectedCategory?.id) {
+      dispatch(
+        deleteProduct({
+          categoryId: selectedCategory.id,
+          productId: product.id,
+        })
+      );
+    } else {
+      console.error("No category selected");
+    }
   };
 
   const handleCloseErrorToast = () => {
     setShowToast(false);
     setShowSuccessToast(false);
-    dispatch(clearCategoryErrorMessage(null));
-    dispatch(clearProductErrorMessage(null));
   };
 
   return (
@@ -162,23 +202,20 @@ export default function CategoryPage() {
           color: "var(--primary-color)",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
-        open={loading || productLoading || categoryLoading}
+        open={restaurantLoading || productLoading || categoryLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
 
+      {/* Error Snackbar */}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showToast}
         autoHideDuration={6000}
-        onClose={() => {
-          handleCloseErrorToast();
-        }}
+        onClose={handleCloseErrorToast}
       >
         <Alert
-          onClose={() => {
-            handleCloseErrorToast();
-          }}
+          onClose={handleCloseErrorToast}
           severity="error"
           variant="filled"
           sx={{ width: "100%" }}
@@ -187,18 +224,15 @@ export default function CategoryPage() {
         </Alert>
       </Snackbar>
 
+      {/* Success Snackbar */}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showSuccessToast}
         autoHideDuration={6000}
-        onClose={() => {
-          setShowSuccessToast(false);
-        }}
+        onClose={() => setShowSuccessToast(false)}
       >
         <Alert
-          onClose={() => {
-            setShowSuccessToast(false);
-          }}
+          onClose={() => setShowSuccessToast(false)}
           severity="success"
           variant="filled"
           sx={{ width: "100%" }}
@@ -206,6 +240,7 @@ export default function CategoryPage() {
           {successMessage}
         </Alert>
       </Snackbar>
+
       <Box
         sx={{
           display: "flex",
@@ -230,8 +265,8 @@ export default function CategoryPage() {
             }}
             aria-label="back"
             onClick={() => {
-              dispatch(setSelectedRestaurant({}));
-              dispatch(setSelectedCategory({}));
+              dispatch(setSelectedRestaurant(null));
+              dispatch(setSelectedCategory(null));
             }}
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
@@ -253,7 +288,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 1 }}>
           <CategoryBoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedRestaurant.categories}
+            items={selectedRestaurant?.categories ?? []}
             addFunction={handleAddCategory}
             editFunction={handleEditCategory}
             deleteFunction={handleDeleteCategory}

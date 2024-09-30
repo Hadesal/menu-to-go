@@ -13,11 +13,11 @@ import { useState } from "react";
 import "react-phone-input-2/lib/material.css";
 import { useNavigate } from "react-router-dom";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { UserSignupData } from "../../DataTypes/UserDataTypes";
+import { UserSignupDataType } from "../../DataTypes/UserDataTypes";
 import { handleSignup } from "../../utils/auth-handlers";
 import { Styles } from "./RegisterPage.style";
 export default function LoginPage() {
-  const [userData, setUserData] = useState<UserSignupData>({
+  const [userData, setUserData] = useState<UserSignupDataType>({
     name: "",
     email: "",
     password: "",

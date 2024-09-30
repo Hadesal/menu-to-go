@@ -11,7 +11,7 @@ import SodaDrinks from "../../assets/sodadrinks.jpg";
 import VeganFoodImg from "../../assets/veganfood.jpg";
 import WarmDrinks from "../../assets/warmdrinks.jpg";
 import { setSelectedCategory } from "../../redux/slices/menuSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { Styles } from "./MenuCategories.styles";
 import { adjustBrightness } from "../../utils/colors";
 

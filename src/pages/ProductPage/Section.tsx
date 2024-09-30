@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Styles } from "./ProductPage.styles";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 interface Section {
   name: string;

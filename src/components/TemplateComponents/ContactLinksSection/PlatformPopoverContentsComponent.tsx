@@ -1,14 +1,20 @@
 import { Card, CardContent, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { useEffect, useState } from "react";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { useState } from "react";
+type PlatformType = keyof typeof contactLinks;
 
+const contactLinks = {
+  facebook: "",
+  twitter: "",
+  instagram: "",
+};
 const PlatformPopoverContentsComponent = ({
   type,
   setIsOpen,
 }: {
-  type: string;
+  type: PlatformType;
   setIsOpen: (value: boolean) => void;
 }) => {
   const { t } = useTranslation();
@@ -26,20 +32,19 @@ const PlatformPopoverContentsComponent = ({
       ? "#ff2770"
       : "#1da1f2";
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
-  const [inputedText, setInputedText] = useState(
-    userUiPreferences.contactLinks[type]
-  );
+
+  const [inputedText, setInputedText] = useState(contactLinks[type]);
 
   const handleSubmit = () => {
     setIsOpen(false);
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
+        ...userUiPreferences!,
         contactLinks: {
-          ...userUiPreferences.contactLinks,
+          ...userUiPreferences!.contactLinks,
           [type]: inputedText,
         },
       })

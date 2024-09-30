@@ -1,27 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Container, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { UserUpdateData } from "../../DataTypes/UserDataTypes";
+import { UserDataType } from "../../DataTypes/UserDataTypes";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import { userUpdate } from "../../redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
+import { updateUser } from "../../redux/thunks/userThunks";
 const BillingDataEditSection = ({
   setActiveSection,
 }: {
-  setActiveSection: Dispatch<SetStateAction<String>>;
+  setActiveSection: Dispatch<SetStateAction<string>>;
 }) => {
   const { t } = useTranslation();
   const getString = t;
-  const { userList } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
-  const [formData, setFormData] = useState<UserUpdateData>(userData);
+  const { user } = useAppSelector((state) => state.userData);
+  const [formData, setFormData] = useState<UserDataType>(user!);
   const dispatch = useAppDispatch();
-  useEffect(() => {}, [userList]);
+  useEffect(() => {}, [user]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "email") {
-      setFormData((prevValue) => ({ ...prevValue, email: value }));
+      setFormData((prevValue) => ({ ...prevValue!, email: value }));
     } else {
       setFormData((prevValue) => ({
         ...prevValue,
@@ -30,7 +30,7 @@ const BillingDataEditSection = ({
     }
   };
 
-  const isFormDataChanged = (formData: any, userData: any) => {
+  const isFormDataChanged = (formData: any, userData: UserDataType) => {
     if (formData.email !== userData.email) return true;
     for (const key in formData.billingData) {
       if (formData.billingData[key] !== userData.billingData[key]) {
@@ -41,8 +41,8 @@ const BillingDataEditSection = ({
   };
 
   const handleOnSave = () => {
-    if (isFormDataChanged(formData, userData)) {
-      dispatch(userUpdate({ updatedUser: formData, userId: userData.id })).then(
+    if (isFormDataChanged(formData, user!)) {
+      dispatch(updateUser({ updatedUser: formData, userId: user!.id })).then(
         () => {
           setActiveSection("billingDataText");
         }

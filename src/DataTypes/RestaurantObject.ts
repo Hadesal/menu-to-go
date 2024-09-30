@@ -4,8 +4,8 @@ export interface RestaurantData {
   id?: string;
   name: string;
   categories: CategoryData[];
-  table: [];
-  userUiPreferences: UserUiPreferences;
+  tables: [];
+  userUiPreferences: UserUiPreferences | undefined;
 }
 
 export interface addRestaurantData {

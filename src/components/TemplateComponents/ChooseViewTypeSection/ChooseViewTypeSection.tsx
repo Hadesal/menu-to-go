@@ -6,13 +6,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import gridViewImage from "../../../assets/gridViewImage.png";
-import listViewImage from "../../../assets/listViewImage.png";
+import { useState } from "react";
+import gridViewImage from "@assets/gridViewImage.png";
+import listViewImage from "@assets/listViewImage.png";
 import { useTranslation } from "react-i18next";
-import { ViewType } from "../../../DataTypes/RestaurantObject";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
+import { ViewType } from "@dataTypes/RestaurantObject";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 
 interface MenuViewType {
   id: string;
@@ -36,13 +36,13 @@ export default function ChooseViewTypeSection() {
   const getString = t;
   const primaryColor = "#a4755d";
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
   const dispatchSelectedView = (selectedView: ViewType) => {
     const newUserUiPreferences = {
-      ...userUiPreferences,
+      ...userUiPreferences!,
       itemsViewType: selectedView,
     };
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));

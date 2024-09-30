@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Card,
@@ -11,7 +12,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Menu,
 } from "@mui/material";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
 import { useEffect, useRef, useState } from "react";
@@ -19,9 +19,9 @@ import logo from "../../assets/logo.svg";
 import html2canvas from "html2canvas";
 import "./qrcodeStyle.css";
 import Dropzone from "../../components/Dropzone";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { useTranslation } from "react-i18next";
-import { createOrUpdateQrCode } from "../../redux/slices/userSlice";
+import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
 import StyleControl from "./StyleControl";
 
 interface DotsOptionsObject {
@@ -45,9 +45,9 @@ interface CornerDotsOptionsObject {
 
 const QrCodePage = () => {
   const dispatch = useAppDispatch();
-  const { userList } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
-  const { qrCodeStyle: qrCodeStyleObject, id } = userData;
+  const { user } = useAppSelector((state) => state.userData);
+
+  const { qrCodeStyle: qrCodeStyleObject, id } = user!;
   const { t } = useTranslation();
   const getString = t;
   const [errorMessage, setErrorMessage] = useState("");
@@ -76,7 +76,7 @@ const QrCodePage = () => {
   const [imageSrc, setImageSrc] = useState<string>(logo);
   const frameRef = useRef(null);
   useEffect(() => {
-    if (userData && userData.qrCodeStyle) {
+    if (user && user.qrCodeStyle) {
       setUrlPath(qrCodeStyleObject.generalUrlPath);
       setDotsOptions(qrCodeStyleObject.dotsOptions);
       setCornersSquareOptions(qrCodeStyleObject.cornersSquareOptions);
@@ -84,7 +84,7 @@ const QrCodePage = () => {
       setImageSrc(qrCodeStyleObject.imageSrc);
     }
     setSelectedRestaurant(restaurantList[0]);
-  }, [userData, qrCodeStyleObject]);
+  }, [user, qrCodeStyleObject]);
   useEffect(() => {}, [dispatch]);
   const handlePushNewQrStyle = () => {
     const newQrStyleObject = {
@@ -127,7 +127,7 @@ const QrCodePage = () => {
     setUrlPath(`http://localhost:5173/menu/${selectedRestaurant.id}`);
   };
   const downloadImage = async () => {
-    const canvas = await html2canvas(frameRef.current, {
+    const canvas = await html2canvas(frameRef?.current, {
       backgroundColor: "#ffffff",
       scale: 1.5,
       useCORS: true,

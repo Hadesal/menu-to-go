@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
@@ -9,14 +10,14 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import Styles from "../../DataTypes/StylesTypes";
-import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
-import EmptyState from "../EmptyStateComponet/EmptyState";
-import ItemsGridView from "../Views/ItemsGridView";
-import ItemsListView from "../Views/ItemsListView"; // Make sure this import is correct
-import { useAppSelector } from "../../utils/hooks";
-import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
+import Styles from "@dataTypes/StylesTypes";
+import AddProductDialog from "@components/Dialogs/AddItemDialog/addProductDialog";
+import EmptyState from "@components/EmptyStateComponet/EmptyState";
+import ItemsGridView from "@components/Views/ItemsGridView";
+import ItemsListView from "@components/Views/ItemsListView";
+import { useAppSelector } from "@redux/reduxHooks";
+import AddRestaurantDialog from "@components/Dialogs/AddItemDialog/addRestaurantDialog";
 
 interface BoxComponentProps {
   items: RestaurantData[];
@@ -53,7 +54,12 @@ const BoxComponent = ({
   const getString = t;
 
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
+
+  // Safe check for selectedCategory, add fallback if it's undefined
+  const selectedCategory = useAppSelector(
+    (state) => state.restaurantsData.selectedCategory || null
+  );
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -61,9 +67,11 @@ const BoxComponent = ({
   useEffect(() => {
     setFilteredItems(items);
   }, [items]);
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const findNameProperty = (obj: any): string | null => {
     if (obj !== null && typeof obj === "object") {
       for (const key in obj) {
@@ -109,7 +117,7 @@ const BoxComponent = ({
               variant="outlined"
               color="primary"
               onClick={handleClickOpen}
-              disabled={product && !selectedCategory?.name}
+              disabled={product && !selectedCategory?.name} // Safe check on selectedCategory
             >
               {getString("add")}
             </Button>

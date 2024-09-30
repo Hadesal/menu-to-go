@@ -1,5 +1,5 @@
 import {
-  ExtraData,
+  ExtrasData,
   IngredientData,
   VariantData,
 } from "./ProductDetailsDataTypes";
@@ -10,7 +10,7 @@ export interface ProductData {
   price: number;
   details: {
     detailsDescription: string;
-    extras: ExtraData[];
+    extras: ExtrasData[];
     ingredients: IngredientData[];
     variants: {
       name: string;
@@ -18,6 +18,6 @@ export interface ProductData {
     };
   };
   isAvailable: true;
-  image: string | null;
+  image: string | undefined;
   uniqueProductOrderingName: string;
 }

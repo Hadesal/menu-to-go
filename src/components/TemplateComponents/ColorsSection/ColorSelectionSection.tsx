@@ -2,8 +2,8 @@ import { Typography, Container, Button } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 const defaultColorsList = [
   { id: 0, color: "#A4755D" },
   { id: 1, color: "#D9B18F" },
@@ -23,8 +23,8 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
   useEffect(() => {
@@ -47,9 +47,9 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
   const handleColorChange = (newColor: string, type: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
+        ...userUiPreferences!,
         colors: {
-          ...userUiPreferences.colors,
+          ...userUiPreferences!.colors,
           [type === "Text" ? "secondaryColor" : "primaryColor"]: newColor,
         },
       })
@@ -105,8 +105,8 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
               cursor: "pointer",
               border:
                 (type === "Text"
-                  ? userUiPreferences.colors?.secondaryColor
-                  : userUiPreferences.colors?.primaryColor) === item.color
+                  ? userUiPreferences?.colors?.secondaryColor
+                  : userUiPreferences?.colors?.primaryColor) === item.color
                   ? "solid"
                   : "none",
               borderColor: "#d57e2e",
@@ -149,8 +149,8 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
             <HexColorPicker
               color={
                 type === "Text"
-                  ? userUiPreferences.colors?.secondaryColor
-                  : userUiPreferences.colors?.primaryColor
+                  ? userUiPreferences?.colors?.secondaryColor
+                  : userUiPreferences?.colors?.primaryColor
               }
               onChange={(newColor) => handleColorChange(newColor, type)}
             />

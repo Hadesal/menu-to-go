@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
@@ -17,11 +19,20 @@ import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import { setSelectedRestaurant } from "../../redux/slices/restaurantsSlice";
-import { setSelectedCategory } from "../../redux/slices/categorySlice";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
+import {
+  setSelectedRestaurant,
+  setSelectedCategory,
+} from "@slices/restaurantsSlice";
+import { ProductData } from "@dataTypes/ProductDataTypes";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+export type itemsType =
+  | any[]
+  | ProductData[]
+  | CategoryData[]
+  | RestaurantData[];
 interface GridViewProps {
-  items: any[];
+  items: itemsType;
   deleteFunction: (item: object) => void;
   editFunction: (item: object) => void;
   styles: any;
@@ -42,7 +53,9 @@ const ItemsGridView = ({
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<RestaurantData>({ name: "" });
+  const [currentItem, setCurrentItem] = useState<RestaurantData | undefined>(
+    undefined
+  );
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
@@ -222,7 +235,7 @@ const ItemsGridView = ({
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {
-          deleteFunction(currentItem);
+          deleteFunction(currentItem!);
           setIsDeleteDialogOpen(false);
         }}
         onSecondaryActionClick={handleDeleteDialogClose}
@@ -234,7 +247,7 @@ const ItemsGridView = ({
         primaryActionText={getString("delete")}
         title={getString("deleteConfirmText")}
         subTitle={getString("restaurantDeleteText", {
-          restaurantName: currentItem.name,
+          restaurantName: currentItem?.name,
         })}
       />
     </Grid>

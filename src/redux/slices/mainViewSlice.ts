@@ -1,10 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store"; // Adjust the import path based on your project structure
-
-export interface MainState {
-  activeTab: string;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "@redux/store";
+import { TabType } from "@constants/types";
+import { MainState } from "@redux/slicesInterfaces";
 
 const initialState: MainState = {
   activeTab: "dashboard",
@@ -14,7 +11,7 @@ export const mainSlice = createSlice({
   name: "mainView",
   initialState,
   reducers: {
-    setActiveTab: (state, action: PayloadAction<string>) => {
+    setActiveTab: (state, action: PayloadAction<TabType>) => {
       state.activeTab = action.payload;
     },
     resetActiveTab: (state) => {

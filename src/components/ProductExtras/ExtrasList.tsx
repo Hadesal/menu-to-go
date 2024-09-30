@@ -1,13 +1,9 @@
 import { Box } from "@mui/material";
 import ExtrasItem from "./ExtrasItem";
-
-interface Extras {
-  name: string;
-  price: string;
-}
+import { ExtrasData as ExtrasData } from "@dataTypes/ProductDetailsDataTypes";
 
 interface ExtrasListProps {
-  extras: Extras[];
+  extras: ExtrasData[];
 }
 
 const styles = {

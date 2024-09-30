@@ -4,13 +4,12 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import ContactCardImg from "../../../assets/contactus-card.svg";
-import FeedbacksCardImg from "../../../assets/feedbacks-card.svg";
-import QRCodeCardImg from "../../../assets/generateqrcode-card.svg";
-import RestaurantCardImg from "../../../assets/resturant-card.svg";
-import TemplatesCardImg from "../../../assets/templates-card.svg";
-import { setActiveTab } from "../../../redux/slices/mainViewSlice";
-import { useAppSelector } from "../../../utils/hooks";
+import ContactCardImg from "@assets/contactus-card.svg";
+import QRCodeCardImg from "@assets/generateqrcode-card.svg";
+import RestaurantCardImg from "@assets/resturant-card.svg";
+import TemplatesCardImg from "@assets/templates-card.svg";
+import { setActiveTab } from "@slices/mainViewSlice";
+import { useAppSelector } from "@redux/reduxHooks";
 
 export default function DashboardView() {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export default function DashboardView() {
     },
     { id: "contactUs", image: ContactCardImg, label: getString("contactUs") },
   ];
-  const { userList } = useAppSelector((state) => state.userData);
+  const { user } = useAppSelector((state) => state.userData);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -52,7 +51,7 @@ export default function DashboardView() {
           }}
         >
           {/* FIXME: we need a user object */}
-          {userList[0]?.name}
+          {user?.name}
         </Typography>
       </Box>
       <Box
@@ -83,7 +82,7 @@ export default function DashboardView() {
               },
               cursor: "pointer",
             }}
-            onClick={() => dispatch(setActiveTab(card.id))}
+            onClick={() => dispatch(setActiveTab(card.id as string))}
           >
             <Box>
               <img

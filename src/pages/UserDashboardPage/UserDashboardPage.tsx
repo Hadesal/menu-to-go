@@ -1,135 +1,57 @@
-import HomeIcon from "@mui/icons-material/Home";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import LanguageIcon from "@mui/icons-material/Language";
-import LayersIcon from "@mui/icons-material/Layers";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import MenuIcon from "@mui/icons-material/Menu";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
-import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
+import { Box, CssBaseline, Toolbar, Drawer } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import logo from "../../assets/qr-code-logo.svg";
-import ConfirmDialog from "../../components/Dialogs/LogoutDialog/confirmDialog";
-import {
-  resetActiveTab,
-  selectActiveTab,
-  setActiveTab,
-} from "../../redux/slices/mainViewSlice";
-import { fetchAllData } from "../../utils/DashboaredDataFetching";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import ContactPage from "../ContactPage/Contact";
-import FeedbackPage from "../FeedbackPage/FeedbackPage";
-import RestaurantSection from "../RestaurantSection/RestaurantSection";
-import SplashScreen from "../SplashScreen/SplashScreen";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { resetActiveTab, selectActiveTab } from "@slices/mainViewSlice";
+import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
+import { deleteUser } from "@redux/thunks/userThunks";
+import ConfirmDialog from "@components/Dialogs/LogoutDialog/confirmDialog";
+import SplashScreen from "@pages/SplashScreen/SplashScreen";
+import UserDetailsInputComponent from "@components/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-import UserDetailsInputComponent from "../../components/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
-import { userDelete } from "../../redux/slices/userSlice";
-import QrCodePage from "../QrCodePage/QrCodePage";
-import ProfilePage from "../ProfilePage/ProfilePage";
-import TemplatePage from "../TemplatePage/TemplatePage";
-const INACTIVITY_PERIOD = 60 * 10000; // 1 minute in milliseconds
-const PROMPT_BEFORE_IDLE = 30 * 1000; // 30 seconds in milliseconds
-const CHECK_INTERVAL = 1000; // 1 second in milliseconds
+import RestaurantSection from "@pages/RestaurantSection/RestaurantSection";
+import ProfilePage from "@pages/ProfilePage/ProfilePage";
+import TemplatePage from "@pages/TemplatePage/TemplatePage";
+import QrCodePage from "@pages/QrCodePage/QrCodePage";
+import ContactPage from "@pages/ContactPage/Contact";
+import AppBarComponent from "@components/AppBarComponent/AppBarComponent";
+import SideDrawer from "@components/SideDrawerComponent/SideDrawerComponent";
+import {
+  INACTIVITY_PERIOD,
+  PROMPT_BEFORE_IDLE,
+  CHECK_INTERVAL,
+  drawerWidth,
+} from "@constants/constants";
 
-const drawerWidth = 240;
-
-const langs = {
-  en: { nativeName: "English" },
-  de: { nativeName: "Deutsch" },
-  es: { nativeName: "Español" },
-  ar: { nativeName: "العربية" },
-  fr: { nativeName: "Français" },
-  tr: { nativeName: "Türkçe" },
-};
-
-export default function UserDashboardPage() {
+const UserDashboardPage = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [anchorElProfile, setAnchorElProfile] = useState(null);
-  const [anchorElLang, setAnchorElLang] = useState(null);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
-  const openProfile = Boolean(anchorElProfile);
-  const openLang = Boolean(anchorElLang);
-  const [daysLeftForVerification, setDaysLeftForVerification] = useState(3);
-  const { i18n, t } = useTranslation();
-  const getString = t;
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
     useState(false);
   const [remaining, setRemaining] = useState<number>(10 * 6000);
+  const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
+
+  const { t } = useTranslation();
+  const getString = t;
 
   const activeTab = useSelector(selectActiveTab);
   const navigate = useNavigate();
-  const userData = useAppSelector(
-    (selector) => selector?.userData?.userList[0]
-  );
+  const userData = useAppSelector((selector) => selector?.userData?.user);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
-  const buttonData = [
-    { id: "dashboard", icon: <HomeIcon />, label: getString("dashboard") },
-    {
-      id: "restaurant",
-      icon: <RestaurantIcon />,
-      label: getString("restaurant"),
-    },
-    // { id: "categories", icon: <LayersIcon />, label: getString("categories") },
-    { id: "templates", icon: <ViewQuiltIcon />, label: getString("templates") },
-    {
-      id: "generateQrCode",
-      icon: <QrCodeIcon />,
-      label: getString("generateQrCode"),
-    },
-    {
-      id: "contactUs",
-      icon: <SupportAgentIcon />,
-      label: getString("contactUs"),
-    },
-    {
-      id: "logout",
-      icon: <LogoutOutlinedIcon />,
-      label: getString("logout"),
-    },
-  ];
-  const profileOptions = [
-    { id: "myprofile", optionName: getString("myProfile") },
-    { id: "notifications", optionName: getString("notification") },
-    { id: "subscription", optionName: getString("Subscription") },
-  ];
 
-  const handleProfileClick = (event) => {
-    setAnchorElProfile(event.currentTarget);
-  };
-  const handleProfileClose = () => {
-    setAnchorElProfile(null);
-  };
-  const handleLangClick = (event) => {
-    setAnchorElLang(event.currentTarget);
-  };
-  const handleLangClose = () => {
-    setAnchorElLang(null);
+  const [daysLeftForVerification, setDaysLeftForVerification] = useState(3);
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
   };
 
   const handleDrawerClose = () => {
@@ -141,18 +63,10 @@ export default function UserDashboardPage() {
     setIsClosing(false);
   };
 
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
-
   const handleLogoutClick = () => {
     setShowLogoutDialog(true);
   };
-  const closeDialog = () => {
-    setShowDeleteDialog(false);
-  };
+
   const handleLogout = () => {
     setShowLogoutDialog(false);
     navigate("/login");
@@ -160,34 +74,22 @@ export default function UserDashboardPage() {
     localStorage.removeItem("userToken");
     localStorage.removeItem("expireTime");
   };
-  const handleIfTokenNotExists = () => {
-    const userToken = localStorage.getItem("userToken");
-    if (!userToken) {
-      navigate("/login");
-      dispatch(resetActiveTab());
-    }
-  };
+
   const handleLogoutDialogCancel = () => {
     setShowLogoutDialog(false);
-  };
-
-  /**
-   * Function is trigged after the inactivity timeout is over
-   */
-  const onIdle = () => {
-    handleLogout();
-  };
-
-  /**
-   * Function is trigged to inform the user about his inactivity and that he will be logged out after specific time
-   */
-  const onPrompt = () => {
-    setShowSessionTimeoutDialog(true);
   };
 
   const handleStillHere = () => {
     activate();
     setShowSessionTimeoutDialog(false);
+  };
+
+  const onIdle = () => {
+    handleLogout();
+  };
+
+  const onPrompt = () => {
+    setShowSessionTimeoutDialog(true);
   };
 
   const { getRemainingTime, activate } = useIdleTimer({
@@ -198,24 +100,36 @@ export default function UserDashboardPage() {
     promptBeforeIdle: PROMPT_BEFORE_IDLE,
     throttle: CHECK_INTERVAL,
   });
+
   useEffect(() => {
+    const handleIfTokenNotExists = () => {
+      const userToken = localStorage.getItem("userToken");
+      if (!userToken) {
+        navigate("/login");
+        dispatch(resetActiveTab());
+      }
+    };
+
     handleIfTokenNotExists();
+
     const fetchDataAndHandleLoading = async () => {
       setLoading(true);
       try {
         const result = await fetchAllData(dispatch);
-        if (!result.success) {
-          throw new Error(result.error);
+        if (!result?.success) {
+          throw new Error(result?.error);
         }
       } catch (error) {
         localStorage.removeItem("userToken");
+        navigate("/login");
       } finally {
         setLoading(false);
       }
     };
 
     fetchDataAndHandleLoading();
-  }, []);
+  }, [dispatch, navigate]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setRemaining(Math.ceil(getRemainingTime() / 1000));
@@ -224,7 +138,8 @@ export default function UserDashboardPage() {
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [getRemainingTime]);
+
   useEffect(() => {
     const createdAtDate = new Date(userData?.createdAt);
     const currentDate = new Date();
@@ -233,7 +148,7 @@ export default function UserDashboardPage() {
     if (daysDifference >= 3) {
       if (userData?.verified === false) {
         console.log("Account is being deleted due to lack of verification.");
-        dispatch(userDelete(userData.id));
+        dispatch(deleteUser(userData.id));
         navigate("/login");
       }
     }
@@ -241,7 +156,13 @@ export default function UserDashboardPage() {
       setDaysLeftForVerification(3 - daysDifference);
       setShowDeleteDialog(true);
     }
-  }, [userData?.verified, userData?.createdAt]);
+  }, [
+    userData?.verified,
+    userData?.createdAt,
+    dispatch,
+    navigate,
+    userData?.id,
+  ]);
 
   useEffect(() => {
     if (restaurantList.length < 1) {
@@ -250,56 +171,6 @@ export default function UserDashboardPage() {
       setUserDetailsisOpen(false);
     }
   }, [restaurantList]);
-
-  const drawer = (
-    <div>
-      <img
-        style={{
-          display: "flex",
-          margin: "0 auto",
-          marginTop: "2rem",
-          marginBottom: "2rem",
-        }}
-        alt="qrcode"
-        src={logo}
-      />
-      <List>
-        {buttonData.map((btn) => (
-          <ListItem
-            sx={{
-              marginBottom: 2,
-            }}
-            key={btn.id}
-            disablePadding
-            onClick={() => {
-              if (btn.id === "logout") {
-                handleLogoutClick();
-              } else {
-                dispatch(setActiveTab(btn.id));
-                //isTokenValid(handleLogout);
-              }
-            }}
-          >
-            <ListItemButton
-              sx={{
-                color: activeTab === btn.id ? "#F9FDFE" : "#8B6A58",
-                backgroundColor: activeTab === btn.id ? "#A4755D" : null,
-                "&:hover": {
-                  backgroundColor: "#A4755D",
-                  color: "#F9FDFE",
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
-                {btn.icon}
-              </ListItemIcon>
-              <ListItemText sx={{ width: "0px" }} primary={btn.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
 
   // Show splash screen while loading
   if (loading) {
@@ -310,127 +181,11 @@ export default function UserDashboardPage() {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <UserDetailsInputComponent isOpen={userDetailsisOpen} />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          background: "#A4755D",
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: "Lucida Calligraphy",
-                fontStyle: "italic",
-                fontWeight: 400,
-                fontSize: "28px",
-                lineHeight: "36px",
-              }}
-              variant="h6"
-              noWrap
-              component="div"
-            >
-              Menu-To-Go
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <Avatar style={{ alignSelf: "center" }}>
-                {userData && userData?.name?.split("")[0]}
-              </Avatar>
-
-              <IconButton
-                id="profile-icon"
-                aria-label="profile details icon"
-                aria-controls={openProfile ? "profile-icon" : undefined}
-                aria-haspopup="true"
-                aria-expanded={openProfile ? "true" : undefined}
-                onClick={handleProfileClick}
-                sx={{ color: "#F9FDFE" }}
-              >
-                <KeyboardArrowDownIcon />
-              </IconButton>
-              <Menu
-                id="profile-icon"
-                anchorEl={anchorElProfile}
-                open={openProfile}
-                onClose={handleProfileClose}
-                MenuListProps={{
-                  "aria-labelledby": "profile-icon",
-                }}
-              >
-                {profileOptions.map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    onClick={() => {
-                      dispatch(setActiveTab(option.id));
-                      setAnchorElProfile(null);
-                    }}
-                  >
-                    {option.optionName}
-                  </MenuItem>
-                ))}
-              </Menu>
-              <Box
-                sx={{
-                  borderLeft: "1px solid #F9FDFE",
-                  marginLeft: "0.5rem",
-                  paddingLeft: "0.5rem",
-                }}
-              >
-                <IconButton
-                  id="language-icon"
-                  aria-label="Language icon"
-                  aria-controls={openLang ? "language-icon" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openLang ? "true" : undefined}
-                  onClick={handleLangClick}
-                  sx={{ color: "#F9FDFE" }}
-                >
-                  <LanguageIcon />
-                </IconButton>
-                <Menu
-                  id="language-icon"
-                  anchorEl={anchorElLang}
-                  open={openLang}
-                  onClose={handleLangClose}
-                  MenuListProps={{
-                    "aria-labelledby": "language-icon",
-                  }}
-                >
-                  {Object.keys(langs).map((lang) => (
-                    <MenuItem
-                      key={lang}
-                      onClick={() => {
-                        i18n.changeLanguage(lang);
-                      }}
-                      disabled={i18n.resolvedLanguage === lang}
-                    >
-                      {langs[lang].nativeName}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            </Box>
-          </div>
-        </Toolbar>
-      </AppBar>
+      <AppBarComponent
+        handleDrawerToggle={handleDrawerToggle}
+        drawerWidth={drawerWidth}
+        handleLogoutClick={handleLogoutClick}
+      />
       <Box
         component="nav"
         sx={{
@@ -458,7 +213,10 @@ export default function UserDashboardPage() {
             },
           }}
         >
-          {drawer}
+          <SideDrawer
+            getString={getString}
+            handleLogoutClick={handleLogoutClick}
+          />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -473,7 +231,10 @@ export default function UserDashboardPage() {
           }}
           open
         >
-          {drawer}
+          <SideDrawer
+            getString={getString}
+            handleLogoutClick={handleLogoutClick}
+          />
         </Drawer>
       </Box>
       <Box
@@ -485,7 +246,7 @@ export default function UserDashboardPage() {
         }}
       >
         <Toolbar />
-        {/* confirm logout */}
+        {/* Confirm logout */}
         <ConfirmDialog
           isOpen={showLogoutDialog}
           onPrimaryActionClick={handleLogout}
@@ -499,10 +260,10 @@ export default function UserDashboardPage() {
           subTitle={getString("logoutText")}
           onClose={handleLogoutDialogCancel}
         />
-        {/*confirm delete account*/}
+        {/* Confirm delete account */}
         <ConfirmDialog
           isOpen={showDeleteDialog}
-          onPrimaryActionClick={closeDialog}
+          onPrimaryActionClick={() => setShowDeleteDialog(false)}
           width="580px"
           height="500px"
           showImg={false}
@@ -513,7 +274,7 @@ export default function UserDashboardPage() {
             daysLeftForVerification.toString()
           )}
         />
-        {/* confirm session timeout */}
+        {/* Confirm session timeout */}
         <ConfirmDialog
           isOpen={showSessionTimeoutDialog}
           onPrimaryActionClick={handleStillHere}
@@ -526,6 +287,7 @@ export default function UserDashboardPage() {
           title={getString("sessionalLogoutText")}
           subTitle={getString("sessionalLogoutSubText")}
         />
+        {/* Main content based on activeTab */}
         {activeTab === "dashboard" && <DashboardView />}
         {activeTab === "restaurant" && (
           <RestaurantSection label={getString("restaurant")} />
@@ -537,4 +299,6 @@ export default function UserDashboardPage() {
       </Box>
     </Box>
   );
-}
+};
+
+export default UserDashboardPage;

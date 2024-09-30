@@ -1,7 +1,7 @@
 // src/components/MenuSelection/MenuSelection.tsx
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { setSelectedCategoryType } from "../../redux/slices/menuSlice";
 
 // Define the type for the menu selection items

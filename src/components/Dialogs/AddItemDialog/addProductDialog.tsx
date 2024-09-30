@@ -50,7 +50,7 @@ const AddProductDialog = ({
       },
     },
     isAvailable: true,
-    image: null,
+    image: undefined,
     uniqueProductOrderingName: "",
   });
 
@@ -91,7 +91,7 @@ const AddProductDialog = ({
         uniqueProductOrderingName: initialData.uniqueProductOrderingName,
       });
     }
-  }, [initialData , isOpen]);
+  }, [initialData, isOpen]);
 
   const handleConfirm = () => {
     let hasError = false;
@@ -218,7 +218,7 @@ const AddProductDialog = ({
           },
         },
         isAvailable: true,
-        image: null,
+        image: undefined,
         uniqueProductOrderingName: "",
       });
     }
@@ -241,8 +241,9 @@ const AddProductDialog = ({
       ...prevData,
       details: {
         ...prevData.details,
-        extras: extras.map((extra) => ({
+        extras: extras.map((extra, index) => ({
           ...extra,
+          id: prevData.details.extras[index]?.id || `extra-${index}`, // Use existing id or generate new
           price: extra.price ?? 0,
         })),
       },
@@ -256,8 +257,9 @@ const AddProductDialog = ({
       ...prevData,
       details: {
         ...prevData.details,
-        ingredients: ingredients.map((ingredient) => ({
+        ingredients: ingredients.map((ingredient, index) => ({
           ...ingredient,
+          id: prevData.details.ingredients[index]?.id || `new-${index}`, // Keep existing id or generate a new one
           image: ingredient.image ?? "",
         })),
       },
@@ -273,8 +275,11 @@ const AddProductDialog = ({
         ...prevData.details,
         variants: {
           name: variants.name,
-          variantList: variants.variants.map((variant) => ({
+          variantList: variants.variants.map((variant, index) => ({
             ...variant,
+            id:
+              prevData.details.variants.variantList[index]?.id ||
+              `variant-${index}`, // Preserve id or generate new one
             price: variant.price ?? 0,
           })),
         },

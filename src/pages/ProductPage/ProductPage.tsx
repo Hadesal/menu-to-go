@@ -1,15 +1,15 @@
 import { Box, Container, IconButton } from "@mui/material";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import ProductDetails from "../../components/ProductDetails/ProductDetails";
-import ExtrasList from "../../components/ProductExtras/ExtrasList";
-import IngredientList from "../../components/ProductIngredients/IngredientList";
-import VariantList from "../../components/ProductVariants/ProductVariants";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import ProductDetails from "@components/ProductDetails/ProductDetails";
+import ExtrasList from "@components/ProductExtras/ExtrasList";
+import IngredientList from "@components/ProductIngredients/IngredientList";
+import VariantList from "@components/ProductVariants/ProductVariants";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
-import { setSelectedProduct } from "../../redux/slices/menuSlice";
-import { hexToRgba } from "../../utils/colors";
+import { setSelectedProduct } from "@redux/slices/menuSlice";
+import { hexToRgba } from "@utils/colors";
 
 export default function ProductPage() {
   const dispatch = useAppDispatch();

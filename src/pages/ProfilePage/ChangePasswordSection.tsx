@@ -11,19 +11,19 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { ChangePasswordDataType } from "../../DataTypes/UserDataTypes";
-import { userUpdatePassword } from "../../redux/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { UpdatePasswordDataType } from "../../DataTypes/UserDataTypes";
+import { updateUserPassword } from "../../redux/thunks/userThunks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 
 const ChangePasswordSection = () => {
-  const { userList, loading } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
+  const { user, loading } = useAppSelector((state) => state.userData);
+
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
 
   // Separate state for form data and errors
-  const [formData, setFormData] = useState<ChangePasswordDataType>({
+  const [formData, setFormData] = useState<UpdatePasswordDataType>({
     currentPassword: "",
     newPassword: "",
   });
@@ -88,16 +88,16 @@ const ChangePasswordSection = () => {
 
     // Proceed with password update
     dispatch(
-      userUpdatePassword({
+      updateUserPassword({
         updatePasswordObject: formData,
-        userId: userData.id,
+        userId: user!.id,
       })
     ).then((value) => {
       const response = value.payload;
 
       // Handle API response
       if (response?.body) {
-        setToastMessage(response.body);
+        setToastMessage(response?.body);
         setSeverity("success");
         onReset();
       } else if (response?.message) {

@@ -1,251 +1,124 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// Import the `createOrUpdateQrCode`
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import {
-  getUserData,
+  registerUser,
+  loginUser,
+  fetchUserData,
   updateUser,
-  getUserById,
-  deleteUser,
   updateUserPassword,
-  createUpdateQrCode,
-} from "../../services/api/userCrud";
+  createOrUpdateQrCode, // Import this properly
+  requestPasswordReset,
+  resetUserPassword,
+  fetchUserById,
+  deleteUser,
+} from "../thunks/userThunks";
 import {
-  UpdatePasswordDataType,
-  UserUpdateData,
-} from "../../DataTypes/UserDataTypes";
-import { QrCodeStyleUpdateDTO } from "../../DataTypes/QrStyleDataType";
-
-export interface UserState {
-  userList: any[];
-  loading: boolean;
-  error: string | null;
-  message: string | null;
-}
+  handlePending,
+  handleRejected,
+  handleFulfilled,
+} from "../helpers/reduxHelpers";
+import { UserDataType } from "@dataTypes/UserDataTypes";
+import { QrCodeStyleDataType } from "@dataTypes/QrStyleDataType";
+import { UserState } from "@redux/slicesInterfaces";
 
 const initialState: UserState = {
-  userList: [],
+  user: null,
   loading: false,
   error: null,
-  message: null,
+  successMessage: null,
 };
 
-export const fetchUserData = createAsyncThunk(
-  "user/fetchUserData",
-  async (_, { rejectWithValue }) => {
-    try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-      const response = await getUserData(userToken.token);
-      return [response];
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data || "Error fetching user data"
-      );
-    }
-  }
-);
-
-export const userUpdate = createAsyncThunk(
-  "user/update",
-  async (
-    { updatedUser, userId }: { updatedUser: UserUpdateData; userId: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await updateUser(updatedUser, userId);
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Error updating user");
-    }
-  }
-);
-export const userUpdatePassword = createAsyncThunk(
-  "user/updatePassword",
-  async (
-    {
-      updatePasswordObject,
-      userId,
-    }: { updatePasswordObject: UpdatePasswordDataType; userId: String },
-    { rejectWithValue }
-  ) => {
-    try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-
-      const response = await updateUserPassword(
-        updatePasswordObject,
-        userId,
-        userToken
-      );
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Error updating user");
-    }
-  }
-);
-export const fetchUserById = createAsyncThunk(
-  "user/fetchById",
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-      const response = await getUserById(userId, userToken);
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data || "Error fetching user by ID"
-      );
-    }
-  }
-);
-
-export const userDelete = createAsyncThunk(
-  "user/delete",
-  async (userId: String, { rejectWithValue }) => {
-    try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-      const response = await deleteUser(userId, userToken);
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Error deleting user");
-    }
-  }
-);
-
-export const createOrUpdateQrCode = createAsyncThunk(
-  "user/createOrUpdateQrCode",
-  async (
-    {
-      userId,
-      qrCodeStyle,
-    }: { userId: string; qrCodeStyle: QrCodeStyleUpdateDTO },
-    { rejectWithValue }
-  ) => {
-    try {
-      const userToken = JSON.parse(localStorage.getItem("userToken") as string);
-      const response = await createUpdateQrCode(userId, qrCodeStyle, userToken);
-      return { userId, qrCodeStyle: response.qrCodeStyle };
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data || "Error updating QR code style"
-      );
-    }
-  }
-);
-
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    resetUserData: (state) => {
-      state.userList = [];
+    clearError(state) {
       state.error = null;
+    },
+    clearSuccessMessage(state) {
+      state.successMessage = null;
+    },
+    logout(state) {
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserData.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        action.payload.forEach((newUser) => {
-          const existingUserIndex = state.userList.findIndex(
-            (user) => user.id === newUser.id
-          );
-          if (existingUserIndex === -1) {
-            state.userList.push(newUser);
-          } else {
-            state.userList[existingUserIndex] = newUser;
-          }
-        });
-        state.loading = false;
-      })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(userUpdate.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(userUpdate.fulfilled, (state, action) => {
-        const updatedUserIndex = state.userList.findIndex(
-          (user) => user.id === action.payload.id
-        );
-        if (updatedUserIndex !== -1) {
-          state.userList[updatedUserIndex] = action.payload;
+    // Handle pending actions for all async thunks
+    builder.addMatcher(
+      isAnyOf(
+        registerUser.pending,
+        loginUser.pending,
+        fetchUserData.pending,
+        updateUser.pending,
+        updateUserPassword.pending,
+        createOrUpdateQrCode.pending,
+        requestPasswordReset.pending,
+        resetUserPassword.pending,
+        fetchUserById.pending,
+        deleteUser.pending
+      ),
+      handlePending
+    );
+
+    // Handle fulfilled actions that modify user data
+    builder.addMatcher(
+      isAnyOf(
+        registerUser.fulfilled,
+        loginUser.fulfilled,
+        fetchUserData.fulfilled,
+        updateUser.fulfilled,
+        fetchUserById.fulfilled
+      ),
+      (state, action: PayloadAction<UserDataType>) => {
+        state.user = action.payload;
+        handleFulfilled(state, action, "Operation successful");
+      }
+    );
+
+    // Handle QR code update success separately
+    builder.addMatcher(
+      (action) => createOrUpdateQrCode.fulfilled.match(action),
+      (state, action: PayloadAction<{ qrCodeStyle: QrCodeStyleDataType }>) => {
+        if (state.user && action.payload.qrCodeStyle) {
+          state.user.qrCodeStyle = action.payload.qrCodeStyle;
         }
         state.loading = false;
-      })
-      .addCase(userUpdate.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(userUpdatePassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(userUpdatePassword.fulfilled, (state, action) => {
-        state.message = "password updated successfully!";
-        state.loading = false;
-      })
-      .addCase(userUpdatePassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(fetchUserById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchUserById.fulfilled, (state, action) => {
-        const fetchedUserIndex = state.userList.findIndex(
-          (user) => user.id === action.payload.id
-        );
-        if (fetchedUserIndex !== -1) {
-          state.userList[fetchedUserIndex] = action.payload;
-        } else {
-          state.userList.push(action.payload);
-        }
-        state.loading = false;
-      })
-      .addCase(fetchUserById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(userDelete.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(userDelete.fulfilled, (state, action) => {
-        state.userList = state.userList.filter(
-          (user) => user.id !== action.meta.arg
-        );
-        state.loading = false;
-      })
-      .addCase(userDelete.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(createOrUpdateQrCode.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createOrUpdateQrCode.fulfilled, (state, action) => {
-        const updatedUserIndex = state.userList.findIndex(
-          (user) => user.id === action.payload.userId
-        );
-        if (updatedUserIndex !== -1) {
-          state.userList[updatedUserIndex] = {
-            ...state.userList[updatedUserIndex],
-            qrCodeStyle: action.payload.qrCodeStyle,
-          };
-        }
-        state.loading = false;
-        state.message = "QR Code Style updated successfully!";
-      })
-      .addCase(createOrUpdateQrCode.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+        state.successMessage = "QR Code updated successfully!";
+      }
+    );
+
+    // Handle fulfilled actions that don't modify user data
+    builder.addMatcher(
+      isAnyOf(
+        updateUserPassword.fulfilled,
+        requestPasswordReset.fulfilled,
+        resetUserPassword.fulfilled,
+        deleteUser.fulfilled
+      ),
+      (state) => {
+        handleFulfilled(state, null, "Operation successful");
+      }
+    );
+
+    // Handle rejected actions for all async thunks
+    builder.addMatcher(
+      isAnyOf(
+        registerUser.rejected,
+        loginUser.rejected,
+        fetchUserData.rejected,
+        updateUser.rejected,
+        updateUserPassword.rejected,
+        createOrUpdateQrCode.rejected,
+        requestPasswordReset.rejected,
+        resetUserPassword.rejected,
+        fetchUserById.rejected,
+        deleteUser.rejected
+      ),
+      handleRejected
+    );
   },
 });
 
-export const { resetUserData } = userSlice.actions;
+export const { clearError, clearSuccessMessage, logout } = userSlice.actions;
 
 export default userSlice.reducer;

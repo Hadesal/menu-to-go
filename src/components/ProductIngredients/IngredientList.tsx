@@ -1,15 +1,11 @@
 import { Box } from "@mui/material";
 import IngredientItem from "./IngredientItem";
 import { Styles } from "./ProductIngredients.styles";
-import { useAppSelector } from "../../utils/hooks";
-
-interface Ingredient {
-  img: string;
-  name: string;
-}
+import { useAppSelector } from "../../redux/reduxHooks";
+import { IngredientData } from "@dataTypes/ProductDetailsDataTypes";
 
 interface IngredientListProps {
-  ingredients: Ingredient[];
+  ingredients: IngredientData[];
   listView: boolean;
 }
 

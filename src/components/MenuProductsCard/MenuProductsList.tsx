@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
 import { setSelectedProduct } from "../../redux/slices/menuSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 
 export default function MenuProductsList({ product }) {
   const dispatch = useAppDispatch();

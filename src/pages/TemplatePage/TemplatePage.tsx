@@ -18,12 +18,11 @@ import CategoryShapesComponent from "../../components/TemplateComponents/Categor
 import ContactLinksComponent from "../../components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
 import { useEffect, useState } from "react";
 import ChooseViewTypeSection from "../../components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import {
-  editRestaurant,
-  setSelectedRestaurant,
-} from "../../redux/slices/restaurantsSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks.ts";
+import { setSelectedRestaurant } from "@slices/restaurantsSlice";
+import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import ToastNotification from "../../components/ToastNotification/ToastNotification.tsx";
 
 export default function TemplatePage() {
   const { t } = useTranslation();
@@ -36,6 +35,15 @@ export default function TemplatePage() {
   useEffect(() => {
     setBigScreen(window.innerWidth);
   }, []);
+  const [toastMessageObject, setToastMessageObject] = useState<{
+    success: boolean;
+    message: string;
+    show: boolean;
+  }>({
+    success: true,
+    message: "",
+    show: false,
+  });
 
   const handleChangeSelectedRestaurant = (event) => {
     const selectedName = event.target.value;
@@ -45,8 +53,13 @@ export default function TemplatePage() {
     dispatch(setSelectedRestaurant(selected as RestaurantData));
   };
 
-  const handleSaveChanges = () => {
-    dispatch(editRestaurant({ restaurant: selectedRestaurant }));
+  const handleSaveChanges = async () => {
+    await dispatch(
+      editRestaurant({
+        updatedRestaurant: selectedRestaurant,
+        restaurantId: selectedRestaurant?.id,
+      })
+    );
   };
 
   return (
@@ -79,13 +92,17 @@ export default function TemplatePage() {
           <InputLabel id="restaurant-select-label">
             {selectedRestaurant
               ? selectedRestaurant.name
-              : getString("selectRestaurant")}
+              : restaurantList[0].name}
           </InputLabel>
 
           <Select
             key="restaurantSelect"
             labelId="restaurant-select-label"
-            value={selectedRestaurant ? selectedRestaurant.name : ""}
+            value={
+              selectedRestaurant
+                ? selectedRestaurant.name
+                : restaurantList[0].name
+            }
             onChange={handleChangeSelectedRestaurant}
             sx={{ width: "100%" }}
           >
@@ -190,6 +207,14 @@ export default function TemplatePage() {
             </CardContent>
           </Card>
         </Paper>
+        <ToastNotification
+          severity={toastMessageObject.success === true ? "success" : "error"}
+          message={toastMessageObject.message}
+          show={false}
+          onClose={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </Container>
     </>
   );

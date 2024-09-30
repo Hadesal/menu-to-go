@@ -8,7 +8,7 @@ import FacebookIcon from "../../assets/facebookvector.svg";
 import InstagramIcon from "../../assets/instagramvector.svg";
 import GmailIcon from "../../assets/gmailvector.svg";
 import Button from "@mui/material/Button";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 export default function MenuFooter() {
   const { restaurantData } = useAppSelector((state) => state.menuData);

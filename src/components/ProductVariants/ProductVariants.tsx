@@ -1,17 +1,11 @@
 import { Box, Paper, Typography } from "@mui/material";
-import BulletImage from "../../assets/tabler_point.svg";
 import { Styles } from "./ProductVariants.styles";
-import { useAppSelector } from "../../utils/hooks";
-import PlusIcon from "../ProductExtras/PlusIcon";
+import { useAppSelector } from "../../redux/reduxHooks";
 import BulletIcon from "./BulletIcon";
-
-interface Variant {
-  name: string;
-  price: string;
-}
+import { VariantData } from "@dataTypes/ProductDetailsDataTypes";
 
 interface VariantListProps {
-  variants: Variant[];
+  variants: VariantData[];
 }
 
 export default function VariantList({ variants }: VariantListProps) {

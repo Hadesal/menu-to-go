@@ -2,6 +2,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import {
   Box,
   Container,
@@ -21,17 +22,17 @@ import Styles from "../../DataTypes/StylesTypes";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 interface Props {
   CardIcon: string;
-  items: any[];
+  items: ProductData[]; // Explicit typing for product items
   editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
   styles: Styles;
-  duplicateFunction?: (item: any) => void;
+  duplicateFunction?: (item: ProductData) => void; // ProductData for consistency
 }
+
 const ItemsListView = ({
   items,
   editFunction,
@@ -47,7 +48,11 @@ const ItemsListView = ({
   const getString = t;
   const [isDuplicateProductDialogOpen, setIsDuplicateProductDialogOpen] =
     useState<boolean>(false);
-  // const [selectedProduct, setSelectedProduct] = useState<ProductData | undefiend>();
+  const [currentItem, setCurrentItem] = useState<ProductData | null>(null); // Make sure currentItem can be null initially
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
@@ -56,19 +61,6 @@ const ItemsListView = ({
     newAnchorEls[index] = event.currentTarget;
     setAnchorEls(newAnchorEls);
   };
-  //const [open, setOpen] = useState(false);
-  const [currentItem, setCurrentItem] = useState<ProductData>({
-    details: {},
-    id: "",
-    image: null,
-    isAvailable: true,
-    name: "",
-    price: 0,
-    uniqueProductOrderingName: "",
-  });
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const { selectedCategory } = useAppSelector((state) => state.categoriesData);
 
   const handleMenuClose = (index: number) => {
     const newAnchorEls = [...anchorEls];
@@ -76,27 +68,28 @@ const ItemsListView = ({
     setAnchorEls(newAnchorEls);
   };
 
-  const handleEditClick = (item: any) => {
+  const handleEditClick = (item: ProductData) => {
     setCurrentItem(item);
     setIsEditDialogOpen(true);
-    //setOpen(true);
-  };
-  const handleOnDuplicateProductDialogCancel = () => {
-    setIsDuplicateProductDialogOpen(false);
   };
 
-  const handleDeleteClick = (item: any) => {
-    console.log(currentItem);
+  const handleDeleteClick = (item: ProductData) => {
     setCurrentItem(item);
     setIsDeleteDialogOpen(true);
+  };
+
+  const handleOnDuplicateProductDialogCancel = () => {
+    setIsDuplicateProductDialogOpen(false);
   };
 
   const handleDeleteDialogClose = () => {
     setIsDeleteDialogOpen(false);
   };
+
   const handleEditDialogClose = () => {
     setIsEditDialogOpen(false);
   };
+
   return (
     <Container sx={styles.container}>
       <List sx={styles.list}>
@@ -128,7 +121,7 @@ const ItemsListView = ({
                       background: "transparent",
                     },
                   }}
-                  aria-label="more"
+                  aria-label="drag"
                 >
                   <DragIndicatorIcon
                     sx={{
@@ -184,12 +177,12 @@ const ItemsListView = ({
                 </IconButton>
 
                 <Menu
-                  id={`categoryOptions-${index}`}
+                  id={`productOptions-${index}`}
                   anchorEl={anchorEls[index]}
                   open={Boolean(anchorEls[index])}
                   onClose={() => handleMenuClose(index)}
                   MenuListProps={{
-                    "aria-labelledby": `categoryOptions-${index}`,
+                    "aria-labelledby": `productOptions-${index}`,
                   }}
                   disableScrollLock={true}
                   elevation={1}
@@ -241,50 +234,56 @@ const ItemsListView = ({
           </Paper>
         ))}
       </List>
-      <AddProductDialog
-        dialogTitle={"Edit category"}
-        errorMessage={getString("addCategoryInfoText")}
-        cancelText={getString("cancel")}
-        confirmText={getString("add")}
-        isDialogOpen={isEditDialogOpen}
-        onCancelClick={handleEditDialogClose}
-        onConfirmClick={(data) => editFunction({ ...data, id: currentItem.id })}
-        initialData={currentItem}
-        data={selectedCategory.products}
-      />
-      <AddProductDialog
-        dialogTitle={getString("DuplicateProduct")}
-        cancelText={getString("cancel")}
-        confirmText={getString("add")}
-        isDialogOpen={isDuplicateProductDialogOpen}
-        onCancelClick={handleOnDuplicateProductDialogCancel}
-        initialData={currentItem}
-        onConfirmClick={(item) => {
-          if (item && duplicateFunction) {
-            duplicateFunction(item);
-          }
-        }}
-        errorMessage={getString("duplicateProductError")}
-        data={selectedCategory.products}
-      />
-      <ConfirmDialog
-        isOpen={isDeleteDialogOpen}
-        onPrimaryActionClick={() => {
-          deleteFunction(currentItem);
-          setIsDeleteDialogOpen(false);
-        }}
-        onSecondaryActionClick={handleDeleteDialogClose}
-        onClose={handleDeleteDialogClose}
-        width="500px"
-        height="300px"
-        showImg={false}
-        secondaryActionText={getString("cancel")}
-        primaryActionText={getString("delete")}
-        title={getString("deleteConfirmText")}
-        subTitle={getString("productDeleteText", {
-          productName: currentItem.name,
-        })}
-      />
+      {currentItem && (
+        <>
+          <AddProductDialog
+            dialogTitle={getString("editProduct")}
+            errorMessage={getString("editProductInfoText")}
+            cancelText={getString("cancel")}
+            confirmText={getString("confirm")}
+            isDialogOpen={isEditDialogOpen}
+            onCancelClick={handleEditDialogClose}
+            onConfirmClick={(data) =>
+              editFunction({ ...data, id: currentItem.id })
+            }
+            initialData={currentItem}
+            data={selectedCategory?.products || []}
+          />
+          <AddProductDialog
+            dialogTitle={getString("DuplicateProduct")}
+            cancelText={getString("cancel")}
+            confirmText={getString("add")}
+            isDialogOpen={isDuplicateProductDialogOpen}
+            onCancelClick={handleOnDuplicateProductDialogCancel}
+            initialData={currentItem}
+            onConfirmClick={(item) => {
+              if (item && duplicateFunction) {
+                duplicateFunction(item);
+              }
+            }}
+            errorMessage={getString("duplicateProductError")}
+            data={selectedCategory?.products || []}
+          />
+          <ConfirmDialog
+            isOpen={isDeleteDialogOpen}
+            onPrimaryActionClick={() => {
+              deleteFunction(currentItem);
+              setIsDeleteDialogOpen(false);
+            }}
+            onSecondaryActionClick={handleDeleteDialogClose}
+            onClose={handleDeleteDialogClose}
+            width="500px"
+            height="300px"
+            showImg={false}
+            secondaryActionText={getString("cancel")}
+            primaryActionText={getString("delete")}
+            title={getString("deleteConfirmText")}
+            subTitle={getString("productDeleteText", {
+              productName: currentItem.name,
+            })}
+          />
+        </>
+      )}
     </Container>
   );
 };

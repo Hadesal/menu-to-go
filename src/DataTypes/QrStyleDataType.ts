@@ -1,22 +1,22 @@
-export interface QrCodeStyleUpdateDTO {
-  dotsOptions: DotsOptions;
-  cornersSquareOptions: CornerSquareOptions;
-  cornersDotOptions: CornerDotsOptions;
+export interface QrCodeStyleDataType {
+  dotsOptions: DotsOptionsDataType;
+  cornersSquareOptions: CornerSquareOptionsDataType;
+  cornersDotOptions: CornerDotsOptionsDataType;
   imageSrc: string;
   generalUrlPath?: string;
 }
 
-export interface DotsOptions {
+export interface DotsOptionsDataType {
   color: string;
   type: string;
 }
 
-export interface CornerSquareOptions {
+export interface CornerSquareOptionsDataType {
   color: string;
   type: string;
 }
 
-export interface CornerDotsOptions {
+export interface CornerDotsOptionsDataType {
   color: string;
   type: string;
 }

@@ -11,14 +11,16 @@ import { useEffect, useState } from "react";
 import RestaurantIcon from "../../assets/restaurant-icon.jpg";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import {
-  addRestaurant,
-  clearErrorMessage,
+  clearRestaurantError,
   clearSuccessMessage,
-  deleteRestaurant,
-  editRestaurant,
   setSelectedRestaurant,
-} from "../../redux/slices/restaurantsSlice";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+} from "../../redux/slices/restaurantsSlice.ts";
+import {
+  addRestaurant,
+  editRestaurant,
+  removeRestaurant,
+} from "@redux/thunks/restaurantThunks.ts";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks.ts";
 import { useTranslation } from "react-i18next";
 import CategoryPage from "../CategoryPage/CategoryPage";
 import ToastNotification from "../../components/ToastNotification/ToastNotification.tsx";
@@ -29,8 +31,13 @@ interface RestaurantSectionProps {
 
 const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { restaurantList, loading, error, selectedRestaurant, successMessage } =
-    useAppSelector((state) => state.restaurantsData);
+  const {
+    restaurantList,
+    restaurantLoading: loading,
+    error,
+    selectedRestaurant,
+    successMessage,
+  } = useAppSelector((state) => state.restaurantsData);
   const [errorMessage, setErrorMessage] = useState(error);
   const [showToast, setShowToast] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -52,42 +59,45 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   }, [successMessage]);
 
   useEffect(() => {
+    // Check if selectedRestaurant exists before accessing its properties
     if (!selectedRestaurant || Object.keys(selectedRestaurant).length === 0) {
       setShowSuccessToast(false);
       setShowToast(false);
-      dispatch(clearErrorMessage(null));
-      dispatch(clearSuccessMessage(null));
+      dispatch(clearRestaurantError());
+      dispatch(clearSuccessMessage());
     }
   }, [selectedRestaurant, dispatch]);
 
   useEffect(() => {
-    dispatch(setSelectedRestaurant({}));
-  }, []);
+    dispatch(setSelectedRestaurant(null));
+  }, [dispatch]);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
-    dispatch(addRestaurant({ restaurant }));
+    dispatch(addRestaurant(restaurant));
   };
 
   const handleEditRestaurant = (restaurant: RestaurantData) => {
-    dispatch(editRestaurant({ restaurant }));
+    dispatch(
+      editRestaurant({
+        restaurantId: restaurant.id as string,
+        updatedRestaurant: restaurant,
+      })
+    );
   };
 
   const handleDeleteRestaurant = (restaurant: RestaurantData) => {
     if (restaurantList.length > 1) {
-      dispatch(
-        deleteRestaurant({
-          restaurantId: restaurant.id as string,
-        })
-      );
+      dispatch(removeRestaurant(restaurant.id as string));
     } else if (restaurantList.length < 2) {
       setErrorMessage(getString("errorDeleteRestaurant"));
       setShowToast(true);
     }
   };
 
-  if (Object.keys(selectedRestaurant).length !== 0) {
+  if (selectedRestaurant && Object.keys(selectedRestaurant).length !== 0) {
     return <CategoryPage />;
   }
+
   return (
     <Stack spacing={3} sx={styles.stack}>
       <Backdrop

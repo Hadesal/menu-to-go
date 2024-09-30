@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Styles } from "./MenuHeader.styles";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 export default function MenuHeader() {
   const title: string = "";

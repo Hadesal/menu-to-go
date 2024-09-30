@@ -1,14 +1,14 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
 import { Styles } from "../LogoutDialog/confirmDialog.style";
 import { useTranslation } from "react-i18next";
-import InputComponent from "../../InputComponent/InputComponent";
+import InputComponent from "@components/InputComponent/InputComponent";
 import { useEffect, useState } from "react";
-import { Styles as inputStyles } from "../../../pages/LoginPage/LoginPage.style";
-import logo from "../../../assets/logo.svg";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { addRestaurant } from "../../../redux/slices/restaurantsSlice";
-import { userUpdate } from "../../../redux/slices/userSlice";
-import { fetchAllData } from "../../../utils/DashboaredDataFetching";
+import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
+import logo from "@assets/logo.svg";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { addRestaurant } from "@redux/thunks/restaurantThunks";
+import { updateUser } from "@redux/thunks/userThunks";
+import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -34,39 +34,38 @@ const UserDetailsInputComponent = ({
     country: "",
   });
   const dispatch = useAppDispatch();
-  const { userList } = useAppSelector((state) => state.userData);
+  const { user } = useAppSelector((state) => state.userData);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const userData = userList[0];
   useEffect(() => {
     setUserDetails((prevState) => {
       return {
         ...prevState,
         restaurantName: restaurantList.length > 0 ? restaurantList[0].name : "",
-        country:
-          userData?.billingData?.country !== ""
-            ? userData?.billingData?.country
-            : "",
-        currency: userData?.currency !== "" ? userData?.currency : "",
+        country: user?.billingData?.country || "",
+        currency: user?.currency || "",
       };
     });
-  }, [restaurantList, userData?.billingData?.country, userData?.currency]);
+  }, [restaurantList, user?.billingData?.country, user?.currency]);
   const handleUserDetails = async () => {
     await dispatch(
       addRestaurant({
-        restaurant: { name: userDetails?.restaurantName, table: [] },
+        name: userDetails?.restaurantName,
+        tables: [],
+        categories: [],
+        userUiPreferences: undefined,
       })
     );
     await dispatch(
-      userUpdate({
+      updateUser({
         updatedUser: {
-          ...userData,
+          ...user!,
           billingData: {
-            ...userData.billingData,
+            ...user!.billingData,
             country: userDetails.country,
           },
           currency: userDetails.currency,
         },
-        userId: userData.id,
+        userId: user!.id,
       })
     );
     await fetchAllData(dispatch);

@@ -1,16 +1,11 @@
 import { Paper, Typography } from "@mui/material";
-import PlusImage from "../../assets/ph_plus-fill.svg";
 import { Styles } from "./Extras.styles";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 import PlusIcon from "./PlusIcon";
-
-interface Extras {
-  name: string;
-  price: string;
-}
+import { ExtrasData } from "@dataTypes/ProductDetailsDataTypes";
 
 interface ExtrasItemProps {
-  extras: Extras;
+  extras: ExtrasData;
 }
 
 export default function ExtrasItem({ extras }: ExtrasItemProps) {

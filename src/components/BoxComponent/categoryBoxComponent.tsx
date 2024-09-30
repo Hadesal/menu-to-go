@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import CategoryItemsListView from "../Views/categoryItemsListView";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 interface CategoryBoxComponentProps {
   items: CategoryData[];
@@ -32,7 +33,6 @@ const CategoryBoxComponent = ({
   title,
 }: CategoryBoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [filteredItems, setFilteredItems] = useState(items);
   const { t } = useTranslation();
   const getString = t;
   const { selectedRestaurant } = useAppSelector(
@@ -42,10 +42,6 @@ const CategoryBoxComponent = ({
   const handleClickOpen = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    setFilteredItems(items);
-  }, [items]);
 
   const handleClose = () => {
     setOpen(false);
@@ -75,10 +71,10 @@ const CategoryBoxComponent = ({
         </Box>
       </Stack>
 
-      {filteredItems?.length > 0 ? (
+      {items?.length > 0 ? (
         <CategoryItemsListView
           CardIcon={CardIcon}
-          items={filteredItems}
+          items={items}
           editFunction={editFunction}
           deleteFunction={deleteFunction}
           styles={styles}
@@ -97,7 +93,7 @@ const CategoryBoxComponent = ({
         isDialogOpen={open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
-        data={selectedRestaurant.categories}
+        data={selectedRestaurant?.categories}
       />
     </Paper>
   );

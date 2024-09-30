@@ -7,9 +7,9 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import InputComponent from "../../InputComponent/InputComponent";
+import InputComponent from "@components/InputComponent/InputComponent";
 import { Styles } from "./addItemDialog.styles";
-import { addRestaurantData } from "../../../DataTypes/RestaurantObject";
+import { addRestaurantData } from "@dataTypes/RestaurantObject";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;

@@ -1,8 +1,8 @@
 import { Card, CardContent, Container, Paper, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { useEffect } from "react";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 const defaultFontTypes = [
   "Aa.Serif",
   "Aa.Poppins",
@@ -14,14 +14,15 @@ const FontSectionComponent = () => {
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
   useEffect(() => {
     console.log(userUiPreferences);
   }, [userUiPreferences]);
   const renderFontBox = (font: string, key: number) => {
     const handleSelectFontType = (fontValue: string) => {
+      if (!userUiPreferences) return;
       const updatedUserUiPreferences = {
         ...userUiPreferences,
         fontType: fontValue,

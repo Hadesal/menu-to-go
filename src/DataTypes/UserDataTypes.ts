@@ -1,55 +1,55 @@
-export interface CountryData {
+import { QrCodeStyleDataType } from "./QrStyleDataType";
+
+export interface CountryDataType {
   name: string;
   dialCode: string;
   countryCode: string;
 }
 
-export interface UserSignupData {
+export interface BillingDataType {
+  fullName?: string;
+  email?: string;
+  phoneNumber?: string;
+  companyName?: string;
+  country?: string;
+  address?: string;
+  taxId?: string;
+  city?: string;
+  zipCode?: string;
+}
+
+export interface UserSignupDataType {
   name: string;
   email: string;
   password: string;
   agreedTermsAndConditions: boolean;
 }
 
-export interface UserSignupApiData {
-  name: string;
+export interface UserSignInDataType {
   email: string;
   password: string;
 }
 
-export interface UserSignInData {
-  email: string;
-  password: string;
-}
-
-export interface UserUpdateData {
+export interface UserDataType {
   id: string;
   name: string;
   email: string;
-  password: string;
-  image?: string;
+  password?: string;
   billingData?: BillingDataType;
   currency?: string;
-}
-
-export interface ChangePasswordDataType {
-  currentPassword: string;
-  newPassword: string;
-}
-
-export interface BillingDataType {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  companyName: string;
-  country: string;
-  address: string;
-  taxId: string;
-  city: string;
-  zipCode: string;
+  qrCodeStyle?: QrCodeStyleDataType;
+  verified?: boolean;
+  createdAt: string;
 }
 
 export interface UpdatePasswordDataType {
   currentPassword: string;
   newPassword: string;
+}
+
+export interface UserStateDataType {
+  userList: UserDataType[];
+  loading: boolean;
+  error: string | null;
+  message: string | null;
 }

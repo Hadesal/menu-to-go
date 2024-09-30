@@ -2,7 +2,7 @@ import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Form from "../../components/Form/Form";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 interface FormData {
   name?: string;
@@ -13,8 +13,7 @@ interface FormData {
 }
 
 export default function ContactPage() {
-  const { userList } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
+  const { user } = useAppSelector((state) => state.userData);
 
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -35,8 +34,8 @@ export default function ContactPage() {
         import.meta.env.VITE_REACT_APP_SERVICE_ID,
         import.meta.env.VITE_REACT_APP_TEMPLATE_ID,
         {
-          user_name: userData.name,
-          user_email: userData.email,
+          user_name: user?.name,
+          user_email: user?.email,
           inquiry_type:
             formValues.sentiments === ""
               ? formValues.typeOfInquiry

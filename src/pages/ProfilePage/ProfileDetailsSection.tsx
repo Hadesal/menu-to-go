@@ -3,15 +3,14 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 import EditProfileDetailsSection from "./EditProfileDetailsSection";
 
 const ProfileDetailsSection = () => {
-  const { userList } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
+  const { user } = useAppSelector((state) => state.userData);
   const { t } = useTranslation();
   const getString = t;
-  useEffect(() => {}, [userData]);
+  useEffect(() => {}, [user]);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -62,7 +61,7 @@ const ProfileDetailsSection = () => {
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.name}
+          value={user?.name}
         />
       </Container>
       <Container
@@ -86,7 +85,7 @@ const ProfileDetailsSection = () => {
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.email}
+          value={user?.email}
         />
       </Container>
 
@@ -111,7 +110,7 @@ const ProfileDetailsSection = () => {
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.billingData?.phoneNumber}
+          value={user?.billingData?.phoneNumber}
         />
       </Container>
     </Box>

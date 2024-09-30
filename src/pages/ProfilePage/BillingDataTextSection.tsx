@@ -1,8 +1,7 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useAppSelector } from "../../utils/hooks";
+import { useAppSelector } from "../../redux/reduxHooks";
 import InputComponent from "../../components/InputComponent/InputComponent";
 
 const BillingDataTextSection = ({
@@ -12,10 +11,9 @@ const BillingDataTextSection = ({
 }) => {
   const { t } = useTranslation();
   const getString = t;
-  const { userList } = useAppSelector((state) => state.userData);
-  const userData = userList[0];
+  const { user } = useAppSelector((state) => state.userData);
 
-  useEffect(() => {}, [userList]);
+  useEffect(() => {}, [user]);
   return (
     <Box>
       <Container
@@ -51,7 +49,7 @@ const BillingDataTextSection = ({
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.billingData?.fullName as string}
+          value={user?.billingData?.fullName as string}
           readOnly={true}
         />
       </Container>
@@ -75,7 +73,7 @@ const BillingDataTextSection = ({
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.email as string}
+          value={user?.email as string}
           readOnly={true}
         />
       </Container>
@@ -99,7 +97,7 @@ const BillingDataTextSection = ({
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={userData?.billingData?.phoneNumber as string}
+          value={user?.billingData?.phoneNumber as string}
           readOnly={true}
         />
       </Container>
@@ -131,7 +129,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.companyName as string}
+              value={user?.billingData?.companyName as string}
               readOnly={true}
             />
           </Container>{" "}
@@ -158,7 +156,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.country as string}
+              value={user?.billingData?.country as string}
               readOnly={true}
             />
           </Container>{" "}
@@ -185,7 +183,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.address as string}
+              value={user?.billingData?.address as string}
               readOnly={true}
             />
           </Container>
@@ -214,7 +212,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.taxId as string}
+              value={user?.billingData?.taxId as string}
               readOnly={true}
             />
           </Container>
@@ -241,7 +239,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.city as string}
+              value={user?.billingData?.city as string}
               readOnly={true}
             />
           </Container>
@@ -268,7 +266,7 @@ const BillingDataTextSection = ({
               InputPropStyle={{ borderRadius: "0.5rem" }}
               styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
-              value={userData?.billingData?.zipCode as string}
+              value={user?.billingData?.zipCode as string}
               readOnly={true}
             />
           </Container>

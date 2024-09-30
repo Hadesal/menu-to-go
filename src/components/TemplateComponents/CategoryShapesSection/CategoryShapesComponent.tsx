@@ -7,21 +7,21 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks";
-import { updateRestaurantUserUiPreferences } from "../../../redux/slices/restaurantsSlice";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 
 const CategoryShapesComponent = () => {
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
-  const { userUiPreferences } = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant
+  const userUiPreferences = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
   const handleChangeShape = (shapeType: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
+        ...userUiPreferences!,
         categoryShape: shapeType,
       })
     );
@@ -85,7 +85,7 @@ const CategoryShapesComponent = () => {
                   borderWidth: "2px",
                   cursor: "pointer",
                   borderColor:
-                    userUiPreferences.categoryShape === "rounded"
+                    userUiPreferences?.categoryShape === "rounded"
                       ? "#A4755D"
                       : "#BCB8B1",
                   marginRight: { xs: "1rem", sm: "2rem" },
@@ -103,7 +103,7 @@ const CategoryShapesComponent = () => {
                   cursor: "pointer",
                   borderWidth: "2px",
                   borderColor:
-                    userUiPreferences.categoryShape === "square"
+                    userUiPreferences?.categoryShape === "square"
                       ? "#A4755D"
                       : "#BCB8B1",
                   marginBottom: "1rem",
