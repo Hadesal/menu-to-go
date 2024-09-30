@@ -96,7 +96,7 @@ const AddProductDialog = ({
   const handleConfirm = () => {
     let hasError = false;
 
-    if (dialogData.name.length === 0) {
+    if (dialogData.name.trim().length === 0) {
       setShowNameError(true);
       hasError = true;
     }

@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import InputComponent from "@components/InputComponent/InputComponent";
 import { Styles } from "./addItemDialog.styles";
-import { addRestaurantData } from "@dataTypes/RestaurantObject";
+import { addRestaurantData, RestaurantData } from "@dataTypes/RestaurantObject";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ interface AddAddRestaurantDialogProps {
   onConfirmClick: (data: addRestaurantData) => void;
   onCancelClick: () => void;
   initialData?: { name: string };
-  data?: object[];
+  data?: RestaurantData[];
 }
 
 const AddRestaurantDialog = ({
@@ -47,7 +47,7 @@ const AddRestaurantDialog = ({
   }, [isOpen, initialData]);
 
   const handleConfirm = () => {
-    if (dialogData.name.length === 0) {
+    if (dialogData.name.trim().length === 0) {
       setShowError(true);
       return;
     }
@@ -66,13 +66,15 @@ const AddRestaurantDialog = ({
             item.name.toLocaleLowerCase()
         );
         if (existingItem) {
-          setIsNameDuplicate(true); // Set duplicate flag
-          hasError = true;
+          setIsNameDuplicate(true);
         }
       }
     }
 
-    onConfirmClick(dialogData);
+    onConfirmClick({
+      ...dialogData,
+      name: dialogData.name.trim(),
+    });
     handleCancel();
   };
 

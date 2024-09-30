@@ -73,6 +73,12 @@ const ChangePasswordSection = () => {
       validationErrors.newPassword = "Please enter new password";
     }
 
+    // Check if the new password is the same as the current password
+    if (formData.newPassword === formData.currentPassword) {
+      validationErrors.newPassword =
+        "New password cannot be the same as the current password";
+    }
+
     return validationErrors;
   };
 
@@ -157,14 +163,11 @@ const ChangePasswordSection = () => {
 
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
-          {getString("oldPassword")} :
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("oldPassword")}
         </Typography>
         <InputComponent
           name="currentPassword"
@@ -175,7 +178,7 @@ const ChangePasswordSection = () => {
           onChange={handleInputChange}
           error={!!errors.currentPassword}
           helperText={errors.currentPassword}
-          textFieldStyle={{ width: "100%" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
@@ -184,14 +187,11 @@ const ChangePasswordSection = () => {
 
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
-          {getString("newPassword")} :
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("newPassword")}
         </Typography>
         <InputComponent
           name="newPassword"
@@ -202,7 +202,7 @@ const ChangePasswordSection = () => {
           onChange={handleInputChange}
           error={!!errors.newPassword}
           helperText={errors.newPassword}
-          textFieldStyle={{ width: "100%" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}

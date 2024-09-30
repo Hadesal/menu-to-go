@@ -28,7 +28,7 @@ interface AddCategoryDialogProps {
   onConfirmClick: (item: CategoryData) => void;
   onCancelClick: () => void;
   initialData?: CategoryData;
-  data?: object[];
+  data?: CategoryData[];
 }
 
 const AddCategoryDialog = ({
@@ -70,7 +70,7 @@ const AddCategoryDialog = ({
   const handleConfirm = () => {
     let hasError = false;
 
-    if (dialogData.name.length === 0) {
+    if (dialogData.name.trim().length === 0) {
       setShowError(true);
       hasError = true;
     }
@@ -109,7 +109,10 @@ const AddCategoryDialog = ({
       return;
     }
 
-    onConfirmClick(dialogData);
+    onConfirmClick({
+      ...dialogData,
+      name: dialogData.name.trim(),
+    });
     handleCancel();
   };
 

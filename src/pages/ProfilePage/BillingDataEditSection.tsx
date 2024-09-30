@@ -1,317 +1,475 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Container, TextField } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { UserDataType } from "../../DataTypes/UserDataTypes";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import {
+  Alert,
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Snackbar,
+  Typography,
+} from "@mui/material";
+import PhoneInput from "react-phone-input-2";
+import "./ProfilePage.css";
+
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import InputComponent from "../../components/InputComponent/InputComponent";
+import { BillingDataType, UserDataType } from "../../DataTypes/UserDataTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { updateUser } from "../../redux/thunks/userThunks";
+import { defaultUserData } from "@constants/defaultObjects";
+
+interface BillingDataEditSectionProps {
+  setToastVisible: Dispatch<SetStateAction<boolean>>;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+}
 const BillingDataEditSection = ({
-  setActiveSection,
-}: {
-  setActiveSection: Dispatch<SetStateAction<string>>;
-}) => {
+  setToastVisible,
+  setIsEditing,
+}: BillingDataEditSectionProps) => {
   const { t } = useTranslation();
   const getString = t;
-  const { user } = useAppSelector((state) => state.userData);
-  const [formData, setFormData] = useState<UserDataType>(user!);
+  const { user, loading } = useAppSelector((state) => state.userData);
+  const [formData, setFormData] = useState<UserDataType>(
+    user ?? defaultUserData
+  );
   const dispatch = useAppDispatch();
-  useEffect(() => {}, [user]);
+  const [severity, setSeverity] = useState<
+    "success" | "warning" | "error" | "info"
+  >("info");
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>("");
+
+  useEffect(() => {
+    setFormData(user ?? defaultUserData);
+  }, [user]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "email") {
-      setFormData((prevValue) => ({ ...prevValue!, email: value }));
-    } else {
-      setFormData((prevValue) => ({
-        ...prevValue,
-        billingData: { ...prevValue.billingData!, [name]: value },
-      }));
-    }
-  };
 
-  const isFormDataChanged = (formData: any, userData: UserDataType) => {
+    setFormData((prevValue) => ({
+      ...prevValue,
+      billingData: { ...prevValue.billingData!, [name]: value },
+    }));
+  };
+  function isUserDataType(response: any): response is UserDataType {
+    return typeof response === "object" && "id" in response;
+  }
+  const isFormDataChanged = (
+    formData: UserDataType,
+    userData: UserDataType
+  ) => {
     if (formData.email !== userData.email) return true;
-    for (const key in formData.billingData) {
-      if (formData.billingData[key] !== userData.billingData[key]) {
-        return true;
+
+    // Check if billingData exists in both formData and userData
+    if (formData.billingData && userData.billingData) {
+      for (const key in formData.billingData) {
+        if (
+          formData.billingData[key as keyof BillingDataType] !==
+          userData.billingData[key as keyof BillingDataType]
+        ) {
+          return true;
+        }
       }
     }
     return false;
   };
-
   const handleOnSave = () => {
     if (isFormDataChanged(formData, user!)) {
-      dispatch(updateUser({ updatedUser: formData, userId: user!.id })).then(
-        () => {
-          setActiveSection("billingDataText");
+      // Updated regex to match either "+" or country codes like +20, +43, etc.
+      const onlyCountryCode = /^\+(\d+)?$/;
+
+      // Check if phone number is only a "+" or a country code and set it to an empty string
+      const updatedPhoneNumber = onlyCountryCode.test(
+        formData.billingData?.phoneNumber || ""
+      )
+        ? ""
+        : formData.billingData?.phoneNumber;
+
+      // Update formData with the cleaned phone number before saving
+      const updatedFormData = {
+        ...formData,
+        billingData: {
+          ...formData.billingData,
+          phoneNumber: updatedPhoneNumber,
+        },
+      };
+      dispatch(
+        updateUser({ updatedUser: updatedFormData, userId: user!.id })
+      ).then((value) => {
+        const response = value.payload;
+        if (typeof response === "string") {
+          setToastMessage(response);
+          setSeverity("error");
+        } else if (isUserDataType(response)) {
+          setToastVisible(true);
+          onCancel();
+        } else {
+          const errorMessage =
+            (response as any)?.message || getString("unknownError");
+          setToastMessage(errorMessage);
+          setSeverity("error");
         }
-      );
+
+        setShowToast(true);
+      });
     } else {
-      setActiveSection("billingDataText");
+      setToastMessage(getString("dataNotChanged"));
+      setShowToast(true);
+      setSeverity("warning");
+      return;
     }
+  };
+  const onCancel = () => {
+    setIsEditing(false);
   };
 
   return (
     <>
-      <Container>
+      <Box>
+        <Backdrop
+          sx={{
+            color: "var(--primary-color)",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={showToast}
+          autoHideDuration={6000}
+          onClose={() => setShowToast(false)}
+        >
+          <Alert
+            onClose={() => setShowToast(false)}
+            severity={severity}
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            {toastMessage}
+          </Alert>
+        </Snackbar>
         <Container
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             marginBottom: "1rem",
-            marginTop: "1rem",
+            width: "100%",
           }}
         >
-          <TextField
-            variant="outlined"
-            value={formData?.billingData?.fullName}
-            label={getString("fullName")}
+          <Container
+            disableGutters
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              marginBottom: "1rem",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h5">{getString("editBillingData")}</Typography>
+          </Container>
+          <Typography variant="subtitle1" sx={{ color: "#797979" }}>
+            {getString("billingDataPageDescription")}
+          </Typography>
+        </Container>
+        <Container
+          sx={{
+            marginTop: "0.5rem",
+          }}
+        >
+          <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+            {getString("fullName")}
+          </Typography>
+          <InputComponent
             name="fullName"
-            autoComplete="fullName"
-            onChange={handleInputChange}
-            sx={{
-              width: "25vw",
-              marginTop: "1rem",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderRadius: "0.8rem",
-                },
-              },
+            id="nameField"
+            type="Name"
+            label=""
+            textFieldStyle={{
+              width: "100%",
+              padding: "0",
+              marginTop: "0.5rem",
             }}
+            InputPropStyle={{ borderRadius: "0.5rem" }}
+            styleInputProps={{ padding: "0.8rem" }}
+            boxStyle={{ flexGrow: 1 }}
+            value={formData?.billingData?.fullName}
+            onChange={handleInputChange}
           />
         </Container>
         <Container
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: "1rem",
+            marginTop: "0.5rem",
           }}
         >
-          <TextField
-            variant="outlined"
-            value={formData?.email}
-            label={getString("email")}
+          <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+            {getString("email")}
+          </Typography>
+          <InputComponent
+            id="emailField"
             name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            sx={{
-              width: "25vw",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderRadius: "0.8rem",
-                },
-              },
+            type="Email"
+            label=""
+            textFieldStyle={{
+              width: "100%",
+              padding: "0",
+              marginTop: "0.5rem",
             }}
+            InputPropStyle={{ borderRadius: "0.5rem" }}
+            styleInputProps={{ padding: "0.8rem" }}
+            boxStyle={{ flexGrow: 1 }}
+            value={formData?.email as string}
+            readOnly={true}
+            disabled={true}
           />
         </Container>
         <Container
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            marginBottom: "1rem",
-            marginTop: "1rem",
+            marginTop: "0.5rem",
           }}
         >
-          <TextField
-            variant="outlined"
-            value={formData?.billingData?.phoneNumber}
-            label={getString("phonenumber")}
-            name="phoneNumber"
-            autoComplete="phone"
-            onChange={handleInputChange}
-            sx={{
-              width: "25vw",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderRadius: "0.8rem",
+          <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+            {getString("phonenumber")}
+          </Typography>
+          {/* <InputComponent
+            id="phoneField"
+            type="Phone"
+            label=""
+            textFieldStyle={{
+              width: "100%",
+              padding: "0",
+              marginTop: "0.5rem",
+            }}
+            InputPropStyle={{ borderRadius: "0.5rem" }}
+            styleInputProps={{ padding: "0.8rem" }}
+            boxStyle={{ flexGrow: 1 }}
+            value={formData?.billingData?.phoneNumber as string}
+          /> */}
+          <PhoneInput
+            country=""
+            enableAreaCodes={true}
+            value={formData.billingData?.phoneNumber as string}
+            onChange={(_, __, ___, formattedValue) => {
+              setFormData((prevValue) => ({
+                ...prevValue,
+                billingData: {
+                  ...prevValue.billingData!,
+                  phoneNumber: formattedValue,
                 },
-              },
+              }));
+            }}
+            specialLabel=""
+            containerStyle={{
+              marginTop: "0.5rem",
+            }}
+            inputStyle={{
+              width: "100%",
             }}
           />
         </Container>
-      </Container>
+        <Container
+          disableGutters
+          sx={{ display: "flex", flexDirection: "row", marginTop: 3 }}
+        >
+          <Container disableGutters>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("companyName")}
+              </Typography>
+              <InputComponent
+                id="companyNameField"
+                type="companyName"
+                name="companyName"
+                label=""
+                onChange={handleInputChange}
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.companyName as string}
+              />
+            </Container>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("country")}
+              </Typography>
+              <InputComponent
+                id="countryField"
+                type="country"
+                name="country"
+                onChange={handleInputChange}
+                label=""
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.country as string}
+              />
+            </Container>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("address")}
+              </Typography>
+              <InputComponent
+                id="addressField"
+                type="address"
+                name="address"
+                label=""
+                onChange={handleInputChange}
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.address as string}
+              />
+            </Container>
+          </Container>
+          <Container>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("taxId")}
+              </Typography>
+              <InputComponent
+                id="taxIdField"
+                type="taxId"
+                name="taxId"
+                label=""
+                onChange={handleInputChange}
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.taxId as string}
+              />
+            </Container>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("city")}
+              </Typography>
+              <InputComponent
+                id="cityField"
+                type="city"
+                name="city"
+                label=""
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                onChange={handleInputChange}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.city as string}
+              />
+            </Container>
+            <Container
+              sx={{
+                marginTop: "0.5rem",
+              }}
+            >
+              <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+                {getString("zipCode")}
+              </Typography>
+              <InputComponent
+                id="zipCodeField"
+                type="zipCode"
+                name="zipCode"
+                label=""
+                onChange={handleInputChange}
+                textFieldStyle={{
+                  width: "100%",
+                  padding: "0",
+                  marginTop: "0.5rem",
+                }}
+                InputPropStyle={{ borderRadius: "0.5rem" }}
+                styleInputProps={{ padding: "0.8rem" }}
+                boxStyle={{ flexGrow: 1 }}
+                value={formData?.billingData?.zipCode as string}
+              />
+            </Container>
+          </Container>
+        </Container>
 
-      <Container sx={{ display: "flex", flexDirection: "row" }}>
-        <Container disableGutters>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.companyName}
-              label={getString("companyName")}
-              name="companyName"
-              autoComplete="companyName"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "rem",
-              marginTop: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.country}
-              label={getString("country")}
-              name="country"
-              autoComplete="country"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginTop: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.address}
-              label={getString("address")}
-              name="address"
-              autoComplete="address"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-        </Container>
-        <Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.taxId}
-              label={getString("taxId")}
-              name="taxId"
-              autoComplete="taxId"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.city}
-              label={getString("city")}
-              name="city"
-              autoComplete="city"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "2rem",
-              marginTop: "1rem",
-            }}
-          >
-            <TextField
-              variant="outlined"
-              value={formData?.billingData?.zipCode}
-              label={getString("zipCode")}
-              name="zipCode"
-              autoComplete="zipCode"
-              onChange={handleInputChange}
-              sx={{
-                width: "25vw",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "0.8rem",
-                  },
-                },
-              }}
-            />
-          </Container>
-        </Container>
-      </Container>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: "1rem",
-          alignItems: "center",
-          justifyContent: "end",
-        }}
-      >
-        <Button
-          sx={{ borderRadius: "1rem", marginRight: "2rem" }}
-          variant="outlined"
-          startIcon={<CloseOutlinedIcon />}
-          onClick={() => {
-            setActiveSection("billingDataText");
+        <Container
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "end",
+            alignItems: "center",
+            padding: 0,
+            marginTop: 2,
           }}
         >
-          {getString("cancel")}
-        </Button>
-        <Button
-          sx={{ borderRadius: "1rem", marginRight: "2rem" }}
-          variant="outlined"
-          startIcon={<DoneOutlineOutlinedIcon />}
-          onClick={handleOnSave}
-        >
-          {getString("save")}
-        </Button>
-      </Container>
+          <Button
+            sx={{ borderRadius: "1rem", marginRight: "2rem" }}
+            variant="outlined"
+            startIcon={<CloseOutlinedIcon />}
+            onClick={onCancel}
+          >
+            {getString("cancel")}
+          </Button>
+          <Button
+            sx={{
+              borderRadius: "1rem",
+              backgroundColor: "var(--primary-color)",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "transparent",
+                borderColor: "var(--primary-color)",
+                color: "var(--primary-color)",
+              },
+            }}
+            variant="outlined"
+            startIcon={<DoneOutlineOutlinedIcon />}
+            onClick={handleOnSave}
+          >
+            {getString("save")}
+          </Button>
+        </Container>
+      </Box>
     </>
   );
 };

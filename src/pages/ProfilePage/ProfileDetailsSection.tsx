@@ -1,5 +1,12 @@
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -13,12 +20,33 @@ const ProfileDetailsSection = () => {
   useEffect(() => {}, [user]);
 
   const [isEditing, setIsEditing] = useState(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   if (isEditing) {
-    return <EditProfileDetailsSection setIsEditing={setIsEditing} />;
+    return (
+      <EditProfileDetailsSection
+        setToastVisible={setShowToast}
+        setIsEditing={setIsEditing}
+      />
+    );
   }
   return (
     <Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast}
+        autoHideDuration={6000}
+        onClose={() => setShowToast(false)}
+      >
+        <Alert
+          onClose={() => setShowToast(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {getString("userUpdateSuccess")}
+        </Alert>
+      </Snackbar>
       <Container
         sx={{
           display: "flex",
@@ -35,7 +63,6 @@ const ProfileDetailsSection = () => {
           variant="outlined"
           startIcon={<EditOutlinedIcon />}
           onClick={() => {
-            //setActiveTab("edit");
             setIsEditing(true);
           }}
         >
@@ -45,10 +72,7 @@ const ProfileDetailsSection = () => {
 
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
         <Typography variant="subtitle1">{getString("userName")} :</Typography>
@@ -81,36 +105,55 @@ const ProfileDetailsSection = () => {
           type="Name"
           label=""
           readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={user?.email}
+          value={user?.name}
+          disabled={true}
         />
       </Container>
-
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
-          {getString("phonenumber")}
-          {" :"}
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("email")}
         </Typography>
         <InputComponent
           id="nameField"
           type="Name"
           label=""
           readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
-          value={user?.billingData?.phoneNumber}
+          value={user?.email}
+          disabled={true}
+        />
+      </Container>
+
+      <Container
+        sx={{
+          marginTop: "0.5rem",
+        }}
+      >
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("phonenumber")}
+        </Typography>
+        <InputComponent
+          id="nameField"
+          type="Name"
+          label=""
+          readOnly={true}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
+          InputPropStyle={{ borderRadius: "0.5rem" }}
+          styleInputProps={{ padding: "0.8rem" }}
+          boxStyle={{ flexGrow: 1 }}
+          value={user?.billingData?.phoneNumber?.trim()}
+          disabled={true}
         />
       </Container>
     </Box>

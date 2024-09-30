@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
+import PhoneInput from "react-phone-input-2";
+import "./ProfilePage.css";
 import {
   Alert,
   Backdrop,
@@ -17,18 +19,25 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserDataType } from "../../DataTypes/UserDataTypes";
 import { updateUser } from "../../redux/thunks/userThunks";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
+import { defaultUserData } from "@constants/defaultObjects";
 
-const EditProfileDetailsSection = ({
-  setIsEditing,
-}: {
+// Define props interface
+interface EditProfileDetailsSectionProps {
+  setToastVisible: Dispatch<SetStateAction<boolean>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
-}) => {
+}
+const EditProfileDetailsSection = ({
+  setToastVisible,
+  setIsEditing,
+}: EditProfileDetailsSectionProps) => {
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
   const { user, loading } = useAppSelector((state) => state.userData);
 
-  const [formData, setFormData] = useState<UserDataType>(user!);
+  const [formData, setFormData] = useState<UserDataType>(
+    user ?? defaultUserData
+  );
   const [severity, setSeverity] = useState<
     "success" | "warning" | "error" | "info"
   >("info");
@@ -40,7 +49,8 @@ const EditProfileDetailsSection = ({
   }, [user]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "phoneNumber") {
+    console.log(value);
+    if (name === "") {
       setFormData((prevValue) => ({
         ...prevValue,
         billingData: {
@@ -56,40 +66,75 @@ const EditProfileDetailsSection = ({
     }
   };
 
-  const isFormDataChanged = (formData: any, userData: any) => {
-    if (formData.phoneNumber !== userData.phoneNumber) return true;
-    for (const key in formData) {
+  const isFormDataChanged = (
+    formData: UserDataType,
+    userData: UserDataType
+  ) => {
+    if (formData.billingData?.phoneNumber !== userData.billingData?.phoneNumber)
+      return true;
+
+    for (const key of Object.keys(formData) as (keyof UserDataType)[]) {
       if (formData[key] !== userData[key]) {
         return true;
       }
     }
     return false;
   };
-
+  function isUserDataType(response: any): response is UserDataType {
+    return typeof response === "object" && "id" in response;
+  }
   const onSave = () => {
-    if (isFormDataChanged(formData, user)) {
-      if (formData.name.length === 0) {
-        setToastMessage("Data has not been changed");
+    if (user && isFormDataChanged(formData, user)) {
+      if (formData.name.trim().length === 0) {
+        setToastMessage("User name cannot be empty");
         setShowToast(true);
         setSeverity("warning");
         return;
       }
-      dispatch(updateUser({ updatedUser: formData, userId: user!.id })).then(
-        (value) => {
-          const response = value.payload;
-          // Handle API response
-          if (response?.body) {
-            setToastMessage(response?.body);
-            setSeverity("success");
-          } else if (response?.message) {
-            setToastMessage(response?.message);
-            setSeverity("warning");
-          }
-          setShowToast(true);
+      // Updated regex to match either "+" or country codes like +20, +43, etc.
+      const onlyCountryCode = /^\+(\d+)?$/;
+
+      // Check if phone number is only a "+" or a country code and set it to an empty string
+      const updatedPhoneNumber = onlyCountryCode.test(
+        formData.billingData?.phoneNumber || ""
+      )
+        ? ""
+        : formData.billingData?.phoneNumber;
+
+      // Update formData with the cleaned phone number before saving
+      const updatedFormData = {
+        ...formData,
+        billingData: {
+          ...formData.billingData,
+          phoneNumber: updatedPhoneNumber,
+        },
+      };
+
+      dispatch(
+        updateUser({ updatedUser: updatedFormData, userId: user!.id })
+      ).then((value) => {
+        const response = value.payload;
+
+        // Handle if response is a string (error message) or an object (UserDataType)
+        if (typeof response === "string") {
+          setToastMessage(response);
+          setSeverity("error");
+        } else if (isUserDataType(response)) {
+          // Handle success with user data
+          setToastVisible(true);
+          onCancel();
+        } else {
+          // Handle other error responses (if the response is an error object)
+          const errorMessage =
+            (response as any)?.message || getString("unknownError");
+          setToastMessage(errorMessage);
+          setSeverity("error");
         }
-      );
+
+        setShowToast(true);
+      });
     } else {
-      setToastMessage("Data has not been changed");
+      setToastMessage(getString("dataNotChanged"));
       setShowToast(true);
       setSeverity("warning");
       return;
@@ -138,19 +183,18 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">{getString("userName")} :</Typography>
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("userName")}
+        </Typography>
         <InputComponent
           name="name"
           id="nameField"
           type="Name"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
@@ -160,53 +204,53 @@ const EditProfileDetailsSection = ({
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
           {getString("email")}
-          {" :"}
         </Typography>
         <InputComponent
           name="email"
           id="emailField"
           type="email"
           label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
+          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={formData.email as string}
-          onChange={handleInputChange}
           disabled={true}
         />
       </Container>
       <Container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
+          marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
           {getString("phonenumber")}
-          {" :"}
         </Typography>
-        <InputComponent
-          name="phoneNumber"
-          id="emailField"
-          type="phoneNumber"
-          label=""
-          textFieldStyle={{ width: "100%", padding: "0" }}
-          InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
-          boxStyle={{ flexGrow: 1 }}
+        <PhoneInput
+          country=""
+          enableAreaCodes={true}
           value={formData.billingData?.phoneNumber as string}
-          onChange={handleInputChange}
+          onChange={(_, __, ___, formattedValue) => {
+            setFormData((prevValue) => ({
+              ...prevValue,
+              billingData: {
+                ...prevValue.billingData!,
+                phoneNumber: formattedValue,
+              },
+            }));
+          }}
+          specialLabel=""
+          containerStyle={{
+            marginTop: "0.5rem",
+          }}
+          inputStyle={{
+            width: "100%",
+          }}
         />
       </Container>
       <Container
@@ -236,7 +280,6 @@ const EditProfileDetailsSection = ({
             "&:hover": {
               backgroundColor: "transparent",
               borderColor: "var(--primary-color)",
-              //boxShadow: "none",
               color: "var(--primary-color)",
             },
           }}

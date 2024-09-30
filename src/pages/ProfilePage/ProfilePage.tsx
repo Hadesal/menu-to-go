@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import BillingDetailsSection from "./BillingDataSection";
 import ChangePasswordSection from "./ChangePasswordSection";
 import ProfileDetailsSection from "./ProfileDetailsSection";
+import BillingDataTextSection from "./BillingDataTextSection";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -17,7 +18,15 @@ const ProfilePage = () => {
     >
       <Typography variant="h5">{getString("profile")}</Typography>
       <Divider variant="fullWidth" />
-      <Grid sx={{ margin: 0 , marginTop:"2rem !important" , width:"100% !important" }} container spacing={4}>
+      <Grid
+        sx={{
+          margin: 0,
+          marginTop: "2rem !important",
+          width: "100% !important",
+        }}
+        container
+        spacing={4}
+      >
         <Grid
           sx={{ paddingLeft: "0 !important", paddingTop: "0 !important" }}
           item
@@ -138,16 +147,12 @@ const ProfilePage = () => {
             elevation={3}
             sx={{ padding: "2rem 1rem", borderRadius: "15px" }}
           >
-            {activeTab === "profileDetails" && (
-              <ProfileDetailsSection />
-            )}
-            {activeTab === "changePassword" && (
-              <ChangePasswordSection  />
-            )}
+            {activeTab === "profileDetails" && <ProfileDetailsSection />}
+            {activeTab === "changePassword" && <ChangePasswordSection />}
             {/* {activeTab === "edit" && (
               <EditProfileDetailsSection setActiveTab={setActiveTab} />
             )} */}
-            {activeTab === "billingData" && <BillingDetailsSection />}
+            {activeTab === "billingData" && <BillingDataTextSection />}
           </Paper>
         </Grid>
       </Grid>
