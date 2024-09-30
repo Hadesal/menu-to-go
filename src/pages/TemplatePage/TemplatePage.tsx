@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Card,
@@ -45,7 +46,7 @@ export default function TemplatePage() {
     show: false,
   });
 
-  const handleChangeSelectedRestaurant = (event) => {
+  const handleChangeSelectedRestaurant = (event: any) => {
     const selectedName = event.target.value;
     const selected = restaurantList.find(
       (restaurant) => restaurant.name === selectedName
@@ -54,12 +55,31 @@ export default function TemplatePage() {
   };
 
   const handleSaveChanges = async () => {
-    await dispatch(
-      editRestaurant({
-        updatedRestaurant: selectedRestaurant,
-        restaurantId: selectedRestaurant?.id,
-      })
-    );
+    if (selectedRestaurant && selectedRestaurant.id) {
+      const result = await dispatch(
+        editRestaurant({
+          updatedRestaurant: selectedRestaurant,
+          restaurantId: selectedRestaurant.id,
+        })
+      );
+
+      if (editRestaurant.fulfilled.match(result)) {
+        setToastMessageObject({
+          success: true,
+          message: getString("restaurantUpdatedSuccessfully"),
+          show: true,
+        });
+      } else {
+        setToastMessageObject({
+          success: false,
+          message: getString("restaurantUpdateFailed"),
+          show: true,
+        });
+      }
+    }
+  };
+  const handleToastClose = () => {
+    setToastMessageObject((prev) => ({ ...prev, show: false }));
   };
 
   return (
@@ -210,10 +230,8 @@ export default function TemplatePage() {
         <ToastNotification
           severity={toastMessageObject.success === true ? "success" : "error"}
           message={toastMessageObject.message}
-          show={false}
-          onClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          show={toastMessageObject.show}
+          onClose={handleToastClose}
         />
       </Container>
     </>
