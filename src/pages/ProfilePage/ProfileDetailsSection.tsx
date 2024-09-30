@@ -75,37 +75,15 @@ const ProfileDetailsSection = () => {
           marginTop: "0.5rem",
         }}
       >
-        <Typography variant="subtitle1">{getString("userName")} :</Typography>
-        <InputComponent
-          id="nameField"
-          type="Name"
-          label=""
-          readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0" }}
-          InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
-          boxStyle={{ flexGrow: 1 }}
-          value={user?.name}
-        />
-      </Container>
-      <Container
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "150px 1fr",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <Typography variant="subtitle1">
-          {getString("email")}
-          {" :"}
+        <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
+          {getString("userName")}
         </Typography>
         <InputComponent
           id="nameField"
           type="Name"
           label=""
           readOnly={true}
-          textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
+          textFieldStyle={{ width: "100%", padding: "0" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
           styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}

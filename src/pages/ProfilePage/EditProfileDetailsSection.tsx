@@ -49,7 +49,6 @@ const EditProfileDetailsSection = ({
   }, [user]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(value);
     if (name === "") {
       setFormData((prevValue) => ({
         ...prevValue,

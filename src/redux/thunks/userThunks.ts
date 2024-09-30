@@ -89,10 +89,14 @@ export const updateUserPassword = createAsyncThunk<
   "user/updatePassword",
   async ({ updatePasswordObject, userId }, { rejectWithValue }) => {
     try {
-      await apiUpdateUserPassword(updatePasswordObject, userId);
+      const response = await apiUpdateUserPassword(
+        updatePasswordObject,
+        userId
+      );
+      return response;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Password update failed"
+        error.message || "Password update failed"
       );
     }
   }

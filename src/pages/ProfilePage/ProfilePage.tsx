@@ -1,10 +1,9 @@
 import { Box, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import BillingDetailsSection from "./BillingDataSection";
+import BillingDataTextSection from "./BillingDataTextSection";
 import ChangePasswordSection from "./ChangePasswordSection";
 import ProfileDetailsSection from "./ProfileDetailsSection";
-import BillingDataTextSection from "./BillingDataTextSection";
 
 const ProfilePage = () => {
   const { t } = useTranslation();

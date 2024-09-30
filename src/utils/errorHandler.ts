@@ -31,7 +31,6 @@ export const handleAxiosError = (error: unknown): ErrorResponseObject => {
 
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
-    console.log("hey");
     if (axiosError.response) {
       errorResponse = {
         ...errorResponse,

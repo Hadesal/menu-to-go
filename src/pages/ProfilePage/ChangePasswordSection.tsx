@@ -71,10 +71,7 @@ const ChangePasswordSection = () => {
 
     if (formData.newPassword.length === 0) {
       validationErrors.newPassword = "Please enter new password";
-    }
-
-    // Check if the new password is the same as the current password
-    if (formData.newPassword === formData.currentPassword) {
+    } else if (formData.newPassword === formData.currentPassword) {
       validationErrors.newPassword =
         "New password cannot be the same as the current password";
     }
@@ -106,9 +103,14 @@ const ChangePasswordSection = () => {
         setToastMessage(response?.body);
         setSeverity("success");
         onReset();
-      } else if (response?.message) {
-        setToastMessage(response.message);
+      } else if (typeof response === "string") {
+        setToastMessage(response);
         setSeverity("warning");
+      } else {
+        const errorMessage =
+          (response as any)?.message || getString("unknownError");
+        setToastMessage(errorMessage);
+        setSeverity("error");
       }
       setShowToast(true);
     });
