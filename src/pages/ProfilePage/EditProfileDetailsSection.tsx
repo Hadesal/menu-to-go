@@ -91,17 +91,14 @@ const EditProfileDetailsSection = ({
         setSeverity("warning");
         return;
       }
-      // Updated regex to match either "+" or country codes like +20, +43, etc.
       const onlyCountryCode = /^\+(\d+)?$/;
 
-      // Check if phone number is only a "+" or a country code and set it to an empty string
       const updatedPhoneNumber = onlyCountryCode.test(
         formData.billingData?.phoneNumber || ""
       )
         ? ""
         : formData.billingData?.phoneNumber;
 
-      // Update formData with the cleaned phone number before saving
       const updatedFormData = {
         ...formData,
         billingData: {
@@ -115,16 +112,13 @@ const EditProfileDetailsSection = ({
       ).then((value) => {
         const response = value.payload;
 
-        // Handle if response is a string (error message) or an object (UserDataType)
         if (typeof response === "string") {
           setToastMessage(response);
           setSeverity("error");
         } else if (isUserDataType(response)) {
-          // Handle success with user data
           setToastVisible(true);
           onCancel();
         } else {
-          // Handle other error responses (if the response is an error object)
           const errorMessage =
             (response as any)?.message || getString("unknownError");
           setToastMessage(errorMessage);
