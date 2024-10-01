@@ -67,7 +67,7 @@ export const deleteRestaurant = async (restaurantId: string) => {
 // Create a new restaurant (with token)
 export const createRestaurant = async (restaurant: RestaurantData) => {
   try {
-    const response = await privateApiService.post("", restaurant);
+    const response = await privateApiService.post("/restaurants", restaurant);
     return response.data;
   } catch (error) {
     return Promise.reject(error);
