@@ -104,11 +104,7 @@ export default function CategoryPage() {
           restaurantId: selectedRestaurant.id,
           categoryData: category,
         })
-      ).then((result) => {
-        if (addCategory.fulfilled.match(result)) {
-          dispatch(setSelectedCategory(category));
-        }
-      });
+      );
     }
   };
 
@@ -135,9 +131,10 @@ export default function CategoryPage() {
         })
       );
 
-      if (deleteCategory.fulfilled.match(result)) {
-        dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
-      }
+      // if (deleteCategory.fulfilled.match(result)) {
+      //   console.log("fullfulid");
+      //   dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
+      // }
     } else {
       console.error("No restaurant selected");
     }
@@ -182,7 +179,7 @@ export default function CategoryPage() {
       dispatch(
         deleteProduct({
           categoryId: selectedCategory.id,
-          productId: product.id,
+          productId: [product.id],
         })
       );
     } else {

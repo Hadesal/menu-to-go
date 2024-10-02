@@ -19,6 +19,7 @@ export interface RestaurantState {
   categoryError: string | null;
   productError: string | null;
   successMessage: string | null;
+  selectedProductsIDs: string[];
 }
 export interface ProductState {
   productList: ProductData[];

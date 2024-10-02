@@ -88,7 +88,6 @@ const CategoryItemsListView = ({
   const handleClose = () => {
     setOpen(false);
   };
-  useEffect(() => {}, [items]);
 
   return (
     <Container sx={{ ...styles.container, padding: "0 !important" }}>

@@ -18,6 +18,7 @@ const Styles = {
     color: "white",
     "&:hover": {
       color: "var(--primary-color)",
+      background: "white",
     },
   },
   previewMenu: {
@@ -57,8 +58,8 @@ const Styles = {
     width: "100%",
     display: "flex",
     justifyContent: "center",
-    paddingLeft:"0 !important",
-    paddingRight:"0 !important"
+    paddingLeft: "0 !important",
+    paddingRight: "0 !important",
   },
   list: {
     display: "flex",
@@ -75,8 +76,8 @@ const Styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "flex-start",
-    paddingTop:"3rem",
-    paddingBottom:"3rem"
+    paddingTop: "3rem",
+    paddingBottom: "3rem",
   },
   listItemBox: {
     color: "primary",

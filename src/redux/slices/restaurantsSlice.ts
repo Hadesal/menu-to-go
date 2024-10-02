@@ -34,6 +34,7 @@ const initialState: RestaurantState = {
   categoryError: null,
   productError: null,
   successMessage: null,
+  selectedProductsIDs: [],
 };
 
 const isRejectedAction = (
@@ -72,6 +73,9 @@ const restaurantSlice = createSlice({
       action: PayloadAction<UserUiPreferences>
     ) => {
       state.selectedRestaurant!.userUiPreferences = action.payload;
+    },
+    setSelectedProductsIDs(state, action: PayloadAction<string[]>) {
+      state.selectedProductsIDs = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -202,6 +206,7 @@ const restaurantSlice = createSlice({
 
         state.successMessage = "Category added successfully!";
         state.categoryLoading = false;
+        state.selectedCategory = action.payload.category;
       }
     );
     builder.addCase(
@@ -240,6 +245,7 @@ const restaurantSlice = createSlice({
           }
         }
 
+        state.selectedCategory = action.payload.updatedCategory;
         state.successMessage = "Category updated successfully!";
         state.categoryLoading = false;
       }
@@ -269,6 +275,14 @@ const restaurantSlice = createSlice({
           }
         }
 
+        if (
+          state.selectedRestaurant &&
+          state.selectedRestaurant?.categories.length > 0
+        ) {
+          state.selectedCategory = state.selectedRestaurant?.categories[0];
+        } else {
+          state.selectedCategory = null;
+        }
         state.successMessage = "Category removed successfully!";
         state.categoryLoading = false;
       }
@@ -324,6 +338,12 @@ const restaurantSlice = createSlice({
           }
         });
 
+        if (state.selectedCategory && state.selectedCategory.products) {
+          state.selectedCategory.products = [
+            ...state.selectedCategory.products,
+            action.payload.product,
+          ];
+        }
         state.successMessage = "Product added successfully!";
         state.productLoading = false;
       }
@@ -369,6 +389,11 @@ const restaurantSlice = createSlice({
                 selectedCategory.products[selectedProductIndex] =
                   action.payload.updatedProduct;
               }
+
+              if (state.selectedCategory && state.selectedCategory.products) {
+                state.selectedCategory.products[selectedProductIndex] =
+                  action.payload.updatedProduct;
+              }
             }
           }
         });
@@ -382,7 +407,7 @@ const restaurantSlice = createSlice({
       removeProductFromCategory.fulfilled,
       (
         state,
-        action: PayloadAction<{ categoryId: string; productId: string }>
+        action: PayloadAction<{ categoryId: string; productId: string[] }>
       ) => {
         state.restaurantList.forEach((restaurant) => {
           const category = restaurant.categories.find(
@@ -391,7 +416,7 @@ const restaurantSlice = createSlice({
           if (category && category.products) {
             // Update the products in the restaurant list
             category.products = category.products.filter(
-              (prod) => prod.id !== action.payload.productId
+              (prod) => !action.payload.productId.includes(prod.id as string)
             );
           }
 
@@ -406,12 +431,20 @@ const restaurantSlice = createSlice({
             if (selectedCategory && selectedCategory.products) {
               // Update the products in the selectedRestaurant
               selectedCategory.products = selectedCategory.products.filter(
-                (prod) => prod.id !== action.payload.productId
+                (prod) => !action.payload.productId.includes(prod.id as string)
               );
             }
           }
         });
 
+        if (state.selectedCategory && state.selectedCategory.products) {
+          state.selectedCategory.products =
+            state.selectedCategory.products.filter(
+              (prod) => !action.payload.productId.includes(prod.id as string)
+            );
+        }
+
+        state.selectedProductsIDs = [];
         state.successMessage = "Product removed successfully!";
         state.productLoading = false;
       }
@@ -435,6 +468,7 @@ export const {
   clearProductError,
   clearCategoryError,
   updateRestaurantUserUiPreferences,
+  setSelectedProductsIDs,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

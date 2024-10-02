@@ -3,8 +3,11 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import { setSelectedProductsIDs } from "@slices/restaurantsSlice";
+
 import {
   Box,
+  Checkbox,
   Container,
   IconButton,
   List,
@@ -15,14 +18,14 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../assets/catering-item-placeholder-704x520.png";
 import Styles from "../../DataTypes/StylesTypes";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "../../DataTypes/ProductDataTypes";
 import AddProductDialog from "../Dialogs/AddItemDialog/addProductDialog";
-import { useAppSelector } from "../../redux/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 
 interface Props {
   CardIcon: string;
@@ -52,6 +55,58 @@ const ItemsListView = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const dispatch = useAppDispatch();
+  const selectedProductIds = useAppSelector(
+    (state) => state.restaurantsData?.selectedProductsIDs
+  );
+  // Change the state to an object to manage multiple checkboxes
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
+    items.reduce((acc, item) => {
+      acc[item.id as string] = false;
+      return acc;
+    }, {} as Record<string, boolean>)
+  );
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    item: ProductData
+  ) => {
+    console.log(checkedItems);
+
+    const newCheckedItems = {
+      ...checkedItems,
+      [item.id as string]: event.target.checked,
+    };
+
+    console.log(newCheckedItems);
+
+    setCheckedItems(newCheckedItems);
+
+    // Ensure the item ID is defined and valid
+    if (!item.id) return;
+
+    // Prepare the updated selected product IDs based on the checkbox state
+    const updatedSelectedProductIds = event.target.checked
+      ? [...selectedProductIds, item.id] // Add the ID if checked
+      : selectedProductIds.filter((id) => id !== item.id); // Remove the ID if unchecked
+
+    dispatch(setSelectedProductsIDs(updatedSelectedProductIds));
+  };
+
+  const handleUncheckAll = () => {
+    setCheckedItems((prevCheckedItems) => {
+      console.log(prevCheckedItems);
+      const newCheckedItems = { ...prevCheckedItems };
+
+      // Set each item's checked state to false
+      Object.keys(newCheckedItems).forEach((key) => {
+        newCheckedItems[key] = false;
+      });
+
+      console.log(newCheckedItems);
+
+      return newCheckedItems;
+    });
+  };
 
   const handleMenuClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -60,6 +115,8 @@ const ItemsListView = ({
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = event.currentTarget;
     setAnchorEls(newAnchorEls);
+
+    handleUncheckAll();
   };
 
   const handleMenuClose = (index: number) => {
@@ -90,11 +147,31 @@ const ItemsListView = ({
     setIsEditDialogOpen(false);
   };
 
+  useEffect(() => {
+    setCheckedItems((prevCheckedItems) => {
+      const newCheckedItems = { ...prevCheckedItems }; // Create a new object to avoid mutating the previous state
+      for (let i = 0; i < selectedProductIds.length; i++) {
+        newCheckedItems[selectedProductIds[i]] = true; // Update the checked state for each selected product
+      }
+      return newCheckedItems; // Return the updated checkedItems object
+    });
+  }, [selectedProductIds]); // Add selectedProductIds to the dependency array
+
   return (
     <Container sx={styles.container}>
       <List sx={styles.list}>
         {items.map((item, index) => (
-          <Paper key={item.id} elevation={3} sx={styles.paperListView}>
+          <Paper
+            key={item.id}
+            elevation={3}
+            sx={{
+              ...styles.paperListView,
+              background: checkedItems[item?.id || ""] ? "#FFF9F4" : "inherit",
+              "&:hover": {
+                backgroundColor: "#FFF9F4",
+              },
+            }}
+          >
             <ListItem
               sx={{
                 display: "flex",
@@ -110,9 +187,21 @@ const ItemsListView = ({
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  gap: 2,
+                  gap: 1,
                 }}
               >
+                <Checkbox
+                  checked={checkedItems[item?.id || ""]} // Check if the item ID exists in checkedItems
+                  onChange={(e) => handleChange(e, item)}
+                  inputProps={{ "aria-label": "controlled" }}
+                  sx={{
+                    borderRadius: 0,
+                    padding: 0,
+                    "&:hover": {
+                      backgroundColor: "transparent", // Make background transparent when hovered
+                    },
+                  }}
+                />
                 <IconButton
                   sx={{
                     padding: 0.8,
@@ -186,6 +275,10 @@ const ItemsListView = ({
                   }}
                   disableScrollLock={true}
                   elevation={1}
+                  // onClick={() => {
+                  //   setCheckedItems({});
+                  //   dispatch(setSelectedProductsIDs([])); // Reset selected product IDs
+                  // }}
                 >
                   {duplicateFunction && (
                     <MenuItem
