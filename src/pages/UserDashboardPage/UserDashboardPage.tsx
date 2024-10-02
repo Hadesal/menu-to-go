@@ -17,7 +17,7 @@ import ProfilePage from "@pages/ProfilePage/ProfilePage";
 import TemplatePage from "@pages/TemplatePage/TemplatePage";
 import QrCodePage from "@pages/QrCodePage/QrCodePage";
 import ContactPage from "@pages/ContactPage/Contact";
-import AppBarComponent from "@components/AppBarComponent/AppBarComponent";
+import AppBarComponent from "@components/AppBar/AppBarComponent";
 import SideDrawer from "@components/SideDrawerComponent/SideDrawerComponent";
 import {
   INACTIVITY_PERIOD,
