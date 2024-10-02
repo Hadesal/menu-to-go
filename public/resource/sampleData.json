@@ -1,127 +1,774 @@
 {
   "categories": [
     {
-      "name": "Pizza",
-      "image": "https://cdn.pixabay.com/photo/2021/06/22/19/49/pizza-6357221_960_720.jpg",
-      "categoryType": "Main Course",
-      "productList": [
+      "name": "Beverages",
+      "image": null,
+      "categoryType": "drink",
+      "products": [
         {
-          "name": "Margherita Pizza",
-          "price": 12.99,
-          "image": "https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_960_720.jpg",
-          "uniqueProductOrderingName": "MP123",
-          "isAvailable": true,
+          "name": "Cappuccino",
+          "price": 4.5,
           "details": {
-            "detailsDescription": "A classic Margherita pizza topped with fresh tomatoes, mozzarella, and basil.",
+            "detailsDescription": "A hot coffee drink made with espresso and steamed milk.",
+            "extras": [
+              {
+                "name": "Extra Shot of Espresso",
+                "price": 0.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Espresso",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Steamed Milk",
+                "price": 1.0,
+                "image": null
+              }
+            ],
             "variants": {
               "name": "Size",
               "variantList": [
                 {
-                  "name": "Small"
+                  "name": "Small",
+                  "price": 4.5
                 },
                 {
-                  "name": "Medium"
+                  "name": "Medium",
+                  "price": 5.0
                 },
                 {
-                  "name": "Large"
+                  "name": "Large",
+                  "price": 5.5
                 }
               ]
-            },
-            "ingredients": [
-              {
-                "name": "Tomato Sauce",
-                "image": "https://cdn.pixabay.com/photo/2017/02/14/10/19/tomatoes-2068723_960_720.jpg"
-              },
-              {
-                "name": "Mozzarella Cheese",
-                "image": "https://cdn.pixabay.com/photo/2016/03/27/18/10/cheese-1284157_960_720.jpg"
-              },
-              {
-                "name": "Basil",
-                "image": "https://cdn.pixabay.com/photo/2017/05/23/23/36/basil-2338878_960_720.jpg"
-              }
-            ],
-            "extras": [
-              {
-                "name": "Extra Cheese",
-                "price": 1.5
-              },
-              {
-                "name": "Pepperoni",
-                "price": 2.0
-              }
-            ]
-          }
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Cappuccino"
         },
         {
-          "name": "Pepperoni Pizza",
-          "price": 14.99,
-          "image": "https://cdn.pixabay.com/photo/2016/02/19/11/19/pizza-1209748_960_720.jpg",
-          "uniqueProductOrderingName": "PP456",
-          "isAvailable": false,
+          "name": "Latte",
+          "price": 5.0,
           "details": {
-            "detailsDescription": "A delicious pizza topped with spicy pepperoni slices and mozzarella.",
+            "detailsDescription": "A creamy coffee drink made with espresso and steamed milk.",
+            "extras": [
+              {
+                "name": "Vanilla Syrup",
+                "price": 0.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Espresso",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Steamed Milk",
+                "price": 1.0,
+                "image": null
+              }
+            ],
             "variants": {
               "name": "Size",
               "variantList": [
                 {
-                  "name": "Small"
+                  "name": "Small",
+                  "price": 5.0
                 },
                 {
-                  "name": "Medium"
+                  "name": "Medium",
+                  "price": 5.5
                 },
                 {
-                  "name": "Large"
+                  "name": "Large",
+                  "price": 6.0
                 }
               ]
-            },
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Latte"
+        },
+        {
+          "name": "Espresso",
+          "price": 3.0,
+          "details": {
+            "detailsDescription": "A strong black coffee made by forcing steam through ground coffee beans.",
+            "extras": [],
             "ingredients": [
               {
-                "name": "Pepperoni",
-                "image": "https://cdn.pixabay.com/photo/2017/01/19/18/29/pepperoni-1997017_960_720.jpg"
-              },
-              {
-                "name": "Mozzarella Cheese",
-                "image": "https://cdn.pixabay.com/photo/2016/03/27/18/10/cheese-1284157_960_720.jpg"
+                "name": "Ground Coffee",
+                "price": 1.5,
+                "image": null
               }
             ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Single",
+                  "price": 3.0
+                },
+                {
+                  "name": "Double",
+                  "price": 4.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Espresso"
+        },
+        {
+          "name": "Mocha",
+          "price": 5.5,
+          "details": {
+            "detailsDescription": "A coffee drink that combines espresso, chocolate, and steamed milk.",
             "extras": [
               {
-                "name": "Extra Pepperoni",
-                "price": 2.5
+                "name": "Whipped Cream",
+                "price": 0.5
               }
-            ]
-          }
+            ],
+            "ingredients": [
+              {
+                "name": "Espresso",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Steamed Milk",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Chocolate Syrup",
+                "price": 1.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 5.5
+                },
+                {
+                  "name": "Medium",
+                  "price": 6.0
+                },
+                {
+                  "name": "Large",
+                  "price": 6.5
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Mocha"
         }
       ]
     },
     {
-      "name": "Drinks",
-      "image": "https://cdn.pixabay.com/photo/2017/05/23/23/43/beer-2338991_960_720.jpg",
-      "categoryType": "Beverages",
-
-      "productList": [
+      "name": "Appetizers",
+      "image": null,
+      "categoryType": "food",
+      "products": [
         {
-          "name": "Coca Cola",
-          "image": "https://cdn.pixabay.com/photo/2017/01/20/13/33/coca-cola-1998414_960_720.jpg",
-          "uniqueProductOrderingName": "CC789",
-          "isAvailable": true,
+          "name": "Bruschetta",
+          "price": 6.5,
           "details": {
-            "detailsDescription": "Chilled Coca Cola served in a can.",
+            "detailsDescription": "Grilled bread topped with diced tomatoes, garlic, and olive oil.",
+            "extras": [],
+            "ingredients": [
+              {
+                "name": "Grilled Bread",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Tomatoes",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Garlic",
+                "price": 0.5,
+                "image": null
+              },
+              {
+                "name": "Olive Oil",
+                "price": 0.5,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 6.5
+                },
+                {
+                  "name": "Large",
+                  "price": 9.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Bruschetta"
+        },
+        {
+          "name": "Garlic Bread",
+          "price": 5.0,
+          "details": {
+            "detailsDescription": "Toasted bread with garlic butter.",
+            "extras": [],
+            "ingredients": [
+              {
+                "name": "Bread",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Garlic Butter",
+                "price": 1.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 5.0
+                },
+                {
+                  "name": "Large",
+                  "price": 7.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Garlic Bread"
+        },
+        {
+          "name": "Stuffed Mushrooms",
+          "price": 7.5,
+          "details": {
+            "detailsDescription": "Mushrooms stuffed with a mixture of cheese and herbs.",
+            "extras": [],
+            "ingredients": [
+              {
+                "name": "Mushrooms",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Cheese",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Herbs",
+                "price": 0.5,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 7.5
+                },
+                {
+                  "name": "Large",
+                  "price": 10.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Stuffed Mushrooms"
+        },
+        {
+          "name": "Chicken Wings",
+          "price": 8.5,
+          "details": {
+            "detailsDescription": "Crispy chicken wings served with dipping sauce.",
+            "extras": [
+              {
+                "name": "Extra Sauce",
+                "price": 0.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Chicken Wings",
+                "price": 4.0,
+                "image": null
+              },
+              {
+                "name": "Dipping Sauce",
+                "price": 1.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 8.5
+                },
+                {
+                  "name": "Large",
+                  "price": 12.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Chicken Wings"
+        }
+      ]
+    },
+    {
+      "name": "Desserts",
+      "image": null,
+      "categoryType": "food",
+      "products": [
+        {
+          "name": "Cheesecake",
+          "price": 6.5,
+          "details": {
+            "detailsDescription": "Rich and creamy cheesecake with a graham cracker crust.",
+            "extras": [
+              {
+                "name": "Strawberry Topping",
+                "price": 0.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Cream Cheese",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Graham Cracker Crust",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Sugar",
+                "price": 0.5,
+                "image": null
+              }
+            ],
             "variants": {
               "name": "Size",
               "variantList": [
                 {
-                  "name": "330ml"
+                  "name": "Small",
+                  "price": 6.5
                 },
                 {
-                  "name": "500ml"
+                  "name": "Large",
+                  "price": 9.0
                 }
               ]
-            },
-            "ingredients": [],
-            "extras": []
-          }
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Cheesecake"
+        },
+        {
+          "name": "Brownie",
+          "price": 5.0,
+          "details": {
+            "detailsDescription": "Rich chocolate brownie with a chewy texture.",
+            "extras": [
+              {
+                "name": "Ice Cream",
+                "price": 1.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Chocolate",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Flour",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Butter",
+                "price": 1.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 5.0
+                },
+                {
+                  "name": "Large",
+                  "price": 7.5
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Brownie"
+        },
+        {
+          "name": "Apple Pie",
+          "price": 6.0,
+          "details": {
+            "detailsDescription": "Classic apple pie with a flaky crust.",
+            "extras": [],
+            "ingredients": [
+              {
+                "name": "Apples",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Pie Crust",
+                "price": 1.5,
+                "image": null
+              },
+              {
+                "name": "Sugar",
+                "price": 0.5,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 6.0
+                },
+                {
+                  "name": "Large",
+                  "price": 8.5
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Apple Pie"
+        },
+        {
+          "name": "Ice Cream Sundae",
+          "price": 4.5,
+          "details": {
+            "detailsDescription": "Vanilla ice cream topped with chocolate sauce and whipped cream.",
+            "extras": [
+              {
+                "name": "Nuts",
+                "price": 0.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Vanilla Ice Cream",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Chocolate Sauce",
+                "price": 0.5,
+                "image": null
+              },
+              {
+                "name": "Whipped Cream",
+                "price": 0.5,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Serving Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 4.5
+                },
+                {
+                  "name": "Large",
+                  "price": 6.5
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "Ice Cream Sundae"
+        }
+      ]
+    },
+    {
+      "name": "Pizza",
+      "image": "https://i.imgur.com/UlG5DBp.jpg",
+      "categoryType": "food",
+      "products": [
+        {
+          "name": "Margherita Pizza",
+          "price": 10.0,
+          "details": {
+            "detailsDescription": "Classic pizza with fresh tomatoes, mozzarella, and basil.",
+            "extras": [
+              {
+                "name": "Extra Cheese",
+                "price": 1.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Tomatoes",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Basil",
+                "price": 0.5,
+                "image": null
+              },
+              {
+                "name": "Pizza Dough",
+                "price": 2.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 10.0
+                },
+                {
+                  "name": "Medium",
+                  "price": 12.0
+                },
+                {
+                  "name": "Large",
+                  "price": 14.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": "https://i.imgur.com/zo8CwxC.jpg",
+          "uniqueProductOrderingName": "MargheritaPizza"
+        },
+        {
+          "name": "Pepperoni Pizza",
+          "price": 12.0,
+          "details": {
+            "detailsDescription": "Delicious pizza topped with pepperoni and mozzarella cheese.",
+            "extras": [
+              {
+                "name": "Extra Pepperoni",
+                "price": 2.0
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Pepperoni",
+                "price": 3.0,
+                "image": null
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Tomato Sauce",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Pizza Dough",
+                "price": 2.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 12.0
+                },
+                {
+                  "name": "Medium",
+                  "price": 14.0
+                },
+                {
+                  "name": "Large",
+                  "price": 16.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": "https://i.imgur.com/UlG5DBp.jpg",
+          "uniqueProductOrderingName": "PepperoniPizza"
+        },
+        {
+          "name": "BBQ Chicken Pizza",
+          "price": 14.0,
+          "details": {
+            "detailsDescription": "Pizza with BBQ sauce, grilled chicken, and red onions.",
+            "extras": [
+              {
+                "name": "Extra BBQ Sauce",
+                "price": 1.0
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Grilled Chicken",
+                "price": 3.5,
+                "image": null
+              },
+              {
+                "name": "BBQ Sauce",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Red Onions",
+                "price": 0.5,
+                "image": null
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Pizza Dough",
+                "price": 2.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 14.0
+                },
+                {
+                  "name": "Medium",
+                  "price": 16.0
+                },
+                {
+                  "name": "Large",
+                  "price": 18.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": "https://i.imgur.com/ExgXkC9.jpg",
+          "uniqueProductOrderingName": "BBQChickenPizza"
+        },
+        {
+          "name": "Vegetarian Pizza",
+          "price": 11.0,
+          "details": {
+            "detailsDescription": "A healthy pizza loaded with fresh vegetables.",
+            "extras": [
+              {
+                "name": "Extra Vegetables",
+                "price": 1.5
+              }
+            ],
+            "ingredients": [
+              {
+                "name": "Tomatoes",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Bell Peppers",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Olives",
+                "price": 1.0,
+                "image": null
+              },
+              {
+                "name": "Mozzarella Cheese",
+                "price": 2.0,
+                "image": null
+              },
+              {
+                "name": "Pizza Dough",
+                "price": 2.0,
+                "image": null
+              }
+            ],
+            "variants": {
+              "name": "Size",
+              "variantList": [
+                {
+                  "name": "Small",
+                  "price": 11.0
+                },
+                {
+                  "name": "Medium",
+                  "price": 13.0
+                },
+                {
+                  "name": "Large",
+                  "price": 15.0
+                }
+              ]
+            }
+          },
+          "isAvailable": true,
+          "image": null,
+          "uniqueProductOrderingName": "VegetarianPizza"
         }
       ]
     }
