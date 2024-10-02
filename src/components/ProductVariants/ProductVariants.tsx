@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import { Styles } from "./ProductVariants.styles";
 import { useAppSelector } from "../../redux/reduxHooks";
 import BulletIcon from "./BulletIcon";
-import { VariantData } from "@dataTypes/ProductDetailsDataTypes";
+import { VariantData } from "@dataTypes/ProductDataTypes";
 
 interface VariantListProps {
   variants: VariantData[];

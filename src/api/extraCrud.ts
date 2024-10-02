@@ -1,5 +1,5 @@
 import privateApiService from "./services/privateApiService";
-import { ExtrasData } from "@dataTypes/ProductDetailsDataTypes";
+import { ExtrasData } from "@dataTypes/ProductDataTypes";
 
 // Fetch all extras by product details ID
 export const getAllExtrasByProductDetailsId = async (
