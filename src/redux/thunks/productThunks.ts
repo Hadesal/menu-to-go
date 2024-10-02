@@ -68,7 +68,7 @@ export const updateProductInCategory = createAsyncThunk(
 export const removeProductFromCategory = createAsyncThunk(
   "products/removeFromCategory",
   async (
-    { categoryId, productId }: { categoryId: string; productId: string },
+    { categoryId, productId }: { categoryId: string; productId: string[] },
     { rejectWithValue }
   ) => {
     try {

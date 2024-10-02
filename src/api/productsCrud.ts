@@ -77,13 +77,15 @@ export const updateProduct = async (
 // Delete a specific product by category and product ID
 export const deleteProduct = async (
   categoryId: string | undefined,
-  productId: string
+  productIds: string[]
 ) => {
   try {
     const response = await privateApiService.delete(
-      `/categories/${categoryId}/products/${productId}`
+      `/categories/${categoryId}/products`, // Endpoint
+      { data: productIds } // Send productIds wrapped in a data object
     );
-    return response.data;
+
+    return response.data; // Return the response data
   } catch (error) {
     return Promise.reject(error);
   }
