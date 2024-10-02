@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import IngredientItem from "./IngredientItem";
 import { Styles } from "./ProductIngredients.styles";
 import { useAppSelector } from "../../redux/reduxHooks";
-import { IngredientData } from "@dataTypes/ProductDetailsDataTypes";
+import { IngredientData } from "@dataTypes/ProductDataTypes";
 
 interface IngredientListProps {
   ingredients: IngredientData[];

@@ -2,7 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import { Styles } from "./Extras.styles";
 import { useAppSelector } from "../../redux/reduxHooks";
 import PlusIcon from "./PlusIcon";
-import { ExtrasData } from "@dataTypes/ProductDetailsDataTypes";
+import { ExtrasData } from "@dataTypes/ProductDataTypes";
 
 interface ExtrasItemProps {
   extras: ExtrasData;

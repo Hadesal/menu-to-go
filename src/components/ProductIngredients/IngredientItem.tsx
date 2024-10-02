@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { Styles } from "./ProductIngredients.styles";
 import PlaceHolder from "../../assets/catering-item-placeholder-704x520.png";
 import { useAppSelector } from "../../redux/reduxHooks";
-import { IngredientData } from "@dataTypes/ProductDetailsDataTypes";
+import { IngredientData } from "@dataTypes/ProductDataTypes";
 
 interface IngredientItemProps {
   ingredient: IngredientData;

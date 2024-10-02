@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import ExtrasItem from "./ExtrasItem";
-import { ExtrasData as ExtrasData } from "@dataTypes/ProductDetailsDataTypes";
+import { ExtrasData as ExtrasData } from "@dataTypes/ProductDataTypes";
 
 interface ExtrasListProps {
   extras: ExtrasData[];
