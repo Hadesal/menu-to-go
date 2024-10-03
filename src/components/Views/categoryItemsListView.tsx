@@ -45,6 +45,7 @@ const CategoryItemsListView = ({
   const dispatch = useAppDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   //const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
+  //reverted
   const [currentItem, setCurrentItem] = useState<CategoryData>({
     id: "",
     name: "",
