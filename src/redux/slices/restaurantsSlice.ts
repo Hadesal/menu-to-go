@@ -7,6 +7,7 @@ import {
   removeRestaurant,
 } from "../thunks/restaurantThunks";
 import {
+  addCategoriesToRestaurant,
   addCategoryToRestaurant,
   editCategoryInRestaurant,
   removeCategoryFromRestaurant,
@@ -104,6 +105,9 @@ const restaurantSlice = createSlice({
       state.categoryLoading = true;
     });
     builder.addCase(removeCategoryFromRestaurant.pending, (state) => {
+      state.categoryLoading = true;
+    });
+    builder.addCase(addCategoriesToRestaurant.pending, (state) => {
       state.categoryLoading = true;
     });
 
@@ -210,6 +214,41 @@ const restaurantSlice = createSlice({
       }
     );
     builder.addCase(
+      addCategoriesToRestaurant.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          restaurantId: string;
+          categories: CategoryData[];
+        }>
+      ) => {
+        const restaurant = state.restaurantList.find(
+          (r) => r.id === action.payload.restaurantId
+        );
+
+        if (restaurant) {
+          restaurant.categories = [
+            ...restaurant.categories,
+            ...action.payload.categories,
+          ];
+
+          if (state.selectedRestaurant?.id === action.payload.restaurantId) {
+            state.selectedRestaurant = {
+              ...state.selectedRestaurant,
+              categories: [
+                ...state.selectedRestaurant.categories,
+                ...action.payload.categories,
+              ],
+            };
+          }
+        }
+
+        state.successMessage = "Categories added successfully!";
+        state.categoryLoading = false;
+      }
+    );
+
+    builder.addCase(
       editCategoryInRestaurant.fulfilled,
       (
         state,
@@ -287,6 +326,14 @@ const restaurantSlice = createSlice({
         state.categoryLoading = false;
       }
     );
+
+    // Rejected state for adding multiple categories
+    builder.addCase(addCategoriesToRestaurant.rejected, (state, action) => {
+      state.categoryLoading = false;
+      state.categoryError =
+        (action.payload as string) || "Failed to add categories!";
+    });
+
     // Fulfilled states for product-related thunks
     builder.addCase(
       fetchProductsByCategory.fulfilled,

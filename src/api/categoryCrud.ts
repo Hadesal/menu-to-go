@@ -28,6 +28,22 @@ export const createCategory = async (
   }
 };
 
+// Create multiple categories (with token)
+export const createMultipleCategories = async (
+  restaurantId: string,
+  categoryList: CategoryData[]
+) => {
+  try {
+    const response = await privateApiService.post(
+      `/categories/${restaurantId}/list`, // Matches your backend endpoint
+      categoryList
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 // Update a specific category by restaurant ID and category ID (with token)
 export const updateCategory = async (
   restaurantId: string,

@@ -2,7 +2,6 @@ import { TabType } from "@constants/types";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { RestaurantData } from "@dataTypes/RestaurantObject";
-import { RestaurantAllData } from "@dataTypes/ResturantAllData";
 import { UserDataType } from "@dataTypes/UserDataTypes";
 
 // RestaurantState interface
@@ -11,7 +10,6 @@ export interface RestaurantState {
   selectedRestaurant: RestaurantData | null;
   selectedCategory: CategoryData | null;
   selectedProduct: ProductData | null;
-  restaurantLoading: boolean;
   categoryLoading: boolean;
   productLoading: boolean;
   restaurantLoading: boolean;
@@ -29,7 +27,7 @@ export interface ProductState {
   successMessage: string | null;
 }
 export interface MenuState {
-  restaurantData: RestaurantAllData;
+  restaurantData: RestaurantData;
   selectedProduct: ProductData;
   selectedCategory: CategoryData;
   selectedCategoryType: string;
@@ -38,6 +36,7 @@ export interface MenuState {
 }
 export interface MainState {
   activeTab: TabType;
+  errorMessage: string;
 }
 export interface CategoryState {
   selectedCategory: CategoryData | null;

@@ -1,3 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAppSelector, useAppDispatch } from "@redux/reduxHooks";
+import { setActiveTab, setErrorMessage } from "@slices/mainViewSlice";
+import {
+  clearSuccessMessage,
+  clearRestaurantError,
+  setSelectedRestaurant,
+} from "@slices/restaurantsSlice";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   Alert,
@@ -11,73 +20,49 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useCategoryPageService } from "./categoryPageService";
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
-import BoxComponent from "@components/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "@components/BoxComponent/categoryBoxComponent";
-import { CategoryData } from "@dataTypes/CategoryDataTypes";
-import {
-  clearSuccessMessage,
-  setSelectedRestaurant,
-  clearRestaurantError,
-  setSelectedCategory,
-} from "@slices/restaurantsSlice";
-import {
-  addProductToCategory as addProduct,
-  updateProductInCategory as editProduct,
-  removeProductFromCategory as deleteProduct,
-} from "@redux/thunks/productThunks";
-import {
-  addCategoryToRestaurant as addCategory,
-  removeCategoryFromRestaurant as deleteCategory,
-  editCategoryInRestaurant as updateCategory,
-} from "@redux/thunks/categoryThunks";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import BoxComponent from "@components/BoxComponent/BoxComponent";
 import Styles from "./CategorySection.styles";
+import { useTranslation } from "react-i18next";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 
 export default function CategoryPage() {
+  const { t } = useTranslation();
+  const getString = t;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [showToast, setShowToast] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+
   const {
     selectedRestaurant,
     restaurantLoading,
-    // error: restaurantError,
-  } = useAppSelector((state) => state.restaurantsData);
-  const {
     selectedCategory,
     successMessage,
     categoryLoading,
     error: categoryError,
   } = useAppSelector((state) => state.restaurantsData);
-  const { error: productError, productLoading } = useAppSelector(
+
+  const { productLoading, error: productError } = useAppSelector(
     (state) => state.restaurantsData
   );
-  const dispatch = useAppDispatch();
 
-  const [showToast, setShowToast] = useState(false);
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const {
+    handleAddCategory,
+    handleAddCategories,
+    handleEditCategory,
+    handleDeleteCategory,
+    handleAddProduct,
+    handleEditProduct,
+    handleDeleteProduct,
+    handleResetSelection,
+    handleDuplicateProduct,
+  } = useCategoryPageService();
 
-  const { t } = useTranslation();
-  const getString = t;
-
-  useEffect(() => {
-    if (categoryError || productError) {
-      setShowToast(true);
-    }
-  }, [categoryError, productError]);
-
-  useEffect(() => {
-    if (successMessage) {
-      setShowSuccessToast(true);
-    }
-  }, [successMessage, selectedRestaurant]);
-
-  useEffect(() => {
-    setShowSuccessToast(false);
-    setShowToast(false);
-    dispatch(clearSuccessMessage());
-    dispatch(clearRestaurantError());
-  }, []);
+  // Manage toast visibility
   useEffect(() => {
     if (categoryError || productError) {
       setShowToast(true);
@@ -92,100 +77,33 @@ export default function CategoryPage() {
 
   useEffect(() => {
     return () => {
-      // Clear success and error messages on unmount
       dispatch(clearSuccessMessage());
       dispatch(clearRestaurantError());
     };
   }, [dispatch]);
-  const handleAddCategory = (category: CategoryData) => {
-    if (selectedRestaurant?.id) {
-      dispatch(
-        addCategory({
-          restaurantId: selectedRestaurant.id,
-          categoryData: category,
-        })
-      );
-    }
-  };
 
-  const handleEditCategory = (category: CategoryData) => {
-    if (selectedRestaurant?.id && selectedCategory?.id) {
-      dispatch(
-        updateCategory({
-          restaurantId: selectedRestaurant.id,
-          categoryId: selectedCategory.id,
-          updatedCategory: category,
-        })
-      );
-    } else {
-      console.error("No restaurant or category selected");
+  useEffect(() => {
+    if (!selectedRestaurant && !restaurantLoading) {
+      dispatch(setSelectedRestaurant(null));
+      dispatch(setActiveTab("dashboard"));
+      dispatch(setErrorMessage("Restaurant data could not be loaded in time."));
+      navigate("/dashboard");
     }
-  };
+  }, [dispatch, navigate, selectedRestaurant, restaurantLoading]);
 
-  const handleDeleteCategory = async (category: { id: string }) => {
-    if (selectedRestaurant?.id) {
-      const result = await dispatch(
-        deleteCategory({
-          restaurantId: selectedRestaurant.id,
-          categoryId: category.id,
-        })
-      );
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!selectedRestaurant) {
+        dispatch(setActiveTab("dashboard"));
+        dispatch(
+          setErrorMessage("Failed to load restaurant data within 30 seconds.")
+        );
+        navigate("/dashboard");
+      }
+    }, 30000);
 
-      // if (deleteCategory.fulfilled.match(result)) {
-      //   console.log("fullfulid");
-      //   dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
-      // }
-    } else {
-      console.error("No restaurant selected");
-    }
-  };
-
-  const handleAddProduct = (product: ProductData) => {
-    if (selectedCategory?.id) {
-      dispatch(
-        addProduct({
-          categoryId: selectedCategory.id,
-          productData: product,
-        })
-      );
-    } else {
-      console.error("No category selected");
-    }
-  };
-  const handleDuplicateProduct = (product: ProductData) => {
-    dispatch(
-      addProduct({
-        categoryId: selectedCategory!.id as string,
-        productData: product,
-      })
-    );
-  };
-  const handleEditProduct = (product: ProductData) => {
-    if (selectedCategory?.id && product?.id) {
-      dispatch(
-        editProduct({
-          categoryId: selectedCategory.id,
-          productId: product.id,
-          updatedProduct: product,
-        })
-      );
-    } else {
-      console.error("No category or product selected");
-    }
-  };
-
-  const handleDeleteProduct = (product: { id: string }) => {
-    if (selectedCategory?.id) {
-      dispatch(
-        deleteProduct({
-          categoryId: selectedCategory.id,
-          productId: [product.id],
-        })
-      );
-    } else {
-      console.error("No category selected");
-    }
-  };
+    return () => clearTimeout(timeout); // Cleanup the timer
+  }, [dispatch, navigate, selectedRestaurant]);
 
   const handleCloseErrorToast = () => {
     setShowToast(false);
@@ -256,15 +174,10 @@ export default function CategoryPage() {
           <IconButton
             sx={{
               background: "#A4755D30",
-              "&:hover": {
-                background: "#A4755D30",
-              },
+              "&:hover": { background: "#A4755D30" },
             }}
             aria-label="back"
-            onClick={() => {
-              dispatch(setSelectedRestaurant(null));
-              dispatch(setSelectedCategory(null));
-            }}
+            onClick={handleResetSelection}
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
           </IconButton>
@@ -274,21 +187,74 @@ export default function CategoryPage() {
           {getString("categoryPagePreviewMenuText")}
         </Button>
       </Box>
+
       <Divider />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: 10,
-        }}
-      >
+
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 10 }}>
         <Box sx={{ flex: 1 }}>
+          {/* <BoxComponent
+            CardIcon={RestaurantIcon}
+            items={selectedRestaurant?.categories}
+            addFunction={(category) => {
+              if (selectedRestaurant?.id) {
+                handleAddCategory(selectedRestaurant.id, category);
+              } else {
+                console.error("Selected restaurant is not defined");
+              }
+            }}
+            editFunction={(category) => {
+              if (selectedRestaurant?.id && selectedCategory?.id) {
+                handleEditCategory(
+                  selectedRestaurant.id,
+                  selectedCategory.id,
+                  category
+                );
+              } else {
+                console.error("No restaurant or category selected");
+              }
+            }}
+            deleteFunction={(category) => {
+              if (selectedRestaurant?.id) {
+                handleDeleteCategory(selectedRestaurant.id, category.id);
+              } else {
+                console.error("No restaurant selected");
+              }
+            }}
+            styles={Styles}
+            emptyStateTitle={getString("categoryEmptyStateTitle")}
+            emptyStateMessage={getString("categoryEmptyStateInfo")}
+            title={getString("categories")}
+            listView={true}
+            product={false}
+          /> */}
           <CategoryBoxComponent
             CardIcon={RestaurantIcon}
             items={selectedRestaurant?.categories ?? []}
-            addFunction={handleAddCategory}
-            editFunction={handleEditCategory}
-            deleteFunction={handleDeleteCategory}
+            addFunction={(category) => {
+              if (selectedRestaurant?.id) {
+                handleAddCategory(selectedRestaurant.id, category);
+              } else {
+                console.error("Selected restaurant is not defined");
+              }
+            }}
+            editFunction={(category) => {
+              if (selectedRestaurant?.id && selectedCategory?.id) {
+                handleEditCategory(
+                  selectedRestaurant.id,
+                  selectedCategory.id,
+                  category
+                );
+              } else {
+                console.error("No restaurant or category selected");
+              }
+            }}
+            deleteFunction={(category) => {
+              if (selectedRestaurant?.id) {
+                handleDeleteCategory(selectedRestaurant.id, category.id);
+              } else {
+                console.error("No restaurant selected");
+              }
+            }}
             styles={Styles}
             emptyStateTitle={getString("categoryEmptyStateTitle")}
             emptyStateMessage={getString("categoryEmptyStateInfo")}
@@ -300,10 +266,18 @@ export default function CategoryPage() {
           <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedCategory?.products}
-            addFunction={handleAddProduct}
-            editFunction={handleEditProduct}
-            deleteFunction={handleDeleteProduct}
-            duplicateFunction={handleDuplicateProduct}
+            addFunction={(product: ProductData) =>
+              handleAddProduct(selectedCategory!.id!, product)
+            }
+            editFunction={(product: ProductData) =>
+              handleEditProduct(selectedCategory!.id!, product.id!, product)
+            }
+            deleteFunction={(product: { id: string }) =>
+              handleDeleteProduct(selectedCategory!.id!, product.id!)
+            }
+            duplicateFunction={(product: ProductData) =>
+              handleDuplicateProduct(selectedCategory!.id!, product)
+            }
             styles={Styles}
             emptyStateTitle={getString("productEmptyStateTitle")}
             emptyStateMessage={getString("productEmptyStateInfo")}

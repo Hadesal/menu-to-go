@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,11 +30,11 @@ import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 
 interface Props {
   CardIcon: string;
-  items: ProductData[]; // Explicit typing for product items
+  items: any[];
   editFunction: (item: ProductData) => void;
   deleteFunction: (item: ProductData) => void;
   styles: Styles;
-  duplicateFunction?: (item: ProductData) => void; // ProductData for consistency
+  duplicateFunction?: (item: ProductData) => void;
 }
 
 const ItemsListView = ({

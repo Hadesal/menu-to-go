@@ -14,6 +14,7 @@ import InputComponent from "../../InputComponent/InputComponent";
 import ProductDetailsAccordion from "../ProductDetailsAccordion/ProductDetailsAccordion";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   dialogTitle: string;
@@ -23,7 +24,7 @@ interface AddProductDialogProps {
   onConfirmClick: (item: ProductData) => void;
   onCancelClick: () => void;
   initialData?: ProductData;
-  data: object[];
+  data: ProductData[] | CategoryData[];
 }
 
 const AddProductDialog = ({
@@ -304,7 +305,7 @@ const AddProductDialog = ({
       <FileUploadComponent
         image={dialogData.image}
         onImageChange={(image) =>
-          setDialogData({ ...dialogData, image: image })
+          setDialogData({ ...dialogData, image: image || undefined })
         }
         error={imageError}
         setError={setImageError}

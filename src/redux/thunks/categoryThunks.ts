@@ -4,6 +4,7 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  createMultipleCategories,
 } from "@api/categoryCrud";
 import { getErrorMessage } from "@utils/errorHandler";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
@@ -62,6 +63,28 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
     try {
       await deleteCategory(categoryId);
       return { restaurantId, categoryId };
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+// Add a list of categories to a specific restaurant
+export const addCategoriesToRestaurant = createAsyncThunk(
+  "restaurants/addCategories",
+  async (
+    {
+      restaurantId,
+      categoriesData,
+    }: { restaurantId: string; categoriesData: CategoryData[] },
+    { rejectWithValue }
+  ) => {
+    try {
+      // Use createMultipleCategories API to add all categories at once
+      const response = await createMultipleCategories(
+        restaurantId,
+        categoriesData
+      );
+      return { restaurantId, categories: response };
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }

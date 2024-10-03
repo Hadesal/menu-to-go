@@ -5,6 +5,7 @@ import { MainState } from "@redux/slicesInterfaces";
 
 const initialState: MainState = {
   activeTab: "dashboard",
+  errorMessage: "",
 };
 
 export const mainSlice = createSlice({
@@ -17,11 +18,22 @@ export const mainSlice = createSlice({
     resetActiveTab: (state) => {
       state.activeTab = initialState.activeTab;
     },
+    setErrorMessage: (state, action: PayloadAction<string>) => {
+      state.errorMessage = action.payload;
+    },
+    clearErrorMessage: (state) => {
+      state.errorMessage = "";
+    },
   },
 });
 
 export const selectActiveTab = (state: RootState) => state.mainView.activeTab;
 
-export const { setActiveTab, resetActiveTab } = mainSlice.actions;
+export const {
+  setActiveTab,
+  resetActiveTab,
+  setErrorMessage,
+  clearErrorMessage,
+} = mainSlice.actions;
 
 export default mainSlice.reducer;

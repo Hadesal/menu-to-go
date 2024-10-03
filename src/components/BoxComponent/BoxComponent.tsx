@@ -1,38 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import SearchIcon from "@mui/icons-material/Search";
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
+import { Paper } from "@mui/material";
+import { useState, useEffect, ChangeEvent } from "react";
+import { useAppSelector } from "@redux/reduxHooks";
+import { ConfirmDialogSection } from "./ConfirmDialogSection";
+import { ActionHeader } from "./SearchAndAddSection";
+import { ItemsViewSection } from "./ItemsViewSection";
+import { AddDialogsSection } from "./AddDialogsSection";
+import { findNameProperty } from "./boxServices";
+
 import Styles from "@dataTypes/StylesTypes";
-import AddProductDialog from "@components/Dialogs/AddItemDialog/addProductDialog";
-import EmptyState from "@components/EmptyStateComponet/EmptyState";
-import ItemsGridView from "@components/Views/ItemsGridView";
-import ItemsListView from "@components/Views/ItemsListView";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import AddRestaurantDialog from "@components/Dialogs/AddItemDialog/addRestaurantDialog";
-import { removeProductFromCategory as deleteProduct } from "@redux/thunks/productThunks";
-import ConfirmDialog from "@components/Dialogs/LogoutDialog/confirmDialog";
 interface BoxComponentProps {
-  items: RestaurantData[];
+  CardIcon: string;
+  items: any[] | null;
   styles: Styles;
   editFunction: (item: any) => void;
   deleteFunction: (item: any) => void;
   addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
-  CardIcon: string;
   title?: string;
-  listView?: boolean;
+  listView: boolean;
   product: boolean;
-  duplicateFunction?: (item: any, newItemName: string) => void;
+  duplicateFunction?: (item: any) => void;
 }
 
 const BoxComponent = ({
@@ -50,248 +39,73 @@ const BoxComponent = ({
   product,
 }: BoxComponentProps): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [filteredItems, setFilteredItems] = useState(items);
-  const { t } = useTranslation();
-  const getString = t;
-  const dispatch = useAppDispatch();
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+
+  const [filteredItems, setFilteredItems] = useState<any[]>(items || []);
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-
-  // Safe check for selectedCategory, add fallback if it's undefined
   const selectedCategory = useAppSelector(
-    (state) => state.restaurantsData.selectedCategory || null
+    (state) => state.restaurantsData.selectedCategory
   );
-
-  const selectedProductIds = useAppSelector(
-    (state) => state.restaurantsData?.selectedProductsIDs
-  );
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   useEffect(() => {
-    setFilteredItems(items);
+    if (items) setFilteredItems(items);
   }, [items]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const findNameProperty = (obj: any): string | null => {
-    if (obj !== null && typeof obj === "object") {
-      for (const key in obj) {
-        if (key === "name") return obj[key];
-        if (typeof obj[key] === "object") {
-          const result = findNameProperty(obj[key]);
-          if (result) return result;
-        }
-      }
-    }
-    return null;
-  };
+  const handleClose = () => setOpen(false);
+  const handleClickOpen = () => setOpen(true);
 
   const onSearch = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const searchText = event.target.value.toLowerCase();
-    const filtered = items.filter((item) => {
-      const nameValue = findNameProperty(item);
-      return nameValue && nameValue.toLowerCase().includes(searchText);
-    });
-    setFilteredItems(filtered);
+    const filtered =
+      items &&
+      items.filter((item) => {
+        const nameValue = findNameProperty(item);
+        return nameValue && nameValue.toLowerCase().includes(searchText);
+      });
+    setFilteredItems(filtered || []);
   };
 
   return (
     <Paper elevation={3} sx={styles.paper}>
-      <ConfirmDialog
+      <ConfirmDialogSection
         isOpen={isDeleteDialogOpen}
-        onPrimaryActionClick={() => {
-          if (selectedCategory?.id) {
-            dispatch(
-              deleteProduct({
-                categoryId: selectedCategory?.id,
-                productId: selectedProductIds,
-              })
-            );
-          }
-          setIsDeleteDialogOpen(false);
-        }}
-        onSecondaryActionClick={() => {
-          setIsDeleteDialogOpen(false);
-        }}
-        onClose={() => {
-          setIsDeleteDialogOpen(false);
-        }}
-        width="500px"
-        height="300px"
-        showImg={false}
-        secondaryActionText={getString("cancel")}
-        primaryActionText={getString("delete")}
-        title={getString("deleteConfirmText")}
-        subTitle={
-          "Are you sure you want to delete? You can't undo this action."
-        }
+        onClose={() => setIsDeleteDialogOpen(false)}
       />
-      {!title && (
-        <Stack direction="row" spacing={2} alignItems="center" mb={3}>
-          <>
-            <TextField
-              sx={styles.searchField}
-              variant="outlined"
-              placeholder="   Search"
-              color="primary"
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
-              fullWidth
-              onChange={onSearch}
-            />
-            <Button
-              sx={styles.addButton}
-              variant="outlined"
-              color="primary"
-              onClick={handleClickOpen}
-              disabled={product && !selectedCategory?.name} // Safe check on selectedCategory
-            >
-              {getString("add")}
-            </Button>
-          </>
-        </Stack>
-      )}
-      {title && (
-        <Stack direction="column" spacing={2} mb={3}>
-          <>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="h6">{title}</Typography>
 
-              <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                {selectedProductIds.length > 0 && (
-                  <>
-                    <Button
-                      sx={{ borderRadius: 10, width: "6vw", height: "5vh" }}
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => {
-                        // Add your copy logic here
-                      }}
-                    >
-                      Copy
-                    </Button>
-                    <Button
-                      sx={{ borderRadius: 10, width: "6vw", height: "5vh" }}
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => {
-                        // Add your move logic here
-                      }}
-                    >
-                      Move
-                    </Button>
-                    <Button
-                      sx={{
-                        borderRadius: 10,
-                        width: "6vw",
-                        height: "5vh",
-                        background: "red",
-                        color: "white",
-                      }}
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => {
-                        setIsDeleteDialogOpen(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </>
-                )}
-                <Button
-                  sx={{
-                    background: "var(--primary-color)",
-                    color: "white",
-                    borderRadius: 10,
-                    width: "6vw",
-                    height: "5vh",
-                    "&:hover": {
-                      backgroundColor: "transparent", // Make background transparent when hovered
-                      color: "var(--primary-color)",
-                    },
-                  }}
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleClickOpen}
-                >
-                  {getString("add")}
-                </Button>
-              </Box>
-            </Box>
-            <TextField
-              sx={styles.searchField}
-              variant="outlined"
-              placeholder="   Search"
-              color="primary"
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
-              fullWidth
-              onChange={onSearch}
-            />
-          </>
-        </Stack>
-      )}
-      {filteredItems?.length > 0 ? (
-        listView ? (
-          <ItemsListView
-            CardIcon={CardIcon}
-            items={filteredItems}
-            editFunction={editFunction}
-            deleteFunction={deleteFunction}
-            duplicateFunction={duplicateFunction}
-            styles={styles}
-          />
-        ) : (
-          <ItemsGridView
-            CardIcon={CardIcon}
-            items={filteredItems}
-            editFunction={editFunction}
-            deleteFunction={deleteFunction}
-            styles={styles}
-          />
-        )
-      ) : (
-        <EmptyState
-          emptyStateTitle={emptyStateTitle}
-          emptyStateMessage={emptyStateMessage}
+      {title && (
+        <ActionHeader
+          onSearch={onSearch}
+          handleClickOpen={handleClickOpen}
+          isProduct={product}
+          selectedCategoryName={selectedCategory?.name}
+          styles={styles}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          title={title}
         />
       )}
-      <AddRestaurantDialog
-        title={getString("addRestaurantText")}
-        errorMessage={getString("addRestaurantInfoText")}
-        cancelText={getString("cancel")}
-        confirmText={getString("add")}
-        isOpen={product ? false : open}
-        onCancelClick={handleClose}
-        onConfirmClick={addFunction}
-        data={restaurantList}
+      <ItemsViewSection
+        filteredItems={filteredItems}
+        listView={listView}
+        styles={styles}
+        CardIcon={CardIcon}
+        editFunction={editFunction}
+        deleteFunction={deleteFunction}
+        duplicateFunction={duplicateFunction}
+        emptyStateTitle={emptyStateTitle}
+        emptyStateMessage={emptyStateMessage}
       />
 
-      <AddProductDialog
-        dialogTitle={getString("addCategoryText")}
-        errorMessage={getString("addCategoryInfoText")}
-        cancelText={getString("cancel")}
-        confirmText={getString("add")}
-        isDialogOpen={product ? open : false}
-        onCancelClick={handleClose}
-        onConfirmClick={addFunction}
-        existingProduct
-        data={selectedCategory?.products}
+      <AddDialogsSection
+        open={open}
+        handleClose={handleClose}
+        addFunction={addFunction}
+        restaurantList={restaurantList}
+        selectedCategoryProducts={selectedCategory?.products}
+        product={product}
       />
     </Paper>
   );
