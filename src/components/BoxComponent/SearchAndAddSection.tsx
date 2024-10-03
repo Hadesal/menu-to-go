@@ -35,10 +35,8 @@ export const ActionHeader = ({
   );
   return (
     <>
-      {/* If there's no title */}
       {!title && (
         <Stack direction="row" spacing={2} alignItems="center" mb={3}>
-          {/* Conditionally render search field */}
           {showSearch && (
             <TextField
               sx={styles.searchField}
@@ -64,7 +62,6 @@ export const ActionHeader = ({
         </Stack>
       )}
 
-      {/* If there's a title */}
       {title && (
         <Stack direction="column" spacing={2} mb={3}>
           <Box
@@ -74,10 +71,8 @@ export const ActionHeader = ({
               justifyContent: "space-between",
             }}
           >
-            {/* Display the title */}
             <Typography variant="h6">{title}</Typography>
 
-            {/* Action buttons (Copy, Move, Delete) */}
             <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
               {selectedProductIds.length > 0 && (
                 <>
@@ -127,7 +122,7 @@ export const ActionHeader = ({
                   width: "6vw",
                   height: "5vh",
                   "&:hover": {
-                    backgroundColor: "transparent", // Make background transparent when hovered
+                    backgroundColor: "transparent",
                     color: "var(--primary-color)",
                   },
                 }}
@@ -140,7 +135,6 @@ export const ActionHeader = ({
             </Box>
           </Box>
 
-          {/* Conditionally render search field under the title */}
           {showSearch && (
             <TextField
               sx={styles.searchField}

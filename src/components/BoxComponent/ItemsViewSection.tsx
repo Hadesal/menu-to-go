@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ItemsListView from "@components/Views/ItemsListView";
+import ItemsListView from "@components/Views/ListView/ItemsListView";
 import ItemsGridView from "@components/Views/ItemsGridView";
 import EmptyState from "@components/EmptyStateComponet/EmptyState";
 import { ProductData } from "@dataTypes/ProductDataTypes";
