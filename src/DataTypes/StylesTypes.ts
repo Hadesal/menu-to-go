@@ -1,4 +1,5 @@
 import { SxProps, Theme } from "@mui/system";
+import { CSSProperties } from "react";
 
 interface Styles {
   stack: SxProps<Theme>;
@@ -19,6 +20,22 @@ interface Styles {
   listItemBox: SxProps<Theme>;
   categoryList: SxProps<Theme>;
   categoryPaper: SxProps<Theme>;
+  previewMenu: SxProps<Theme>;
+  productListItem: SxProps<Theme>;
+  productListItemBox: SxProps<Theme>;
+  productImg: CSSProperties;
+  productCheckBox: SxProps<Theme>;
+  productName: SxProps<Theme>;
+  productPrice: SxProps<Theme>;
+  productMoreIcon: SxProps<Theme>;
+  categoryListItem: SxProps<Theme>;
+  categoryListItemBox: SxProps<Theme>;
+  categoryListItemText: SxProps<Theme>;
+  categoryName: SxProps<Theme>;
+  categoryItemsLengthText: SxProps<Theme>;
+  dropDownMenuItemIcon: SxProps<Theme>;
+  selectedCategoryColor?: string ;
+  defaultCategoryColor?: string ;
 }
 
 export default Styles;

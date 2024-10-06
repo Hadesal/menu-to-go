@@ -1,3 +1,4 @@
+
 const Styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
@@ -52,7 +53,6 @@ const Styles = {
     display: "flex",
     justifyContent: "end",
   },
-  iconButton: { color: "var(--primary-color)" },
   container: {
     height: "100%",
     width: "100%",
@@ -78,15 +78,86 @@ const Styles = {
     alignContent: "flex-start",
     paddingTop: "3rem",
     paddingBottom: "3rem",
+    "&:hover": {
+      backgroundColor: "#FFF9F4",
+    },
   },
-  listItemBox: {
-    color: "primary",
-  },
-  categoryList: {
+  /**Product item styles */
+  productListItem: {
     display: "flex",
-    flexDirection: "column",
-    height: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  productListItemBox: {
+    color: "primary",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 1,
+  },
+  productImg: {
+    borderRadius: "10px",
+  },
+  productCheckBox: {
+    borderRadius: 0,
+    padding: 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  },
+  productName: {
+    fontWeight: 500,
+    fontSize: "18px",
+    marginLeft: 1,
+    color: "var(--primary-color)",
+  },
+  productPrice: {
+    fontWeight: 500,
+    fontSize: "18px",
+  },
+  productMoreIcon: {
+    padding: 0.8,
+    "&:hover": {
+      background: "transparent",
+    },
+    marginLeft: 4, // Add any additional styles specific to productMoreIcon
+    color: "var(--primary-color)",
+  },
+  /**Category item styles */
+  categoryListItem: {
+    display: "flex",
+    justifyContent: "space-between",
+    borderTop: "1px solid #BCB8B1",
     width: "100%",
+    cursor: "pointer",
+  },
+  categoryListItemBox: {
+    color: "primary",
+    paddingTop: "8px",
+    paddingBottom: "8px",
+  },
+  categoryListItemText: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  categoryName: { fontWeight: 500, fontSize: "18px" },
+  categoryItemsLengthText: { marginLeft: 1 },
+  dropDownMenuItemIcon: {
+    marginRight: 1,
+  },
+  iconButton: {
+    padding: 0.8,
+    "&:hover": {
+      background: "transparent",
+    },
+  },
+  defaultCategoryColor: {
+    color: "var(--primary-color)",
+  },
+  selectedCategoryColor: {
+    color: "white",
   },
 };
 export default Styles;

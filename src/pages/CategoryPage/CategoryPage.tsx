@@ -67,17 +67,20 @@ export default function CategoryPage() {
   }, [categoryError, productError]);
 
   useEffect(() => {
-    if (successMessage) {
-      setShowSuccessToast(true);
-    }
-  }, [successMessage, selectedRestaurant]);
-
-  useEffect(() => {
     setShowSuccessToast(false);
     setShowToast(false);
     dispatch(clearSuccessMessage());
     dispatch(clearRestaurantError());
   }, []);
+  
+  useEffect(() => {
+    if (successMessage) {
+      setShowSuccessToast(true);
+    }
+  }, [successMessage, selectedRestaurant]);
+
+  
+
   useEffect(() => {
     if (categoryError || productError) {
       setShowToast(true);
@@ -122,19 +125,14 @@ export default function CategoryPage() {
     }
   };
 
-  const handleDeleteCategory = async (category: { id: string }) => {
+  const handleDeleteCategory = (category: { id: string }) => {
     if (selectedRestaurant?.id) {
-      const result = await dispatch(
+      dispatch(
         deleteCategory({
           restaurantId: selectedRestaurant.id,
           categoryId: category.id,
         })
       );
-
-      // if (deleteCategory.fulfilled.match(result)) {
-      //   console.log("fullfulid");
-      //   dispatch(setSelectedCategory(selectedRestaurant.categories[0]));
-      // }
     } else {
       console.error("No restaurant selected");
     }

@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CategoryData } from "../../DataTypes/CategoryDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
+import { useAppSelector } from "../../redux/reduxHooks";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
-import CategoryItemsListView from "../Views/categoryItemsListView";
-import { useAppSelector } from "../../redux/reduxHooks";
+import ItemsListView from "../ItemViews/listView";
 
 interface CategoryBoxComponentProps {
   items: CategoryData[];
@@ -72,13 +72,15 @@ const CategoryBoxComponent = ({
       </Stack>
 
       {items?.length > 0 ? (
-        <CategoryItemsListView
-          CardIcon={CardIcon}
-          items={items}
-          editFunction={editFunction}
-          deleteFunction={deleteFunction}
-          styles={styles}
-        />
+        <>
+          <ItemsListView
+            items={items}
+            editFunction={editFunction}
+            deleteFunction={deleteFunction}
+            styles={styles}
+            isCategory={true}
+          />
+        </>
       ) : (
         <EmptyState
           emptyStateTitle={emptyStateTitle}

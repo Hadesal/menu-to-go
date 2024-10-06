@@ -14,14 +14,18 @@ import { RestaurantData } from "@dataTypes/RestaurantObject";
 import Styles from "@dataTypes/StylesTypes";
 import AddProductDialog from "@components/Dialogs/AddItemDialog/addProductDialog";
 import EmptyState from "@components/EmptyStateComponet/EmptyState";
-import ItemsGridView from "@components/Views/ItemsGridView";
-import ItemsListView from "@components/Views/ItemsListView";
+import GridView from "@components/ItemViews/gridView";
+import ItemsListView from "@components/ItemViews/listView";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import AddRestaurantDialog from "@components/Dialogs/AddItemDialog/addRestaurantDialog";
 import { removeProductFromCategory as deleteProduct } from "@redux/thunks/productThunks";
 import ConfirmDialog from "@components/Dialogs/LogoutDialog/confirmDialog";
+import { ProductData } from "@dataTypes/ProductDataTypes";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+
+export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 interface BoxComponentProps {
-  items: RestaurantData[];
+  items: itemsType;
   styles: Styles;
   editFunction: (item: any) => void;
   deleteFunction: (item: any) => void;
@@ -257,7 +261,7 @@ const BoxComponent = ({
             styles={styles}
           />
         ) : (
-          <ItemsGridView
+          <GridView
             CardIcon={CardIcon}
             items={filteredItems}
             editFunction={editFunction}

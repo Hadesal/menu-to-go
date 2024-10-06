@@ -75,7 +75,7 @@ export const removeRestaurant = createAsyncThunk(
   async (restaurantId: string, { rejectWithValue }) => {
     try {
       const response = await deleteRestaurant(restaurantId);
-      return response;
+      return { response, restaurantId }; // Return both response and restaurantId
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }

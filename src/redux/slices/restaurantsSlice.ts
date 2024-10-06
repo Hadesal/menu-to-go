@@ -67,6 +67,8 @@ const restaurantSlice = createSlice({
     },
     setSelectedRestaurant(state, action: PayloadAction<RestaurantData | null>) {
       state.selectedRestaurant = action.payload;
+      state.successMessage = null;
+      state.error = null;
     },
     updateRestaurantUserUiPreferences: (
       state,
@@ -88,12 +90,18 @@ const restaurantSlice = createSlice({
     });
     builder.addCase(addRestaurant.pending, (state) => {
       state.restaurantLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
     builder.addCase(editRestaurant.pending, (state) => {
       state.restaurantLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
     builder.addCase(removeRestaurant.pending, (state) => {
       state.restaurantLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
 
     // Pending state for category-related thunks
@@ -162,14 +170,18 @@ const restaurantSlice = createSlice({
     );
     builder.addCase(
       removeRestaurant.fulfilled,
-      (state, action: PayloadAction<string>) => {
+      (
+        state,
+        action: PayloadAction<{ response: object; restaurantId: string }>
+      ) => {
+        console.log(action.payload);
         state.restaurantList = state.restaurantList.filter(
-          (r) => r.id !== action.payload
+          (r) => r.id !== action.payload.restaurantId
         );
         state.successMessage = "Restaurant deleted successfully!";
         state.restaurantLoading = false;
 
-        if (state.selectedRestaurant?.id === action.payload) {
+        if (state.selectedRestaurant?.id === action.payload.restaurantId) {
           state.selectedRestaurant =
             state.restaurantList.length > 0 ? state.restaurantList[0] : null;
         }

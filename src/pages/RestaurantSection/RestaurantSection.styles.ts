@@ -23,12 +23,32 @@ const styles = {
         height: "22vh",
       },
   },
-  card: { borderRadius: "20px", padding: 1 },
-  cardContent: { height: "100%" },
-  stackColumn: {
+  card: { borderRadius: "20px", padding: 1, cursor: "pointer" },
+  cardHeader: { padding: "10px 10px 0 0" },
+  cardHeaderActionButton: {
+    padding: 0.8,
+    background: "#A4755D30",
+    "&:hover": {
+      background: "#A4755D30",
+    },
+  },
+  cardContent: { height: "100%", position: "relative", paddingTop: 0 },
+  cardContentBody: {
     display: "flex",
     justifyContent: "space-between",
     height: "100%",
+  },
+  cardContentBodyImg: {
+    display: "block",
+    margin: "0 auto",
+    opacity: 0.5,
+    mixBlendMode: "multiply",
+  },
+  cardContentBodyText: {
+    marginTop: 1,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    width: "90%",
   },
   stackRow: {
     display: "flex",
@@ -59,6 +79,9 @@ const styles = {
   },
   listItemBox: {
     color: "primary",
+  },
+  menuItemIcon: {
+    marginRight: 1,
   },
 };
 export default styles;
