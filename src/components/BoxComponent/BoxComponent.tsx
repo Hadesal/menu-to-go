@@ -179,6 +179,7 @@ const BoxComponent = ({
         isOpen={product ? false : category ? false : open}
         onCancelClick={handleClose}
         onConfirmClick={addFunction}
+        setDialogIsOpen={setOpen}
         data={restaurantList}
       />
 
