@@ -22,6 +22,11 @@ import { removeProductFromCategory as deleteProduct } from "@redux/thunks/produc
 import ConfirmDialog from "@components/Dialogs/LogoutDialog/confirmDialog";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import {
+  isProductData,
+  isCategoryData,
+  isRestaurantData,
+} from "@utils/dataTypeCheck";
 
 export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 interface BoxComponentProps {
@@ -36,7 +41,7 @@ interface BoxComponentProps {
   title?: string;
   listView?: boolean;
   product: boolean;
-  duplicateFunction?: (item: any, newItemName: string) => void;
+  duplicateFunction?: (item: ProductData) => void;
 }
 
 const BoxComponent = ({
@@ -78,10 +83,6 @@ const BoxComponent = ({
     setFilteredItems(items);
   }, [items]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const findNameProperty = (obj: any): string | null => {
     if (obj !== null && typeof obj === "object") {
       for (const key in obj) {
@@ -99,11 +100,23 @@ const BoxComponent = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const searchText = event.target.value.toLowerCase();
+
     const filtered = items.filter((item) => {
       const nameValue = findNameProperty(item);
       return nameValue && nameValue.toLowerCase().includes(searchText);
     });
-    setFilteredItems(filtered);
+
+    if (filtered.length > 0) {
+      if (isProductData(filtered[0])) {
+        setFilteredItems(filtered as ProductData[]);
+      } else if (isCategoryData(filtered[0])) {
+        setFilteredItems(filtered as CategoryData[]);
+      } else if (isRestaurantData(filtered[0])) {
+        setFilteredItems(filtered as RestaurantData[]);
+      }
+    } else {
+      setFilteredItems([]);
+    }
   };
 
   return (
@@ -241,9 +254,7 @@ const BoxComponent = ({
               variant="outlined"
               placeholder="   Search"
               color="primary"
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
+              slotProps={{ input: { startAdornment: <SearchIcon /> } }}
               fullWidth
               onChange={onSearch}
             />
@@ -252,14 +263,32 @@ const BoxComponent = ({
       )}
       {filteredItems?.length > 0 ? (
         listView ? (
-          <ItemsListView
-            CardIcon={CardIcon}
-            items={filteredItems}
-            editFunction={editFunction}
-            deleteFunction={deleteFunction}
-            duplicateFunction={duplicateFunction}
-            styles={styles}
-          />
+          isProductData(filteredItems[0]) ? (
+            <ItemsListView
+              isCategory={false}
+              CardIcon={CardIcon}
+              items={filteredItems as (ProductData | CategoryData)[]}
+              editFunction={editFunction}
+              deleteFunction={deleteFunction}
+              duplicateFunction={duplicateFunction}
+              styles={styles}
+            />
+          ) : isCategoryData(filteredItems[0]) ? (
+            <ItemsListView
+              isCategory={true}
+              CardIcon={CardIcon}
+              items={filteredItems as (ProductData | CategoryData)[]}
+              editFunction={editFunction}
+              deleteFunction={deleteFunction}
+              duplicateFunction={duplicateFunction}
+              styles={styles}
+            />
+          ) : (
+            <EmptyState
+              emptyStateTitle={emptyStateTitle}
+              emptyStateMessage={emptyStateMessage}
+            />
+          )
         ) : (
           <GridView
             CardIcon={CardIcon}
@@ -281,20 +310,20 @@ const BoxComponent = ({
         cancelText={getString("cancel")}
         confirmText={getString("add")}
         isOpen={product ? false : open}
-        onCancelClick={handleClose}
+        onCancelClick={setOpen}
+        setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
         data={restaurantList}
       />
 
       <AddProductDialog
+        isDialogOpen={product ? open : false}
         dialogTitle={getString("addCategoryText")}
-        errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
-        isDialogOpen={product ? open : false}
-        onCancelClick={handleClose}
+        setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
-        existingProduct
+        errorMessage={getString("addCategoryInfoText")}
         data={selectedCategory?.products}
       />
     </Paper>

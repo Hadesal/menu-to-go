@@ -18,6 +18,9 @@ import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
 import { CategoryData } from "../../../DataTypes/CategoryDataTypes";
 import { useTranslation } from "react-i18next";
+import { handleCancel, handleConfirm } from "../helpers/handlers";
+import { categoryDefaultData } from "@constants/constants";
+import { itemsType } from "@utils/dataTypeCheck";
 
 interface AddCategoryDialogProps {
   isDialogOpen: boolean;
@@ -25,7 +28,7 @@ interface AddCategoryDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (item: CategoryData) => void;
+  onConfirmClick: (item: itemsType) => void;
   onCancelClick: () => void;
   initialData?: CategoryData;
   data?: CategoryData[];
@@ -42,16 +45,11 @@ const AddCategoryDialog = ({
   initialData,
   data,
 }: AddCategoryDialogProps) => {
-  const [dialogData, setDialogData] = useState<CategoryData>({
-    name: "",
-    image: null,
-    categoryType: "",
-  });
-
-  const [showError, setShowError] = useState<boolean>(false);
+  const [dialogData, setDialogData] =
+    useState<CategoryData>(categoryDefaultData);
+  const [showNameError, setShowNameError] = useState<boolean>(false);
   const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
-
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const getString = t;
@@ -59,77 +57,43 @@ const AddCategoryDialog = ({
 
   useEffect(() => {
     if (isOpen && initialData) {
-      setDialogData({
-        name: initialData.name,
-        image: initialData.image,
-        categoryType: initialData.categoryType,
-      });
+      setDialogData(initialData);
     }
   }, [isOpen, initialData]);
 
-  const handleConfirm = () => {
-    let hasError = false;
-
-    if (dialogData.name.trim().length === 0) {
-      setShowError(true);
-      hasError = true;
-    }
-
-    if (dialogData.categoryType.length === 0) {
-      setShowCategoryError(true);
-      hasError = true;
-    }
-
-    // Check if the name already exists in the data
-    if (data) {
-      if (initialData?.name !== dialogData.name) {
-        const existingItem = data.find(
-          (item) =>
-            dialogData.name.toLocaleLowerCase() ===
-            item.name.toLocaleLowerCase()
-        );
-        if (existingItem) {
-          setIsNameDuplicate(true); // Set duplicate flag
-          hasError = true;
-        }
-      }
-    }
-
-    if (hasError) {
-      return;
-    }
-
-    if (
-      initialData &&
-      dialogData.name === initialData.name &&
-      dialogData.categoryType === initialData.categoryType &&
-      dialogData.image === initialData.image
-    ) {
-      setIsDataUnchanged(true);
-      return;
-    }
-
-    onConfirmClick({
-      ...dialogData,
-      name: dialogData.name.trim(),
-    });
-    handleCancel();
+  const handleOnConfirm = () => {
+    handleConfirm(
+      dialogData,
+      {
+        setShowNameError,
+        setShowCategoryError,
+        setIsDataUnchanged,
+        setIsNameDuplicate,
+        setImageError,
+      },
+      onConfirmClick,
+      setDialogData,
+      onCancelClick,
+      "category",
+      data,
+      initialData
+    );
   };
 
-  const handleCancel = () => {
-    if (!initialData) {
-      setDialogData({
-        name: "",
-        image: null,
-        categoryType: "",
-      });
-    }
-    setImageError(null);
-    setShowError(false);
-    setShowCategoryError(false);
-    setIsDataUnchanged(false);
-    setIsNameDuplicate(false);
-    onCancelClick();
+  const handleOnCancel = () => {
+    handleCancel(
+      setDialogData,
+      "category",
+      onCancelClick,
+      {
+        setImageError,
+        setShowNameError,
+        setShowCategoryError,
+        setIsDataUnchanged,
+        setIsNameDuplicate,
+      },
+      initialData
+    );
   };
 
   return (
@@ -142,14 +106,14 @@ const AddCategoryDialog = ({
           height: isDataUnchanged ? "39.5rem" : "36.5rem",
         },
       }}
-      onClose={handleCancel}
+      onClose={handleOnCancel}
       open={isOpen}
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
         image={dialogData.image}
         onImageChange={(image) => {
-          setDialogData({ ...dialogData, image: image });
+          setDialogData({ ...dialogData, image });
           setIsDataUnchanged(initialData ? image === initialData.image : false);
         }}
         error={imageError}
@@ -174,7 +138,7 @@ const AddCategoryDialog = ({
               ...dialogData,
               name: e.target.value,
             });
-            setShowError(e.target.value.trim().length === 0);
+            setShowNameError(e.target.value.trim().length === 0);
             setIsNameDuplicate(false);
             setIsDataUnchanged(
               initialData ? e.target.value === initialData.name : false
@@ -183,13 +147,13 @@ const AddCategoryDialog = ({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleConfirm();
+              handleOnConfirm();
             }
           }}
           value={dialogData.name}
-          error={showError || isNameDuplicate}
+          error={showNameError || isNameDuplicate}
           helperText={
-            showError
+            showNameError
               ? errorMessage
               : isNameDuplicate
               ? "A category with the same name already exists"
@@ -246,14 +210,14 @@ const AddCategoryDialog = ({
         <Box sx={Styles.actionBox}>
           <Button
             variant="outlined"
-            onClick={handleCancel}
+            onClick={handleOnCancel}
             sx={Styles.cancelButton}
           >
             {cancelText}
           </Button>
           <Button
             variant="contained"
-            onClick={handleConfirm}
+            onClick={handleOnConfirm}
             sx={Styles.logoutButton}
           >
             {confirmText}

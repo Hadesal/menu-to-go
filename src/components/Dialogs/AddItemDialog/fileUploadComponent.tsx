@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 interface FileUploadComponentProps {
-  image: string | undefined;
+  image: string | null;
   onImageChange: (image: string | null) => void;
   error: string | null;
   setError: (error: string | null) => void;

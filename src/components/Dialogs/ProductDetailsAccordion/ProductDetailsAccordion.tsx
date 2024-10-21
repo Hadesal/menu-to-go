@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import { Box, Button } from "@mui/material";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";

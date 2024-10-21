@@ -210,7 +210,7 @@ const ListView = ({
                 cancelText={getString("cancel")}
                 confirmText={getString("confirm")}
                 isDialogOpen={isEditDialogOpen}
-                onCancelClick={handleEditDialogClose}
+                setDialogIsOpen={handleEditDialogClose}
                 onConfirmClick={(data) =>
                   editFunction({ ...data, id: currentItem.id })
                 }
@@ -226,7 +226,7 @@ const ListView = ({
                 cancelText={getString("cancel")}
                 confirmText={getString("add")}
                 isDialogOpen={isDuplicateProductDialogOpen}
-                onCancelClick={handleOnDuplicateProductDialogCancel}
+                setDialogIsOpen={handleOnDuplicateProductDialogCancel}
                 initialData={
                   currentItem && "details" in currentItem
                     ? currentItem

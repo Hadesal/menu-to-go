@@ -72,14 +72,12 @@ export default function CategoryPage() {
     dispatch(clearSuccessMessage());
     dispatch(clearRestaurantError());
   }, []);
-  
+
   useEffect(() => {
     if (successMessage) {
       setShowSuccessToast(true);
     }
   }, [successMessage, selectedRestaurant]);
-
-  
 
   useEffect(() => {
     if (categoryError || productError) {
@@ -297,7 +295,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedCategory?.products}
+            items={selectedCategory?.products ?? []}
             addFunction={handleAddProduct}
             editFunction={handleEditProduct}
             deleteFunction={handleDeleteProduct}
