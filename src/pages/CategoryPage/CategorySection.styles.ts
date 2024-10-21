@@ -1,4 +1,3 @@
-
 const Styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
@@ -153,11 +152,7 @@ const Styles = {
       background: "transparent",
     },
   },
-  defaultCategoryColor: {
-    color: "var(--primary-color)",
-  },
-  selectedCategoryColor: {
-    color: "white",
-  },
+  defaultCategoryColor: "var(--primary-color)",
+  selectedCategoryColor: "white",
 };
 export default Styles;

@@ -5,25 +5,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import BoxComponent from "../../components/BoxComponent/BoxComponent";
+import BoxComponent from "@components/BoxComponent/BoxComponent";
 import styles from "./RestaurantSection.styles";
 import { useEffect, useState } from "react";
-import RestaurantIcon from "../../assets/restaurant-icon.jpg";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
+import RestaurantIcon from "@assets/restaurant-icon.jpg";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import {
   clearRestaurantError,
   clearSuccessMessage,
   setSelectedRestaurant,
-} from "../../redux/slices/restaurantsSlice.ts";
+} from "@slices/restaurantsSlice.ts";
 import {
   addRestaurant,
   editRestaurant,
   removeRestaurant,
 } from "@redux/thunks/restaurantThunks.ts";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks.ts";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { useTranslation } from "react-i18next";
 import CategoryPage from "../CategoryPage/CategoryPage";
-import ToastNotification from "../../components/ToastNotification/ToastNotification.tsx";
+import ToastNotification from "@components/ToastNotification/ToastNotification.tsx";
 
 interface RestaurantSectionProps {
   label: string;
@@ -135,6 +135,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         styles={styles}
         emptyStateTitle={getString("noRestaurantsfoundTitle")}
         emptyStateMessage={getString("noRestaurantsfoundMessage")}
+        product={false}
       />
     </Stack>
   );

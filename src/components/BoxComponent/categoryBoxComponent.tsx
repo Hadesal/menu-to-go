@@ -8,14 +8,14 @@ import { useAppSelector } from "../../redux/reduxHooks";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import ItemsListView from "../ItemViews/listView";
-import { ProductData } from "@dataTypes/ProductDataTypes";
+import { itemsType } from "@utils/dataTypeCheck";
 
 interface CategoryBoxComponentProps {
   items: CategoryData[];
   styles: Styles;
-  editFunction: (item: CategoryData | ProductData) => void;
-  deleteFunction: (item: any) => void;
-  addFunction: (item: CategoryData) => void;
+  editFunction: (item: itemsType) => void;
+  deleteFunction: (id: string) => void;
+  addFunction: (item: itemsType) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
   CardIcon: string;
@@ -80,6 +80,7 @@ const CategoryBoxComponent = ({
             deleteFunction={deleteFunction}
             styles={styles}
             isCategory={true}
+            CardIcon={""}
           />
         </>
       ) : (

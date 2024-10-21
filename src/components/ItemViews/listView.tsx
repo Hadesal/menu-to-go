@@ -15,12 +15,13 @@ import ListViewProductItem from "./ListViewItem/ProductListItem";
 import CategoryListItemItem from "./ListViewItem/CategoryListItem";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import AddCategoryDialog from "@components/Dialogs/AddItemDialog/addCategoryDialog";
+import { itemsType } from "@utils/dataTypeCheck";
 
 interface ListViewProps {
   CardIcon: string;
   items: (ProductData | CategoryData)[];
-  editFunction: (item: ProductData | CategoryData) => void;
-  deleteFunction: (item: ProductData | CategoryData) => void;
+  editFunction: (item: itemsType) => void;
+  deleteFunction: (id: string) => void;
   styles: Styles;
   duplicateFunction?: (item: ProductData) => void;
   isCategory: boolean;
@@ -211,9 +212,7 @@ const ListView = ({
                 confirmText={getString("confirm")}
                 isDialogOpen={isEditDialogOpen}
                 setDialogIsOpen={handleEditDialogClose}
-                onConfirmClick={(data) =>
-                  editFunction({ ...data, id: currentItem.id })
-                }
+                onConfirmClick={editFunction}
                 initialData={
                   currentItem && "details" in currentItem
                     ? currentItem
@@ -234,7 +233,7 @@ const ListView = ({
                 }
                 onConfirmClick={(item) => {
                   if (item && duplicateFunction) {
-                    duplicateFunction(item);
+                    duplicateFunction(item as ProductData);
                   }
                 }}
                 errorMessage={getString("duplicateProductError")}
@@ -267,7 +266,7 @@ const ListView = ({
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
-              deleteFunction(currentItem);
+              deleteFunction(currentItem.id ? currentItem.id : "");
               setIsDeleteDialogOpen(false);
             }}
             onSecondaryActionClick={handleDeleteDialogClose}

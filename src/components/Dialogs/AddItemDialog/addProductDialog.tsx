@@ -136,7 +136,7 @@ const AddProductDialog = ({
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
-        image={dialogData.image}
+        image={dialogData.image!}
         onImageChange={(image) =>
           setDialogData({ ...dialogData, image: image ? image : "" })
         }
