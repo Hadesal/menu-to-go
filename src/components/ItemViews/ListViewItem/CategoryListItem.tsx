@@ -93,8 +93,8 @@ const CategoryListItemItem = ({
                 variant="body1"
                 color={
                   selectedCategory?.id === item.id
-                    ? styles.selectedCategoryColor
-                    : styles.defaultCategoryColor
+                    ? "white"
+                    : "var(--primary-color)"
                 }
               >
                 {item.name}
