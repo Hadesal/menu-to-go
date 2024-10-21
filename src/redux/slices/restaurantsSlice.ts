@@ -121,12 +121,18 @@ const restaurantSlice = createSlice({
     });
     builder.addCase(addProductToCategory.pending, (state) => {
       state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
     builder.addCase(updateProductInCategory.pending, (state) => {
       state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
     builder.addCase(removeProductFromCategory.pending, (state) => {
       state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
 
     // Fulfilled states for restaurant-related thunks
@@ -216,6 +222,9 @@ const restaurantSlice = createSlice({
           }
         }
 
+        if (state.selectedProductsIDs.length > 0) {
+          state.selectedProductsIDs = [];
+        }
         state.successMessage = "Category added successfully!";
         state.categoryLoading = false;
         state.selectedCategory = action.payload.category;
@@ -456,7 +465,9 @@ const restaurantSlice = createSlice({
             );
         }
 
-        state.selectedProductsIDs = [];
+        state.selectedProductsIDs = state.selectedProductsIDs.filter(
+          (id) => !action.payload.productId.includes(id as string)
+        );
         state.successMessage = "Product removed successfully!";
         state.productLoading = false;
       }

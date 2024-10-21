@@ -18,14 +18,14 @@ import {
   setSelectedCategory,
   setSelectedRestaurant,
 } from "@slices/restaurantsSlice";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useItemDialogHandlers } from "src/hooks/useItemDialogHandlers";
+import useMenu from "src/hooks/useMenu";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
 import DropDownMenuComponent from "../DropDownMenu/DropDownMenuComponent";
-
 export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 
 interface GridViewProps {
@@ -43,50 +43,21 @@ const GridView = ({
   editFunction,
   styles,
 }: GridViewProps) => {
-  const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
-    new Array(items.length).fill(null)
-  );
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<RestaurantData | undefined>(
-    undefined
-  );
   const { t } = useTranslation();
   const getString = t;
   const dispatch = useAppDispatch();
+  const { anchorEls, handleMenuClick, handleMenuClose } = useMenu(items.length);
 
-  const handleEditDialogClose = () => {
-    setIsUpdateDialogOpen(false);
-  };
-  const handleDeleteDialogClose = () => {
-    setIsDeleteDialogOpen(false);
-  };
-
-  const handleMenuClick = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number
-  ) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = event.currentTarget;
-    setAnchorEls(newAnchorEls);
-  };
-
-  const handleMenuClose = (index: number) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = null;
-    setAnchorEls(newAnchorEls);
-  };
-
-  const handleEditClick = (item: RestaurantData) => {
-    setCurrentItem(item);
-    setIsUpdateDialogOpen(true);
-  };
-
-  const handleDeleteClick = (item: RestaurantData) => {
-    setCurrentItem(item);
-    setIsDeleteDialogOpen(true);
-  };
+  const {
+    currentItem,
+    isDeleteDialogOpen,
+    isEditDialogOpen,
+    handleEditClick,
+    handleDeleteClick,
+    handleDeleteDialogClose,
+    handleEditDialogClose,
+  } = useItemDialogHandlers();
 
   const generateMenuItems = (item: RestaurantData) => [
     {
@@ -167,7 +138,7 @@ const GridView = ({
         errorMessage={getString("restaurantError")}
         cancelText={getString("cancel")}
         confirmText={getString("update")}
-        isOpen={isUpdateDialogOpen}
+        isOpen={isEditDialogOpen}
         onCancelClick={handleEditDialogClose}
         onConfirmClick={(newRestaurantName) => {
           const newRestaurant = {
@@ -176,14 +147,14 @@ const GridView = ({
           };
           editFunction(newRestaurant);
         }}
-        initialData={currentItem}
+        initialData={currentItem as RestaurantData}
         data={restaurantList}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {
           deleteFunction(currentItem!);
-          setIsDeleteDialogOpen(false);
+          handleDeleteDialogClose();
         }}
         onSecondaryActionClick={handleDeleteDialogClose}
         onClose={handleDeleteDialogClose}

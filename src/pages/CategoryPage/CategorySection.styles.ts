@@ -3,7 +3,6 @@ const Styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
   paper: { padding: 3, borderRadius: "20px" },
-  categoryPaper: { borderRadius: "20px" },
   searchField: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {

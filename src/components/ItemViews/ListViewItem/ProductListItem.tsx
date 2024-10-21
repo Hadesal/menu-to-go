@@ -24,7 +24,7 @@ interface ProductListItemProps {
   checked: boolean;
   onCheckChange: (
     event: React.ChangeEvent<HTMLInputElement>,
-    item: ProductData
+    itemId: string
   ) => void;
   onMenuClick: (event: React.MouseEvent<HTMLElement>, index: number) => void;
   onMenuClose: (index: number) => void;
@@ -51,7 +51,7 @@ const ListViewProductItem = ({
   const { t } = useTranslation();
   const getString = t;
 
-  const generateMenuItems = () => [
+  const menuItems = () => [
     {
       text: getString("duplicate"),
       icon: (
@@ -90,7 +90,7 @@ const ListViewProductItem = ({
         <Box sx={styles.productListItemBox}>
           <Checkbox
             checked={checked}
-            onChange={(e) => onCheckChange(e, item)}
+            onChange={(e) => item.id && onCheckChange(e, item.id)}
             inputProps={{ "aria-label": "controlled" }}
             sx={styles.productCheckBox}
           />
@@ -130,7 +130,7 @@ const ListViewProductItem = ({
             <MoreVertIcon fontSize="medium" />
           </IconButton>
           <DropDownMenuComponent
-            menuItems={generateMenuItems()}
+            menuItems={menuItems()}
             open={Boolean(anchorEl)}
             onClose={() => onMenuClose(index)}
             anchorEl={anchorEl}

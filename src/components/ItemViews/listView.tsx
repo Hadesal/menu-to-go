@@ -15,7 +15,8 @@ import ListViewProductItem from "./ListViewItem/ProductListItem";
 import CategoryListItemItem from "./ListViewItem/CategoryListItem";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import AddCategoryDialog from "@components/Dialogs/AddItemDialog/addCategoryDialog";
-
+import useCheckBoxHandler from "../../hooks/useCheckBoxHandler";
+import useMenu from "src/hooks/useMenu";
 interface ListViewProps {
   CardIcon: string;
   items: (ProductData | CategoryData)[];
@@ -34,100 +35,37 @@ const ListView = ({
   styles,
   isCategory,
 }: ListViewProps) => {
-  const [anchorEls, setAnchorEls] = useState<(null | HTMLElement)[]>(
-    new Array(items.length).fill(null)
-  );
   const [open, setOpen] = useState(false);
-
   const { t } = useTranslation();
   const getString = t;
   const [isDuplicateProductDialogOpen, setIsDuplicateProductDialogOpen] =
     useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<
     ProductData | CategoryData | null
-  >(null); // Make sure currentItem can be null initially
+  >(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const dispatch = useAppDispatch();
-  const selectedProductIds = useAppSelector(
-    (state) => state.restaurantsData?.selectedProductsIDs
-  );
   const { selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
-  // Change the state to an object to manage multiple checkboxes
-  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
-    items.reduce((acc, item) => {
-      acc[item.id as string] = false;
-      return acc;
-    }, {} as Record<string, boolean>)
-  );
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    item: ProductData
-  ) => {
-    const newCheckedItems = {
-      ...checkedItems,
-      [item.id as string]: event.target.checked,
-    };
 
-    console.log(newCheckedItems);
+  const { checkedItems, handleCheckBoxChange, resetCheckedItems } =
+    useCheckBoxHandler(items as ProductData[]);
 
-    setCheckedItems(newCheckedItems);
-
-    // Ensure the item ID is defined and valid
-    if (!item.id) return;
-
-    // Prepare the updated selected product IDs based on the checkbox state
-    const updatedSelectedProductIds = event.target.checked
-      ? [...selectedProductIds, item.id] // Add the ID if checked
-      : selectedProductIds.filter((id) => id !== item.id); // Remove the ID if unchecked
-
-    dispatch(setSelectedProductsIDs(updatedSelectedProductIds));
-  };
-
-  const handleUncheckAll = () => {
-    setCheckedItems((prevCheckedItems) => {
-      const newCheckedItems = { ...prevCheckedItems };
-
-      // Set each item's checked state to false
-      Object.keys(newCheckedItems).forEach((key) => {
-        newCheckedItems[key] = false;
-      });
-
-      console.log(newCheckedItems);
-
-      return newCheckedItems;
-    });
-  };
-
-  const handleMenuClick = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number
-  ) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = event.currentTarget;
-    setAnchorEls(newAnchorEls);
-
-    handleUncheckAll();
-  };
-
-  const handleMenuClose = (index: number) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = null;
-    setAnchorEls(newAnchorEls);
-  };
+  const { anchorEls, handleMenuClick, handleMenuClose } = useMenu(items.length);
 
   const handleDuplicateClick = (item: ProductData) => {
     setCurrentItem(item);
     setIsDuplicateProductDialogOpen(true);
   };
+
   const handleEditClick = (item: ProductData | CategoryData) => {
-    console.log(item);
     setCurrentItem(item);
     isCategory ? setOpen(true) : setIsEditDialogOpen(true);
   };
+
   const handleDeleteClick = (item: ProductData | CategoryData) => {
     setCurrentItem(item);
     setIsDeleteDialogOpen(true);
@@ -146,18 +84,27 @@ const ListView = ({
   };
 
   const handleCategoryClick = (item: CategoryData) => {
+    dispatch(setSelectedProductsIDs([]));
     dispatch(setSelectedCategory(item));
   };
 
   useEffect(() => {
-    setCheckedItems((prevCheckedItems) => {
-      const newCheckedItems = { ...prevCheckedItems };
-      for (let i = 0; i < selectedProductIds.length; i++) {
-        newCheckedItems[selectedProductIds[i]] = true;
+    if (!isCategory) {
+      // Get the keys of checkedItems as an array
+      const checkedItemKeys = Object.keys(checkedItems);
+      // Use some() to check if any item matches
+      const foundMatch = items.some((item) =>
+        checkedItemKeys.some((i) => i === item.id)
+      );
+      // Log if a match was found
+      if (foundMatch) {
+        console.log("Match found!");
+        return;
       }
-      return newCheckedItems;
-    });
-  }, [selectedProductIds]);
+      // Reset checkedItems for the current items
+      resetCheckedItems();
+    }
+  }, [items, isCategory]);
 
   return (
     <Container sx={styles.container}>
@@ -187,8 +134,8 @@ const ListView = ({
               key={item.id}
               item={item as ProductData}
               index={index}
-              checked={checkedItems[item?.id || ""]}
-              onCheckChange={handleChange}
+              checked={checkedItems[item?.id || ""] || false}
+              onCheckChange={handleCheckBoxChange}
               onMenuClick={handleMenuClick}
               onMenuClose={handleMenuClose}
               anchorEl={anchorEls[index]}

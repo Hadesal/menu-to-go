@@ -42,7 +42,7 @@ const CategoryListItemItem = ({
   const { t } = useTranslation();
   const getString = t;
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
-  const generateMenuItems = () => [
+  const menuItems = () => [
     {
       text: getString("edit"),
       icon: <EditIcon fontSize="small" sx={styles.dropDownMenuItemIcon} />,
@@ -126,7 +126,7 @@ const CategoryListItemItem = ({
         />
       </IconButton>
       <DropDownMenuComponent
-        menuItems={generateMenuItems()}
+        menuItems={menuItems()}
         open={Boolean(anchorEl)}
         onClose={() => onMenuClose(index)}
         anchorEl={anchorEl}

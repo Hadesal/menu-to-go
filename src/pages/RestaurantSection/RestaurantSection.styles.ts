@@ -14,7 +14,7 @@ const styles = {
       color: "#BCB8B1",
     },
   },
-  addButton: { borderRadius: 10, width: "8vw", height: "5vh" },
+  addButton: { borderRadius: 5, minWidth: "8vw" , padding:"1rem" },
   gridPaper: {
     borderRadius: "20px",
     //width: "14vw",

@@ -22,6 +22,7 @@ import {
   setSelectedRestaurant,
   clearRestaurantError,
   setSelectedCategory,
+  setSelectedProductsIDs,
 } from "@slices/restaurantsSlice";
 import {
   addProductToCategory as addProduct,
@@ -72,14 +73,12 @@ export default function CategoryPage() {
     dispatch(clearSuccessMessage());
     dispatch(clearRestaurantError());
   }, []);
-  
+
   useEffect(() => {
     if (successMessage) {
       setShowSuccessToast(true);
     }
   }, [successMessage, selectedRestaurant]);
-
-  
 
   useEffect(() => {
     if (categoryError || productError) {
@@ -262,6 +261,7 @@ export default function CategoryPage() {
             onClick={() => {
               dispatch(setSelectedRestaurant(null));
               dispatch(setSelectedCategory(null));
+              dispatch(setSelectedProductsIDs([]));
             }}
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
@@ -281,7 +281,7 @@ export default function CategoryPage() {
         }}
       >
         <Box sx={{ flex: 1 }}>
-          <CategoryBoxComponent
+          <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedRestaurant?.categories ?? []}
             addFunction={handleAddCategory}
@@ -291,6 +291,8 @@ export default function CategoryPage() {
             emptyStateTitle={getString("categoryEmptyStateTitle")}
             emptyStateMessage={getString("categoryEmptyStateInfo")}
             title={getString("categories")}
+            listView={true}
+            category={true}
           />
         </Box>
 
