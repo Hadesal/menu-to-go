@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
   Button,
@@ -7,23 +8,35 @@ import {
   InputLabel,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ProductData } from "../../../DataTypes/ProductDataTypes";
+import {
+  ExtrasData,
+  IngredientData,
+  ProductData,
+} from "@dataTypes/ProductDataTypes";
 import InputComponent from "../../InputComponent/InputComponent";
 import ProductDetailsAccordion from "../ProductDetailsAccordion/ProductDetailsAccordion";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
+import { handleCancel, handleConfirm } from "../helpers/handlers";
+import { itemsType } from "@utils/dataTypeCheck";
+import { productDefaultData } from "@constants/constants";
+import {
+  handleExtrasChange,
+  handleIngredientsChange,
+  handleVariantsChange,
+} from "../helpers/dialogDataHandlers";
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   dialogTitle: string;
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (item: ProductData) => void;
-  onCancelClick: () => void;
+  onConfirmClick: (item: itemsType) => void;
+  setDialogIsOpen: Dispatch<SetStateAction<boolean>>;
   initialData?: ProductData;
-  data: object[];
+  data: ProductData[] | undefined;
 }
 
 const AddProductDialog = ({
@@ -32,27 +45,12 @@ const AddProductDialog = ({
   cancelText,
   confirmText,
   onConfirmClick,
-  onCancelClick,
+  setDialogIsOpen,
   errorMessage,
   initialData,
   data,
 }: AddProductDialogProps) => {
-  const [dialogData, setDialogData] = useState<ProductData>({
-    name: "",
-    price: 0,
-    details: {
-      detailsDescription: "",
-      extras: [],
-      ingredients: [],
-      variants: {
-        name: "",
-        variantList: [],
-      },
-    },
-    isAvailable: true,
-    image: undefined,
-    uniqueProductOrderingName: "",
-  });
+  const [dialogData, setDialogData] = useState<ProductData>(productDefaultData);
 
   const [showNameError, setShowNameError] = useState<boolean>(false);
   const [showPriceError, setShowPriceError] = useState<boolean>(false);
@@ -65,7 +63,7 @@ const AddProductDialog = ({
   const getString = t;
 
   const [extrasErrors, setExtrasErrors] = useState<
-    { nameError: boolean; priceError: boolean; index: number }[]
+    { nameError: boolean; priceError?: boolean; index: number }[]
   >([]);
   const [ingredientsErrors, setIngredientsErrors] = useState<
     { nameError: boolean; index: number }[]
@@ -77,214 +75,50 @@ const AddProductDialog = ({
 
   useEffect(() => {
     if (isOpen && initialData) {
-      setDialogData({
-        name: initialData.name,
-        price: initialData.price,
-        details: {
-          detailsDescription: initialData.details.detailsDescription,
-          extras: initialData.details.extras,
-          ingredients: initialData.details.ingredients,
-          variants: initialData.details.variants,
-        },
-        isAvailable: initialData.isAvailable,
-        image: initialData.image,
-        uniqueProductOrderingName: initialData.uniqueProductOrderingName,
-      });
+      setDialogData(initialData);
     }
   }, [initialData, isOpen]);
 
-  const handleConfirm = () => {
-    let hasError = false;
-
-    if (dialogData.name.trim().length === 0) {
-      setShowNameError(true);
-      hasError = true;
-    }
-
-    // Check if the name already exists in the data
-    if (data) {
-      if (initialData?.name !== dialogData.name) {
-        const existingItem = data.find(
-          (item) =>
-            dialogData.name.toLocaleLowerCase() ===
-            item.name.toLocaleLowerCase()
-        );
-        if (existingItem) {
-          setIsNameDuplicate(true); // Set duplicate flag
-          hasError = true;
-        }
-      }
-    }
-
-    if (dialogData.price === 0) {
-      setShowPriceError(true);
-      hasError = true;
-    }
-
-    if (dialogData.details.detailsDescription.trim().length === 0) {
-      setShowDescriptionError(true);
-    }
-
-    dialogData.details.ingredients.forEach((ingredient, index) => {
-      const errorObject = {
-        nameError: false,
-        index: index,
-      };
-
-      if (ingredient.name.length === 0) {
-        errorObject.nameError = true;
-      }
-      if (errorObject.nameError) {
-        hasError = true;
-        setIngredientsErrors((prevState) => [...prevState, errorObject]);
-      }
-    });
-
-    dialogData.details.extras.forEach((extra, index) => {
-      const errorObject = {
-        nameError: false,
-        priceError: false,
-        index: index,
-      };
-
-      if (extra.name.length === 0) {
-        errorObject.nameError = true;
-      }
-
-      if (extra.price <= 0) {
-        errorObject.priceError = true;
-      }
-
-      if (errorObject.nameError || errorObject.priceError) {
-        hasError = true;
-        setExtrasErrors((prevState) => [...prevState, errorObject]);
-      }
-    });
-
-    if (
-      dialogData.details.variants.name.length === 0 &&
-      dialogData.details.variants.variantList.length > 0
-    ) {
-      hasError = true;
-      console.log("Variant name cannot be empty");
-    }
-
-    dialogData.details.variants.variantList.forEach((variant, index) => {
-      const errorObject = {
-        nameError: false,
-        priceError: false,
-        index: index,
-      };
-
-      if (variant.name.length === 0) {
-        errorObject.nameError = true;
-      }
-
-      if (variant.price <= 0) {
-        errorObject.priceError = true;
-      }
-
-      if (errorObject.nameError || errorObject.priceError) {
-        hasError = true;
-        setVariantsErrors((prevState) => [...prevState, errorObject]);
-      }
-    });
-
-    if (hasError) {
-      return;
-    }
-
-    // if (initialData && dialogData.name === initialData.name) {
-    //   setIsDataUnchanged(true);
-    //   return;
-    // }
-
-    onConfirmClick(dialogData);
-    handleCancel();
-  };
-
-  const handleCancel = () => {
-    if (!initialData) {
-      setDialogData({
-        name: "",
-        price: 0,
-        details: {
-          detailsDescription: "",
-          extras: [],
-          ingredients: [],
-          variants: {
-            name: "",
-            variantList: [],
-          },
-        },
-        isAvailable: true,
-        image: undefined,
-        uniqueProductOrderingName: "",
-      });
-    }
-    setImageError(null);
-    setShowNameError(false);
-    setShowPriceError(false);
-    setIsDataUnchanged(false);
-    setShowDescriptionError(false);
-    setIsNameDuplicate(false);
-    setExtrasErrors([]);
-    setIngredientsErrors([]);
-    setVariantsErrors([]);
-    onCancelClick();
-  };
-
-  const handleExtrasChange = (
-    extras: { name: string; price?: number; image?: string | null }[]
-  ) => {
-    setDialogData((prevData) => ({
-      ...prevData,
-      details: {
-        ...prevData.details,
-        extras: extras.map((extra, index) => ({
-          ...extra,
-          id: prevData.details.extras[index]?.id || `extra-${index}`, // Use existing id or generate new
-          price: extra.price ?? 0,
-        })),
+  const handleOnConfirm = () => {
+    handleConfirm(
+      dialogData,
+      {
+        setShowNameError,
+        setShowDescriptionError,
+        setVariantsErrors,
+        setExtrasErrors,
+        setIngredientsErrors,
+        setIsDataUnchanged,
+        setIsNameDuplicate,
+        setShowPriceError,
       },
-    }));
+      onConfirmClick,
+      setDialogData,
+      setDialogIsOpen,
+      "product",
+      data,
+      initialData
+    );
   };
 
-  const handleIngredientsChange = (
-    ingredients: { name: string; price?: number; image?: string | null }[]
-  ) => {
-    setDialogData((prevData) => ({
-      ...prevData,
-      details: {
-        ...prevData.details,
-        ingredients: ingredients.map((ingredient, index) => ({
-          ...ingredient,
-          id: prevData.details.ingredients[index]?.id || `new-${index}`, // Keep existing id or generate a new one
-          image: ingredient.image ?? "",
-        })),
+  const handleOnCancel = () => {
+    handleCancel(
+      setDialogData,
+      "product",
+      setDialogIsOpen,
+      {
+        setImageError,
+        setShowNameError,
+        setShowPriceError,
+        setIsDataUnchanged,
+        setShowDescriptionError,
+        setIsNameDuplicate,
+        setExtrasErrors,
+        setIngredientsErrors,
+        setVariantsErrors,
       },
-    }));
-  };
-  const handleVariantsChange = (variants: {
-    name: string;
-    variants: { name: string; price?: number; image?: string | null }[];
-  }) => {
-    setDialogData((prevData) => ({
-      ...prevData,
-      details: {
-        ...prevData.details,
-        variants: {
-          name: variants.name,
-          variantList: variants.variants.map((variant, index) => ({
-            ...variant,
-            id:
-              prevData.details.variants.variantList[index]?.id ||
-              `variant-${index}`, // Preserve id or generate new one
-            price: variant.price ?? 0,
-          })),
-        },
-      },
-    }));
+      initialData
+    );
   };
 
   return (
@@ -294,17 +128,17 @@ const AddProductDialog = ({
         sx: {
           ...Styles.dialog,
           width: "56.25rem",
-          maxHeight: "90vh", // Limit the height
+          maxHeight: "90vh",
         },
       }}
-      onClose={handleCancel}
+      onClose={handleOnCancel}
       open={isOpen}
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
-        image={dialogData.image}
+        image={dialogData.image!}
         onImageChange={(image) =>
-          setDialogData({ ...dialogData, image: image })
+          setDialogData({ ...dialogData, image: image ? image : "" })
         }
         error={imageError}
         setError={setImageError}
@@ -327,14 +161,11 @@ const AddProductDialog = ({
             }));
             setShowNameError(e.target.value.trim().length === 0);
             setIsNameDuplicate(false);
-            // setIsDataUnchanged(
-            //   initialData ? e.target.value.trim() === initialData.name : false
-            // );
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleConfirm();
+              handleOnConfirm();
             }
           }}
           value={dialogData.name}
@@ -369,16 +200,11 @@ const AddProductDialog = ({
             setShowPriceError(
               e.target.value === "" || parseInt(e.target.value) <= 0
             );
-            // setIsDataUnchanged(
-            //   initialData
-            //     ? parseInt(e.target.value.trim()) === initialData.price
-            //     : false
-            // );
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleConfirm();
+              handleOnConfirm();
             }
           }}
           value={dialogData.price === 0 ? "" : dialogData.price}
@@ -412,13 +238,6 @@ const AddProductDialog = ({
                 detailsDescription: e.target.value,
               },
             }));
-
-            // setIsDataUnchanged(
-            //   initialData
-            //     ? e.target.value.trim() ===
-            //         initialData.details.detailsDescription
-            //     : false
-            // );
           }}
           error={showDescriptionError || isDataUnchanged}
           helperText={
@@ -434,7 +253,11 @@ const AddProductDialog = ({
       <ProductDetailsAccordion
         accordionTitle="Ingredients"
         namePlaceHolder="Ingredient name"
-        onItemsChange={handleIngredientsChange}
+        onItemsChange={(ingredients) => {
+          ingredients.map((val) => {
+            handleIngredientsChange(setDialogData, val as IngredientData);
+          });
+        }}
         errors={ingredientsErrors}
         initialDataList={dialogData.details.ingredients}
         isVariant={false}
@@ -443,7 +266,11 @@ const AddProductDialog = ({
         accordionTitle="Variants"
         showPrice={true}
         namePlaceHolder="Variant name"
-        onVariantsChange={handleVariantsChange}
+        onVariantsChange={(variants) => {
+          variants.variants.map((variant) => {
+            handleVariantsChange(setDialogData, variant);
+          });
+        }}
         errors={variantsErrors}
         isVariant={true}
         initialDataName={dialogData.details.variants?.name}
@@ -453,7 +280,11 @@ const AddProductDialog = ({
         accordionTitle="Extras"
         showPrice={true}
         namePlaceHolder="Extras name"
-        onItemsChange={handleExtrasChange}
+        onItemsChange={(extras) => {
+          extras.map((extra) => {
+            handleExtrasChange(setDialogData, extra as ExtrasData);
+          });
+        }}
         errors={extrasErrors}
         initialDataList={dialogData.details.extras}
         isVariant={false}
@@ -463,14 +294,16 @@ const AddProductDialog = ({
         <Box sx={{ ...Styles.actionBox, padding: "1rem" }}>
           <Button
             variant="outlined"
-            onClick={handleCancel}
+            onClick={() => {
+              handleOnCancel();
+            }}
             sx={Styles.cancelButton}
           >
             {cancelText}
           </Button>
           <Button
             variant="contained"
-            onClick={handleConfirm}
+            onClick={handleOnConfirm}
             sx={Styles.logoutButton}
           >
             {confirmText}

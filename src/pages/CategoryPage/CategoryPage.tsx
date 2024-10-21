@@ -37,6 +37,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import Styles from "./CategorySection.styles";
 import { ProductData } from "@dataTypes/ProductDataTypes";
+import { itemsType } from "@utils/dataTypeCheck";
 
 export default function CategoryPage() {
   const {
@@ -99,7 +100,7 @@ export default function CategoryPage() {
       dispatch(clearRestaurantError());
     };
   }, [dispatch]);
-  const handleAddCategory = (category: CategoryData) => {
+  const handleAddCategory = (category: itemsType) => {
     if (selectedRestaurant?.id) {
       dispatch(
         addCategory({
@@ -109,27 +110,25 @@ export default function CategoryPage() {
       );
     }
   };
-
-  const handleEditCategory = (category: CategoryData) => {
+  const handleEditCategory = (category: itemsType) => {
     if (selectedRestaurant?.id && selectedCategory?.id) {
       dispatch(
         updateCategory({
           restaurantId: selectedRestaurant.id,
           categoryId: selectedCategory.id,
-          updatedCategory: category,
+          updatedCategory: category as CategoryData,
         })
       );
     } else {
       console.error("No restaurant or category selected");
     }
   };
-
-  const handleDeleteCategory = (category: { id: string }) => {
+  const handleDeleteCategory = (id: string) => {
     if (selectedRestaurant?.id) {
       dispatch(
         deleteCategory({
           restaurantId: selectedRestaurant.id,
-          categoryId: category.id,
+          categoryId: id,
         })
       );
     } else {
@@ -171,12 +170,12 @@ export default function CategoryPage() {
     }
   };
 
-  const handleDeleteProduct = (product: { id: string }) => {
+  const handleDeleteProduct = (id: string) => {
     if (selectedCategory?.id) {
       dispatch(
         deleteProduct({
           categoryId: selectedCategory.id,
-          productId: [product.id],
+          productId: [id],
         })
       );
     } else {
@@ -299,7 +298,7 @@ export default function CategoryPage() {
         <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
-            items={selectedCategory?.products}
+            items={selectedCategory?.products ?? []}
             addFunction={handleAddProduct}
             editFunction={handleEditProduct}
             deleteFunction={handleDeleteProduct}

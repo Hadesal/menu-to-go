@@ -6,10 +6,12 @@ import {
   DialogTitle,
   InputLabel,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputComponent from "@components/InputComponent/InputComponent";
 import { Styles } from "./addItemDialog.styles";
-import { addRestaurantData, RestaurantData } from "@dataTypes/RestaurantObject";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
+import { handleConfirm } from "../helpers/handlers";
+import { itemsType } from "@utils/dataTypeCheck";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;
@@ -17,9 +19,10 @@ interface AddAddRestaurantDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (data: addRestaurantData) => void;
-  onCancelClick: () => void;
-  initialData?: { name: string };
+  onConfirmClick: (data: itemsType) => void;
+  onCancelClick: Dispatch<SetStateAction<boolean>>;
+  setDialogIsOpen: Dispatch<SetStateAction<boolean>>;
+  initialData?: RestaurantData;
   data?: RestaurantData[];
 }
 
@@ -30,64 +33,34 @@ const AddRestaurantDialog = ({
   confirmText,
   onConfirmClick,
   onCancelClick,
+  setDialogIsOpen,
   errorMessage,
   initialData,
   data,
 }: AddAddRestaurantDialogProps) => {
-  const [dialogData, setDialogData] = useState<addRestaurantData>({ name: "" });
-
+  const [dialogData, setDialogData] = useState<RestaurantData>({
+    name: "",
+    categories: [],
+    tables: [],
+  });
   const [showError, setShowError] = useState<boolean>(false);
   const [isNameUnchanged, setIsNameUnchanged] = useState<boolean>(false);
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen && initialData) {
-      setDialogData({ name: initialData.name });
+      setDialogData((prev) => ({ ...prev, name: initialData.name }));
     }
   }, [isOpen, initialData]);
 
-  const handleConfirm = () => {
-    if (dialogData.name.trim().length === 0) {
-      setShowError(true);
-      return;
-    }
-
-    if (initialData && dialogData.name === initialData.name) {
-      setIsNameUnchanged(true);
-      return;
-    }
-
-    // Check if the name already exists in the data
-    if (data) {
-      if (initialData?.name !== dialogData.name) {
-        const existingItem = data.find(
-          (item) =>
-            dialogData.name.toLocaleLowerCase() ===
-            item.name.toLocaleLowerCase()
-        );
-        if (existingItem) {
-          setIsNameDuplicate(true);
-        }
-      }
-    }
-
-    onConfirmClick({
-      ...dialogData,
-      name: dialogData.name.trim(),
-    });
-    handleCancel();
-  };
-
   const handleCancel = () => {
     if (!initialData) {
-      setDialogData({
-        name: "",
-      });
+      setDialogData((prev) => ({ ...prev, name: "" }));
     }
     setShowError(false);
     setIsNameUnchanged(false);
     setIsNameDuplicate(false);
-    onCancelClick();
+    onCancelClick(false);
   };
 
   return (
@@ -127,7 +100,18 @@ const AddRestaurantDialog = ({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleConfirm();
+              handleConfirm(
+                dialogData,
+                {
+                  setIsDataUnchanged: setIsNameUnchanged,
+                },
+                onConfirmClick,
+                setDialogData,
+                setDialogIsOpen,
+                "restaurant",
+                data,
+                initialData
+              );
             }
           }}
           value={dialogData.name}
@@ -154,7 +138,20 @@ const AddRestaurantDialog = ({
           </Button>
           <Button
             variant="contained"
-            onClick={handleConfirm}
+            onClick={() => {
+              handleConfirm(
+                dialogData,
+                {
+                  setIsDataUnchanged: setIsNameUnchanged,
+                },
+                onConfirmClick,
+                setDialogData,
+                setDialogIsOpen,
+                "restaurant",
+                data,
+                initialData
+              );
+            }}
             sx={Styles.logoutButton}
           >
             {confirmText}

@@ -11,31 +11,31 @@ export interface ProductData {
       variantList: VariantData[];
     };
   };
-  isAvailable: true;
-  image: string | undefined;
+  isAvailable: boolean;
+  image?: string | undefined;
   uniqueProductOrderingName: string;
 }
 export interface ExtrasData {
-  id: string;
+  id?: string;
   name: string;
   price: number;
 }
 
 export interface IngredientData {
-  id: string;
+  id?: string;
   name: string;
   price?: number;
   image: string | null;
 }
 
 export interface VariantData {
-  id: string;
+  id?: string;
   name: string;
   price: number;
 }
 
 export interface ProductDetailsData {
-  id: string;
+  id?: string;
   detailsDescription: string | null;
   variants: VariantsData;
   ingredients: IngredientData[];
@@ -43,7 +43,7 @@ export interface ProductDetailsData {
 }
 
 export interface VariantsData {
-  id: number;
+  id?: number;
   name: string;
   variantList: VariantData[];
   productDetailsId: number;

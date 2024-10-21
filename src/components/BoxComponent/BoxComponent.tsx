@@ -18,6 +18,11 @@ import { useTranslation } from "react-i18next";
 import HeaderComponent from "./BoxComponentHeader";
 import AddCategoryDialog from "@components/Dialogs/AddItemDialog/addCategoryDialog";
 import CategoryListView from "@components/ItemViews/CategoryListView";
+import {
+  isProductData,
+  isCategoryData,
+  isRestaurantData,
+} from "@utils/dataTypeCheck";
 
 export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 interface BoxComponentProps {
@@ -178,14 +183,13 @@ const BoxComponent = ({
       />
 
       <AddProductDialog
+        isDialogOpen={product ? open : false}
         dialogTitle={getString("addCategoryText")}
-        errorMessage={getString("addCategoryInfoText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
-        isDialogOpen={product ? open : false}
-        onCancelClick={handleClose}
+        setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
-        existingProduct
+        errorMessage={getString("addCategoryInfoText")}
         data={selectedCategory?.products}
       />
 

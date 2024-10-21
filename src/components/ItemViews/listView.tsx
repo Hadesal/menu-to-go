@@ -20,8 +20,8 @@ import useMenu from "src/hooks/useMenu";
 interface ListViewProps {
   CardIcon: string;
   items: (ProductData | CategoryData)[];
-  editFunction: (item: ProductData | CategoryData) => void;
-  deleteFunction: (item: ProductData | CategoryData) => void;
+  editFunction: (item: itemsType) => void;
+  deleteFunction: (id: string) => void;
   styles: Styles;
   duplicateFunction?: (item: ProductData) => void;
   isCategory: boolean;
@@ -157,10 +157,8 @@ const ListView = ({
                 cancelText={getString("cancel")}
                 confirmText={getString("confirm")}
                 isDialogOpen={isEditDialogOpen}
-                onCancelClick={handleEditDialogClose}
-                onConfirmClick={(data) =>
-                  editFunction({ ...data, id: currentItem.id })
-                }
+                setDialogIsOpen={handleEditDialogClose}
+                onConfirmClick={editFunction}
                 initialData={
                   currentItem && "details" in currentItem
                     ? currentItem
@@ -173,7 +171,7 @@ const ListView = ({
                 cancelText={getString("cancel")}
                 confirmText={getString("add")}
                 isDialogOpen={isDuplicateProductDialogOpen}
-                onCancelClick={handleOnDuplicateProductDialogCancel}
+                setDialogIsOpen={handleOnDuplicateProductDialogCancel}
                 initialData={
                   currentItem && "details" in currentItem
                     ? currentItem
@@ -181,7 +179,7 @@ const ListView = ({
                 }
                 onConfirmClick={(item) => {
                   if (item && duplicateFunction) {
-                    duplicateFunction(item);
+                    duplicateFunction(item as ProductData);
                   }
                 }}
                 errorMessage={getString("duplicateProductError")}
@@ -214,7 +212,7 @@ const ListView = ({
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
-              deleteFunction(currentItem);
+              deleteFunction(currentItem.id ? currentItem.id : "");
               setIsDeleteDialogOpen(false);
             }}
             onSecondaryActionClick={handleDeleteDialogClose}

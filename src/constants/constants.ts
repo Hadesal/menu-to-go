@@ -4,6 +4,9 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import QrCodeIcon from "@mui/icons-material/QrCode";
+import { ProductData } from "@dataTypes/ProductDataTypes";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
 // Time constants
 export const INACTIVITY_PERIOD = 60 * 10000; // 10 minutes in milliseconds
@@ -75,4 +78,32 @@ export const Colors = {
   text: "#333333",
   success: "#28a745",
   danger: "#dc3545",
+};
+
+export const restaurantDefaultData: RestaurantData = {
+  name: "",
+  categories: [],
+  tables: [],
+};
+export const productDefaultData: ProductData = {
+  name: "",
+  price: 0,
+  details: {
+    detailsDescription: "",
+    extras: [],
+    ingredients: [],
+    variants: {
+      name: "",
+      variantList: [],
+    },
+  },
+  isAvailable: true,
+  image: undefined,
+  uniqueProductOrderingName: "",
+};
+
+export const categoryDefaultData: CategoryData = {
+  name: "",
+  image: "",
+  categoryType: "",
 };

@@ -8,6 +8,7 @@ import { useAppSelector } from "../../redux/reduxHooks";
 import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
 import EmptyState from "../EmptyStateComponet/EmptyState";
 import ItemsListView from "../ItemViews/listView";
+import { itemsType } from "@utils/dataTypeCheck";
 import CategoryListView from "@components/ItemViews/CategoryListView";
 
 interface CategoryBoxComponentProps {
@@ -78,8 +79,7 @@ const CategoryBoxComponent = ({
             items={items}
             editFunction={editFunction}
             deleteFunction={deleteFunction}
-            styles={styles}
-          />
+            styles={styles}          />
         </>
       ) : (
         <EmptyState
