@@ -69,35 +69,52 @@ const VariantGroup = ({
   };
 
   return (
-    <Box sx={{ marginTop: "2rem" }}>
-      <InputComponent
-        id="groupNameField"
-        type="Name"
-        label=""
-        required
-        textFieldStyle={{
-          width: "100%",
-          background: "white",
-          marginBottom: "1rem",
-        }}
-        value={groupName}
-        InputPropStyle={Styles.inputPropStyle}
-        placeholder={namePlaceHolder}
-        onChange={(e) => setGroupName(e.target.value)}
-      />
-      <AccordionWrapper
-        hasItems={variants.length > 0}
-        expanded={expanded}
-        onChange={(event, isExpanded) => {
-          if (variants.length > 0) setExpanded(isExpanded);
-        }}
-        summaryContent={
+    <AccordionWrapper
+      hasItems={true}
+      expanded={expanded}
+      onChange={(event, isExpanded) => {
+        setExpanded(isExpanded);
+      }}
+      summaryContent={
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "17px", color: "var(--primary-color)" }}
+          >
+            Variants
+          </Typography>
+        </Box>
+      }
+      detailsContent={
+        <Box>
+          <InputComponent
+            id="groupNameField"
+            type="Name"
+            label=""
+            required
+            textFieldStyle={{
+              width: "100%",
+              background: "white",
+              marginBottom: "1rem",
+            }}
+            value={groupName}
+            InputPropStyle={Styles.inputPropStyle}
+            placeholder={namePlaceHolder}
+            onChange={(e) => setGroupName(e.target.value)}
+          />
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "100%",
+              marginBottom: "1rem",
             }}
           >
             <Typography
@@ -116,37 +133,36 @@ const VariantGroup = ({
               }}
               variant="outlined"
               color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAddVariant();
-              }}
+              onClick={handleAddVariant}
             >
               Add
             </Button>
           </Box>
-        }
-        detailsContent={variants.map((variant, index) => {
-          const { nameError, priceError } = getItemError(index);
-          return (
-            <AccordionItem
-              key={index}
-              onDelete={() => handleDeleteVariant(index)}
-              onItemChange={(itemData) => handleVariantChange(index, itemData)}
-              namePlaceHolder={namePlaceHolder}
-              showPrice={showPrice}
-              name={variant.name}
-              price={variant.price}
-              nameError={nameError}
-              priceError={priceError}
-            />
-          );
-        })}
-        summarySx={{ borderRadius: "12px", padding: "0.5rem 1rem" }}
-        detailsSx={{ padding: "0 1rem 1rem 1rem" }}
-        sx={{ borderRadius: "12px", marginTop: "1rem" }}
-        children={""}
-      />
-    </Box>
+          {variants.map((variant, index) => {
+            const { nameError, priceError } = getItemError(index);
+            return (
+              <AccordionItem
+                key={index}
+                onDelete={() => handleDeleteVariant(index)}
+                onItemChange={(itemData) =>
+                  handleVariantChange(index, itemData)
+                }
+                namePlaceHolder={namePlaceHolder}
+                showPrice={showPrice}
+                name={variant.name}
+                price={variant.price}
+                nameError={nameError}
+                priceError={priceError}
+              />
+            );
+          })}
+        </Box>
+      }
+      summarySx={{ borderRadius: "15px", padding: "0.5rem 1.5rem" }}
+      detailsSx={{ padding: "1rem 2rem" }}
+      sx={{ marginTop: "2rem", borderRadius: "15px" }}
+      children={""}
+    />
   );
 };
 
