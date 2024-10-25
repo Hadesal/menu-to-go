@@ -77,6 +77,7 @@
   "changePassword": "Change Password",
   "billingDataPageDescription": "Billing data This data will be used for invoicing",
   "fullName": "Full Name",
+  "category": "Category",
   "categoryPageTitle": "Categories & Products",
   "categoryPagePreviewMenuText": "Preview Menu",
   "addCategoryText": "Add Category",
@@ -119,5 +120,16 @@
   "twitterLink": "Enter Your Twitter Link",
   "facebookLink": "Enter Your Facebook Link",
   "instagramLink": "Enter Your Instagram Link",
-  "chooseEffectedSpaceError": "Please choose space to save"
+  "chooseEffectedSpaceError": "Please choose space to save",
+  "name": "Name",
+  "price": "Price",
+  "nameCannotBeEmptyMessage": "Name cannot be empty",
+  "priceCannotBeEmpty": "Price cannot be empty",
+  "dataUnchangedMessage": "No updates detected. Please modify the category to update.",
+  "categoryWithSameNameMessage": "A category with the same name already exists",
+  "food": "Food",
+  "drinks": "Drinks",
+  "deletionCofirmMessage": "Are you sure you want to delete? You can't undo this action.",
+  "copy": "Copy",
+  "move": "Move"
 }

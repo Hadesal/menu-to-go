@@ -20,7 +20,7 @@ import ProductDetailsAccordion from "../ProductDetailsAccordion/ProductDetailsAc
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
 import { handleCancel, handleConfirm } from "../helpers/handlers";
-import { itemsType } from "@utils/dataTypeCheck";
+import { itemType } from "@utils/dataTypeCheck";
 import { productDefaultData } from "@constants/constants";
 import {
   handleExtrasChange,
@@ -33,7 +33,7 @@ interface AddProductDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (item: itemsType) => void;
+  onConfirmClick: (item: itemType) => void;
   setDialogIsOpen: Dispatch<SetStateAction<boolean>>;
   initialData?: ProductData;
   data: ProductData[] | undefined;
@@ -57,7 +57,7 @@ const AddProductDialog = ({
   const [showDescriptionError, setShowDescriptionError] =
     useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
-
+  const MAXNAMECHARSLENGTH = 40;
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const getString = t;
@@ -145,7 +145,7 @@ const AddProductDialog = ({
       />
       <Box sx={Styles.textFieldWrapper}>
         <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
-          Name
+          {getString("name")}
         </InputLabel>
         <InputComponent
           id="nameField"
@@ -170,6 +170,7 @@ const AddProductDialog = ({
           }}
           value={dialogData.name}
           error={showNameError || isDataUnchanged || isNameDuplicate}
+          MAXCHARSLENGTH={MAXNAMECHARSLENGTH}
           helperText={
             showNameError
               ? errorMessage
@@ -177,13 +178,13 @@ const AddProductDialog = ({
               ? "Data is unchanged"
               : isNameDuplicate
               ? "A product with the same name already exists"
-              : ""
+              : `${dialogData.name.length}/${MAXNAMECHARSLENGTH}`
           }
         />
       </Box>
       <Box sx={Styles.textFieldWrapper}>
         <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
-          Price
+          {getString("price")}
         </InputLabel>
         <InputComponent
           id="priceField"
@@ -220,7 +221,7 @@ const AddProductDialog = ({
       </Box>
       <Box sx={Styles.textFieldWrapper}>
         <InputLabel required={true} sx={Styles.textFieldLabelStyle}>
-          Description
+          {getString("description")}
         </InputLabel>
         <TextField
           id="description"

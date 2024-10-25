@@ -54,7 +54,7 @@ const AddCategoryDialog = ({
   const { t } = useTranslation();
   const getString = t;
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-
+  const MAXCHARSLENGTH = 30;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData(initialData);
@@ -121,7 +121,7 @@ const AddCategoryDialog = ({
       />
       {isDataUnchanged && (
         <Alert sx={{ marginTop: 3 }} severity="error">
-          No updates detected. Please modify the category to update.
+          {getString("dataUnchangedMessage")}
         </Alert>
       )}
       <Box sx={Styles.textFieldWrapper}>
@@ -152,12 +152,13 @@ const AddCategoryDialog = ({
           }}
           value={dialogData.name}
           error={showNameError || isNameDuplicate}
+          MAXCHARSLENGTH={MAXCHARSLENGTH}
           helperText={
             showNameError
               ? errorMessage
               : isNameDuplicate
-              ? "A category with the same name already exists"
-              : ""
+              ? getString("categoryWithSameNameMessage")
+              : `${dialogData.name.length}/${MAXCHARSLENGTH}`
           }
         />
       </Box>
@@ -181,7 +182,7 @@ const AddCategoryDialog = ({
           }}
         >
           <FormControlLabel
-            value="Food"
+            value={getString("food")}
             control={
               <Radio
                 sx={{
@@ -193,7 +194,7 @@ const AddCategoryDialog = ({
             sx={{ width: "fit-content" }}
           />
           <FormControlLabel
-            value="Drinks"
+            value={getString("drinks")}
             control={
               <Radio
                 sx={{

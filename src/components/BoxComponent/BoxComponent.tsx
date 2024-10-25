@@ -18,15 +18,10 @@ import { useTranslation } from "react-i18next";
 import HeaderComponent from "./BoxComponentHeader";
 import AddCategoryDialog from "@components/Dialogs/AddItemDialog/addCategoryDialog";
 import CategoryListView from "@components/ItemViews/CategoryListView";
-import {
-  isProductData,
-  isCategoryData,
-  isRestaurantData,
-} from "@utils/dataTypeCheck";
+import { itemsTypes } from "@utils/dataTypeCheck";
 
-export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 interface BoxComponentProps {
-  items: itemsType;
+  items: itemsTypes;
   styles: Styles;
   editFunction: (item: any) => void;
   deleteFunction: (item: any) => void;
@@ -167,9 +162,7 @@ const BoxComponent = ({
         secondaryActionText={getString("cancel")}
         primaryActionText={getString("delete")}
         title={getString("deleteConfirmText")}
-        subTitle={
-          "Are you sure you want to delete? You can't undo this action."
-        }
+        subTitle={getString("deletionCofirmMessage")}
       />
       <AddRestaurantDialog
         title={getString("addRestaurantText")}

@@ -2,6 +2,7 @@ import Styles from "@dataTypes/StylesTypes";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 interface HeaderComponentProps {
   title?: string;
@@ -32,6 +33,8 @@ const HeaderComponent = ({
   category,
   product,
 }: HeaderComponentProps) => {
+  const { t } = useTranslation();
+  const getString = t;
   return (
     <Stack
       direction={title ? "column-reverse" : "row"}
@@ -46,9 +49,7 @@ const HeaderComponent = ({
           variant="outlined"
           placeholder="   Search"
           color="primary"
-          InputProps={{
-            startAdornment: <SearchIcon />,
-          }}
+          slotProps={{ input: { startAdornment: <SearchIcon /> } }}
           fullWidth
           onChange={onSearch}
         />
@@ -71,7 +72,7 @@ const HeaderComponent = ({
                 color="primary"
                 onClick={onCopyClick}
               >
-                Copy
+                {getString("copy")}
               </Button>
               <Button
                 sx={{ borderRadius: 10, width: "6vw", height: "5vh" }}
@@ -79,7 +80,7 @@ const HeaderComponent = ({
                 color="primary"
                 onClick={onMoveClick}
               >
-                Move
+                {getString("move")}
               </Button>
               <Button
                 sx={{
@@ -93,7 +94,7 @@ const HeaderComponent = ({
                 color="primary"
                 onClick={onDeleteClick}
               >
-                Delete
+                {getString("delete")}
               </Button>
             </>
           )}
@@ -112,7 +113,7 @@ const HeaderComponent = ({
             onClick={onAddClick}
             disabled={addButtonDisabled}
           >
-            Add
+            {getString("add")}
           </Button>
         </Box>
       </Box>

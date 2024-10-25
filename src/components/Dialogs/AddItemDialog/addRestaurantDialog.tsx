@@ -46,7 +46,7 @@ const AddRestaurantDialog = ({
   const [showError, setShowError] = useState<boolean>(false);
   const [isNameUnchanged, setIsNameUnchanged] = useState<boolean>(false);
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-
+  const MAXCHARSLENGTH = 40;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData((prev) => ({ ...prev, name: initialData.name }));
@@ -116,6 +116,7 @@ const AddRestaurantDialog = ({
           }}
           value={dialogData.name}
           error={showError || isNameUnchanged || isNameDuplicate}
+          MAXCHARSLENGTH={MAXCHARSLENGTH}
           helperText={
             showError
               ? errorMessage
@@ -123,7 +124,7 @@ const AddRestaurantDialog = ({
               ? "Name is unchanged"
               : isNameDuplicate
               ? "A restaurant with the same name already exists"
-              : ""
+              : `${dialogData.name.length}/${MAXCHARSLENGTH}`
           }
         />
       </Box>

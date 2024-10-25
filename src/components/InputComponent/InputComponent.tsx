@@ -28,6 +28,7 @@ interface InputComponentProps {
   styleInputProps?: object;
   name?: string;
   disabled?: boolean;
+  MAXCHARSLENGTH?: number;
 }
 
 export default function InputComponent({
@@ -50,6 +51,7 @@ export default function InputComponent({
   styleInputProps,
   name,
   disabled,
+  MAXCHARSLENGTH,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -92,15 +94,18 @@ export default function InputComponent({
         required={required}
         variant={variant}
         disabled={disabled}
-        InputProps={{
-          sx: InputPropStyle,
-          endAdornment:
-            type === "password" ? endPassowrdAdorment : endAdornment,
-          inputProps: { min: 0 },
-          readOnly: readOnly,
-        }}
-        inputProps={{
-          style: styleInputProps,
+        slotProps={{
+          input: {
+            style: styleInputProps,
+            sx: InputPropStyle,
+            endAdornment:
+              type === "password" ? endPassowrdAdorment : endAdornment,
+            inputProps: {
+              min: 0,
+              maxLength: MAXCHARSLENGTH ? MAXCHARSLENGTH : undefined,
+            },
+            readOnly: readOnly,
+          },
         }}
         onKeyDown={onKeyDown}
         onChange={onChange}

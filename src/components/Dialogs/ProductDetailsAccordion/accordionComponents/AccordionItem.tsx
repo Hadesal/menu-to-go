@@ -4,6 +4,7 @@ import InputComponent from "@components/InputComponent/InputComponent";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Box, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface AccordionItemProps {
   onDelete: () => void;
@@ -35,7 +36,9 @@ const AccordionItem = ({
     price: showPrice ? price || 0 : undefined,
     image: null,
   });
-
+  const MAXCHARSLENGTH = 30;
+  const { t } = useTranslation();
+  const getString = t;
   useEffect(() => {
     setItemData((prev) => ({
       ...prev,
@@ -77,7 +80,8 @@ const AccordionItem = ({
           label=""
           required
           error={nameError}
-          helperText={nameError ? "Name cannot be empty" : ""}
+          MAXCHARSLENGTH={MAXCHARSLENGTH}
+          helperText={nameError ? getString("nameCannotBeEmptyMessage") : ""}
           textFieldStyle={{
             width: "100%",
             background: "white",
@@ -100,9 +104,9 @@ const AccordionItem = ({
             }}
             value={itemData.price === 0 ? "" : itemData.price}
             error={priceError}
-            helperText={priceError ? "Price cannot be empty" : ""}
+            helperText={priceError ? getString("priceCannotBeEmpty") : ""}
             InputPropStyle={Styles.inputPropStyle}
-            placeholder="Price"
+            placeholder={getString("price")}
             onChange={handlePriceChange}
           />
         )}

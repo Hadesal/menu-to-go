@@ -5,6 +5,7 @@ import AccordionItem from "./AccordionItem";
 import AccordionWrapper from "./AccordionWrapper";
 import InputComponent from "@components/InputComponent/InputComponent";
 import { Styles } from "@components/Dialogs/AddItemDialog/addItemDialog.styles";
+import { useTranslation } from "react-i18next";
 
 interface VariantGroupProps {
   namePlaceHolder: string;
@@ -30,7 +31,9 @@ const VariantGroup = ({
   const [variants, setVariants] =
     useState<{ name: string; price: number }[]>(initialDataList);
   const [expanded, setExpanded] = useState(false);
-
+  const MAXCHARSLENGTH = 30;
+  const { t } = useTranslation();
+  const getString = t;
   useEffect(() => {
     onVariantsChange({ name: groupName, variants });
   }, [groupName, variants, onVariantsChange]);
@@ -88,7 +91,7 @@ const VariantGroup = ({
             variant="h6"
             sx={{ fontSize: "17px", color: "var(--primary-color)" }}
           >
-            Variants
+            {getString("variants")}
           </Typography>
         </Box>
       }
@@ -108,6 +111,7 @@ const VariantGroup = ({
             InputPropStyle={Styles.inputPropStyle}
             placeholder={namePlaceHolder}
             onChange={(e) => setGroupName(e.target.value)}
+            MAXCHARSLENGTH={MAXCHARSLENGTH}
           />
           <Box
             sx={{
@@ -121,7 +125,7 @@ const VariantGroup = ({
               variant="h6"
               sx={{ fontSize: "17px", color: "var(--primary-color)" }}
             >
-              Variants Option
+              {getString("variantsOption")}
             </Typography>
             <Button
               sx={{
@@ -135,7 +139,7 @@ const VariantGroup = ({
               color="primary"
               onClick={handleAddVariant}
             >
-              Add
+              {getString("add")}
             </Button>
           </Box>
           {variants.map((variant, index) => {

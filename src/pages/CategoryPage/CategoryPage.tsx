@@ -292,6 +292,7 @@ export default function CategoryPage() {
             title={getString("categories")}
             listView={true}
             category={true}
+            product={false}
           />
         </Box>
 
@@ -309,6 +310,7 @@ export default function CategoryPage() {
             title={selectedCategory ? selectedCategory?.name : ""}
             listView={true}
             product={true}
+            category={false}
           />
         </Box>
       </Box>
