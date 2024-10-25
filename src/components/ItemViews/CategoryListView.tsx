@@ -1,23 +1,22 @@
 import { Container, List } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { CategoryData } from "../../DataTypes/CategoryDataTypes";
-import CategoryListItemItem from "./ListViewItem/CategoryListItem";
-import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
-import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
-import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
-import Styles from "../../DataTypes/StylesTypes";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import {
   setSelectedCategory,
   setSelectedProductsIDs,
 } from "@slices/restaurantsSlice";
+import { useTranslation } from "react-i18next";
 import useMenu from "src/hooks/useMenu";
-import { useEffect } from "react";
+import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import Styles from "../../DataTypes/StylesTypes";
+import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
+import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
+import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
+import CategoryListItemItem from "./ListViewItem/CategoryListItem";
 
 interface CategoryListViewProps {
   items: CategoryData[];
   editFunction: (item: CategoryData) => void;
-  deleteFunction: (item: CategoryData) => void;
+  deleteFunction: (itemId: string) => void;
   styles: Styles;
 }
 
@@ -90,7 +89,9 @@ const CategoryListView = ({
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
-              deleteFunction(currentItem as CategoryData);
+              if (currentItem.id) {
+                deleteFunction(currentItem.id);
+              }
               handleDeleteDialogClose();
             }}
             onSecondaryActionClick={handleDeleteDialogClose}
@@ -100,7 +101,7 @@ const CategoryListView = ({
             showImg={false}
             secondaryActionText={getString("cancel")}
             primaryActionText={getString("delete")}
-            title={getString("deleteCategoryConfirm")}
+            title={getString("deleteConfirmText")}
             subTitle={getString("categoryDeleteText", {
               categoryName: currentItem.name,
             })}

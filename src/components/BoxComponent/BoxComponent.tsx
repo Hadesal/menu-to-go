@@ -36,9 +36,9 @@ interface BoxComponentProps {
   CardIcon: string;
   title?: string;
   listView?: boolean;
-  product: boolean;
+  product?: boolean;
+  category?: boolean;
   duplicateFunction?: (item: ProductData) => void;
-  category: boolean;
 }
 
 const BoxComponent = ({
