@@ -83,6 +83,7 @@ const UserDetailsInputComponent = ({
           alt="logo"
         />
         <Typography
+          noWrap
           width={"100%"}
           variant="subtitle2"
           textAlign={"center"}

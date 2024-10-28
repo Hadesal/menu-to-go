@@ -89,6 +89,7 @@ const CategoryListItemItem = ({
                 />
               </IconButton>
               <Typography
+                noWrap
                 sx={styles.categoryName}
                 variant="body1"
                 color={
@@ -99,6 +100,7 @@ const CategoryListItemItem = ({
               >
                 {item.name}
                 <Typography
+                  noWrap
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}
                   sx={styles.categoryItemsLengthText}
                   component="span"

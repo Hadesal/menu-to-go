@@ -112,7 +112,7 @@ const ListViewProductItem = ({
           />
           <ListItemText
             primary={
-              <Typography sx={styles.productName} variant="body1">
+              <Typography noWrap sx={styles.productName} variant="body1">
                 {item.name}
               </Typography>
             }

@@ -57,7 +57,7 @@ const AddProductDialog = ({
   const [showDescriptionError, setShowDescriptionError] =
     useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
-  const MAXNAMECHARSLENGTH = 40;
+  const MAXNAMECHARSLENGTH = 30;
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const getString = t;
@@ -92,17 +92,15 @@ const AddProductDialog = ({
         setIsNameDuplicate,
         setShowPriceError,
       },
+      handleOnCancel,
       onConfirmClick,
-      setDialogData,
-      setDialogIsOpen,
-      "product",
       data,
       initialData
     );
   };
 
   const handleOnCancel = () => {
-    handleCancel(
+    return handleCancel(
       setDialogData,
       "product",
       setDialogIsOpen,

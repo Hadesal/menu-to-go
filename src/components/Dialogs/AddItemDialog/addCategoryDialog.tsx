@@ -20,7 +20,7 @@ import { CategoryData } from "../../../DataTypes/CategoryDataTypes";
 import { useTranslation } from "react-i18next";
 import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { categoryDefaultData } from "@constants/constants";
-import { itemsType } from "@utils/dataTypeCheck";
+import { itemType } from "@utils/dataTypeCheck";
 
 interface AddCategoryDialogProps {
   isDialogOpen: boolean;
@@ -28,7 +28,7 @@ interface AddCategoryDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (item: itemsType) => void;
+  onConfirmClick: (item: itemType) => void;
   onCancelClick: () => void;
   initialData?: CategoryData;
   data?: CategoryData[];
@@ -54,7 +54,7 @@ const AddCategoryDialog = ({
   const { t } = useTranslation();
   const getString = t;
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-  const MAXCHARSLENGTH = 30;
+  const MAXCHARSLENGTH = 20;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData(initialData);
@@ -71,17 +71,15 @@ const AddCategoryDialog = ({
         setIsNameDuplicate,
         setImageError,
       },
+      handleOnCancel,
       onConfirmClick,
-      setDialogData,
-      onCancelClick,
-      "category",
       data,
       initialData
     );
   };
 
   const handleOnCancel = () => {
-    handleCancel(
+    return handleCancel(
       setDialogData,
       "category",
       onCancelClick,

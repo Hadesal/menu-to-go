@@ -82,7 +82,9 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         restaurantId: restaurant.id as string,
         updatedRestaurant: restaurant,
       })
-    );
+    ).catch((error) => {
+      console.log(error);
+    });
   };
 
   const handleDeleteRestaurant = (restaurant: RestaurantData) => {
@@ -136,6 +138,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         emptyStateTitle={getString("noRestaurantsfoundTitle")}
         emptyStateMessage={getString("noRestaurantsfoundMessage")}
         product={false}
+        category={false}
       />
     </Stack>
   );

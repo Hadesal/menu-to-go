@@ -81,6 +81,7 @@ const ItemList = ({
           }}
         >
           <Typography
+            noWrap
             variant="h6"
             sx={{ fontSize: "17px", color: "var(--primary-color)" }}
           >

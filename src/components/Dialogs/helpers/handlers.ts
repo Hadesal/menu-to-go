@@ -8,7 +8,7 @@ import {
   isCategoryData,
   isProductData,
   isRestaurantData,
-  itemsType,
+  itemType,
 } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction } from "react";
 
@@ -18,7 +18,7 @@ interface Error {
   priceError?: boolean;
 }
 //TODO ADD HANDLE IMAGE ERROR
-export const handleConfirm = <T extends itemsType>(
+export const handleConfirm = <T extends itemType>(
   dialogData: T,
   setErrorFlags: {
     setShowNameError?: Dispatch<SetStateAction<boolean>>;
@@ -32,12 +32,10 @@ export const handleConfirm = <T extends itemsType>(
     setVariantsErrors?: Dispatch<SetStateAction<Error[]>>;
     setImageError?: Dispatch<SetStateAction<string | null>>;
   },
-  onConfirmClick: (data: itemsType) => void,
-  setDialogData: Dispatch<SetStateAction<T>>,
-  setDialogIsOpen: Dispatch<SetStateAction<boolean>>,
-  dataType: dataTypesString,
+  onHandleCancel: () => void,
+  onConfirmClick: (data: itemType) => void,
   dataList?: T[],
-  initialData?: itemsType | null
+  initialData?: itemType | null
 ) => {
   let hasError = false;
 
@@ -126,13 +124,7 @@ export const handleConfirm = <T extends itemsType>(
 
   // Final confirmation and cancel
   onConfirmClick(dialogData);
-  handleCancel(
-    setDialogData,
-    dataType,
-    setDialogIsOpen,
-    setErrorFlags,
-    initialData
-  );
+  onHandleCancel();
 };
 
 // Helper function for checking ingredient, extra, and variant errors
@@ -154,7 +146,7 @@ const checkErrors = (
   return hasError;
 };
 
-export const handleCancel = <T extends itemsType>(
+export const handleCancel = <T extends itemType>(
   setDialogData: Dispatch<SetStateAction<T>>,
   dataType: dataTypesString,
   onCancelClick: Dispatch<SetStateAction<boolean>>,
@@ -170,7 +162,7 @@ export const handleCancel = <T extends itemsType>(
     setVariantsErrors?: Dispatch<SetStateAction<Error[]>>;
     setImageError?: Dispatch<SetStateAction<string | null>>;
   },
-  initialData?: itemsType | null
+  initialData?: itemType | null
 ) => {
   if (!initialData) {
     if (dataType === "product") {

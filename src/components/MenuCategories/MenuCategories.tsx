@@ -66,7 +66,7 @@ export default function MenuCategories({
               ...Styles.categoryLabel,
               color:
                 category.name === selectedCategory
-                  ? restaurantData.userUiPreferences.colors.primaryColor
+                  ? restaurantData.userUiPreferences?.colors.primaryColor
                   : adjustBrightness(
                       restaurantData.userUiPreferences.colors.primaryColor,
                       50

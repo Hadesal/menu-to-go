@@ -10,8 +10,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputComponent from "@components/InputComponent/InputComponent";
 import { Styles } from "./addItemDialog.styles";
 import { RestaurantData } from "@dataTypes/RestaurantObject";
-import { handleConfirm } from "../helpers/handlers";
-import { itemsType } from "@utils/dataTypeCheck";
+import { handleCancel, handleConfirm } from "../helpers/handlers";
+import { itemType } from "@utils/dataTypeCheck";
+import ItemList from "../ProductDetailsAccordion/accordionComponents/ItemList";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ interface AddAddRestaurantDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (data: itemsType) => void;
+  onConfirmClick: (data: itemType) => void;
   onCancelClick: Dispatch<SetStateAction<boolean>>;
   setDialogIsOpen: Dispatch<SetStateAction<boolean>>;
   initialData?: RestaurantData;
@@ -46,21 +47,33 @@ const AddRestaurantDialog = ({
   const [showError, setShowError] = useState<boolean>(false);
   const [isNameUnchanged, setIsNameUnchanged] = useState<boolean>(false);
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-  const MAXCHARSLENGTH = 40;
+  const MAXCHARSLENGTH = 25;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData((prev) => ({ ...prev, name: initialData.name }));
     }
   }, [isOpen, initialData]);
 
-  const handleCancel = () => {
-    if (!initialData) {
-      setDialogData((prev) => ({ ...prev, name: "" }));
-    }
-    setShowError(false);
-    setIsNameUnchanged(false);
-    setIsNameDuplicate(false);
-    onCancelClick(false);
+  const onHandleCancel = () => {
+    return handleCancel(setDialogData, "restaurant", onCancelClick, {
+      setShowNameError: setShowError,
+      setIsDataUnchanged: setIsNameUnchanged,
+      setIsNameDuplicate: setIsNameDuplicate,
+    });
+  };
+
+  const onHandleConfirm = () => {
+    handleConfirm(
+      dialogData,
+      {
+        setShowNameError: setShowError,
+        setIsDataUnchanged: setIsNameUnchanged,
+        setIsNameDuplicate: setIsNameDuplicate,
+      },
+      onHandleCancel,
+      onConfirmClick,
+      data
+    );
   };
 
   return (
@@ -73,7 +86,7 @@ const AddRestaurantDialog = ({
           height: "17.5rem",
         },
       }}
-      onClose={handleCancel}
+      onClose={onHandleCancel}
       open={isOpen}
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
@@ -100,18 +113,7 @@ const AddRestaurantDialog = ({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleConfirm(
-                dialogData,
-                {
-                  setIsDataUnchanged: setIsNameUnchanged,
-                },
-                onConfirmClick,
-                setDialogData,
-                setDialogIsOpen,
-                "restaurant",
-                data,
-                initialData
-              );
+              onHandleConfirm();
             }
           }}
           value={dialogData.name}
@@ -132,7 +134,7 @@ const AddRestaurantDialog = ({
         <Box sx={Styles.actionBox}>
           <Button
             variant="outlined"
-            onClick={handleCancel}
+            onClick={onHandleCancel}
             sx={Styles.cancelButton}
           >
             {cancelText}
@@ -140,18 +142,7 @@ const AddRestaurantDialog = ({
           <Button
             variant="contained"
             onClick={() => {
-              handleConfirm(
-                dialogData,
-                {
-                  setIsDataUnchanged: setIsNameUnchanged,
-                },
-                onConfirmClick,
-                setDialogData,
-                setDialogIsOpen,
-                "restaurant",
-                data,
-                initialData
-              );
+              onHandleConfirm();
             }}
             sx={Styles.logoutButton}
           >
