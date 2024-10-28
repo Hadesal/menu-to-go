@@ -138,8 +138,12 @@ const restaurantSlice = createSlice({
     // Fulfilled states for restaurant-related thunks
     builder.addCase(
       fetchAllRestaurants.fulfilled,
-      (state, action: PayloadAction<RestaurantData[]>) => {
-        state.restaurantList = action.payload;
+      (
+        state,
+        action: PayloadAction<{ data: RestaurantData[]; message: string }>
+      ) => {
+        state.restaurantList = action.payload.data;
+        state.successMessage = action.payload.message;
         state.restaurantLoading = false;
         if (state.restaurantList.length > 0) {
           state.selectedRestaurant = state.restaurantList[0];
@@ -148,29 +152,39 @@ const restaurantSlice = createSlice({
     );
     builder.addCase(
       fetchRestaurantById.fulfilled,
-      (state, action: PayloadAction<RestaurantData>) => {
-        state.selectedRestaurant = action.payload;
+      (
+        state,
+        action: PayloadAction<{ data: RestaurantData; message: string }>
+      ) => {
+        state.selectedRestaurant = action.payload.data;
+        state.successMessage = action.payload.message;
         state.restaurantLoading = false;
       }
     );
     builder.addCase(
       addRestaurant.fulfilled,
-      (state, action: PayloadAction<RestaurantData>) => {
-        state.restaurantList.push(action.payload);
-        state.successMessage = "Restaurant added successfully!";
+      (
+        state,
+        action: PayloadAction<{ data: RestaurantData; message: string }>
+      ) => {
+        state.restaurantList.push(action.payload.data);
+        state.successMessage = action.payload.message;
         state.restaurantLoading = false;
       }
     );
     builder.addCase(
       editRestaurant.fulfilled,
-      (state, action: PayloadAction<RestaurantData>) => {
+      (
+        state,
+        action: PayloadAction<{ data: RestaurantData; message: string }>
+      ) => {
         const index = state.restaurantList.findIndex(
-          (r) => r.id === action.payload.id
+          (r) => r.id === action.payload.data.id
         );
         if (index !== -1) {
-          state.restaurantList[index] = action.payload;
+          state.restaurantList[index] = action.payload.data;
         }
-        state.successMessage = "Restaurant updated successfully!";
+        state.successMessage = action.payload.message;
         state.restaurantLoading = false;
       }
     );
@@ -178,13 +192,16 @@ const restaurantSlice = createSlice({
       removeRestaurant.fulfilled,
       (
         state,
-        action: PayloadAction<{ response: object; restaurantId: string }>
+        action: PayloadAction<{
+          response: { message: string };
+          restaurantId: string;
+        }>
       ) => {
         console.log(action.payload);
         state.restaurantList = state.restaurantList.filter(
           (r) => r.id !== action.payload.restaurantId
         );
-        state.successMessage = "Restaurant deleted successfully!";
+        state.successMessage = action.payload.response.message;
         state.restaurantLoading = false;
 
         if (state.selectedRestaurant?.id === action.payload.restaurantId) {
