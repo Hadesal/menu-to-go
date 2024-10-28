@@ -95,6 +95,7 @@ const CategoryListItemItem = ({
                 }}
               >
                 <Typography
+                title={item.name}
                   sx={styles.categoryName}
                   variant="body1"
                   color={

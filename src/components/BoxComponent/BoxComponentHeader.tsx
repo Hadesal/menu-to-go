@@ -66,6 +66,7 @@ const HeaderComponent = ({
         }}
       >
         <Typography
+          title={title}
           sx={{
             overflow: "hidden",
             textOverflow: "ellipsis",
