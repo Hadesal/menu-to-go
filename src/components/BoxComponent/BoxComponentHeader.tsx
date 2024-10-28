@@ -60,14 +60,26 @@ const HeaderComponent = ({
           flexDirection: "row",
           justifyContent: "space-between",
           width: title ? "100%" : "inherit",
+          minWidth: 0,
+          gap: 2,
+          alignItems: "center",
         }}
       >
-        <Typography variant="h6">{title}</Typography>
+        <Typography
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          variant="h6"
+        >
+          {title}
+        </Typography>
         <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
           {product && selectedProductsIDs.length > 0 && (
             <>
               <Button
-                sx={{ borderRadius: 10, width: "6vw", height: "5vh" }}
+                sx={{ borderRadius: 10, minWidth: "6vw" }}
                 variant="outlined"
                 color="primary"
                 onClick={onCopyClick}
@@ -75,7 +87,7 @@ const HeaderComponent = ({
                 {getString("copy")}
               </Button>
               <Button
-                sx={{ borderRadius: 10, width: "6vw", height: "5vh" }}
+                sx={{ borderRadius: 10, minWidth: "6vw" }}
                 variant="outlined"
                 color="primary"
                 onClick={onMoveClick}
@@ -85,8 +97,7 @@ const HeaderComponent = ({
               <Button
                 sx={{
                   borderRadius: 10,
-                  width: "6vw",
-                  height: "5vh",
+                  minWidth: "6vw",
                   background: "red",
                   color: "white",
                 }}

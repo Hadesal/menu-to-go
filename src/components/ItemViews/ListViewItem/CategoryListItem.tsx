@@ -70,10 +70,10 @@ const CategoryListItemItem = ({
       }}
       key={item.id}
     >
-      <Box sx={styles.categoryListItemBox}>
+      <Box sx={{ ...styles.categoryListItemBox, display: "flex", minWidth: 0 }}>
         <ListItemText
           primary={
-            <Box sx={styles.categoryListItemText}>
+            <Box sx={styles.categoryListItemTextWrapper}>
               <IconButton
                 sx={{ ...styles.iconButton, cursor: "grab" }}
                 aria-label="more"
@@ -88,30 +88,39 @@ const CategoryListItemItem = ({
                   fontSize="medium"
                 />
               </IconButton>
-              <Typography
-                sx={styles.categoryName}
-                variant="body1"
-                color={
-                  selectedCategory?.id === item.id
-                    ? "white"
-                    : "var(--primary-color)"
-                }
+              <Box
+                sx={{
+                  minWidth: 0,
+                  display: "flex",
+                }}
               >
-                {item.name}
+                <Typography
+                  sx={styles.categoryName}
+                  variant="body1"
+                  color={
+                    selectedCategory?.id === item.id
+                      ? "white"
+                      : "var(--primary-color)"
+                  }
+                >
+                  {item.name}
+                </Typography>
                 <Typography
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}
                   sx={styles.categoryItemsLengthText}
-                  component="span"
                 >
                   ({item?.products?.length})
                 </Typography>
-              </Typography>
+              </Box>
             </Box>
           }
         />
       </Box>
       <IconButton
-        sx={styles.iconButton}
+        sx={{
+          ...styles.iconButton,
+          flexShrink: 0,
+        }}
         aria-label="more"
         onClick={(event) => onMenuClick(event, index)}
       >
