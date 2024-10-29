@@ -9,7 +9,7 @@ import {
 } from "@api/restaurantCrud";
 
 import { RestaurantData } from "@dataTypes/RestaurantObject";
-import { getErrorMessage } from "@utils/errorHandler";
+import { ErrorData, getErrorMessage } from "@utils/errorHandler";
 
 // Fetch all restaurants by user ID
 export const fetchAllRestaurants = createAsyncThunk(
@@ -44,7 +44,7 @@ export const addRestaurant = createAsyncThunk(
     try {
       const response = await createRestaurant(restaurantData);
       return response;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(getErrorMessage(error));
     }
   }
