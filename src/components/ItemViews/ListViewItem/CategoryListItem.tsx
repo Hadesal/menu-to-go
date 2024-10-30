@@ -70,10 +70,10 @@ const CategoryListItemItem = ({
       }}
       key={item.id}
     >
-      <Box sx={styles.categoryListItemBox}>
+      <Box sx={{ ...styles.categoryListItemBox, display: "flex", minWidth: 0 }}>
         <ListItemText
           primary={
-            <Box sx={styles.categoryListItemText}>
+            <Box sx={styles.categoryListItemTextWrapper}>
               <IconButton
                 sx={{ ...styles.iconButton, cursor: "grab" }}
                 aria-label="more"
@@ -88,32 +88,41 @@ const CategoryListItemItem = ({
                   fontSize="medium"
                 />
               </IconButton>
-              <Typography
-                noWrap
-                sx={styles.categoryName}
-                variant="body1"
-                color={
-                  selectedCategory?.id === item.id
-                    ? "white"
-                    : "var(--primary-color)"
-                }
+              <Box
+                sx={{
+                  minWidth: 0,
+                  display: "flex",
+                }}
               >
-                {item.name}
+                <Typography
+                  title={item.name}
+                  sx={styles.categoryName}
+                  variant="body1"
+                  color={
+                    selectedCategory?.id === item.id
+                      ? "white"
+                      : "var(--primary-color)"
+                  }
+                >
+                  {item.name}
+                </Typography>
                 <Typography
                   noWrap
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}
                   sx={styles.categoryItemsLengthText}
-                  component="span"
                 >
                   ({item?.products?.length})
                 </Typography>
-              </Typography>
+              </Box>
             </Box>
           }
         />
       </Box>
       <IconButton
-        sx={styles.iconButton}
+        sx={{
+          ...styles.iconButton,
+          flexShrink: 0,
+        }}
         aria-label="more"
         onClick={(event) => onMenuClick(event, index)}
       >
