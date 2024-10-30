@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
-import BoxComponent from "@components/BoxComponent/BoxComponent";
+import BoxComponent from "@components/common/BoxComponent/BoxComponent";
 import CategoryBoxComponent from "@components/BoxComponent/categoryBoxComponent";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import {

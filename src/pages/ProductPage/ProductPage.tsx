@@ -1,10 +1,10 @@
 import { Box, Container, IconButton } from "@mui/material";
 
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import ProductDetails from "@components/ProductDetails/ProductDetails";
-import ExtrasList from "@components/ProductExtras/ExtrasList";
-import IngredientList from "@components/ProductIngredients/IngredientList";
-import VariantList from "@components/ProductVariants/ProductVariants";
+import ProductDetails from "@components/Product/ProductDetails/ProductDetails";
+import ExtrasList from "@components/Product/ProductExtras/ExtrasList";
+import IngredientList from "@components/Product/ProductIngredients/IngredientList";
+import VariantList from "@components/Product/ProductVariants/ProductVariants";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
@@ -39,7 +39,9 @@ export default function ProductPage() {
         >
           <NavigateBeforeIcon
             fontSize="large"
-            sx={{ color: restaurantData.userUiPreferences.colors.primaryColor }}
+            sx={{
+              color: restaurantData.userUiPreferences?.colors.primaryColor,
+            }}
           />
         </IconButton>
         <ProductDetails
@@ -54,7 +56,8 @@ export default function ProductPage() {
             children={
               <IngredientList
                 listView={
-                  restaurantData.userUiPreferences.ingredientViewType !== "GRID"
+                  restaurantData.userUiPreferences?.ingredientViewType !==
+                  "GRID"
                 }
                 ingredients={selectedProduct.details.ingredients}
               />

@@ -7,20 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import MenuCategories from "@components/MenuCategories/MenuCategories";
-import MenuHeader from "@components/MenuHeader/MenuHeader";
-import MenuProductsCard from "@components/MenuProductsCard/MenuProductsCard";
+import MenuCategories from "@components/Menu/MenuCategories/MenuCategories";
+import MenuHeader from "@components/Menu/MenuHeader/MenuHeader";
+import MenuProductsCard from "@components/Menu/MenuProductsCard/MenuProductsCard";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
 import { Styles } from "@pages/ProductPage/ProductPage.styles";
 import SplashScreen from "@pages/SplashScreen/SplashScreen";
-import MenuFooter from "@components/MenuFooter/MenuFooter";
+import MenuFooter from "@components/Menu/MenuFooter/MenuFooter";
 import ProductPage from "@pages/ProductPage/ProductPage";
-import MenuSelection from "@components/MenuSelection/MenuSelection";
+import MenuSelection from "@components/Menu/MenuSelection/MenuSelection";
 import { useParams } from "react-router-dom";
 import emptyData from "@assets/Animation - 1724972864386.json";
 import Lottie from "lottie-react";
-import MenuProductsList from "@components/MenuProductsCard/MenuProductsList";
+import MenuProductsList from "@components/Menu/MenuProductsCard/MenuProductsList";
 
 // Define menu selection options
 const menuSelections = [

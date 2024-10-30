@@ -15,7 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.png";
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
-import DropDownMenuComponent from "../../DropDownMenu/DropDownMenuComponent";
+import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 import Styles from "../../../DataTypes/StylesTypes";
 
 interface ProductListItemProps {

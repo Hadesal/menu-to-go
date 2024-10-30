@@ -18,11 +18,11 @@ import { useEffect, useRef, useState } from "react";
 import logo from "../../assets/logo.svg";
 import html2canvas from "html2canvas";
 import "./qrcodeStyle.css";
-import Dropzone from "../../components/Dropzone";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { useTranslation } from "react-i18next";
 import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
 import StyleControl from "./StyleControl";
+import Dropzone from "@components/common/Dropzone";
 
 interface DotsOptionsObject {
   color: string;
@@ -77,7 +77,8 @@ const QrCodePage = () => {
   const frameRef = useRef(null);
   useEffect(() => {
     if (user && user.qrCodeStyle) {
-      setUrlPath(qrCodeStyleObject.generalUrlPath);
+      //TODO Change fallback url
+      setUrlPath(qrCodeStyleObject?.generalUrlPath || "www.google.com");
       setDotsOptions(qrCodeStyleObject.dotsOptions);
       setCornersSquareOptions(qrCodeStyleObject.cornersSquareOptions);
       setCornersDotOptions(qrCodeStyleObject.cornersDotOptions);

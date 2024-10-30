@@ -1,11 +1,11 @@
 import { Container, List } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { CategoryData } from "../../DataTypes/CategoryDataTypes";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import CategoryListItemItem from "./ListViewItem/CategoryListItem";
-import AddCategoryDialog from "../Dialogs/AddItemDialog/addCategoryDialog";
-import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
+import AddCategoryDialog from "@components/common/Dialogs/AddItemDialog/addCategoryDialog";
+import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
 import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
-import Styles from "../../DataTypes/StylesTypes";
+import Styles from "@dataTypes/StylesTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import {
   setSelectedCategory,

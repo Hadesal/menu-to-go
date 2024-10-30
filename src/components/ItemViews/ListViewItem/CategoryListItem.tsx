@@ -13,7 +13,7 @@ import {
 import Styles from "../../../DataTypes/StylesTypes";
 import { useAppSelector } from "@redux/reduxHooks";
 import { useTranslation } from "react-i18next";
-import DropDownMenuComponent from "../../DropDownMenu/DropDownMenuComponent";
+import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 interface CategoryListItemProps {
   item: CategoryData;
   index: number;

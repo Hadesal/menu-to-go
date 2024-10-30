@@ -1,7 +1,7 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Form from "../../components/Form/Form";
+import Form from "../../components/common/Form/Form";
 import { useAppSelector } from "../../redux/reduxHooks";
 
 interface FormData {

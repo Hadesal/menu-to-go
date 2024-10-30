@@ -5,7 +5,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import BoxComponent from "@components/BoxComponent/BoxComponent";
+import BoxComponent from "@components/common/BoxComponent/BoxComponent";
 import styles from "./RestaurantSection.styles";
 import { useEffect, useState } from "react";
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
@@ -23,7 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { useTranslation } from "react-i18next";
 import CategoryPage from "../CategoryPage/CategoryPage";
-import ToastNotification from "@components/ToastNotification/ToastNotification.tsx";
+import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx";
 
 interface RestaurantSectionProps {
   label: string;

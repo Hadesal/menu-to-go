@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks.ts";
 import { setSelectedRestaurant } from "@slices/restaurantsSlice";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import ToastNotification from "../../components/ToastNotification/ToastNotification.tsx";
+import ToastNotification from "../../components/common/ToastNotification/ToastNotification.tsx.tsx";
 
 export default function TemplatePage() {
   const { t } = useTranslation();

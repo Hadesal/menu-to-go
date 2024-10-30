@@ -23,9 +23,9 @@ import { useItemDialogHandlers } from "src/hooks/useItemDialogHandlers";
 import useMenu from "src/hooks/useMenu";
 import { RestaurantData } from "../../DataTypes/RestaurantObject";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
-import AddRestaurantDialog from "../Dialogs/AddItemDialog/addRestaurantDialog";
-import ConfirmDialog from "../Dialogs/LogoutDialog/confirmDialog";
-import DropDownMenuComponent from "../DropDownMenu/DropDownMenuComponent";
+import AddRestaurantDialog from "@components/common/Dialogs/AddItemDialog/addRestaurantDialog";
+import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
+import DropDownMenuComponent from "../common/DropDownMenu/DropDownMenuComponent";
 export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 
 interface GridViewProps {
