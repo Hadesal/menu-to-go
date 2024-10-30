@@ -31,7 +31,6 @@ interface Styles {
   categoryListItem?: SxProps<Theme>;
   categoryListItemBox?: SxProps<Theme>;
   categoryListItemText?: SxProps<Theme>;
-  categoryListItemTextWrapper?: SxProps<Theme>;
   categoryName?: SxProps<Theme>;
   categoryItemsLengthText?: SxProps<Theme>;
   dropDownMenuItemIcon?: SxProps<Theme>;

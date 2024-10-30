@@ -4,6 +4,7 @@ import {
 } from "@dataTypes/UserDataTypes";
 import { login, register } from "@api/userCrud";
 import { validateEmail, validateName, validatePassword } from "./validator";
+import { AxiosError } from "axios";
 import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 
 // Error message type definition
@@ -117,7 +118,6 @@ const handleSignup = async (
       // Handles standard Error objects
       setApiError(error.message);
     } else {
-      console.log(error);
       // Handles unknown error types
       setApiError("An unknown error occurred.");
     }
