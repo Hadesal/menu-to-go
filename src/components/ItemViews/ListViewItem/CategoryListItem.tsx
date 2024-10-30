@@ -70,10 +70,10 @@ const CategoryListItemItem = ({
       }}
       key={item.id}
     >
-      <Box sx={{ ...styles.categoryListItemBox, display: "flex", minWidth: 0 }}>
+      <Box sx={styles.categoryListItemBox}>
         <ListItemText
           primary={
-            <Box sx={styles.categoryListItemTextWrapper}>
+            <Box sx={styles.categoryListItemText}>
               <IconButton
                 sx={{ ...styles.iconButton, cursor: "grab" }}
                 aria-label="more"
@@ -88,41 +88,32 @@ const CategoryListItemItem = ({
                   fontSize="medium"
                 />
               </IconButton>
-              <Box
-                sx={{
-                  minWidth: 0,
-                  display: "flex",
-                }}
+              <Typography
+                noWrap
+                sx={styles.categoryName}
+                variant="body1"
+                color={
+                  selectedCategory?.id === item.id
+                    ? "white"
+                    : "var(--primary-color)"
+                }
               >
-                <Typography
-                  title={item.name}
-                  sx={styles.categoryName}
-                  variant="body1"
-                  color={
-                    selectedCategory?.id === item.id
-                      ? "white"
-                      : "var(--primary-color)"
-                  }
-                >
-                  {item.name}
-                </Typography>
+                {item.name}
                 <Typography
                   noWrap
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}
                   sx={styles.categoryItemsLengthText}
+                  component="span"
                 >
                   ({item?.products?.length})
                 </Typography>
-              </Box>
+              </Typography>
             </Box>
           }
         />
       </Box>
       <IconButton
-        sx={{
-          ...styles.iconButton,
-          flexShrink: 0,
-        }}
+        sx={styles.iconButton}
         aria-label="more"
         onClick={(event) => onMenuClick(event, index)}
       >

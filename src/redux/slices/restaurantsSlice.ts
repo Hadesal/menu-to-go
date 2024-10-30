@@ -37,7 +37,9 @@ const initialState: RestaurantState = {
   selectedProductsIDs: [],
 };
 
-const isRejectedAction = (action: Action): action is PayloadAction<string> => {
+const isRejectedAction = (
+  action: Action
+): action is PayloadAction<{ message: string }> => {
   return action.type.endsWith("/rejected");
 };
 
@@ -492,8 +494,7 @@ const restaurantSlice = createSlice({
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;
-      console.log(action.payload);
-      state.error = action.payload || "Something went wrong!";
+      state.error = action.payload?.message || "Something went wrong!";
     });
   },
 });

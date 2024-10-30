@@ -239,7 +239,6 @@ export default function CategoryPage() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          gap: 5,
         }}
       >
         <Box
@@ -248,8 +247,6 @@ export default function CategoryPage() {
             flexDirection: "row",
             alignItems: "center",
             gap: 2,
-            flex: 1,
-            minWidth: 0, // Prevents expansion beyond parent
           }}
         >
           <IconButton
@@ -268,45 +265,21 @@ export default function CategoryPage() {
           >
             <KeyboardBackspaceIcon fontSize="large" color="primary" />
           </IconButton>
-          <Typography
-            title={selectedRestaurant?.name}
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-            variant="h5"
-          >
-            {selectedRestaurant?.name}
-          </Typography>
+          <Typography variant="h5">{selectedRestaurant?.name}</Typography>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexShrink: 0, // Ensures button doesn't shrink
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button sx={Styles.previewMenu} variant="contained">
-            {getString("categoryPagePreviewMenuText")}
-          </Button>
-        </Box>
+        <Button sx={Styles.previewMenu} variant="contained">
+          {getString("categoryPagePreviewMenuText")}
+        </Button>
       </Box>
       <Divider />
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
-          gap: 5,
-          minWidth: 0,
+          gap: 10,
         }}
       >
-        <Box
-          sx={{
-            flex: 1,
-            minWidth: 0, // Prevents expansion beyond parent
-          }}
-        >
+        <Box sx={{ flex: 1 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedRestaurant?.categories ?? []}
@@ -323,12 +296,7 @@ export default function CategoryPage() {
           />
         </Box>
 
-        <Box
-          sx={{
-            flex: 2,
-            minWidth: 0, // Prevents expansion beyond parent
-          }}
-        >
+        <Box sx={{ flex: 2 }}>
           <BoxComponent
             CardIcon={RestaurantIcon}
             items={selectedCategory?.products ?? []}

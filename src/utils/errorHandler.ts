@@ -1,55 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 import axios, { AxiosError } from "axios";
 
-interface ErrorData {
-  status?: number;
-  timestamp?: Date;
-  message?: string;
-  details?:
-    | string
-    | {
-        errors: {
-          [key: string]: string | string[];
-        };
-      };
-}
-
-export const getErrorMessage = (error: ErrorData | any): string => {
-  if (typeof error.details === "string") {
-    const parsedError = JSON.parse(error.details);
-    if (parsedError.errors) {
-      return extractErrorMessages(parsedError.errors);
-    } else {
-      return parsedError.message;
-    }
-  } else if (typeof error.details === "object") {
-    return extractErrorMessages(error.details.errors);
-  }
+export const getErrorMessage = (
+  error: unknown,
+  defaultMessage?: string
+): string => {
   if (axios.isAxiosError(error)) {
     return (
       (typeof error.response?.data === "string" && error.response?.data) ||
       error.response?.data?.message ||
       error.message ||
+      defaultMessage ||
       "An unknown error occurred"
     );
   } else if (error instanceof Error) {
-    return error.message || "An unknown error occurred";
+    return error.message || defaultMessage || "An unknown error occurred";
   }
 
-  return "";
+  return defaultMessage || "An unknown error occurred";
 };
+// Centralized error handler for Axios
 
-// Helper function to extract error messages
-const extractErrorMessages = (errors: {
-  [key: string]: string | string[];
-}): string => {
-  return Object.values(errors)
-    .flatMap((msg) => (Array.isArray(msg) ? msg : [msg]))
-    .join("\n");
-};
 export const handleAxiosError = (error: unknown): ErrorResponseObject => {
-  const errorResponse: ErrorResponseObject = {
+  let errorResponse: ErrorResponseObject = {
     message: "An unexpected error occurred.",
     status: 500,
     timestamp: new Date().toISOString(),
@@ -58,20 +31,30 @@ export const handleAxiosError = (error: unknown): ErrorResponseObject => {
 
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
-    const status = axiosError.response?.status || 500;
-    const message = getErrorMessage(error, "Unknown error occurred");
-    const details = JSON.stringify(axiosError.response?.data || {});
-
-    return {
-      ...errorResponse,
-      status,
-      message,
-      details,
-    };
+    if (axiosError.response) {
+      errorResponse = {
+        ...errorResponse,
+        status: axiosError.response.status,
+        message: axiosError.response.data?.message || "Unknown error occurred",
+        details: JSON.stringify(axiosError.response.data) || "",
+      };
+    } else if (axiosError.request) {
+      errorResponse = {
+        ...errorResponse,
+        message: "No response received from the server.",
+        details: JSON.stringify(axiosError.request),
+      };
+    }
   } else if (error instanceof Error) {
-    return {
+    console.log(error.message);
+    errorResponse = {
       ...errorResponse,
       message: error.message,
+    };
+  } else {
+    errorResponse = {
+      ...errorResponse,
+      message: errorResponse.message,
     };
   }
 
