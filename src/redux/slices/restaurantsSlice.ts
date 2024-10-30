@@ -113,8 +113,6 @@ const restaurantSlice = createSlice({
     });
     builder.addCase(removeCategoryFromRestaurant.pending, (state) => {
       state.categoryLoading = true;
-      state.successMessage = null;
-      state.error = null;
     });
 
     // Pending state for product-related thunks

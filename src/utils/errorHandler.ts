@@ -2,9 +2,9 @@ import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 import axios, { AxiosError } from "axios";
 
 export const getErrorMessage = (
-  error: ErrorResponseObject,
+  error: unknown,
   defaultMessage?: string
-): object => {
+): string => {
   if (axios.isAxiosError(error)) {
     return (
       (typeof error.response?.data === "string" && error.response?.data) ||
@@ -14,9 +14,10 @@ export const getErrorMessage = (
       "An unknown error occurred"
     );
   } else if (error instanceof Error) {
-    return error || defaultMessage || "An unknown error occurred";
+    return error.message || defaultMessage || "An unknown error occurred";
   }
-  return error || "An unknown error occurred";
+
+  return defaultMessage || "An unknown error occurred";
 };
 // Centralized error handler for Axios
 

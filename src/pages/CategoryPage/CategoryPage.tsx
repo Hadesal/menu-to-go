@@ -1,7 +1,3 @@
-import RestaurantIcon from "@assets/restaurant-icon.jpg";
-import BoxComponent from "@components/BoxComponent/BoxComponent";
-import { CategoryData } from "@dataTypes/CategoryDataTypes";
-import { ProductData } from "@dataTypes/ProductDataTypes";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   Alert,
@@ -15,28 +11,33 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import RestaurantIcon from "@assets/restaurant-icon.jpg";
+import BoxComponent from "@components/BoxComponent/BoxComponent";
+import CategoryBoxComponent from "@components/BoxComponent/categoryBoxComponent";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import {
+  clearSuccessMessage,
+  setSelectedRestaurant,
+  clearRestaurantError,
+  setSelectedCategory,
+  setSelectedProductsIDs,
+} from "@slices/restaurantsSlice";
+import {
+  addProductToCategory as addProduct,
+  updateProductInCategory as editProduct,
+  removeProductFromCategory as deleteProduct,
+} from "@redux/thunks/productThunks";
 import {
   addCategoryToRestaurant as addCategory,
   removeCategoryFromRestaurant as deleteCategory,
   editCategoryInRestaurant as updateCategory,
 } from "@redux/thunks/categoryThunks";
-import {
-  addProductToCategory as addProduct,
-  removeProductFromCategory as deleteProduct,
-  updateProductInCategory as editProduct,
-} from "@redux/thunks/productThunks";
-import {
-  clearRestaurantError,
-  clearSuccessMessage,
-  setSelectedCategory,
-  setSelectedProductsIDs,
-  setSelectedRestaurant,
-} from "@slices/restaurantsSlice";
-import { itemsType } from "@utils/dataTypeCheck";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import Styles from "./CategorySection.styles";
+import { ProductData } from "@dataTypes/ProductDataTypes";
+import { itemsType } from "@utils/dataTypeCheck";
 
 export default function CategoryPage() {
   const {
