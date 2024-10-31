@@ -21,7 +21,7 @@ const CategoryShapesComponent = () => {
   const handleChangeShape = (shapeType: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences!,
+        ...userUiPreferences,
         categoryShape: shapeType,
       })
     );

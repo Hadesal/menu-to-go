@@ -12,7 +12,6 @@ import {
   setSelectedProductsIDs,
 } from "@slices/restaurantsSlice";
 import useMenu from "src/hooks/useMenu";
-import { useEffect } from "react";
 
 interface CategoryListViewProps {
   items: CategoryData[];

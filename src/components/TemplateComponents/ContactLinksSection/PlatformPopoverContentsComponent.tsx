@@ -42,9 +42,9 @@ const PlatformPopoverContentsComponent = ({
     setIsOpen(false);
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences!,
+        ...userUiPreferences,
         contactLinks: {
-          ...userUiPreferences!.contactLinks,
+          ...userUiPreferences.contactLinks,
           [type]: inputedText,
         },
       })

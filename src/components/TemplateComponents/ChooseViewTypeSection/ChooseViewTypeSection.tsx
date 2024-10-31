@@ -42,7 +42,7 @@ export default function ChooseViewTypeSection() {
 
   const dispatchSelectedView = (selectedView: ViewType) => {
     const newUserUiPreferences = {
-      ...userUiPreferences!,
+      ...userUiPreferences,
       itemsViewType: selectedView,
     };
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));

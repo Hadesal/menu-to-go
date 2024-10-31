@@ -9,7 +9,6 @@ import {
 } from "@api/restaurantCrud";
 
 import { RestaurantData } from "@dataTypes/RestaurantObject";
-import { getErrorMessage } from "@utils/errorHandler";
 
 // Fetch all restaurants by user ID
 export const fetchAllRestaurants = createAsyncThunk(
@@ -19,7 +18,7 @@ export const fetchAllRestaurants = createAsyncThunk(
       const response = await getAllRestaurantsByUserId(userID);
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -32,7 +31,7 @@ export const fetchRestaurantById = createAsyncThunk(
       const response = await getRestaurantById(restaurantId);
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -45,7 +44,7 @@ export const addRestaurant = createAsyncThunk(
       const response = await createRestaurant(restaurantData);
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -64,7 +63,7 @@ export const editRestaurant = createAsyncThunk(
       const response = await updateRestaurant(updatedRestaurant, restaurantId);
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -77,7 +76,7 @@ export const removeRestaurant = createAsyncThunk(
       const response = await deleteRestaurant(restaurantId);
       return { response, restaurantId }; // Return both response and restaurantId
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );

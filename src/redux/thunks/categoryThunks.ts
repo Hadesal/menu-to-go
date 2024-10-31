@@ -5,7 +5,6 @@ import {
   updateCategory,
   deleteCategory,
 } from "@api/categoryCrud";
-import { getErrorMessage } from "@utils/errorHandler";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
 // Add a category to a specific restaurant
@@ -19,7 +18,7 @@ export const addCategoryToRestaurant = createAsyncThunk(
       const response = await createCategory(restaurantId, categoryData);
       return { restaurantId, category: response };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -47,7 +46,7 @@ export const editCategoryInRestaurant = createAsyncThunk(
       );
       return { restaurantId, categoryId, updatedCategory: response };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -63,7 +62,7 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
       await deleteCategory(categoryId);
       return { restaurantId, categoryId };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );

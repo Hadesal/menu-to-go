@@ -1,5 +1,4 @@
 import axios from "axios";
-import { handleAxiosError } from "@utils/errorHandler";
 import { getUserToken } from "@utils/auth-handlers";
 
 const API_BASE_URL = "http://localhost:8080/api/";
@@ -20,13 +19,13 @@ privateApiService.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(handleAxiosError(error))
+  (error) => Promise.reject(error.response.data)
 );
 
 // handle responses or specific errors globally
 privateApiService.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(handleAxiosError(error))
+  (error) => Promise.reject(error.response.data)
 );
 
 export default privateApiService;

@@ -28,7 +28,7 @@ interface AddCategoryDialogProps {
   cancelText: string;
   confirmText: string;
   errorMessage: string;
-  onConfirmClick: (item: itemType) => void;
+  onConfirmClick: (item: CategoryData) => void;
   onCancelClick: () => void;
   initialData?: CategoryData;
   data?: CategoryData[];
@@ -72,7 +72,7 @@ const AddCategoryDialog = ({
         setImageError,
       },
       handleOnCancel,
-      onConfirmClick,
+      onConfirmClick as (item: itemType) => void,
       data,
       initialData
     );

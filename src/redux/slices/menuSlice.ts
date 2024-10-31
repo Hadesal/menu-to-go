@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "@api/restaurantCrud";
 import { UserUiPreferences, ViewType } from "@dataTypes/RestaurantObject";
 import { MenuState } from "@redux/slicesInterfaces";
-import { getErrorMessage } from "@utils/errorHandler";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
@@ -65,9 +64,7 @@ export const fetchRestaurantData = createAsyncThunk(
       const response = await apiFetchRestaurantData(restaurantID);
       return response;
     } catch (error) {
-      return rejectWithValue(
-        getErrorMessage(error) || "Error fetching categories"
-      );
+      return rejectWithValue(error);
     }
   }
 );
@@ -93,7 +90,7 @@ export const MenuSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
-        state.restaurantData = action.payload;
+        state.restaurantData = action.payload.data;
         state.loading = false;
         if (state?.restaurantData.categories.length !== 0) {
           state.selectedCategory = state?.restaurantData.categories[0];

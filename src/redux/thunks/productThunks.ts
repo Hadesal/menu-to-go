@@ -6,7 +6,6 @@ import {
   deleteProduct,
 } from "@api/productsCrud";
 import { ProductData } from "@dataTypes/ProductDataTypes";
-import { getErrorMessage } from "@utils/errorHandler";
 
 // Fetch all products by category ID
 export const fetchProductsByCategory = createAsyncThunk(
@@ -16,7 +15,7 @@ export const fetchProductsByCategory = createAsyncThunk(
       const response = await getAllProductsByCategoryId(categoryId);
       return { categoryId, products: response };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -35,7 +34,7 @@ export const addProductToCategory = createAsyncThunk(
       const response = await addProduct(categoryId, productData);
       return { categoryId, product: response };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -59,7 +58,7 @@ export const updateProductInCategory = createAsyncThunk(
       );
       return { categoryId, productId, updatedProduct: response };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -75,7 +74,7 @@ export const removeProductFromCategory = createAsyncThunk(
       await deleteProduct(categoryId, productId);
       return { categoryId, productId };
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );

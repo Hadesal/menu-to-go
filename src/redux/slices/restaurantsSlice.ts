@@ -21,6 +21,7 @@ import { RestaurantData, UserUiPreferences } from "@dataTypes/RestaurantObject";
 import { RestaurantState } from "@redux/slicesInterfaces";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import { ProductData } from "@dataTypes/ProductDataTypes";
+import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 
 const initialState: RestaurantState = {
   restaurantList: [],
@@ -39,7 +40,7 @@ const initialState: RestaurantState = {
 
 const isRejectedAction = (
   action: Action
-): action is PayloadAction<{ message: string }> => {
+): action is PayloadAction<ErrorResponseObject> => {
   return action.type.endsWith("/rejected");
 };
 
@@ -65,7 +66,7 @@ const restaurantSlice = createSlice({
     setSelectedProduct(state, action: PayloadAction<ProductData | null>) {
       state.selectedProduct = action.payload;
     },
-    setSelectedRestaurant(state, action: PayloadAction<RestaurantData | null>) {
+    setSelectedRestaurant(state, action: PayloadAction<RestaurantData>) {
       state.selectedRestaurant = action.payload;
       state.successMessage = null;
       state.error = null;
@@ -74,7 +75,7 @@ const restaurantSlice = createSlice({
       state,
       action: PayloadAction<UserUiPreferences>
     ) => {
-      state.selectedRestaurant!.userUiPreferences = action.payload;
+      state.selectedRestaurant.userUiPreferences = action.payload;
     },
     setSelectedProductsIDs(state, action: PayloadAction<string[]>) {
       state.selectedProductsIDs = action.payload;
@@ -197,6 +198,7 @@ const restaurantSlice = createSlice({
           restaurantId: string;
         }>
       ) => {
+        editRestaurant;
         console.log(action.payload);
         state.restaurantList = state.restaurantList.filter(
           (r) => r.id !== action.payload.restaurantId
@@ -205,8 +207,7 @@ const restaurantSlice = createSlice({
         state.restaurantLoading = false;
 
         if (state.selectedRestaurant?.id === action.payload.restaurantId) {
-          state.selectedRestaurant =
-            state.restaurantList.length > 0 ? state.restaurantList[0] : null;
+          state.selectedRestaurant = state.restaurantList[0];
         }
       }
     );
@@ -494,7 +495,7 @@ const restaurantSlice = createSlice({
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;
-      state.error = action.payload?.message || "Something went wrong!";
+      state.error = action.payload.errors.name || "Something went wrong!";
     });
   },
 });

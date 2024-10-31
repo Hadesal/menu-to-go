@@ -13,17 +13,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import ColorsSection from "../../components/TemplateComponents/ColorsSection/ColorsSection";
-import FontSectionComponent from "../../components/TemplateComponents/FontSection/FontSectionComponent";
-import CategoryShapesComponent from "../../components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
-import ContactLinksComponent from "../../components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
+import ColorsSection from "@components/TemplateComponents/ColorsSection/ColorsSection";
+import FontSectionComponent from "@components/TemplateComponents/FontSection/FontSectionComponent";
+import CategoryShapesComponent from "@components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
+import ContactLinksComponent from "@components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
 import { useEffect, useState } from "react";
-import ChooseViewTypeSection from "../../components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks.ts";
+import ChooseViewTypeSection from "@components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { setSelectedRestaurant } from "@slices/restaurantsSlice";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
-import { RestaurantData } from "../../DataTypes/RestaurantObject";
-import ToastNotification from "../../components/common/ToastNotification/ToastNotification.tsx.tsx";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
+import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx.tsx";
 
 export default function TemplatePage() {
   const { t } = useTranslation();
@@ -62,17 +62,16 @@ export default function TemplatePage() {
           restaurantId: selectedRestaurant.id,
         })
       );
-
       if (editRestaurant.fulfilled.match(result)) {
         setToastMessageObject({
           success: true,
-          message: getString("restaurantUpdatedSuccessfully"),
+          message: result.payload.message,
           show: true,
         });
       } else {
         setToastMessageObject({
           success: false,
-          message: getString("restaurantUpdateFailed"),
+          message: result.error.message,
           show: true,
         });
       }
@@ -216,7 +215,11 @@ export default function TemplatePage() {
               }}
             >
               <iframe
-                src={"https://example.com/"}
+                src={
+                  selectedRestaurant
+                    ? `http://localhost:5173/menu/${selectedRestaurant.id}`
+                    : ""
+                }
                 title={"menu"}
                 style={{
                   width: "100%",

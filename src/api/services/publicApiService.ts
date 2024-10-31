@@ -1,5 +1,4 @@
 import axios from "axios";
-import { handleAxiosError } from "@utils/errorHandler";
 
 const API_BASE_URL = "http://localhost:8080/api/";
 
@@ -12,7 +11,7 @@ const publicApiService = axios.create({
 
 publicApiService.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(handleAxiosError(error))
+  (error) => Promise.reject(error.response.data)
 );
 
 export default publicApiService;

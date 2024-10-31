@@ -7,7 +7,7 @@ import { UserDataType } from "@dataTypes/UserDataTypes";
 // RestaurantState interface
 export interface RestaurantState {
   restaurantList: RestaurantData[];
-  selectedRestaurant: RestaurantData | null;
+  selectedRestaurant: RestaurantData;
   selectedCategory: CategoryData | null;
   selectedProduct: ProductData | null;
   categoryLoading: boolean;

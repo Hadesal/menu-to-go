@@ -149,6 +149,7 @@ const GridView = ({
         }}
         initialData={currentItem as RestaurantData}
         data={restaurantList}
+        setDialogIsOpen={handleEditDialogClose}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}

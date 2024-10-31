@@ -30,9 +30,9 @@ const ColorsSection = () => {
   const handleEffectedSpace = async (effectedSpace: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences!,
+        ...userUiPreferences,
         colors: {
-          ...userUiPreferences!.colors,
+          ...userUiPreferences.colors,
           effectedSpace: effectedSpace,
         },
       })

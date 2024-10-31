@@ -22,7 +22,6 @@ interface AddAddRestaurantDialogProps {
   errorMessage: string;
   onConfirmClick: (data: itemType) => void;
   onCancelClick: Dispatch<SetStateAction<boolean>>;
-  setDialogIsOpen: Dispatch<SetStateAction<boolean>>;
   initialData?: RestaurantData;
   data?: RestaurantData[];
 }
@@ -34,7 +33,6 @@ const AddRestaurantDialog = ({
   confirmText,
   onConfirmClick,
   onCancelClick,
-  setDialogIsOpen,
   errorMessage,
   initialData,
   data,

@@ -47,9 +47,9 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
   const handleColorChange = (newColor: string, type: string) => {
     dispatch(
       updateRestaurantUserUiPreferences({
-        ...userUiPreferences!,
+        ...userUiPreferences,
         colors: {
-          ...userUiPreferences!.colors,
+          ...userUiPreferences.colors,
           [type === "Text" ? "secondaryColor" : "primaryColor"]: newColor,
         },
       })

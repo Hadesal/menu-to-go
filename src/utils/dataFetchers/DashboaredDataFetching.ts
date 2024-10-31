@@ -1,7 +1,7 @@
 import { fetchUserData } from "@redux/thunks/userThunks";
 import { fetchAllRestaurants } from "@redux/thunks/restaurantThunks";
 import { AppDispatch } from "@redux/store";
-import { getErrorMessage } from "@utils/errorHandler";
+import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 
 // Function to fetch all required data for the dashboard
 export const fetchAllData = async (
@@ -17,7 +17,7 @@ export const fetchAllData = async (
       return { success: false, error: "User data not found" };
     }
   } catch (error) {
-    const errorMessage = getErrorMessage(error, "Failed to fetch all data");
-    return { success: false, error: errorMessage };
+    const errorResponse = error as ErrorResponseObject;
+    return { success: false, error: errorResponse.errors.name };
   }
 };
