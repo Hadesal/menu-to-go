@@ -272,7 +272,7 @@ export default function CategoryPage() {
           </Box>
           <Box>
             <Button sx={Styles.importBtn} variant="outlined">
-              Import
+              {getString("import")}
             </Button>
             <Button sx={Styles.previewMenu} variant="contained">
               {getString("categoryPagePreviewMenuText")}
