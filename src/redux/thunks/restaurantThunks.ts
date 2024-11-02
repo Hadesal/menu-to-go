@@ -79,7 +79,7 @@ export const removeRestaurant = createAsyncThunk(
       const response = await privateApiService.delete(
         `/restaurants/${restaurantId}`
       );
-      return { response, restaurantId };
+      return { response: response.data, restaurantId };
     } catch (error) {
       return rejectWithValue(error);
     }

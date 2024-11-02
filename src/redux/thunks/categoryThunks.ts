@@ -15,7 +15,7 @@ export const addCategoryToRestaurant = createAsyncThunk(
         `/categories/${restaurantId}`,
         categoryData
       );
-      return { restaurantId, category: response };
+      return { restaurantId, category: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -42,7 +42,7 @@ export const editCategoryInRestaurant = createAsyncThunk(
         `/categories/${categoryId}/${restaurantId}`,
         updatedCategory
       );
-      return { restaurantId, categoryId, updatedCategory: response };
+      return { restaurantId, categoryId, updatedCategory: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
