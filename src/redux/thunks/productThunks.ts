@@ -1,19 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getAllProductsByCategoryId,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-} from "@api/productsCrud";
 import { ProductData } from "@dataTypes/ProductDataTypes";
+import privateApiService from "@api/services/privateApiService";
 
 // Fetch all products by category ID
 export const fetchProductsByCategory = createAsyncThunk(
   "products/fetchByCategory",
   async (categoryId: string, { rejectWithValue }) => {
     try {
-      const response = await getAllProductsByCategoryId(categoryId);
-      return { categoryId, products: response };
+      const response = await privateApiService.get(
+        `/categories/${categoryId}/products`
+      );
+      return { categoryId, products: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -31,8 +28,35 @@ export const addProductToCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await addProduct(categoryId, productData);
-      return { categoryId, product: response };
+      const response = await privateApiService.post(
+        `/categories/${categoryId}/products`,
+        productData
+      );
+      return { categoryId, product: response.data };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const addProductListToCategory = createAsyncThunk(
+  "products/addListToCategory",
+  async (
+    {
+      categoryId,
+      productList,
+    }: {
+      categoryId: string;
+      productList: ProductData[];
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.post(
+        `/categories/${categoryId}/products/list`,
+        productList
+      );
+      return { categoryId, product: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -51,12 +75,11 @@ export const updateProductInCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await updateProduct(
-        categoryId,
-        productId,
+      const response = await privateApiService.put(
+        `/categories/${categoryId}/products/${productId}`,
         updatedProduct
       );
-      return { categoryId, productId, updatedProduct: response };
+      return { categoryId, productId, updatedProduct: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -71,7 +94,10 @@ export const removeProductFromCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      await deleteProduct(categoryId, productId);
+      await privateApiService.delete(
+        `/categories/${categoryId}/products`, // Endpoint
+        { data: productId }
+      );
       return { categoryId, productId };
     } catch (error) {
       return rejectWithValue(error);

@@ -32,6 +32,20 @@ const Styles = {
       color: "var(--primary-color)",
     },
   },
+  importBtn: {
+    borderRadius: "20px",
+    padding: "10px 25px 10px 25px",
+    backgroundColor: "transparent",
+    border: "1px solid var(--primary-color)",
+    "&:hover": {
+      backgroundColor: "var(--primary-color)",
+      borderColor: "white",
+      boxShadow: "none",
+      color: "white",
+    },
+    marginRight: "10px",
+  },
+
   gridPaper: {
     borderRadius: "20px",
     //width: "14vw",

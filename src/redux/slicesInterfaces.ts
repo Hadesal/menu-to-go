@@ -44,7 +44,7 @@ export interface CategoryState {
   successMessage: string | null;
 }
 export interface UserState {
-  user: UserDataType | null;
+  user: UserDataType;
   loading: boolean;
   error: string | null;
   successMessage: string | null;

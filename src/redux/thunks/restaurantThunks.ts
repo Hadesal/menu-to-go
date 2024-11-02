@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getRestaurantById,
-  getAllRestaurantsByUserId,
-  createRestaurant,
-  updateRestaurant,
-  deleteRestaurant,
-} from "@api/restaurantCrud";
-
 import { RestaurantData } from "@dataTypes/RestaurantObject";
+import privateApiService from "@api/services/privateApiService";
 
 // Fetch all restaurants by user ID
 export const fetchAllRestaurants = createAsyncThunk(
   "restaurants/fetchAll",
   async (userID: string, { rejectWithValue }) => {
     try {
-      const response = await getAllRestaurantsByUserId(userID);
-      return response;
+      const response = await privateApiService.get(
+        `/restaurants/user/${userID}`
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -28,8 +23,10 @@ export const fetchRestaurantById = createAsyncThunk(
   "restaurants/fetchById",
   async (restaurantId: string, { rejectWithValue }) => {
     try {
-      const response = await getRestaurantById(restaurantId);
-      return response;
+      const response = await privateApiService.get(
+        `/restaurants/${restaurantId}`
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -41,8 +38,11 @@ export const addRestaurant = createAsyncThunk(
   "restaurants/addRestaurant",
   async (restaurantData: RestaurantData, { rejectWithValue }) => {
     try {
-      const response = await createRestaurant(restaurantData);
-      return response;
+      const response = await privateApiService.post(
+        "/restaurants",
+        restaurantData
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -60,8 +60,11 @@ export const editRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await updateRestaurant(updatedRestaurant, restaurantId);
-      return response;
+      const response = await privateApiService.put(
+        `/restaurants/${restaurantId}`,
+        updatedRestaurant
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -73,8 +76,10 @@ export const removeRestaurant = createAsyncThunk(
   "restaurants/removeRestaurant",
   async (restaurantId: string, { rejectWithValue }) => {
     try {
-      const response = await deleteRestaurant(restaurantId);
-      return { response, restaurantId }; // Return both response and restaurantId
+      const response = await privateApiService.delete(
+        `/restaurants/${restaurantId}`
+      );
+      return { response, restaurantId };
     } catch (error) {
       return rejectWithValue(error);
     }

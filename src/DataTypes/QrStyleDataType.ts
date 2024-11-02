@@ -8,15 +8,21 @@ export interface QrCodeStyleDataType {
 
 export interface DotsOptionsDataType {
   color: string;
-  type: string;
+  type:
+    | "dots"
+    | "rounded"
+    | "classy"
+    | "classy-rounded"
+    | "square"
+    | "extra-rounded";
 }
 
 export interface CornerSquareOptionsDataType {
   color: string;
-  type: string;
+  type: "dot" | "square" | "extra-rounded";
 }
 
 export interface CornerDotsOptionsDataType {
   color: string;
-  type: string;
+  type: "dot" | "square";
 }

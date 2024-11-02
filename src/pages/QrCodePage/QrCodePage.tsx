@@ -14,8 +14,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
-import { useEffect, useRef, useState } from "react";
-import logo from "../../assets/logo.svg";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
+import logo from "@assets/logo.svg";
 import html2canvas from "html2canvas";
 import "./qrcodeStyle.css";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
@@ -23,69 +23,58 @@ import { useTranslation } from "react-i18next";
 import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
 import StyleControl from "./StyleControl";
 import Dropzone from "@components/common/Dropzone";
-
-interface DotsOptionsObject {
-  color: string;
-  type:
-    | "dots"
-    | "rounded"
-    | "classy"
-    | "classy-rounded"
-    | "square"
-    | "extra-rounded";
-}
-interface CornerSquareOptionsObject {
-  color: string;
-  type: "dot" | "square" | "extra-rounded";
-}
-interface CornerDotsOptionsObject {
-  color: string;
-  type: "dot" | "square";
-}
+import {
+  CornerDotsOptionsDataType,
+  CornerSquareOptionsDataType,
+  DotsOptionsDataType,
+} from "@dataTypes/QrStyleDataType";
 
 const QrCodePage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userData);
-
-  const { qrCodeStyle: qrCodeStyleObject, id } = user!;
+  const { qrCodeStyle, id } = user;
   const { t } = useTranslation();
   const getString = t;
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const [dotsOptions, setDotsOptions] = useState<DotsOptionsObject>({
+  const [dotsOptions, setDotsOptions] = useState<DotsOptionsDataType>({
     color: "#77675",
     type: "rounded",
   });
   const [cornersSquareOptions, setCornersSquareOptions] =
-    useState<CornerSquareOptionsObject>({
+    useState<CornerSquareOptionsDataType>({
       color: "#000000",
       type: "extra-rounded",
     });
   const [cornersDotOptions, setCornersDotOptions] =
-    useState<CornerDotsOptionsObject>({
+    useState<CornerDotsOptionsDataType>({
       color: "#4267b2",
       type: "dot",
     });
-  const [selectedRestaurant, setSelectedRestaurant] = useState(
-    restaurantList[0]
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState<string>(
+    restaurantList[0]?.id || ""
   );
+
   const [urlPath, setUrlPath] = useState<string>(
-    `http://localhost:5173/menu/${selectedRestaurant.id}`
+    `http://192.168.1.203:5173/menu/${selectedRestaurantId}`
   );
   const [imageSrc, setImageSrc] = useState<string>(logo);
-  const frameRef = useRef(null);
+  const frameRef: MutableRefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (user && user.qrCodeStyle) {
-      //TODO Change fallback url
-      setUrlPath(qrCodeStyleObject?.generalUrlPath || "www.google.com");
-      setDotsOptions(qrCodeStyleObject.dotsOptions);
-      setCornersSquareOptions(qrCodeStyleObject.cornersSquareOptions);
-      setCornersDotOptions(qrCodeStyleObject.cornersDotOptions);
-      setImageSrc(qrCodeStyleObject.imageSrc);
+      const { qrCodeStyle } = user;
+      setUrlPath(qrCodeStyle.generalUrlPath || "www.google.com");
+      setDotsOptions(qrCodeStyle.dotsOptions);
+      setCornersSquareOptions(qrCodeStyle.cornersSquareOptions);
+      setCornersDotOptions(qrCodeStyle.cornersDotOptions);
+      setImageSrc(qrCodeStyle.imageSrc);
     }
-    setSelectedRestaurant(restaurantList[0]);
-  }, [user, qrCodeStyleObject]);
+    if (restaurantList[0].id) {
+      setSelectedRestaurantId(restaurantList[0].id);
+    }
+  }, [user, restaurantList]);
   useEffect(() => {}, [dispatch]);
   const handlePushNewQrStyle = () => {
     const newQrStyleObject = {
@@ -102,33 +91,38 @@ const QrCodePage = () => {
     }
     const hasChanged =
       JSON.stringify(newQrStyleObject.dotsOptions) !==
-        JSON.stringify(qrCodeStyleObject?.dotsOptions || {}) ||
+        JSON.stringify(qrCodeStyle?.dotsOptions || {}) ||
       JSON.stringify(newQrStyleObject.cornersSquareOptions) !==
-        JSON.stringify(qrCodeStyleObject?.cornersSquareOptions || {}) ||
+        JSON.stringify(qrCodeStyle?.cornersSquareOptions || {}) ||
       JSON.stringify(newQrStyleObject.cornersDotOptions) !==
-        JSON.stringify(qrCodeStyleObject?.cornersDotOptions || {}) ||
-      newQrStyleObject.imageSrc !== (qrCodeStyleObject?.imageSrc || "") ||
-      newQrStyleObject.generalUrlPath !==
-        (qrCodeStyleObject?.generalUrlPath || "");
+        JSON.stringify(qrCodeStyle?.cornersDotOptions || {}) ||
+      newQrStyleObject.imageSrc !== (qrCodeStyle?.imageSrc || "") ||
+      newQrStyleObject.generalUrlPath !== (qrCodeStyle?.generalUrlPath || "");
     if (!hasChanged) {
       setErrorMessage(getString("noDataChanged"));
       setOpen(true);
 
       return;
     }
-    console.log(restaurantList);
-
     dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
     ).unwrap();
   };
   const handleOnRestaurantChange = (event: any) => {
-    const selectedRestaurant = event.target.value;
-    setSelectedRestaurant(selectedRestaurant);
-    setUrlPath(`http://localhost:5173/menu/${selectedRestaurant.id}`);
+    const selectedId = event.target.value as string;
+    setSelectedRestaurantId(selectedId);
+    const selectedRestaurant = restaurantList.find(
+      (restaurant) => restaurant.id === selectedId
+    );
+    setUrlPath(`http://192.168.1.203:5173/menu/${selectedRestaurant?.id}`);
   };
   const downloadImage = async () => {
-    const canvas = await html2canvas(frameRef?.current, {
+    if (!frameRef.current) {
+      setErrorMessage("QR code frame is not available.");
+      setOpen(true);
+      return;
+    }
+    const canvas = await html2canvas(frameRef.current, {
       backgroundColor: "#ffffff",
       scale: 1.5,
       useCORS: true,
@@ -155,7 +149,7 @@ const QrCodePage = () => {
     }
   };
 
-  const handleClose = (reason) => {
+  const handleClose = (_: any, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
@@ -207,13 +201,13 @@ const QrCodePage = () => {
           <Select
             labelId="restaurantDropdownLabel"
             id="restaurantDropdownId"
-            value={selectedRestaurant}
+            value={selectedRestaurantId}
             onChange={handleOnRestaurantChange}
             sx={{ width: "100%", alignSelf: "end" }}
           >
             {restaurantList &&
-              restaurantList.map((restaurantItem, key) => (
-                <MenuItem key={key} value={restaurantItem}>
+              restaurantList.map((restaurantItem) => (
+                <MenuItem key={restaurantItem.id} value={restaurantItem.id}>
                   {restaurantItem.name}
                 </MenuItem>
               ))}
@@ -338,6 +332,7 @@ const QrCodePage = () => {
             onFileUpload={(file) =>
               handlefileUploaded({ target: { files: [file] } })
             }
+            acceptedFileType="svg"
           />
 
           <Button
