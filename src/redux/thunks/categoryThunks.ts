@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from "@api/categoryCrud";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import privateApiService from "@api/services/privateApiService";
 
 // Add a category to a specific restaurant
 export const addCategoryToRestaurant = createAsyncThunk(
@@ -15,7 +11,10 @@ export const addCategoryToRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await createCategory(restaurantId, categoryData);
+      const response = await privateApiService.post(
+        `/categories/${restaurantId}`,
+        categoryData
+      );
       return { restaurantId, category: response };
     } catch (error) {
       return rejectWithValue(error);
@@ -39,9 +38,8 @@ export const editCategoryInRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await updateCategory(
-        restaurantId,
-        categoryId,
+      const response = await privateApiService.put(
+        `/categories/${categoryId}/${restaurantId}`,
         updatedCategory
       );
       return { restaurantId, categoryId, updatedCategory: response };
@@ -59,7 +57,7 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      await deleteCategory(categoryId);
+      await privateApiService.delete(`/categories/${categoryId}`);
       return { restaurantId, categoryId };
     } catch (error) {
       return rejectWithValue(error);

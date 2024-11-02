@@ -7,20 +7,22 @@ import {
 } from "react";
 import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-export type acceptedfileTypes = "svg" | "excel" | "json";
+
+export type AcceptedFileTypes = "svg" | "excel" | "json";
+type FileTypeArray = AcceptedFileTypes | AcceptedFileTypes[];
+
 function Dropzone({
   onFileUpload,
-  acceptedFileType,
+  acceptedFileTypes,
 }: {
   onFileUpload: (file: File) => void;
-  acceptedFileType: acceptedfileTypes;
+  acceptedFileTypes: FileTypeArray;
 }) {
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
 
-  const acceptedFileTypeUpperCase = acceptedFileType.toLocaleUpperCase();
   const handleDragOver = (event: ReactDragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(true);
@@ -32,25 +34,30 @@ function Dropzone({
   };
 
   const validateFile = (file: File): boolean => {
-    switch (acceptedFileType) {
-      case "svg":
-        return file.type === "image/svg+xml" || file.name.endsWith(".svg");
-      case "excel":
-        return (
-          file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-          file.type === "application/vnd.ms-excel" ||
-          file.name.endsWith(".xlsx") ||
-          file.name.endsWith(".xls")
-        );
-      case "json":
-        return (
-          file.type === "application/json" ||
-          file.name.toLowerCase().endsWith(".json")
-        );
-      default:
-        return false;
-    }
+    const types = Array.isArray(acceptedFileTypes)
+      ? acceptedFileTypes
+      : [acceptedFileTypes];
+    return types.some((type) => {
+      switch (type) {
+        case "svg":
+          return file.type === "image/svg+xml" || file.name.endsWith(".svg");
+        case "excel":
+          return (
+            file.type ===
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+            file.type === "application/vnd.ms-excel" ||
+            file.name.endsWith(".xlsx") ||
+            file.name.endsWith(".xls")
+          );
+        case "json":
+          return (
+            file.type === "application/json" ||
+            file.name.toLowerCase().endsWith(".json")
+          );
+        default:
+          return false;
+      }
+    });
   };
 
   const handleClick = () => {
@@ -65,7 +72,7 @@ function Dropzone({
       if (files.length > 0 && validateFile(files[0])) {
         onFileUpload(files[0]);
       } else {
-        setErrorMessage(`Only ${acceptedFileTypeUpperCase} files are allowed.`);
+        setErrorMessage(`Only ${getAcceptAttribute()} files are allowed.`);
         setOpen(true);
       }
     }
@@ -76,7 +83,7 @@ function Dropzone({
     if (files && files.length > 0 && validateFile(files[0])) {
       onFileUpload(files[0]);
     } else {
-      setErrorMessage(`Only ${acceptedFileTypeUpperCase} files are allowed.`);
+      setErrorMessage(`Only ${getAcceptAttribute()} files are allowed.`);
       setOpen(true);
     }
   };
@@ -87,18 +94,27 @@ function Dropzone({
     }
     setOpen(false);
   };
+
   const getAcceptAttribute = (): string => {
-    switch (acceptedFileType) {
-      case "svg":
-        return ".svg";
-      case "excel":
-        return ".xlsx,.xls";
-      case "json":
-        return ".json";
-      default:
-        return "";
-    }
+    const types = Array.isArray(acceptedFileTypes)
+      ? acceptedFileTypes
+      : [acceptedFileTypes];
+    return types
+      .map((type) => {
+        switch (type) {
+          case "svg":
+            return ".svg";
+          case "excel":
+            return ".xlsx,.xls";
+          case "json":
+            return ".json";
+          default:
+            return "";
+        }
+      })
+      .join(",");
   };
+
   return (
     <Box
       className={dragOver ? "dropzone dragover" : "dropzone"}
@@ -128,17 +144,14 @@ function Dropzone({
       <UploadFileIcon
         sx={{ fontSize: 48, color: dragOver ? "primary.main" : "grey.500" }}
       />
-      {/* Added upload icon */}
       <Typography
         variant="body1"
         sx={{ color: dragOver ? "primary.dark" : "grey.800", marginTop: 1 }}
       >
-        Drag and drop an{" "}
-        {acceptedFileType === "svg" ? "image" : acceptedFileType} here, or click
-        to select
+        Drag and drop a file here, or click to select
       </Typography>
       <Typography variant="caption" sx={{ color: "grey.600" }}>
-        Only {acceptedFileTypeUpperCase} files are allowed
+        Only {getAcceptAttribute()} files are allowed
       </Typography>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>

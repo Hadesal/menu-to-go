@@ -6,7 +6,6 @@ import {
   Button,
   CircularProgress,
   Divider,
-  Drawer,
   IconButton,
   Snackbar,
   Stack,
@@ -38,6 +37,7 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import Styles from "./CategorySection.styles";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { itemType } from "@utils/dataTypeCheck";
+import ImportDialog from "@components/common/Dialogs/ImportDialog/ImportDialog";
 
 export default function CategoryPage() {
   const {
@@ -55,7 +55,7 @@ export default function CategoryPage() {
     (state) => state.restaurantsData
   );
   const dispatch = useAppDispatch();
-  const [open, setOpen] = useState(false);
+  const [openImportDialog, setOpenImportDialog] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -101,6 +101,9 @@ export default function CategoryPage() {
       dispatch(clearRestaurantError());
     };
   }, [dispatch]);
+  const handleImportDialogClose = () => {
+    setOpenImportDialog(false);
+  };
   const handleAddCategory = (category: itemType) => {
     if (selectedRestaurant?.id) {
       dispatch(
@@ -191,7 +194,12 @@ export default function CategoryPage() {
 
   return (
     <>
-      <Drawer anchor="right" open={open}></Drawer>
+      <ImportDialog
+        fileType={["excel", "json"]}
+        handleClose={handleImportDialogClose}
+        isOpen={openImportDialog}
+        title={getString("importFileMessage")}
+      />
       <Stack spacing={3} sx={Styles.stack}>
         <Backdrop
           sx={{
@@ -271,7 +279,13 @@ export default function CategoryPage() {
             <Typography variant="h5">{selectedRestaurant?.name}</Typography>
           </Box>
           <Box>
-            <Button sx={Styles.importBtn} variant="outlined">
+            <Button
+              sx={Styles.importBtn}
+              variant="outlined"
+              onClick={() => {
+                setOpenImportDialog(true);
+              }}
+            >
               {getString("import")}
             </Button>
             <Button sx={Styles.previewMenu} variant="contained">

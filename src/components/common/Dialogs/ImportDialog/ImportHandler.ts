@@ -1,0 +1,3 @@
+const hadleUploadedJson = () => {};
+
+const handleUploadedXlsx = () => {};
