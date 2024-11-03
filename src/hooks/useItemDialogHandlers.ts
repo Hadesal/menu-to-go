@@ -57,5 +57,7 @@ export const useItemDialogHandlers = () => {
     handleEditDialogClose,
     handleDuplicateClick,
     handleDuplicateDialogClose,
+    setIsDuplicateProductDialogOpen,
+    setIsEditDialogOpen
   };
 };

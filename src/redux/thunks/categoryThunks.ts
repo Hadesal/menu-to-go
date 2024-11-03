@@ -15,7 +15,7 @@ export const addCategoryToRestaurant = createAsyncThunk(
         `/categories/${restaurantId}`,
         categoryData
       );
-      return { restaurantId, category: response };
+      return { restaurantId, category: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -42,7 +42,7 @@ export const editCategoryInRestaurant = createAsyncThunk(
         `/categories/${categoryId}/${restaurantId}`,
         updatedCategory
       );
-      return { restaurantId, categoryId, updatedCategory: response };
+      return { restaurantId, categoryId, updatedCategory: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -59,6 +59,31 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
     try {
       await privateApiService.delete(`/categories/${categoryId}`);
       return { restaurantId, categoryId };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// Reorder categories for a specific restaurant
+export const reorderCategoriesForRestaurant = createAsyncThunk(
+  "restaurants/reorderCategories",
+  async (
+    {
+      restaurantId,
+      reorderedCategoryIds,
+    }: {
+      restaurantId: string;
+      reorderedCategoryIds: string[];
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.put(
+        `/categories/${restaurantId}/reorder`,
+        reorderedCategoryIds
+      );
+      return { restaurantId, reorderedCategories: response.data };
     } catch (error) {
       return rejectWithValue(error);
     }

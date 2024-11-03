@@ -14,6 +14,9 @@ import Styles from "../../../DataTypes/StylesTypes";
 import { useAppSelector } from "@redux/reduxHooks";
 import { useTranslation } from "react-i18next";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 interface CategoryListItemProps {
   item: CategoryData;
   index: number;
@@ -42,6 +45,12 @@ const CategoryListItemItem = ({
   const { t } = useTranslation();
   const getString = t;
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const menuItems = () => [
     {
       text: getString("edit"),
@@ -62,6 +71,9 @@ const CategoryListItemItem = ({
       onClick={() => {
         itemClick(item);
       }}
+      ref={setNodeRef}
+      {...attributes}
+      style={style}
       sx={{
         ...styles.categoryListItem,
         borderRadius: index === length - 1 ? "0 0 16px 16px" : "0",
@@ -77,6 +89,7 @@ const CategoryListItemItem = ({
               <IconButton
                 sx={{ ...styles.iconButton, cursor: "grab" }}
                 aria-label="more"
+                {...listeners}
               >
                 <DragIndicatorIcon
                   sx={{

@@ -17,6 +17,8 @@ import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.pn
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 import Styles from "../../../DataTypes/StylesTypes";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface ProductListItemProps {
   item: ProductData;
@@ -50,7 +52,12 @@ const ListViewProductItem = ({
 }: ProductListItemProps) => {
   const { t } = useTranslation();
   const getString = t;
-
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const menuItems = () => [
     {
       text: getString("duplicate"),
@@ -77,6 +84,7 @@ const ListViewProductItem = ({
     },
   ];
 
+  
   return (
     <Paper
       key={item.id}
@@ -85,8 +93,10 @@ const ListViewProductItem = ({
         ...styles.paperListView,
         background: checked ? "#FFF9F4" : "inherit",
       }}
+      {...attributes}
+      style={style}
     >
-      <ListItem sx={styles.productListItem} key={item.id}>
+      <ListItem ref={setNodeRef} sx={styles.productListItem} key={item.id}>
         <Box sx={styles.productListItemBox}>
           <Checkbox
             checked={checked}
@@ -101,6 +111,7 @@ const ListViewProductItem = ({
               color: "var(--primary-color)",
             }}
             aria-label="drag"
+            {...listeners}
           >
             <DragIndicatorIcon fontSize="medium" />
           </IconButton>
