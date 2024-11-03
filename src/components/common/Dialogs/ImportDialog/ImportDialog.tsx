@@ -3,10 +3,12 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Drawer,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Box } from "@mui/system";
 
 interface importDialog {
   handleClose: () => void;
@@ -36,35 +38,15 @@ const ImportDialog = ({
 
   return (
     <>
-      <Dialog
-        open={isOpen}
-        fullScreen={fullScreen}
-        onClose={handleClose}
-        sx={{
-          "& .MuiPaper-root": {
-            borderRadius: "1.5rem",
-            minWidth: "35rem",
-            minHeight: "20rem",
-          },
-        }}
-      >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "column",
-          }}
-        >
+      <Drawer open={isOpen} onClose={handleClose} anchor="right">
+        <Box>
+          <Typography variant="h4">{title}</Typography>
+
           <Typography>
             to Import your Restaurant Data Please do the following:
           </Typography>
-          <Dropzone
-            onFileUpload={handleOnFileUpload}
-            acceptedFileTypes={fileType}
-          />
-        </DialogContent>
-      </Dialog>
+        </Box>
+      </Drawer>
     </>
   );
 };
