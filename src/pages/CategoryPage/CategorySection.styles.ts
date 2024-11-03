@@ -100,6 +100,7 @@ const Styles = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 2,
   },
   productListItemBox: {
     color: "primary",
@@ -149,12 +150,19 @@ const Styles = {
     paddingTop: "8px",
     paddingBottom: "8px",
   },
-  categoryListItemText: {
+  categoryListItemTextWrapper: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    minWidth: 0, // Allows text truncation within this box
   },
-  categoryName: { fontWeight: 500, fontSize: "18px" },
+  categoryName: {
+    fontWeight: 500,
+    fontSize: "18px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
   categoryItemsLengthText: { marginLeft: 1 },
   dropDownMenuItemIcon: {
     marginRight: 1,

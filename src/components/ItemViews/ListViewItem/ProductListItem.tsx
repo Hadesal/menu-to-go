@@ -84,7 +84,6 @@ const ListViewProductItem = ({
     },
   ];
 
-  
   return (
     <Paper
       key={item.id}
@@ -97,7 +96,15 @@ const ListViewProductItem = ({
       style={style}
     >
       <ListItem ref={setNodeRef} sx={styles.productListItem} key={item.id}>
-        <Box sx={styles.productListItemBox}>
+        <Box
+          sx={{
+            ...styles.productListItemBox,
+            display: "flex",
+            alignItems: "center",
+            minWidth: 0,
+            flexShrink: 1,
+          }}
+        >
           <Checkbox
             checked={checked}
             onChange={(e) => item.id && onCheckChange(e, item.id)}
@@ -123,14 +130,31 @@ const ListViewProductItem = ({
           />
           <ListItemText
             primary={
-              <Typography noWrap sx={styles.productName} variant="body1">
+              <Typography
+                title={item.name}
+                sx={{
+                  ...styles.productName,
+                  minWidth: 0, // Ensures truncation within available space
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+                variant="body1"
+              >
                 {item.name}
               </Typography>
             }
           />
         </Box>
-        <Box>
-          <Typography sx={styles.productPrice} component="span">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            minWidth: 0,
+            flexShrink: 0,
+          }}
+        >
+          <Typography sx={{ ...styles.productPrice }} component="span">
             {item.price}$
           </Typography>
           <IconButton
