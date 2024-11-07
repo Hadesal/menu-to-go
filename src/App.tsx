@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "./pages/UserDashboardPage/UserDashboardPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute";
 // Define your custom theme
@@ -54,6 +55,14 @@ function App() {
             element={
               <PublicRoute>
                 <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/landing"
+            element={
+              <PublicRoute>
+                <LandingPage />
               </PublicRoute>
             }
           />
