@@ -1,7 +1,17 @@
 import Styles from "@dataTypes/StylesTypes";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { ChangeEvent } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import {
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface HeaderComponentProps {
@@ -33,8 +43,17 @@ const HeaderComponent = ({
   category,
   product,
 }: HeaderComponentProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const { t } = useTranslation();
   const getString = t;
+
   return (
     <Stack
       direction={title ? "column-reverse" : "row"}
@@ -80,7 +99,11 @@ const HeaderComponent = ({
           {product && selectedProductsIDs.length > 0 && (
             <>
               <Button
-                sx={{ borderRadius: 10, minWidth: "6vw" }}
+                sx={{
+                  borderRadius: 10,
+                  minWidth: "6vw",
+                  display: { xs: "none", sm: "block" },
+                }}
                 variant="outlined"
                 color="primary"
                 onClick={onCopyClick}
@@ -88,7 +111,11 @@ const HeaderComponent = ({
                 {getString("copy")}
               </Button>
               <Button
-                sx={{ borderRadius: 10, minWidth: "6vw" }}
+                sx={{
+                  borderRadius: 10,
+                  minWidth: "6vw",
+                  display: { xs: "none", sm: "block" },
+                }}
                 variant="outlined"
                 color="primary"
                 onClick={onMoveClick}
@@ -101,6 +128,7 @@ const HeaderComponent = ({
                   minWidth: "6vw",
                   background: "red",
                   color: "white",
+                  display: { xs: "none", sm: "block" },
                 }}
                 variant="outlined"
                 color="primary"
@@ -108,6 +136,56 @@ const HeaderComponent = ({
               >
                 {getString("delete")}
               </Button>
+
+              <Button
+                id="basic-button"
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+                sx={{
+                  display: { sm: "none" },
+                  minWidth: "6vw",
+                  whiteSpace: "nowrap",
+                }}
+                endIcon={<ExpandMoreIcon />}
+              >
+                Bulk actions
+              </Button>
+              <Menu
+                id="bulk-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    if (onCopyClick) onCopyClick();
+                    handleClose();
+                  }}
+                >
+                  {getString("copy")}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    if (onMoveClick) onMoveClick();
+                    handleClose();
+                  }}
+                >
+                  {getString("move")}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    if (onDeleteClick) onDeleteClick();
+                    handleClose();
+                  }}
+                >
+                  {getString("delete")}
+                </MenuItem>
+              </Menu>
             </>
           )}
           <Button

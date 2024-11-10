@@ -7,10 +7,15 @@ import {
   CircularProgress,
   Divider,
   IconButton,
+  MenuItem,
+  Menu,
   Snackbar,
   Stack,
   Typography,
+  Tooltip,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
@@ -62,6 +67,14 @@ export default function CategoryPage() {
 
   const { t } = useTranslation();
   const getString = t;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     if (categoryError || productError) {
@@ -279,17 +292,19 @@ export default function CategoryPage() {
             >
               <KeyboardBackspaceIcon fontSize="large" color="primary" />
             </IconButton>
-            <Typography
-              title={selectedRestaurant?.name}
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-              variant="h5"
-            >
-              {selectedRestaurant?.name}
-            </Typography>{" "}
+            <Tooltip arrow title={selectedRestaurant?.name}>
+              <Typography
+                title={selectedRestaurant?.name}
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+                variant="h5"
+              >
+                {selectedRestaurant?.name}
+              </Typography>
+            </Tooltip>
           </Box>
           <Box
             sx={{
@@ -299,7 +314,7 @@ export default function CategoryPage() {
             }}
           >
             <Button
-              sx={Styles.importBtn}
+              sx={{ ...Styles.importBtn, display: { xs: "none", sm: "block" } }}
               variant="outlined"
               onClick={() => {
                 setOpenImportDialog(true);
@@ -307,16 +322,56 @@ export default function CategoryPage() {
             >
               {getString("import")}
             </Button>
-            <Button sx={Styles.previewMenu} variant="contained">
+            <Button
+              sx={{
+                ...Styles.previewMenu,
+                display: { xs: "none", sm: "block" },
+              }}
+              variant="contained"
+            >
               {getString("categoryPagePreviewMenuText")}
             </Button>
+
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{
+                ...Styles.previewMenu,
+                display: { xs: "flex", sm: "none" },
+              }}
+              variant="contained"
+              endIcon={<ExpandMoreIcon />}
+            >
+              Options
+            </Button>
+            <Menu
+              id="bulk-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  setOpenImportDialog(true);
+                }}
+              >
+                {getString("import")}
+              </MenuItem>
+              <MenuItem>{getString("categoryPagePreviewMenuText")}</MenuItem>
+            </Menu>
           </Box>
         </Box>
         <Divider />
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", lg: "row" },
             gap: 5,
             minWidth: 0,
           }}

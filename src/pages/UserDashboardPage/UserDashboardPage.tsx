@@ -189,7 +189,7 @@ const UserDashboardPage = () => {
       <Box
         component="nav"
         sx={{
-          width: { sm: drawerWidth },
+          width: { md: drawerWidth },
           flexShrink: { sm: 0 },
           borderRight: "1 solid red",
         }}
@@ -204,7 +204,7 @@ const UserDashboardPage = () => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { sm: "block", md: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -221,7 +221,7 @@ const UserDashboardPage = () => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "none", md: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -242,7 +242,7 @@ const UserDashboardPage = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { xs: "100%", md: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         <Toolbar />

@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import Styles from "../../../DataTypes/StylesTypes";
 import { useAppSelector } from "@redux/reduxHooks";
@@ -105,20 +106,24 @@ const CategoryListItemItem = ({
                 sx={{
                   minWidth: 0,
                   display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <Typography
-                  title={item.name}
-                  sx={styles.categoryName}
-                  variant="body1"
-                  color={
-                    selectedCategory?.id === item.id
-                      ? "white"
-                      : "var(--primary-color)"
-                  }
-                >
-                  {item.name}
-                </Typography>
+                <Tooltip arrow title={item.name}>
+                  <Typography
+                    title={item.name}
+                    sx={styles.categoryName}
+                    variant="body1"
+                    color={
+                      selectedCategory?.id === item.id
+                        ? "white"
+                        : "var(--primary-color)"
+                    }
+                  >
+                    {item.name}
+                  </Typography>
+                </Tooltip>
                 <Typography
                   title={item?.products?.length.toString()}
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}

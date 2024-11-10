@@ -11,6 +11,7 @@ import {
   ListItemText,
   Paper,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.png";
@@ -122,27 +123,31 @@ const ListViewProductItem = ({
           >
             <DragIndicatorIcon fontSize="medium" />
           </IconButton>
-          <img
-            style={styles.productImg}
-            src={item.image ? item.image : placeHolderImg}
-            width={60}
-            height={60}
-          />
+          <Box>
+            <img
+              style={styles.productImg}
+              src={item.image ? item.image : placeHolderImg}
+              width={60}
+              height={60}
+            />
+          </Box>
           <ListItemText
             primary={
-              <Typography
-                title={item.name}
-                sx={{
-                  ...styles.productName,
-                  minWidth: 0, // Ensures truncation within available space
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-                variant="body1"
-              >
-                {item.name}
-              </Typography>
+              <Tooltip arrow title={item.name}>
+                <Typography
+                  title={item.name}
+                  sx={{
+                    ...styles.productName,
+                    minWidth: 0, // Ensures truncation within available space
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  variant="body1"
+                >
+                  {item.name}
+                </Typography>
+              </Tooltip>
             }
           />
         </Box>
@@ -154,7 +159,13 @@ const ListViewProductItem = ({
             flexShrink: 0,
           }}
         >
-          <Typography sx={{ ...styles.productPrice }} component="span">
+          <Typography
+            sx={{
+              ...styles.productPrice,
+              display: { xs: "none", sm: "block" },
+            }}
+            component="span"
+          >
             {item.price}$
           </Typography>
           <IconButton

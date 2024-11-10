@@ -107,7 +107,7 @@ const Styles = {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 1,
+    gap: { xs: 0.5, md: 1 },
   },
   productImg: {
     borderRadius: "10px",
@@ -134,7 +134,7 @@ const Styles = {
     "&:hover": {
       background: "transparent",
     },
-    marginLeft: 4, // Add any additional styles specific to productMoreIcon
+    marginLeft: { xs: 0, md: 4 },
     color: "var(--primary-color)",
   },
   /**Category item styles */
