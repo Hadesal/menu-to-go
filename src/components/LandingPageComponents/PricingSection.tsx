@@ -57,14 +57,21 @@ export default function PricingSection() {
   ];
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", padding: "0 2rem" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        padding: "0 2rem",
+        gap: "32px",
+      }}
+    >
       <Typography
         sx={{
           fontFamily: "Poppins",
           textAlign: "center",
-          fontWeight: 400,
-          fontSize: "56px",
-          lineHeight: "56px",
+          fontWeight: 500,
+          fontSize: "46px",
+          lineHeight: "46px",
         }}
       >
         Streamline your teamwork. Start free.
@@ -78,7 +85,6 @@ export default function PricingSection() {
           fontSize: "20px",
           lineHeight: "20px",
           margin: "0 auto",
-          marginTop: "2rem",
           width: { xs: "100%", md: "80%", lg: "60%" },
         }}
       >
@@ -89,8 +95,7 @@ export default function PricingSection() {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
-          marginTop: "1.5rem",
+          justifyContent: { md: "center", lg: "flex-end" },
           gap: 1,
         }}
       >
@@ -157,11 +162,16 @@ export default function PricingSection() {
 
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "row",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+            md: "1fr 1fr",
+            lg: "1fr 1fr 1fr 1fr",
+          },
+          justifyItems: "center",
           gap: 6,
-          justifyContent: "center",
-          marginTop: "2rem",
         }}
       >
         {pricingPlans.map((plan) => (
@@ -175,6 +185,7 @@ export default function PricingSection() {
               boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
               padding: "1rem",
               gap: 1,
+              margin: 0,
             }}
           >
             <Typography

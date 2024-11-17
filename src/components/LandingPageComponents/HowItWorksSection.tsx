@@ -16,36 +16,35 @@ export default function HowItWorksSection() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        margin: "0 auto",
         height: "800px",
         width: "100%",
+        gap: "32px",
       }}
     >
       <Typography
         sx={{
           fontFamily: "Poppins",
-          textAlign: "center",
-          fontWeight: 400,
           fontSize: "56px",
           lineHeight: "56px",
+          fontWeight: 500,
+          textAlign: "center",
         }}
       >
         How it works?
       </Typography>
       <Typography
         sx={{
+          margin: "0 auto",
           fontFamily: "Poppins",
           textAlign: "center",
-          color: "#BCB8B1",
           fontWeight: 500,
           fontSize: "20px",
           lineHeight: "20x",
-          margin: "0 auto",
-          marginTop: "2rem",
+          color: "#BCB8B1",
           width: { xs: "100%", md: "80%", lg: "60%" },
         }}
       >
-        By using{" "}
+        By using
         <span
           style={{
             fontFamily: "Lucida Calligraphy",
@@ -55,14 +54,8 @@ export default function HowItWorksSection() {
             lineHeight: "24px",
           }}
         >
-          <span
-            style={{
-              color: "#A4755D",
-            }}
-          >
-            Menu
-          </span>
-          -To-Go{" "}
+          <span style={{ color: "#A4755D" }}> Menu</span>
+          <span style={{ color: "#797979" }}>-To-Go </span>
         </span>
         café & Restaurant PDF to QR Code or From Scratch Menu Builder, you can
         easily create a non-contact digital menu for free and many more!
@@ -71,17 +64,14 @@ export default function HowItWorksSection() {
         sx={{
           display: "flex",
           flexDirection: "row",
-          gap: 4,
-          marginTop: "2rem",
           justifyContent: "center",
           height: "100%",
-          position: "relative",
         }}
       >
         {!isPlaying ? (
           <Box
             sx={{
-              width: "70%",
+              width: "80%",
               height: "100%",
               backgroundImage: `url(${VideoBackground})`,
               backgroundSize: "cover",
@@ -92,7 +82,6 @@ export default function HowItWorksSection() {
             }}
             onClick={handlePlay}
           >
-            {/* Custom Play Button */}
             <IconButton
               sx={{
                 position: "absolute",
@@ -115,7 +104,7 @@ export default function HowItWorksSection() {
             height={"100%"}
             style={{
               borderRadius: 5,
-              overflow: "hidden", // Ensure border-radius affects the video player
+              overflow: "hidden",
             }}
             controls={true}
             playing={true}

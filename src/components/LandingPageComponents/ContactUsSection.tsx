@@ -19,6 +19,7 @@ export default function ContactUsSection() {
           margin: "0 auto",
           paddingBottom: "10rem",
           width: { xs: "80%", md: "40%" },
+          gap: "32px",
         }}
       >
         <Box
@@ -44,10 +45,10 @@ export default function ContactUsSection() {
         <Typography
           sx={{
             fontFamily: "Poppins",
-            fontWeight: 400,
+            fontWeight: 500,
             fontSize: "56px",
-            textAlign: "center",
             lineHeight: "56px",
+            textAlign: "center",
           }}
         >
           Contact Us
@@ -56,13 +57,12 @@ export default function ContactUsSection() {
           sx={{
             fontFamily: "Poppins",
             fontWeight: 500,
-            fontSize: "24px",
-            lineHeight: 1.2,
-            color: "#BCB8B1",
-            marginTop: "2rem",
+            fontSize: "20px",
+            lineHeight: "20px",
             textAlign: "center",
+            margin: "0 auto",
             width: { xs: "100%", md: "80%", lg: "90%" },
-            margin: "2rem auto",
+            color: "#BCB8B1",
           }}
         >
           Have a question? Feel free to contact us? we are happy to help you!
@@ -72,7 +72,6 @@ export default function ContactUsSection() {
             display: "flex",
             flexDirection: "row",
             gap: 4,
-            marginTop: "2rem",
           }}
         >
           <TextField
@@ -109,7 +108,6 @@ export default function ContactUsSection() {
           rows={8}
           sx={{
             width: "100%",
-            marginTop: "1rem",
             "& .MuiInputBase-root": {
               borderRadius: "1rem",
             },
@@ -118,13 +116,15 @@ export default function ContactUsSection() {
         <Button
           variant="contained"
           sx={{
-            marginTop: 3,
-            borderRadius: "20px",
-            padding: "5px, 0px, 5px, 0px",
+            borderRadius: "36px",
             backgroundColor: "var(--primary-color)",
             border: "1px solid transparent",
             alignSelf: "flex-end",
-            fontSize: "1rem",
+            fontSize: "24px",
+            lineHeight: "24px",
+            padding: "1.5rem",
+            width: "292px",
+            heigh: "72px",
             textTransform: "none",
             "&:hover": {
               backgroundColor: "transparent",
@@ -133,7 +133,9 @@ export default function ContactUsSection() {
               color: "var(--primary-color)",
             },
           }}
-          //onClick={handleFormSubmit}
+          onClick={() => {
+            console.log("Submit Message");
+          }}
         >
           {getString("SubmitMessage")}
         </Button>

@@ -4,7 +4,6 @@ import Ellipse from "../../assets/Ellipse 18.svg";
 import ThinHalfCircle from "../../assets/ThinHalfCircle.svg";
 import MobileMenu from "../../assets/MobileMenu.svg";
 import LaptopMenu from "../../assets/LaptopMenu.svg";
-//import NoisyImage from "../../assets/noisybg.jpg";
 
 export default function HomeSection() {
   return (
@@ -12,9 +11,6 @@ export default function HomeSection() {
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        //backgroundImage: `url(${NoisyImage})`,
-        //backgroundColor: "rgba(249, 253, 254, 1)",
-        //backgroundBlendMode: "multiply",
       }}
     >
       <Box
@@ -34,7 +30,7 @@ export default function HomeSection() {
           width: { xs: "100%", md: "50%" },
           paddingTop: "8rem",
           paddingLeft: "2rem",
-          gap: 3,
+          gap: "32px",
         }}
       >
         <Typography
@@ -53,8 +49,8 @@ export default function HomeSection() {
           sx={{
             fontFamily: "Poppins",
             fontWeight: 500,
-            fontSize: "64px",
-            lineHeight: "70px",
+            fontSize: "54px",
+            lineHeight: "60px",
           }}
         >
           Help You To Create Your Digital Menu for Free
@@ -69,30 +65,31 @@ export default function HomeSection() {
           }}
         >
           Easily Create a Digital Menu for your Restaurant or Café within the
-          next 5 minutes for FREE
+          next 5 minutes for Free
         </Typography>
+
         <Button
+          variant="outlined"
           sx={{
             fontFamily: "Poppins",
             fontWeight: 500,
             fontSize: "24px",
             lineHeight: "24px",
-            borderRadius: "2.25rem",
+            borderRadius: "36px",
+            padding: "1.5rem",
+            width: "292px",
+            heigh: "72px",
             backgroundColor: "var(--primary-color)",
-            marginTop: "0.5rem",
             color: "white",
+            textTransform: "none",
             "&:hover": {
               backgroundColor: "transparent",
               borderColor: "var(--primary-color)",
               color: "var(--primary-color)",
             },
-            height: "4.5rem",
-            width: "18.25rem",
-            textTransform: "none",
           }}
-          variant="outlined"
           onClick={() => {
-            console.log("sign up");
+            console.log("Create Your Menu");
           }}
         >
           Create Your Menu
@@ -103,6 +100,7 @@ export default function HomeSection() {
           display: "flex",
           justifyContent: { xs: "center", md: "end" },
           width: { xs: "100%", md: "50%" },
+          marginTop: { xs: "2rem", md: "0" },
         }}
       >
         <Box

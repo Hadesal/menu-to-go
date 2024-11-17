@@ -54,13 +54,14 @@ export default function BenefitsSection() {
         display: "flex",
         flexDirection: "column",
         padding: "0 2rem",
+        gap: "32px",
       }}
     >
       <Typography
         sx={{
           fontFamily: "Poppins",
           textAlign: "center",
-          fontWeight: 400,
+          fontWeight: 500,
           fontSize: "56px",
           lineHeight: "56px",
         }}
@@ -76,7 +77,6 @@ export default function BenefitsSection() {
           fontSize: "20px",
           lineHeight: "20x",
           margin: "0 auto",
-          marginTop: "2rem",
           width: { xs: "100%", md: "80%", lg: "60%" },
         }}
       >
@@ -97,7 +97,7 @@ export default function BenefitsSection() {
           >
             Menu
           </span>
-          -To-Go
+          <span style={{ color: "#797979" }}>-To-Go</span>
         </span>
         . From streamlining your ordering process to reducing wait times, our
         platform helps you provide a seamless dining experience.
@@ -112,7 +112,6 @@ export default function BenefitsSection() {
             lg: "1fr 1fr 1fr",
           },
           gap: 8,
-          marginTop: "2rem",
         }}
       >
         {benifitsData.map((benifit, index) => (

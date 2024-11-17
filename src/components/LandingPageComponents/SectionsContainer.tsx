@@ -12,7 +12,7 @@ export default function SectionsContainer() {
         margin: { xs: "1rem 1rem 0", md: "2rem 2rem 0" },
         display: "flex",
         flexDirection: "column",
-        gap: 10,
+        gap: 20,
       }}
     >
       <HomeSection />
