@@ -3,6 +3,27 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import privateApiService from "@api/services/privateApiService";
 
+export const addCategoriesToRestaurant = createAsyncThunk(
+  "restaurant/addCategories",
+  async (
+    {
+      restaurantId,
+      categoryList,
+    }: { restaurantId: string; categoryList: CategoryData[] },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.post(
+        `/categories/${restaurantId}/list`,
+        categoryList
+      );
+      return { categoryList: response.data, restaurantId };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 // Add a category to a specific restaurant
 export const addCategoryToRestaurant = createAsyncThunk(
   "restaurants/addCategory",

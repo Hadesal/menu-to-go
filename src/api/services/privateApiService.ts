@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getUserToken } from "@utils/auth-handlers";
 
-const API_BASE_URL = "http://172.20.10.13:8080/api/";
+const API_BASE_URL = "http://localhost:8080/api/";
 
 const privateApiService = axios.create({
   baseURL: API_BASE_URL,
