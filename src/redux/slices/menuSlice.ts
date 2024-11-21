@@ -1,10 +1,15 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "@api/restaurantCrud";
-import { UserUiPreferences, ViewType } from "@dataTypes/RestaurantObject";
+import {
+  RestaurantData,
+  UserUiPreferences,
+  ViewType,
+} from "@dataTypes/RestaurantObject";
 import { MenuState } from "@redux/slicesInterfaces";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import { productDefaultData } from "@constants/constants";
 
 const initialUserUiPreferences: UserUiPreferences = {
   colors: {
@@ -31,22 +36,7 @@ const initialState: MenuState = {
     categories: [],
     tables: [],
   },
-  selectedProduct: {
-    name: "",
-    price: 0,
-    details: {
-      detailsDescription: "",
-      extras: [],
-      ingredients: [],
-      variants: {
-        name: "",
-        variantList: [],
-      },
-    },
-    isAvailable: true,
-    image: undefined,
-    uniqueProductOrderingName: "",
-  },
+  selectedProduct: productDefaultData,
   selectedCategory: {
     name: "",
     image: null,
@@ -82,6 +72,17 @@ export const MenuSlice = createSlice({
     setSelectedCategoryType: (state, action: PayloadAction<string>) => {
       state.selectedCategoryType = action.payload;
     },
+    // New Reducer for updating userUiPreferences
+    updateMenuUiPreferences: (
+      state,
+      action: PayloadAction<UserUiPreferences>
+    ) => {
+      state.restaurantData.userUiPreferences = action.payload;
+    },
+    // New Reducer for updating userUiPreferences
+    setRestaurantData: (state, action: PayloadAction<RestaurantData>) => {
+      state.restaurantData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,6 +108,8 @@ export const {
   setSelectedProduct,
   setSelectedCategory,
   setSelectedCategoryType,
+  updateMenuUiPreferences,
+  setRestaurantData,
 } = MenuSlice.actions;
 
 export default MenuSlice.reducer;

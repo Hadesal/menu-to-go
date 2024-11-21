@@ -1,41 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx.tsx";
+import CategoryShapesComponent from "@components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
+import ChooseViewTypeSection from "@components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
+import ColorsSection from "@components/TemplateComponents/ColorsSection/ColorsSection";
+import ContactLinksComponent from "@components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
+import FontSectionComponent from "@components/TemplateComponents/FontSection/FontSectionComponent";
+import UploadLogo from "@components/TemplateComponents/UploadLogo/UploadLogo";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import {
+  Backdrop,
+  Box,
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Container,
   Divider,
-  FormControl,
   InputLabel,
   MenuItem,
   Paper,
   Select,
+  Stack,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import ColorsSection from "@components/TemplateComponents/ColorsSection/ColorsSection";
-import FontSectionComponent from "@components/TemplateComponents/FontSection/FontSectionComponent";
-import CategoryShapesComponent from "@components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
-import ContactLinksComponent from "@components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
-import { useEffect, useState } from "react";
-import ChooseViewTypeSection from "@components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
+import MenuPage from "@pages/MenuPage/MenuPage";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
-import { setSelectedRestaurant } from "@slices/restaurantsSlice";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
-import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx.tsx";
+import { setSelectedRestaurant } from "@slices/restaurantsSlice";
+import { useEffect, useState } from "react";
+import { DeviceFrameset } from "react-device-frameset";
+import "react-device-frameset/styles/marvel-devices.min.css";
+import { useTranslation } from "react-i18next";
 
 export default function TemplatePage() {
   const { t } = useTranslation();
   const getString = t;
   const [bigScreen, setBigScreen] = useState<number>(2000);
-  const { restaurantList, selectedRestaurant } = useAppSelector(
-    (state) => state.restaurantsData
-  );
+  const { restaurantList, selectedRestaurant, restaurantLoading } =
+    useAppSelector((state) => state.restaurantsData);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    if (!selectedRestaurant) {
+      dispatch(setSelectedRestaurant(restaurantList[0]));
+    }
     setBigScreen(window.innerWidth);
   }, []);
+
   const [toastMessageObject, setToastMessageObject] = useState<{
     success: boolean;
     message: string;
@@ -56,6 +66,7 @@ export default function TemplatePage() {
 
   const handleSaveChanges = async () => {
     if (selectedRestaurant && selectedRestaurant.id) {
+      console.log(selectedRestaurant);
       const result = await dispatch(
         editRestaurant({
           updatedRestaurant: selectedRestaurant,
@@ -83,160 +94,156 @@ export default function TemplatePage() {
 
   return (
     <>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          margin: 0,
-          padding: 0,
-          maxWidth: "inherit !important",
-          minWidth: "inherit !important",
-          width: "100%",
-        }}
-      >
-        <Typography
+      <Stack spacing={3} sx={{ width: "95%", margin: "0 auto" }}>
+        <Backdrop
           sx={{
-            color: "#797979",
-            fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
-            textAlign: "left",
-            margin: 0,
+            color: "var(--primary-color)",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
-          variant="h5"
+          open={restaurantLoading}
         >
-          {getString("customizeYourMenu")}
-        </Typography>
+          <CircularProgress color="inherit" />
+        </Backdrop>
 
-        <FormControl sx={{ width: "30rem" }}>
-          <InputLabel id="restaurant-select-label">
-            {selectedRestaurant
-              ? selectedRestaurant.name
-              : restaurantList[0].name}
-          </InputLabel>
-
-          <Select
-            key="restaurantSelect"
-            labelId="restaurant-select-label"
-            value={
-              selectedRestaurant
-                ? selectedRestaurant.name
-                : restaurantList[0].name
-            }
-            onChange={handleChangeSelectedRestaurant}
-            sx={{ width: "100%" }}
-          >
-            {restaurantList.length > 0 ? (
-              restaurantList.map((restaurant, index) => (
-                <MenuItem key={index} value={restaurant.name}>
-                  {restaurant.name}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem disabled>
-                {getString("noRestaurantsAvailable")}
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
-      </Container>
-      <Divider
-        sx={{
-          marginTop: "1rem",
-        }}
-      />
-      <Container
-        id="mainContainer"
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          justifyContent: "space-around",
-          padding: 0,
-          margin: 0,
-          minWidth: "inherit !important",
-          maxWidth: "inherit !important",
-        }}
-      >
-        <Container
+        <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            width: bigScreen > 2000 ? "40%" : "50%",
-            marginRight: "inherit !important",
-            marginLeft: "inherit !important",
-            marginBottom: { xs: "2rem", md: 0 },
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "0 !important",
           }}
         >
-          <ChooseViewTypeSection />
-          <ColorsSection />
-          <FontSectionComponent />
-          <CategoryShapesComponent />
-          <ContactLinksComponent />
-          <Button
-            sx={{
-              alignSelf: "end",
-              marginTop: "2rem",
-              backgroundColor: "#a4755d",
-              width: "6rem",
-              color: "white",
-            }}
-            onClick={handleSaveChanges}
-          >
-            {getString("save")}
-          </Button>
-        </Container>
+          <Typography variant="h5" sx={{ alignSelf: "end" }}>
+            {getString("customizeYourMenu")}
+          </Typography>
 
-        <Paper
-          elevation={6}
+          <Box sx={{ width: "25%" }}>
+            <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
+
+            <Select
+              key="restaurantSelect"
+              labelId="restaurant-select-label"
+              value={
+                selectedRestaurant
+                  ? selectedRestaurant.name
+                  : restaurantList[0].name
+              }
+              onChange={handleChangeSelectedRestaurant}
+              sx={{ width: "100%" }}
+            >
+              {restaurantList.length > 0 ? (
+                restaurantList.map((restaurant, index) => (
+                  <MenuItem key={index} value={restaurant.name}>
+                    {restaurant.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled>
+                  {getString("noRestaurantsAvailable")}
+                </MenuItem>
+              )}
+            </Select>
+          </Box>
+        </Box>
+
+        <Divider
           sx={{
-            marginTop: { xs: "1rem", md: "3rem" },
-            padding: 0,
-            borderRadius: "2rem",
-            width: bigScreen > 2000 ? "29vw" : "37vw",
+            marginTop: "1rem",
+          }}
+        />
+        <Container
+          id="mainContainer"
+          disableGutters
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", lg:"column" , xl:"row" },
+            justifyContent: "space-between",
+            padding: "0 !important",
+            margin: "0 !important",
+            minWidth: "inherit !important",
+            maxWidth: "inherit !important",
           }}
         >
-          <Card
-            title={"Embedded Content"}
-            id="menuLiveViewContainerid"
+          <Container
             sx={{
-              height: "100%",
-              padding: 0,
-              margin: 0,
-              borderRadius: "2rem",
+              display: "flex",
+              flexDirection: "column",
+              width: {lg:"100%", xl:"50%"},
+              marginRight: "inherit !important",
+              marginBottom: { xs: "2rem", md: 0 },
+              padding: "0 !important",
+              margin: "0 !important",
             }}
           >
-            <CardContent
+            <UploadLogo />
+            <ChooseViewTypeSection />
+            <ColorsSection />
+            <FontSectionComponent />
+            <CategoryShapesComponent />
+            <ContactLinksComponent />
+            <Button
               sx={{
-                ":last-child": { padding: 0 },
+                alignSelf: "end",
+                marginTop: "2rem",
+                backgroundColor: "#a4755d",
+                width: "6rem",
+                color: "white",
+              }}
+              onClick={handleSaveChanges}
+            >
+              {getString("save")}
+            </Button>
+          </Container>
+
+          <Paper
+            elevation={6}
+            sx={{
+              marginTop: { xs: "1rem", md: "3rem" },
+              padding: 0,
+              borderRadius: "2rem",
+              //width: bigScreen > 2000 ? "29vw" : "28vw",
+              width: {lg:"29vw", xl:"28vw"},
+
+            }}
+          >
+            <Card
+              title={"Embedded Content"}
+              id="menuLiveViewContainerid"
+              sx={{
                 height: "100%",
-                width: "100%",
                 padding: 0,
                 margin: 0,
                 borderRadius: "2rem",
               }}
             >
-              <iframe
-                src={
-                  selectedRestaurant
-                    ? `http://localhost:5173/menu/${selectedRestaurant.id}`
-                    : ""
-                }
-                title={"menu"}
-                style={{
-                  width: "100%",
+              <CardContent
+                sx={{
+                  ":last-child": { padding: 0 },
                   height: "100%",
-                  border: "none",
+                  width: "100%",
+                  padding: 0,
+                  margin: 0,
+                  borderRadius: "2rem",
                 }}
-              ></iframe>
-            </CardContent>
-          </Card>
-        </Paper>
-        <ToastNotification
-          severity={toastMessageObject.success === true ? "success" : "error"}
-          message={toastMessageObject.message}
-          show={toastMessageObject.show}
-          onClose={handleToastClose}
-        />
-      </Container>
+              >
+                <MenuPage
+                  restaurantTemplateId={
+                    selectedRestaurant && selectedRestaurant.id
+                  }
+                />
+                {/* <DeviceFrameset device="iPhone X" color="black">
+                </DeviceFrameset> */}
+              </CardContent>
+            </Card>
+          </Paper>
+          <ToastNotification
+            severity={toastMessageObject.success === true ? "success" : "error"}
+            message={toastMessageObject.message}
+            show={toastMessageObject.show}
+            onClose={handleToastClose}
+          />
+        </Container>
+      </Stack>
     </>
   );
 }

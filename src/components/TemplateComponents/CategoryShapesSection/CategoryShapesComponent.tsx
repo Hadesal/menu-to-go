@@ -1,14 +1,19 @@
 import {
-  Box,
   Card,
   CardContent,
-  Container,
+  FormControl,
+  FormControlLabel,
   Paper,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "react-i18next";
+
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const CategoryShapesComponent = () => {
   const { t } = useTranslation();
@@ -17,15 +22,33 @@ const CategoryShapesComponent = () => {
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
+  );
 
+  const [selecteCategoryShape, setSelecteCategoryShape] = useState(
+    (userUiPreferences && selectedRestaurant.userUiPreferences.categoryShape) ??
+      "circle"
+  );
   const handleChangeShape = (shapeType: string) => {
-    dispatch(
-      updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
-        categoryShape: shapeType,
-      })
-    );
+    setSelecteCategoryShape(shapeType);
+    const newUserUiPreferences = {
+      ...userUiPreferences,
+      categoryShape: shapeType,
+    };
+    dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
+
+    dispatch(updateMenuUiPreferences(newUserUiPreferences));
   };
+
+  useEffect(() => {
+    if (selectedRestaurant) {
+      setSelecteCategoryShape(
+        selectedRestaurant.userUiPreferences.categoryShape
+      );
+    }
+  }, [selectedRestaurant]);
+
   return (
     <>
       <Paper
@@ -35,84 +58,61 @@ const CategoryShapesComponent = () => {
         }}
       >
         <Card sx={{ borderRadius: "2rem", height: "100%" }}>
-          <CardContent>
+          <CardContent sx={{ padding: 4 }}>
             <Typography
               sx={{
-                marginTop: "1rem",
-                color: "#797979",
-                textAlign: "left",
-                fontSize: { xs: "1rem", md: "1.25rem" },
+                color: "000000",
               }}
               variant="h6"
             >
               {getString("categoryShape")}
             </Typography>
-            <Container
-              sx={{
-                display: "flex",
-                justifyContent: { xs: "space-between", sm: "flex-start" },
-                flexWrap: "wrap",
-                padding: 0,
-                marginTop: "1rem",
-              }}
-            >
-              <Box
-                sx={{
-                  width: "5vw",
-                  height: "5vw",
-                  borderRadius: "50%",
-                  border: "solid",
-                  cursor: "pointer",
-                  borderWidth: "2px",
-                  borderColor:
-                    userUiPreferences &&
-                    userUiPreferences.categoryShape === "circle"
-                      ? "#A4755D"
-                      : "#BCB8B1",
-                  marginRight: { xs: "1rem", sm: "2rem" },
-                  marginBottom: "1rem",
+
+            <FormControl sx={{ marginTop: "1rem" }}>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                row
+                value={selecteCategoryShape}
+                onChange={(e) => {
+                  handleChangeShape(e.target.value);
                 }}
-                onClick={() => {
-                  handleChangeShape("circle");
-                }}
-              />
-              <Box
-                sx={{
-                  width: "5vw",
-                  height: "5vw",
-                  borderRadius: "15%",
-                  border: "solid",
-                  borderWidth: "2px",
-                  cursor: "pointer",
-                  borderColor:
-                    userUiPreferences?.categoryShape === "rounded"
-                      ? "#A4755D"
-                      : "#BCB8B1",
-                  marginRight: { xs: "1rem", sm: "2rem" },
-                  marginBottom: "1rem",
-                }}
-                onClick={() => {
-                  handleChangeShape("rounded");
-                }}
-              />
-              <Box
-                sx={{
-                  width: "5vw",
-                  height: "5vw",
-                  border: "solid",
-                  cursor: "pointer",
-                  borderWidth: "2px",
-                  borderColor:
-                    userUiPreferences?.categoryShape === "square"
-                      ? "#A4755D"
-                      : "#BCB8B1",
-                  marginBottom: "1rem",
-                }}
-                onClick={() => {
-                  handleChangeShape("square");
-                }}
-              />
-            </Container>
+              >
+                <FormControlLabel
+                  value="circle"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "var(--primary-color)",
+                      }}
+                    />
+                  }
+                  label="Circle"
+                />
+                <FormControlLabel
+                  value="rounded"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "var(--primary-color)",
+                      }}
+                    />
+                  }
+                  label="Rounded"
+                />
+                <FormControlLabel
+                  value="square"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "var(--primary-color)",
+                      }}
+                    />
+                  }
+                  label="Square"
+                />
+              </RadioGroup>
+            </FormControl>
           </CardContent>
         </Card>
       </Paper>

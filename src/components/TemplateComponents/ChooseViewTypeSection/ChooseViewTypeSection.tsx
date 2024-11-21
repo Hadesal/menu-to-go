@@ -1,52 +1,58 @@
+import { ViewType } from "@dataTypes/RestaurantObject";
+import GridViewIcon from "@mui/icons-material/GridView";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import {
-  Box,
   Card,
   CardContent,
   Container,
+  FormControl,
+  FormControlLabel,
   Paper,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import gridViewImage from "@assets/gridViewImage.png";
-import listViewImage from "@assets/listViewImage.png";
-import { useTranslation } from "react-i18next";
-import { ViewType } from "@dataTypes/RestaurantObject";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-interface MenuViewType {
-  id: string;
-  type: ViewType;
-}
-const views = {
-  gridView: {
-    id: "gridView",
-    type: ViewType.GRID,
-  },
-  listView: {
-    id: "listView",
-    type: ViewType.LIST,
-  },
-};
 export default function ChooseViewTypeSection() {
-  const [selectedView, setSelectedView] = useState<MenuViewType>(
-    views.gridView
-  );
   const { t } = useTranslation();
   const getString = t;
-  const primaryColor = "#a4755d";
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
-  const dispatchSelectedView = (selectedView: ViewType) => {
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+
+  const [selectedView, setSelectedView] = useState(
+    (userUiPreferences && selectedRestaurant.userUiPreferences.itemsViewType) ??
+      ViewType.GRID
+  );
+
+  const handleChange = (selectedView: ViewType) => {
+    setSelectedView(selectedView);
+
     const newUserUiPreferences = {
       ...userUiPreferences,
       itemsViewType: selectedView,
     };
+
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
+    dispatch(updateMenuUiPreferences(newUserUiPreferences));
   };
+
+  useEffect(() => {
+    if (selectedRestaurant) {
+      setSelectedView(selectedRestaurant.userUiPreferences.itemsViewType);
+    }
+  }, [selectedRestaurant]);
+
   return (
     <>
       <Paper
@@ -59,88 +65,77 @@ export default function ChooseViewTypeSection() {
         }}
       >
         <Card sx={{ borderRadius: "2rem", height: "100%" }}>
-          <CardContent>
+          <CardContent sx={{ padding: 4 }}>
             <Typography
               sx={{
-                color: "#797979",
-                textAlign: "left",
-                fontSize: { xs: "1rem", md: "1.25rem" },
+                color: "000000",
               }}
               variant="h6"
             >
               {getString("viewType")}
             </Typography>
             <Container
+              disableGutters
               sx={{
                 display: "flex",
-                justifyContent: "space-evenly",
                 padding: 0,
                 marginTop: "1rem",
               }}
             >
-              <Paper
-                elevation={3}
-                sx={{
-                  width: "12vw",
-                  height: "12vw",
-                  cursor: "pointer",
-                  border: selectedView?.id === "gridView" ? "solid" : "none",
-                  borderRadius: "1rem",
-                  borderColor: primaryColor,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  id="gridView"
-                  onClick={() => {
-                    setSelectedView(views.gridView);
-                    dispatchSelectedView(views.gridView.type);
-                  }}
-                  sx={{
-                    margin: 0,
-                    width: "11.7vw",
-                    height: "11.7vw",
+              <FormControl>
+                <RadioGroup
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="controlled-radio-buttons-group"
+                  row
+                  value={selectedView}
+                  onChange={(e) => {
+                    handleChange(e.target.value as ViewType);
                   }}
                 >
-                  <img
-                    style={{ width: "100%", height: "100%" }}
-                    src={gridViewImage}
+                  <FormControlLabel
+                    value="GRID"
+                    control={
+                      <Radio
+                        sx={{
+                          color: "var(--primary-color)",
+                        }}
+                      />
+                    }
+                    label={
+                      <span style={{ display: "flex", alignItems: "center" }}>
+                        <GridViewIcon
+                          style={{
+                            marginRight: "8px",
+                            color: "var(--primary-color)",
+                          }}
+                        />
+                        Grid
+                      </span>
+                    }
                   />
-                </Box>
-              </Paper>
-              <Paper
-                elevation={3}
-                sx={{
-                  display: "flex",
-                  width: "12.1vw",
-                  height: "12.1vw",
-                  cursor: "pointer",
-                  border: selectedView.id === "listView" ? "solid" : "none",
-                  borderRadius: "1rem",
-                  borderColor: primaryColor,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  id="listView"
-                  onClick={() => {
-                    setSelectedView(views.listView);
-                    dispatchSelectedView(views.listView.type);
-                  }}
-                  sx={{
-                    width: "11.7vw",
-                    height: "11.7vw",
-                  }}
-                >
-                  <img
-                    style={{ width: "100%", height: "100%" }}
-                    src={listViewImage}
+                  <FormControlLabel
+                    value="LIST"
+                    control={
+                      <Radio
+                        sx={{
+                          color: "var(--primary-color)",
+                        }}
+                      />
+                    }
+                    label={
+                      <span style={{ display: "flex", alignItems: "center" }}>
+                        <ViewListIcon
+                          style={{
+                            marginRight: "8px",
+                            color: "var(--primary-color)",
+                          }}
+                        />
+                        List
+                      </span>
+                    }
                   />
-                </Box>
-              </Paper>
+                </RadioGroup>
+              </FormControl>
             </Container>
           </CardContent>
         </Card>

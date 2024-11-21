@@ -1,16 +1,20 @@
-import { Typography, Container, Button } from "@mui/material";
+import { Typography, Container, Button, Box, IconButton } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
+import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import { Colors } from "@dataTypes/RestaurantObject";
+
 const defaultColorsList = [
   { id: 0, color: "#A4755D" },
   { id: 1, color: "#D9B18F" },
   { id: 2, color: "#4B49A6" },
   { id: 3, color: "#802571" },
 ];
-const ColorSelectionSection = ({ type }: { type: string }) => {
+const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const colorPickerRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -50,7 +54,16 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
         ...userUiPreferences,
         colors: {
           ...userUiPreferences.colors,
-          [type === "Text" ? "secondaryColor" : "primaryColor"]: newColor,
+          [type]: newColor,
+        },
+      })
+    );
+    dispatch(
+      updateMenuUiPreferences({
+        ...userUiPreferences,
+        colors: {
+          ...userUiPreferences.colors,
+          [type]: newColor,
         },
       })
     );
@@ -67,18 +80,8 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
 
   return (
     <>
-      <Typography
-        sx={{
-          marginBottom: "1rem",
-          marginTop: "1rem",
-          color: "#797979",
-          textAlign: "left",
-        }}
-        variant="h5"
-      >
-        {type === "Text" ? getString("Text") : getString("Background")}
-      </Typography>
       <Container
+      disableGutters
         id={`${type}ColorsSection`}
         sx={{
           display: "flex",
@@ -86,52 +89,69 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
           alignItems: "flex-start",
           justifyContent: "flex-start",
           padding: 0,
-          marginBottom: "1rem",
         }}
       >
-        {defaultColorsList.map((item, index) => (
-          <Button
-            key={index}
-            id={`${type}ColorStylingButtonId`}
-            onClick={() => handleColorChange(item.color, type)}
-            className="colorStylingButton"
-            variant="contained"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Box
+            //key={index}
             sx={{
-              background: item.color,
+              background:
+                (userUiPreferences && userUiPreferences.colors[type]) ||
+                "#000000",
               minWidth: 0,
               width: { xs: "2rem", sm: "2.5rem" },
               height: { xs: "2rem", sm: "2.5rem" },
-              borderRadius: "2rem",
               cursor: "pointer",
-              border:
-                (type === "Text"
-                  ? userUiPreferences?.colors?.secondaryColor
-                  : userUiPreferences?.colors?.primaryColor) === item.color
-                  ? "solid"
-                  : "none",
-              borderColor: "#d57e2e",
-              marginLeft: "1rem",
-              marginBottom: "1rem",
+              borderRadius: "8px",
             }}
-          />
-        ))}
-        <Button
-          ref={buttonRef}
-          sx={{
-            background:
-              "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)",
-            minWidth: 0,
-            width: { xs: "2rem", sm: "2.5rem" },
-            height: { xs: "2rem", sm: "2.5rem" },
-            borderRadius: "2rem",
-            marginLeft: "1rem",
-            marginBottom: "1rem",
-            cursor: "pointer",
-            border: "none",
-            borderColor: "#d57e2e",
-          }}
-          onClick={handleButtonClick}
-        ></Button>
+          ></Box>
+          <Typography
+            sx={{
+              border: "1px solid #797979",
+              //height: { xs: "2rem", sm: "2.5rem" },
+              boxSizing: "border-box",
+              borderRadius: "10px",
+              padding: 1,
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                color: "#797979",
+                fontSize: "14px",
+                marginRight: "10px",
+              }}
+            >
+              Hex#
+            </span>
+            {(userUiPreferences &&
+              userUiPreferences.colors[type]?.split("#")[1]) ||
+              ""}
+          </Typography>
+
+          <IconButton
+            sx={{
+              background: "#A4755D30",
+              "&:hover": {
+                background: "#A4755D30",
+              },
+              borderRadius: "10px",
+            }}
+            aria-label="back"
+            onClick={(e) => {
+              handleButtonClick(e);
+            }}
+          >
+            <FormatColorFillIcon fontSize="medium" color="primary" />
+          </IconButton>
+        </Box>
         {showColorPicker && (
           <div
             ref={colorPickerRef}
@@ -147,11 +167,7 @@ const ColorSelectionSection = ({ type }: { type: string }) => {
             }}
           >
             <HexColorPicker
-              color={
-                type === "Text"
-                  ? userUiPreferences?.colors?.secondaryColor
-                  : userUiPreferences?.colors?.primaryColor
-              }
+              color={userUiPreferences && userUiPreferences?.colors[type]}
               onChange={(newColor) => handleColorChange(newColor, type)}
             />
           </div>

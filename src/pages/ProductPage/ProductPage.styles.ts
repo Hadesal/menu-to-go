@@ -1,6 +1,7 @@
 export const Styles = {
   container: {
     background: "#F9FDFE",
+    height: "100%",
   },
   box: {
     paddingTop: "2rem",

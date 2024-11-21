@@ -16,7 +16,7 @@ export default function MenuProductsCard({ product }) {
       onClick={() => {
         dispatch(setSelectedProduct(product));
       }}
-      sx={{ height: "200px", borderRadius: "16px" }}
+      sx={{borderRadius: "5px" }}
     >
       <CardActionArea>
         <CardMedia
@@ -29,12 +29,12 @@ export default function MenuProductsCard({ product }) {
         <CardContent
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             padding: 1,
             marginTop: "0.5rem",
-            justifyContent: "space-between",
+            //justifyContent: "space-between",
             color: "#A4755D",
-            lineHeight: "1rem",
+            //lineHeight: "1rem",
           }}
         >
           <Typography

@@ -41,25 +41,23 @@ const ContactLinksComponent = () => {
             borderRadius: "2rem",
           }}
         >
-          <CardContent>
+          <CardContent sx={{ padding: 4 }}>
             <Typography
               sx={{
-                marginTop: "1rem",
-                color: "#797979",
-                textAlign: "left",
-                fontSize: { xs: "1rem", md: "1.25rem" },
+                color: "000000",
               }}
               variant="h6"
             >
               {getString("contactLinks")}
             </Typography>
+
             <Container
+              disableGutters
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                alignItems: { xs: "center", sm: "flex-start" },
-                justifyContent: { xs: "center", sm: "space-evenly" },
-                gap: { xs: "1rem", sm: "0" },
+                flexDirection: { xs: "column" , lg:"row" },
+                alignItems:"flex-start",
+                gap: 2,
                 marginTop: "1rem",
                 padding: 0,
               }}
@@ -83,7 +81,9 @@ const ContactLinksComponent = () => {
                 <Popover
                   id="facebookLinkPopover"
                   open={faceBookOpenPopover}
-                  onClose={handleClose}
+                  onClose={() => {
+                    setFaceBookOpenPopover(false);
+                  }}
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: "top",
@@ -114,7 +114,9 @@ const ContactLinksComponent = () => {
                 <Popover
                   id="twitterLinkPopover"
                   open={twitterOpenPopover}
-                  onClose={handleClose}
+                  onClose={() => {
+                    setTwitterOpenPopover(false);
+                  }}
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: "top",
@@ -144,7 +146,9 @@ const ContactLinksComponent = () => {
                 <Popover
                   id="instagramLinkPopover"
                   open={instagramOpenPopover}
-                  onClose={handleClose}
+                  onClose={() => {
+                    setInstagramOpenPopover(false);
+                  }}
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: "top",
