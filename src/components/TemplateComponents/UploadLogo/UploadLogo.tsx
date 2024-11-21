@@ -21,7 +21,7 @@ export default function UploadLogo() {
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
   const [selectedImage, setSelectedImage] = useState<string>(
-    userUiPreferences.logo || ""
+    userUiPreferences && userUiPreferences.logo || ""
   );
   const dispatch = useAppDispatch();
 

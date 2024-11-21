@@ -50,7 +50,6 @@ const PlatformPopoverContentsComponent = ({
       },
     };
 
-    console.log(newUserUiPreferences);
     setIsOpen(false);
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
     dispatch(updateMenuUiPreferences(newUserUiPreferences));

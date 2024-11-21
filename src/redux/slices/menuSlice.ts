@@ -1,6 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getRestaurantByIdOpenApi as apiFetchRestaurantData } from "@api/restaurantCrud";
 import {
   RestaurantData,
   UserUiPreferences,
@@ -9,12 +8,14 @@ import {
 import { MenuState } from "@redux/slicesInterfaces";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import publicApiService from "@api/services/publicApiService";
 import { productDefaultData } from "@constants/constants";
 
 const initialUserUiPreferences: UserUiPreferences = {
   colors: {
     effectedSpace: "Background",
     primaryColor: "#A4755D",
+    backgroundColor: "#F9FDFE",
     secondaryColor: "#D9B18F",
   },
   fontType: "",
@@ -26,6 +27,7 @@ const initialUserUiPreferences: UserUiPreferences = {
   },
   ingredientViewType: ViewType.GRID,
   itemsViewType: ViewType.GRID,
+  logo: "",
 };
 
 const initialState: MenuState = {
@@ -51,8 +53,10 @@ export const fetchRestaurantData = createAsyncThunk(
   "menuData/fetchRestaurantData",
   async ({ restaurantID }: { restaurantID: string }, { rejectWithValue }) => {
     try {
-      const response = await apiFetchRestaurantData(restaurantID);
-      return response;
+      const response = await publicApiService.get(
+        `/restaurants/id/${restaurantID}`
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }

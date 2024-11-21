@@ -6,4 +6,5 @@ export interface CategoryData {
   image: string | null;
   products?: ProductData[];
   categoryType: string;
+  categoryOrder?: number;
 }

@@ -25,8 +25,10 @@ const FontSectionComponent = () => {
   const { selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
+
+  // Ensure the selectedFont has a default value
   const [selectedFont, setSelectedFont] = useState<string>(
-    selectedRestaurant && selectedRestaurant.userUiPreferences.fontType
+    selectedRestaurant?.userUiPreferences.fontType || "" // Default to empty string
   );
 
   const handleSelectFontType = (fontValue: string) => {
@@ -98,20 +100,6 @@ const FontSectionComponent = () => {
                 ))}
               </Select>
             </FormControl>
-            {/* <Container
-              key={"FontContainerKey"}
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 0fr)",
-                justifyItems: "center",
-                rowGap: "1rem",
-                columnGap: "1rem",
-              }}
-            >
-              {defaultFontTypes.map((fontType, index) =>
-                renderFontBox(fontType, index)
-              )}
-            </Container> */}
           </CardContent>
         </Card>
       </Paper>

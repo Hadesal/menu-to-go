@@ -72,6 +72,8 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
       }
     };
 
+
+    console.log(restaurantTemplateId)
     fetchDataAndHandleLoading();
   }, [dispatch, restaurantTemplateId]);
 
@@ -166,15 +168,6 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
               width: "20%",
             }}
           >
-            {/* Search Icon */}
-            {/* <IconButton>
-              <SearchIcon />
-            </IconButton> */}
-
-            {/* Language Icon */}
-            {/* <IconButton>
-              <LanguageIcon />
-            </IconButton> */}
           </Box>
         </Box>
 
@@ -186,7 +179,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           <MenuCategories
             categories={filteredCategories}
             categoryTag={selectedCategoryType}
-            selectedCategory={selectedCategory.name}
+            selectedCategory={selectedCategory && selectedCategory.name || ""}
           />
         </Box>
         <Divider sx={{ marginTop: 3 }} variant="fullWidth" />

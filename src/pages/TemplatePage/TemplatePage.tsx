@@ -28,23 +28,14 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
 import { setSelectedRestaurant } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
-import { DeviceFrameset } from "react-device-frameset";
-import "react-device-frameset/styles/marvel-devices.min.css";
 import { useTranslation } from "react-i18next";
 
 export default function TemplatePage() {
   const { t } = useTranslation();
   const getString = t;
-  const [bigScreen, setBigScreen] = useState<number>(2000);
   const { restaurantList, selectedRestaurant, restaurantLoading } =
     useAppSelector((state) => state.restaurantsData);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!selectedRestaurant) {
-      dispatch(setSelectedRestaurant(restaurantList[0]));
-    }
-    setBigScreen(window.innerWidth);
-  }, []);
 
   const [toastMessageObject, setToastMessageObject] = useState<{
     success: boolean;
@@ -64,9 +55,12 @@ export default function TemplatePage() {
     dispatch(setSelectedRestaurant(selected as RestaurantData));
   };
 
+  useEffect(() => {
+    dispatch(setSelectedRestaurant(restaurantList[0] as RestaurantData));
+  }, []);
+
   const handleSaveChanges = async () => {
     if (selectedRestaurant && selectedRestaurant.id) {
-      console.log(selectedRestaurant);
       const result = await dispatch(
         editRestaurant({
           updatedRestaurant: selectedRestaurant,
@@ -156,7 +150,7 @@ export default function TemplatePage() {
           disableGutters
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", lg:"column" , xl:"row" },
+            flexDirection: { xs: "column", lg: "column", xl: "row" },
             justifyContent: "space-between",
             padding: "0 !important",
             margin: "0 !important",
@@ -168,7 +162,7 @@ export default function TemplatePage() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              width: {lg:"100%", xl:"50%"},
+              width: { lg: "100%", xl: "50%" },
               marginRight: "inherit !important",
               marginBottom: { xs: "2rem", md: 0 },
               padding: "0 !important",
@@ -202,8 +196,7 @@ export default function TemplatePage() {
               padding: 0,
               borderRadius: "2rem",
               //width: bigScreen > 2000 ? "29vw" : "28vw",
-              width: {lg:"29vw", xl:"28vw"},
-
+              width: { lg: "29vw", xl: "28vw" },
             }}
           >
             <Card
@@ -231,8 +224,6 @@ export default function TemplatePage() {
                     selectedRestaurant && selectedRestaurant.id
                   }
                 />
-                {/* <DeviceFrameset device="iPhone X" color="black">
-                </DeviceFrameset> */}
               </CardContent>
             </Card>
           </Paper>

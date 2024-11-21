@@ -13,6 +13,7 @@ import {
   Paper,
   Stack,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import {
   setSelectedCategory,
@@ -119,14 +120,15 @@ const GridView = ({
                     src={CardIcon}
                     alt={item.name}
                   />
-                  <Typography
-                    sx={styles.cardContentBodyText}
-                    noWrap
-                    variant="h6"
-                    title={item.name}
-                  >
-                    {item.name}
-                  </Typography>
+                  <Tooltip arrow title={item.name}>
+                    <Typography
+                      sx={styles.cardContentBodyText}
+                      noWrap
+                      variant="h6"
+                    >
+                      {item.name}
+                    </Typography>
+                  </Tooltip>
                 </Stack>
               </CardContent>
             </Card>
