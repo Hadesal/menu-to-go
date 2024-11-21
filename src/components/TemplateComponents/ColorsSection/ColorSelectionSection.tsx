@@ -7,6 +7,7 @@ import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import { Colors } from "@dataTypes/RestaurantObject";
+import { ChromePicker } from "react-color";
 
 const defaultColorsList = [
   { id: 0, color: "#A4755D" },
@@ -81,7 +82,7 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
   return (
     <>
       <Container
-      disableGutters
+        disableGutters
         id={`${type}ColorsSection`}
         sx={{
           display: "flex",
@@ -160,15 +161,15 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
               top: `${pickerPosition.top}px`,
               left: `${pickerPosition.left}px`,
               zIndex: 2,
-              backgroundColor: "white",
               borderRadius: "8px",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
               padding: "10px",
             }}
           >
-            <HexColorPicker
+            <ChromePicker
               color={userUiPreferences && userUiPreferences?.colors[type]}
-              onChange={(newColor) => handleColorChange(newColor, type)}
+              onChangeComplete={(color) => {
+                handleColorChange(color.hex, type);
+              }}
             />
           </div>
         )}

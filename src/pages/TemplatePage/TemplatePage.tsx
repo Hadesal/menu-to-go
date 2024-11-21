@@ -221,7 +221,8 @@ export default function TemplatePage() {
               >
                 <MenuPage
                   restaurantTemplateId={
-                    selectedRestaurant && selectedRestaurant.id
+                    (selectedRestaurant && selectedRestaurant.id) ||
+                    restaurantList[0].id
                   }
                 />
               </CardContent>

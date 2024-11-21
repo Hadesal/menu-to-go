@@ -1,18 +1,14 @@
-import { useTranslation } from "react-i18next";
 import {
   Box,
   Card,
   CardContent,
   Container,
-  FormControlLabel,
   Paper,
-  Radio,
-  RadioGroup,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { useTranslation } from "react-i18next";
 import ColorSelectionSection from "./ColorSelectionSection";
-import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 
 const ColorsSection = () => {
   const { t } = useTranslation();

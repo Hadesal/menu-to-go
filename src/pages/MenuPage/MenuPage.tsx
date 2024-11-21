@@ -72,8 +72,6 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
       }
     };
 
-
-    console.log(restaurantTemplateId)
     fetchDataAndHandleLoading();
   }, [dispatch, restaurantTemplateId]);
 
@@ -167,8 +165,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
               alignItems: "center",
               width: "20%",
             }}
-          >
-          </Box>
+          ></Box>
         </Box>
 
         <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
@@ -179,7 +176,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           <MenuCategories
             categories={filteredCategories}
             categoryTag={selectedCategoryType}
-            selectedCategory={selectedCategory && selectedCategory.name || ""}
+            selectedCategory={(selectedCategory && selectedCategory.name) || ""}
           />
         </Box>
         <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
