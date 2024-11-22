@@ -90,6 +90,7 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
           alignItems: "flex-start",
           justifyContent: "flex-start",
           padding: 0,
+          width: "50%",
         }}
       >
         <Box

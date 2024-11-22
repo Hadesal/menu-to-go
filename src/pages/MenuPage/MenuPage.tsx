@@ -131,44 +131,39 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
       maxWidth="sm"
     >
       <Box sx={{ flexGrow: 1 }}>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            //justifyContent: "space-between",
-            marginBottom: 2,
-            marginTop: 2,
-          }}
-        >
-          <Box sx={{ visibility: "hidden", width: "20%" }}></Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "60%",
-            }}
-          >
-            <img
-              style={{
-                width: "70px",
-                height: "70px",
-                borderRadius: "50%",
-              }}
-              src={logo}
-              alt="Logo"
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              width: "20%",
-            }}
-          ></Box>
-        </Box>
+        {restaurantData?.userUiPreferences?.logo &&
+          restaurantData.userUiPreferences.logo.length > 0 && (
+            <>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 2,
+                  marginTop: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                  }}
+                >
+                  <img
+                    style={{
+                      width: "70px",
+                      height: "70px",
+                      borderRadius: "50%",
+                    }}
+                    src={restaurantData.userUiPreferences.logo}
+                    alt="Logo"
+                  />
+                </Box>
+              </Box>
+              <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
+            </>
+          )}
 
-        <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
         <Box sx={Styles.box}>
           {showMenuSelection && (
             <MenuSelection menuSelections={menuSelections} />

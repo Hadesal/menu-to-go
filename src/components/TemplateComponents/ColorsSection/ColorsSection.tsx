@@ -13,11 +13,7 @@ import ColorSelectionSection from "./ColorSelectionSection";
 const ColorsSection = () => {
   const { t } = useTranslation();
   const getString = t;
-  const radioList = [
-    getString("Text"),
-    getString("Background"),
-    getString("text&background"),
-  ];
+
 
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(

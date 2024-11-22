@@ -12,7 +12,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@redux/slices/restaurantsSlice";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
+const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
 
 export default function UploadLogo() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -20,9 +23,15 @@ export default function UploadLogo() {
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
-  const [selectedImage, setSelectedImage] = useState<string>(
-    userUiPreferences && userUiPreferences.logo || ""
+
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
   );
+
+  const [selectedImage, setSelectedImage] = useState<string>(
+    selectedRestaurant.userUiPreferences.logo
+  );
+  
   const dispatch = useAppDispatch();
 
   // Create a ref for the file input
@@ -32,24 +41,30 @@ export default function UploadLogo() {
     const file = event.target.files?.[0];
     if (file) {
       const fileType = file.type;
-      // Allow only SVG, PNG, and JPG
-      if (["image/svg+xml", "image/png", "image/jpeg"].includes(fileType)) {
-        setErrorMessage(null); // Clear any previous error message
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setSelectedImage(reader.result as string);
-          //handleSelectFontType(reader.result as string);
-        };
-        reader.readAsDataURL(file); // This will read the file as a Base64 encoded string
-      } else {
-        setErrorMessage("Please upload an image file (SVG, PNG, JPG)"); // Set error message
-        setSelectedImage(""); // Clear any previously selected image
+      const fileSizeMB = file.size / (1024 * 1024);
+
+      if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+        setErrorMessage("Only PNG, JPG, and SVG files are allowed.");
+        return;
+      } else if (fileSizeMB > MAX_FILE_SIZE_MB) {
+        setErrorMessage(`File size exceeds ${MAX_FILE_SIZE_MB} MB.`);
+        return;
       }
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+        handleLogoUpload(reader.result as string);
+
+        setErrorMessage(null);
+      };
+      reader.readAsDataURL(file); // This will read the file as a Base64 encoded string
     }
   };
 
   const handleClearImage = () => {
     setSelectedImage("");
+    handleLogoUpload("");
     setErrorMessage(null); // Optionally clear the error message when the user clears the image
     // Reset the file input to allow re-upload of the same file
     if (fileInputRef.current) {
@@ -57,7 +72,7 @@ export default function UploadLogo() {
     }
   };
 
-  const handleSelectFontType = (logo: string) => {
+  const handleLogoUpload = (logo: string) => {
     const updatedUserUiPreferences = {
       ...userUiPreferences,
       logo: logo,
@@ -65,6 +80,12 @@ export default function UploadLogo() {
     dispatch(updateRestaurantUserUiPreferences(updatedUserUiPreferences));
     dispatch(updateMenuUiPreferences(updatedUserUiPreferences));
   };
+
+  useEffect(() => {
+    if (selectedRestaurant) {
+      setSelectedImage(selectedRestaurant.userUiPreferences.logo);
+    }
+  }, [selectedRestaurant]);
 
   return (
     <Paper
