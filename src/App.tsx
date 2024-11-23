@@ -5,6 +5,7 @@ import LoginPage from "@pages/LoginPage/LoginPage";
 import MenuPage from "@pages/MenuPage/MenuPage";
 import RegisterPage from "@pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "@pages/UserDashboardPage/UserDashboardPage";
+import LandingPage from "@pages/LandingPage/LandingPage";
 import PrivateRoute from "@routes/PrivateRoute";
 import PublicRoute from "@routes/PublicRoute";
 import theme from "./theme/theme";
@@ -36,6 +37,15 @@ const App = () => {
               </PublicRoute>
             }
           />
+          <Route
+            path="/landing"
+            element={
+              <PublicRoute>
+                <LandingPage />
+              </PublicRoute>
+            }
+          />
+
           <Route
             path={ROUTES.DASHBOARD}
             element={
