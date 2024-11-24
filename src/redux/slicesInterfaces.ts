@@ -28,7 +28,7 @@ export interface ProductState {
 }
 export interface MenuState {
   restaurantData: RestaurantData;
-  selectedProduct: ProductData;
+  selectedProduct: ProductData | null;
   selectedCategory: CategoryData;
   selectedCategoryType: string;
   loading: boolean;
@@ -44,7 +44,7 @@ export interface CategoryState {
   successMessage: string | null;
 }
 export interface UserState {
-  user: UserDataType | null;
+  user: UserDataType;
   loading: boolean;
   error: string | null;
   successMessage: string | null;

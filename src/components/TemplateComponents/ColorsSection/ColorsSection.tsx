@@ -1,43 +1,36 @@
-import { useTranslation } from "react-i18next";
 import {
+  Box,
   Card,
   CardContent,
   Container,
-  FormControlLabel,
   Paper,
-  Radio,
-  RadioGroup,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { useTranslation } from "react-i18next";
 import ColorSelectionSection from "./ColorSelectionSection";
-import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 
 const ColorsSection = () => {
   const { t } = useTranslation();
   const getString = t;
-  const radioList = [
-    getString("Text"),
-    getString("Background"),
-    getString("text&background"),
-  ];
+
 
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
-  const handleEffectedSpace = async (effectedSpace: string) => {
-    dispatch(
-      updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
-        colors: {
-          ...userUiPreferences.colors,
-          effectedSpace: effectedSpace,
-        },
-      })
-    );
-  };
+  // const handleEffectedSpace = async (effectedSpace: string) => {
+  //   dispatch(
+  //     updateRestaurantUserUiPreferences({
+  //       ...userUiPreferences,
+  //       colors: {
+  //         ...userUiPreferences.colors,
+  //         effectedSpace: effectedSpace,
+  //       },
+  //     })
+  //   );
+  // };
 
   return (
     <>
@@ -57,63 +50,74 @@ const ColorsSection = () => {
             borderRadius: "2rem",
           }}
         >
-          <CardContent>
-            {userUiPreferences &&
-            userUiPreferences?.colors?.effectedSpace === "Background" ? (
-              <ColorSelectionSection type="Background" />
-            ) : userUiPreferences?.colors?.effectedSpace === "Text" ? (
-              <ColorSelectionSection type="Text" />
-            ) : (
-              <>
-                <ColorSelectionSection type="Background" />
-                <ColorSelectionSection type="Text" />
-              </>
-            )}
+          <CardContent sx={{ padding: 4 }}>
             <Typography
-              variant="body1"
               sx={{
-                color: "#797979",
-                marginTop: "2rem",
-                textAlign: "left",
+                color: "000000",
               }}
+              variant="h6"
             >
-              {getString("effectedSpace")}
+              Color
             </Typography>
+
             <Container
+              disableGutters
               id="checkBoxesContainerid"
               sx={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
+                gap: 4,
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
                 flexWrap: "wrap",
                 marginTop: "1rem",
               }}
             >
-              <RadioGroup sx={{ display: "flex", flexDirection: "row" }}>
-                {radioList.map((value, index) => (
-                  <FormControlLabel
-                    key={index}
-                    sx={{ color: "#797979" }}
-                    control={
-                      <Radio
-                        sx={{
-                          color: "#A4755D",
-                          "& .MuiSvgIcon-root": { fontSize: 25 },
-                        }}
-                        checked={
-                          userUiPreferences?.colors?.effectedSpace === value
-                        }
-                        value={value}
-                        onChange={(radioEl) => {
-                          handleEffectedSpace(radioEl.target.value);
-                        }}
-                      />
-                    }
-                    label={value}
-                  />
-                ))}
-              </RadioGroup>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  width: "100%",
+                  justifyContent: "center",
+                  gap: { xs: 1, md: 0 },
+                  alignItems: { xs: "flex-start", lg: "center" },
+                }}
+              >
+                <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
+                  Background color:
+                </Typography>
+                <ColorSelectionSection type="backgroundColor" />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  width: "100%",
+                  justifyContent: "center",
+                  gap: { xs: 1, md: 0 },
+                  alignItems: { xs: "flex-start", lg: "center" },
+                }}
+              >
+                <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
+                  Main color:
+                </Typography>
+                <ColorSelectionSection type="primaryColor" />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  width: "100%",
+                  justifyContent: "center",
+                  gap: { xs: 1, md: 0 },
+                  alignItems: { xs: "flex-start", lg: "center" },
+                }}
+              >
+                <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
+                  Help color:
+                </Typography>
+                <ColorSelectionSection type="secondaryColor" />
+              </Box>
             </Container>
           </CardContent>
         </Card>

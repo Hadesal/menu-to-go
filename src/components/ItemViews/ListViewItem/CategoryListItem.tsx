@@ -9,11 +9,15 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import Styles from "../../../DataTypes/StylesTypes";
 import { useAppSelector } from "@redux/reduxHooks";
 import { useTranslation } from "react-i18next";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 interface CategoryListItemProps {
   item: CategoryData;
   index: number;
@@ -42,6 +46,12 @@ const CategoryListItemItem = ({
   const { t } = useTranslation();
   const getString = t;
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const menuItems = () => [
     {
       text: getString("edit"),
@@ -62,6 +72,9 @@ const CategoryListItemItem = ({
       onClick={() => {
         itemClick(item);
       }}
+      ref={setNodeRef}
+      {...attributes}
+      style={style}
       sx={{
         ...styles.categoryListItem,
         borderRadius: index === length - 1 ? "0 0 16px 16px" : "0",
@@ -70,13 +83,14 @@ const CategoryListItemItem = ({
       }}
       key={item.id}
     >
-      <Box sx={styles.categoryListItemBox}>
+      <Box sx={{ ...styles.categoryListItemBox, display: "flex", minWidth: 0 }}>
         <ListItemText
           primary={
-            <Box sx={styles.categoryListItemText}>
+            <Box sx={styles.categoryListItemTextWrapper}>
               <IconButton
                 sx={{ ...styles.iconButton, cursor: "grab" }}
                 aria-label="more"
+                {...listeners}
               >
                 <DragIndicatorIcon
                   sx={{
@@ -88,32 +102,45 @@ const CategoryListItemItem = ({
                   fontSize="medium"
                 />
               </IconButton>
-              <Typography
-                noWrap
-                sx={styles.categoryName}
-                variant="body1"
-                color={
-                  selectedCategory?.id === item.id
-                    ? "white"
-                    : "var(--primary-color)"
-                }
+              <Box
+                sx={{
+                  minWidth: 0,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                {item.name}
+                <Tooltip arrow title={item.name}>
+                  <Typography
+                    sx={styles.categoryName}
+                    variant="body1"
+                    color={
+                      selectedCategory?.id === item.id
+                        ? "white"
+                        : "var(--primary-color)"
+                    }
+                  >
+                    {item.name}
+                  </Typography>
+                </Tooltip>
                 <Typography
-                  noWrap
+                  title={item?.products?.length.toString()}
                   color={selectedCategory?.id === item.id ? "white" : "#BCB8B1"}
                   sx={styles.categoryItemsLengthText}
                   component="span"
                 >
                   ({item?.products?.length})
                 </Typography>
-              </Typography>
+              </Box>
             </Box>
           }
         />
       </Box>
       <IconButton
-        sx={styles.iconButton}
+        sx={{
+          ...styles.iconButton,
+          flexShrink: 0,
+        }}
         aria-label="more"
         onClick={(event) => onMenuClick(event, index)}
       >

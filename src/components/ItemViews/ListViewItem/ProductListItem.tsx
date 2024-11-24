@@ -11,12 +11,15 @@ import {
   ListItemText,
   Paper,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.png";
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 import Styles from "../../../DataTypes/StylesTypes";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface ProductListItemProps {
   item: ProductData;
@@ -50,7 +53,12 @@ const ListViewProductItem = ({
 }: ProductListItemProps) => {
   const { t } = useTranslation();
   const getString = t;
-
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const menuItems = () => [
     {
       text: getString("duplicate"),
@@ -85,9 +93,19 @@ const ListViewProductItem = ({
         ...styles.paperListView,
         background: checked ? "#FFF9F4" : "inherit",
       }}
+      {...attributes}
+      style={style}
     >
-      <ListItem sx={styles.productListItem} key={item.id}>
-        <Box sx={styles.productListItemBox}>
+      <ListItem ref={setNodeRef} sx={styles.productListItem} key={item.id}>
+        <Box
+          sx={{
+            ...styles.productListItemBox,
+            display: "flex",
+            alignItems: "center",
+            minWidth: 0,
+            flexShrink: 1,
+          }}
+        >
           <Checkbox
             checked={checked}
             onChange={(e) => item.id && onCheckChange(e, item.id)}
@@ -101,25 +119,52 @@ const ListViewProductItem = ({
               color: "var(--primary-color)",
             }}
             aria-label="drag"
+            {...listeners}
           >
             <DragIndicatorIcon fontSize="medium" />
           </IconButton>
-          <img
-            style={styles.productImg}
-            src={item.image ? item.image : placeHolderImg}
-            width={60}
-            height={60}
-          />
+          <Box>
+            <img
+              style={styles.productImg}
+              src={item.image ? item.image : placeHolderImg}
+              width={60}
+              height={60}
+            />
+          </Box>
           <ListItemText
             primary={
-              <Typography noWrap sx={styles.productName} variant="body1">
-                {item.name}
-              </Typography>
+              <Tooltip arrow title={item.name}>
+                <Typography
+                  sx={{
+                    ...styles.productName,
+                    minWidth: 0, // Ensures truncation within available space
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  variant="body1"
+                >
+                  {item.name}
+                </Typography>
+              </Tooltip>
             }
           />
         </Box>
-        <Box>
-          <Typography sx={styles.productPrice} component="span">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            minWidth: 0,
+            flexShrink: 0,
+          }}
+        >
+          <Typography
+            sx={{
+              ...styles.productPrice,
+              display: { xs: "none", sm: "block" },
+            }}
+            component="span"
+          >
             {item.price}$
           </Typography>
           <IconButton

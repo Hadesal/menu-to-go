@@ -47,7 +47,15 @@ export default function MenuCategories({
           <img
             src={category.image ? category.image : PlaceHolder}
             alt="Product Image"
-            style={Styles.categoryImage}
+            style={{
+              ...Styles.categoryImage,
+              borderRadius:
+                restaurantData.userUiPreferences.categoryShape === "circle"
+                  ? "50%"
+                  : restaurantData.userUiPreferences.categoryShape === "rounded"
+                  ? "20%"
+                  : "0%",
+            }}
             width={50}
             height={50}
           />
@@ -68,7 +76,13 @@ export default function MenuCategories({
             {category.name}
           </Typography>
           {category.name === selectedCategory && (
-            <Box sx={Styles.selectedCategoryIndicator} />
+            <Box
+              sx={{
+                ...Styles.selectedCategoryIndicator,
+                background:
+                  restaurantData.userUiPreferences?.colors.primaryColor,
+              }}
+            />
           )}
         </Box>
       ))}

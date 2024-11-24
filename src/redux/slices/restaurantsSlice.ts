@@ -10,12 +10,14 @@ import {
   addCategoryToRestaurant,
   editCategoryInRestaurant,
   removeCategoryFromRestaurant,
+  reorderCategoriesForRestaurant,
 } from "../thunks/categoryThunks";
 import {
   fetchProductsByCategory,
   addProductToCategory,
   updateProductInCategory,
   removeProductFromCategory,
+  reorderProductsForRestaurant,
 } from "../thunks/productThunks";
 import { RestaurantData, UserUiPreferences } from "@dataTypes/RestaurantObject";
 import { RestaurantState } from "@redux/slicesInterfaces";
@@ -115,6 +117,9 @@ const restaurantSlice = createSlice({
     builder.addCase(removeCategoryFromRestaurant.pending, (state) => {
       state.categoryLoading = true;
     });
+    builder.addCase(reorderCategoriesForRestaurant.pending, (state) => {
+      state.categoryLoading = true;
+    });
 
     // Pending state for product-related thunks
     builder.addCase(fetchProductsByCategory.pending, (state) => {
@@ -134,6 +139,9 @@ const restaurantSlice = createSlice({
       state.productLoading = true;
       state.successMessage = null;
       state.error = null;
+    });
+    builder.addCase(reorderProductsForRestaurant.pending, (state) => {
+      state.productLoading = true;
     });
 
     // Fulfilled states for restaurant-related thunks
@@ -199,7 +207,6 @@ const restaurantSlice = createSlice({
         }>
       ) => {
         editRestaurant;
-        console.log(action.payload);
         state.restaurantList = state.restaurantList.filter(
           (r) => r.id !== action.payload.restaurantId
         );
@@ -246,6 +253,46 @@ const restaurantSlice = createSlice({
         state.successMessage = "Category added successfully!";
         state.categoryLoading = false;
         state.selectedCategory = action.payload.category;
+      }
+    );
+    // Fulfilled states for category-related thunks
+    builder.addCase(
+      reorderCategoriesForRestaurant.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          restaurantId: string;
+          reorderedCategories: CategoryData[];
+        }>
+      ) => {
+        const { restaurantId, reorderedCategories } = action.payload;
+
+        // Update the restaurant list
+        const restaurant = state.restaurantList.find(
+          (r) => r.id === restaurantId
+        );
+        if (restaurant) {
+          restaurant.categories = reorderedCategories; // Update categories in restaurant
+        }
+
+        // If the selected restaurant matches the restaurant being updated
+        if (state.selectedRestaurant?.id === restaurantId) {
+          state.selectedRestaurant = {
+            ...state.selectedRestaurant,
+            categories: reorderedCategories, // Update selected restaurant categories
+          };
+
+          // Update selected category to maintain its position in the new order
+          const foundCategory = reorderedCategories.find(
+            (cat) => cat.id === state.selectedCategory?.id
+          );
+          if (foundCategory) {
+            state.selectedCategory = foundCategory; // Update to the new category object if it exists
+          }
+        }
+
+        //state.successMessage = "Categories reordered successfully!";
+        state.categoryLoading = false;
       }
     );
     builder.addCase(
@@ -438,6 +485,41 @@ const restaurantSlice = createSlice({
         });
 
         state.successMessage = "Product updated successfully!";
+        state.productLoading = false;
+      }
+    );
+    builder.addCase(
+      reorderProductsForRestaurant.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          categoryId: string;
+          reorderedProducts: ProductData[];
+        }>
+      ) => {
+        const { categoryId, reorderedProducts } = action.payload;
+
+        state.restaurantList.forEach((restaurant) => {
+          const category = restaurant.categories.find(
+            (cat) => cat.id === action.payload.categoryId
+          );
+          if (category && category.products) {
+            category.products = reorderedProducts;
+          }
+
+          if (
+            state.selectedRestaurant &&
+            state.selectedRestaurant.id === restaurant.id
+          ) {
+            const selectedCategory = state.selectedRestaurant.categories.find(
+              (cat) => cat.id === categoryId
+            );
+            if (selectedCategory && selectedCategory.products) {
+              selectedCategory.products = reorderedProducts;
+            }
+          }
+        });
+
         state.productLoading = false;
       }
     );

@@ -112,7 +112,7 @@
   "text&background": "Text & Background",
   "colors": "Colors",
   "effectedSpace": "Choose space to apply selected color for",
-  "font": "Font",
+  "font": "Fonts",
   "categoryShape": "Category Shape",
   "contactLinks": "Contact Links",
   "viewType": "View Type",
@@ -131,5 +131,6 @@
   "drinks": "Drinks",
   "deletionCofirmMessage": "Are you sure you want to delete? You can't undo this action.",
   "copy": "Copy",
-  "move": "Move"
+  "move": "Move",
+  "dragMessage": "Drag and drop an %filetype% here, or click to select"
 }
