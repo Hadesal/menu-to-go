@@ -10,6 +10,7 @@ import { Styles } from "./ProductPage.styles";
 import Section from "./Section";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
 import { hexToRgba } from "@utils/colors";
+import { productDefaultData } from "@constants/constants";
 
 export default function ProductPage() {
   const dispatch = useAppDispatch();
@@ -27,7 +28,7 @@ export default function ProductPage() {
     <Container disableGutters={true} sx={{ ...Styles.container }} maxWidth="sm">
       <Box sx={Styles.box}>
         <IconButton
-          onClick={() => dispatch(setSelectedProduct({}))}
+          onClick={() => dispatch(setSelectedProduct(productDefaultData))}
           sx={{
             ...Styles.iconButton,
             background: backgroundColor,
@@ -44,43 +45,49 @@ export default function ProductPage() {
             }}
           />
         </IconButton>
-        <ProductDetails
-          productName={selectedProduct.name}
-          productDescription={selectedProduct.details.detailsDescription}
-          productImg={selectedProduct.image}
-        />
-
-        {selectedProduct.details.ingredients.length !== 0 && (
-          <Section
-            name="Ingredients"
-            children={
-              <IngredientList
-                listView={
-                  restaurantData.userUiPreferences?.ingredientViewType !==
-                  "GRID"
+        {selectedProduct && (
+          <>
+            <ProductDetails
+              productName={selectedProduct.name}
+              productDescription={selectedProduct.details.detailsDescription}
+              productImg={selectedProduct.image}
+            />
+            {selectedProduct.details.ingredients.length !== 0 && (
+              <Section
+                name="Ingredients"
+                children={
+                  <IngredientList
+                    listView={
+                      restaurantData.userUiPreferences?.ingredientViewType !==
+                      "GRID"
+                    }
+                    ingredients={selectedProduct.details.ingredients}
+                  />
                 }
-                ingredients={selectedProduct.details.ingredients}
               />
-            }
-          />
-        )}
+            )}
 
-        {selectedProduct.details.variants.variantList.length !== 0 && (
-          <Section
-            name={selectedProduct.details.variants.name}
-            children={
-              <VariantList
-                variants={selectedProduct.details.variants.variantList}
+            {selectedProduct.details.variants !== null &&
+              selectedProduct.details.variants.variantList.length !== 0 && (
+                <Section
+                  name={selectedProduct.details.variants.name}
+                  children={
+                    <VariantList
+                      variants={selectedProduct.details.variants.variantList}
+                    />
+                  }
+                />
+              )}
+
+            {selectedProduct.details.extras.length !== 0 && (
+              <Section
+                name="Extras"
+                children={
+                  <ExtrasList extras={selectedProduct.details.extras} />
+                }
               />
-            }
-          />
-        )}
-
-        {selectedProduct.details.extras.length !== 0 && (
-          <Section
-            name="Extras"
-            children={<ExtrasList extras={selectedProduct.details.extras} />}
-          />
+            )}
+          </>
         )}
       </Box>
     </Container>

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { useState } from "react";
+import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 type PlatformType = keyof typeof contactLinks;
 
 const contactLinks = {
@@ -36,19 +37,22 @@ const PlatformPopoverContentsComponent = ({
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
   );
 
-  const [inputedText, setInputedText] = useState(contactLinks[type]);
+  const [inputText, setInputText] = useState(
+    userUiPreferences.contactLinks[type]
+  );
 
   const handleSubmit = () => {
+    const newUserUiPreferences = {
+      ...userUiPreferences,
+      contactLinks: {
+        ...userUiPreferences.contactLinks,
+        [type]: inputText,
+      },
+    };
+
     setIsOpen(false);
-    dispatch(
-      updateRestaurantUserUiPreferences({
-        ...userUiPreferences,
-        contactLinks: {
-          ...userUiPreferences.contactLinks,
-          [type]: inputedText,
-        },
-      })
-    );
+    dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
+    dispatch(updateMenuUiPreferences(newUserUiPreferences));
   };
 
   return (
@@ -78,12 +82,13 @@ const PlatformPopoverContentsComponent = ({
                 color: "gray",
               },
             }}
-            value={inputedText}
+            value={inputText}
             label={placeholder}
             variant="outlined"
             placeholder={placeholder}
             onChange={(val) => {
-              setInputedText(val.target.value);
+              console.log(val.target.value);
+              setInputText(val.target.value);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {

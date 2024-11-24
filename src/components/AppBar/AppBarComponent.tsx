@@ -37,7 +37,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
     <AppBar
       position="fixed"
       sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        width: { md: `calc(100% - ${drawerWidth}px)` },
         ml: { sm: `${drawerWidth}px` },
         background: "#A4755D",
       }}
@@ -48,7 +48,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
           aria-label="open drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }}
+          sx={{ mr: 2, display: { sm: "block" , md:"none" } }}
         >
           <MenuIcon />
         </IconButton>
@@ -65,7 +65,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
               fontFamily: "Lucida Calligraphy",
               fontStyle: "italic",
               fontWeight: 400,
-              fontSize: "28px",
+              fontSize: {xs:"24px",sm:"28px"},
               lineHeight: "36px",
             }}
             variant="h6"

@@ -28,7 +28,7 @@ export interface ProductState {
 }
 export interface MenuState {
   restaurantData: RestaurantData;
-  selectedProduct: ProductData;
+  selectedProduct: ProductData | null;
   selectedCategory: CategoryData;
   selectedCategoryType: string;
   loading: boolean;

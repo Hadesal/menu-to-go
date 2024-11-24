@@ -100,13 +100,14 @@ const Styles = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 2,
   },
   productListItemBox: {
     color: "primary",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 1,
+    gap: { xs: 0.5, md: 1 },
   },
   productImg: {
     borderRadius: "10px",
@@ -133,7 +134,7 @@ const Styles = {
     "&:hover": {
       background: "transparent",
     },
-    marginLeft: 4, // Add any additional styles specific to productMoreIcon
+    marginLeft: { xs: 0, md: 4 },
     color: "var(--primary-color)",
   },
   /**Category item styles */
@@ -149,12 +150,19 @@ const Styles = {
     paddingTop: "8px",
     paddingBottom: "8px",
   },
-  categoryListItemText: {
+  categoryListItemTextWrapper: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    minWidth: 0, // Allows text truncation within this box
   },
-  categoryName: { fontWeight: 500, fontSize: "18px" },
+  categoryName: {
+    fontWeight: 500,
+    fontSize: "18px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
   categoryItemsLengthText: { marginLeft: 1 },
   dropDownMenuItemIcon: {
     marginRight: 1,

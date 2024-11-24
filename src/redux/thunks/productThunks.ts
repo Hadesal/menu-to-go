@@ -104,3 +104,29 @@ export const removeProductFromCategory = createAsyncThunk(
     }
   }
 );
+
+
+// Reorder categories for a specific restaurant
+export const reorderProductsForRestaurant = createAsyncThunk(
+  "restaurants/reorderProducts",
+  async (
+    {
+      categoryId,
+      reorderedProductIds: reorderedCategoryIds,
+    }: {
+      categoryId: string;
+      reorderedProductIds: string[];
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.put(
+        `/categories/${categoryId}/products/reorder`,
+        reorderedCategoryIds
+      );
+      return { categoryId, reorderedProducts: response.data };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

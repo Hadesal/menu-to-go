@@ -5,7 +5,7 @@ export interface RestaurantData {
   name: string;
   categories: CategoryData[];
   tables: TableData[];
-  userUiPreferences?: UserUiPreferences;
+  userUiPreferences: UserUiPreferences;
 }
 
 export interface addRestaurantData {
@@ -19,6 +19,7 @@ export interface UserUiPreferences {
   contactLinks: ContactLinks;
   ingredientViewType: ViewType;
   itemsViewType: ViewType;
+  logo: string;
 }
 
 export enum ViewType {
@@ -29,6 +30,7 @@ export enum ViewType {
 export interface Colors {
   primaryColor: string;
   secondaryColor: string;
+  backgroundColor: string;
   effectedSpace: string;
 }
 

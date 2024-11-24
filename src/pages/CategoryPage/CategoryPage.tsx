@@ -1,3 +1,8 @@
+import RestaurantIcon from "@assets/restaurant-icon.jpg";
+import BoxComponent from "@components/common/BoxComponent/BoxComponent";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import { ProductData } from "@dataTypes/ProductDataTypes";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   Alert,
@@ -7,37 +12,37 @@ import {
   CircularProgress,
   Divider,
   IconButton,
+  Menu,
+  MenuItem,
   Snackbar,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import RestaurantIcon from "@assets/restaurant-icon.jpg";
-import BoxComponent from "@components/common/BoxComponent/BoxComponent";
-import { CategoryData } from "@dataTypes/CategoryDataTypes";
-import {
-  clearSuccessMessage,
-  setSelectedRestaurant,
-  clearRestaurantError,
-  setSelectedCategory,
-  setSelectedProductsIDs,
-} from "@slices/restaurantsSlice";
-import {
-  addProductToCategory as addProduct,
-  updateProductInCategory as editProduct,
-  removeProductFromCategory as deleteProduct,
-} from "@redux/thunks/productThunks";
+
+import ImportDialog from "@components/common/Dialogs/ImportDialog/ImportDialog";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import {
   addCategoryToRestaurant as addCategory,
   removeCategoryFromRestaurant as deleteCategory,
   editCategoryInRestaurant as updateCategory,
 } from "@redux/thunks/categoryThunks";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import Styles from "./CategorySection.styles";
-import { ProductData } from "@dataTypes/ProductDataTypes";
+import {
+  addProductToCategory as addProduct,
+  removeProductFromCategory as deleteProduct,
+  updateProductInCategory as editProduct,
+} from "@redux/thunks/productThunks";
+import {
+  clearRestaurantError,
+  clearSuccessMessage,
+  setSelectedCategory,
+  setSelectedProductsIDs,
+  setSelectedRestaurant,
+} from "@slices/restaurantsSlice";
 import { itemType } from "@utils/dataTypeCheck";
-import ImportDialog from "@components/common/Dialogs/ImportDialog/ImportDialog";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Styles from "./CategorySection.styles";
 
 export default function CategoryPage() {
   const {
@@ -62,6 +67,14 @@ export default function CategoryPage() {
 
   const { t } = useTranslation();
   const getString = t;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     if (categoryError || productError) {
@@ -250,6 +263,7 @@ export default function CategoryPage() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
+            gap: 5,
           }}
         >
           <Box
@@ -258,6 +272,8 @@ export default function CategoryPage() {
               flexDirection: "row",
               alignItems: "center",
               gap: 2,
+              flex: 1,
+              minWidth: 0, // Prevents expansion beyond parent
             }}
           >
             <IconButton
@@ -276,11 +292,28 @@ export default function CategoryPage() {
             >
               <KeyboardBackspaceIcon fontSize="large" color="primary" />
             </IconButton>
-            <Typography variant="h5">{selectedRestaurant?.name}</Typography>
+            <Tooltip arrow title={selectedRestaurant?.name}>
+              <Typography
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+                variant="h5"
+              >
+                {selectedRestaurant?.name}
+              </Typography>
+            </Tooltip>
           </Box>
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexShrink: 0, // Ensures button doesn't shrink
+              justifyContent: "flex-end",
+            }}
+          >
             <Button
-              sx={Styles.importBtn}
+              sx={{ ...Styles.importBtn, display: { xs: "none", sm: "block" } }}
               variant="outlined"
               onClick={() => {
                 setOpenImportDialog(true);
@@ -288,20 +321,66 @@ export default function CategoryPage() {
             >
               {getString("import")}
             </Button>
-            <Button sx={Styles.previewMenu} variant="contained">
+            <Button
+              sx={{
+                ...Styles.previewMenu,
+                display: { xs: "none", sm: "block" },
+              }}
+              variant="contained"
+            >
               {getString("categoryPagePreviewMenuText")}
             </Button>
+
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{
+                ...Styles.previewMenu,
+                display: { xs: "flex", sm: "none" },
+              }}
+              variant="contained"
+              endIcon={<ExpandMoreIcon />}
+            >
+              Options
+            </Button>
+            <Menu
+              id="bulk-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  setOpenImportDialog(true);
+                }}
+              >
+                {getString("import")}
+              </MenuItem>
+              <MenuItem>{getString("categoryPagePreviewMenuText")}</MenuItem>
+            </Menu>
           </Box>
         </Box>
         <Divider />
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            gap: 10,
+            flexDirection: { xs: "column", lg: "row" },
+            gap: 5,
+            minWidth: 0,
           }}
         >
-          <Box sx={{ flex: 1 }}>
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0, // Prevents expansion beyond parent
+            }}
+          >
             <BoxComponent
               CardIcon={RestaurantIcon}
               items={selectedRestaurant?.categories ?? []}
@@ -318,7 +397,12 @@ export default function CategoryPage() {
             />
           </Box>
 
-          <Box sx={{ flex: 2 }}>
+          <Box
+            sx={{
+              flex: 2,
+              minWidth: 0, // Prevents expansion beyond parent
+            }}
+          >
             <BoxComponent
               CardIcon={RestaurantIcon}
               items={selectedCategory?.products ?? []}

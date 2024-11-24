@@ -1,15 +1,18 @@
-import { Container, List } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import ListViewProductItem from "./ListViewItem/ProductListItem";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
-import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
 import AddProductDialog from "@components/common/Dialogs/AddItemDialog/addProductDialog";
 import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
-import useCheckBoxHandler from "../../hooks/useCheckBoxHandler";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import { Container, List } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { reorderProductsForRestaurant } from "@redux/thunks/productThunks";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import useMenu from "src/hooks/useMenu";
+import { ProductData } from "../../DataTypes/ProductDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
-import { useAppSelector } from "@redux/reduxHooks";
-import { useEffect } from "react";
+import useCheckBoxHandler from "../../hooks/useCheckBoxHandler";
+import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
+import ListViewProductItem from "./ListViewItem/ProductListItem";
 
 interface ProductListViewProps {
   items: ProductData[];
@@ -26,6 +29,8 @@ const ProductListView = ({
   duplicateFunction,
   styles,
 }: ProductListViewProps) => {
+  const dispatch = useAppDispatch();
+
   const { t } = useTranslation();
   const getString = t;
   const {
@@ -36,9 +41,9 @@ const ProductListView = ({
     handleEditClick,
     handleDeleteClick,
     handleDeleteDialogClose,
-    handleEditDialogClose,
     handleDuplicateClick,
-    handleDuplicateDialogClose,
+    setIsDuplicateProductDialogOpen,
+    setIsEditDialogOpen,
   } = useItemDialogHandlers();
 
   const { checkedItems, handleCheckBoxChange, resetCheckedItems } =
@@ -46,6 +51,7 @@ const ProductListView = ({
 
   const { anchorEls, handleMenuClick, handleMenuClose } = useMenu(items.length);
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const [reorderedItems, setReorderedItems] = useState(items);
 
   useEffect(() => {
     // Get the keys of checkedItems as an array
@@ -60,25 +66,58 @@ const ProductListView = ({
     resetCheckedItems();
   }, [items, checkedItems, resetCheckedItems]);
 
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+    if (over && active.id !== over.id) {
+      const oldIndex = reorderedItems.findIndex(
+        (item) => item.id === active.id
+      );
+      const newIndex = reorderedItems.findIndex((item) => item.id === over.id);
+
+      // Update the reordered items state
+      const newReorderedItems = arrayMove(reorderedItems, oldIndex, newIndex);
+      setReorderedItems(newReorderedItems);
+
+      dispatch(
+        reorderProductsForRestaurant({
+          categoryId: selectedCategory?.id as string,
+          reorderedProductIds: newReorderedItems
+            .map((item) => item.id)
+            .filter((id): id is string => id !== undefined),
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    setReorderedItems(items);
+  }, [items]);
+
   return (
     <Container sx={styles.container}>
       <List sx={styles.list}>
-        {items.map((item, index) => (
-          <ListViewProductItem
-            key={item.id}
-            item={item}
-            index={index}
-            checked={checkedItems[item?.id || ""] || false}
-            onCheckChange={handleCheckBoxChange}
-            onMenuClick={handleMenuClick}
-            onMenuClose={handleMenuClose}
-            anchorEl={anchorEls[index]}
-            handleDuplicateClick={() => handleDuplicateClick(item)}
-            handleEditClick={() => handleEditClick(item)}
-            handleDeleteClick={() => handleDeleteClick(item)}
-            styles={styles}
-          />
-        ))}
+        <DndContext onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={reorderedItems.map((item) => item.id || "")} // Provide a fallback value
+          >
+            {reorderedItems.map((item, index) => (
+              <ListViewProductItem
+                key={item.id}
+                item={item}
+                index={index}
+                checked={checkedItems[item?.id || ""] || false}
+                onCheckChange={handleCheckBoxChange}
+                onMenuClick={handleMenuClick}
+                onMenuClose={handleMenuClose}
+                anchorEl={anchorEls[index]}
+                handleDuplicateClick={() => handleDuplicateClick(item)}
+                handleEditClick={() => handleEditClick(item)}
+                handleDeleteClick={() => handleDeleteClick(item)}
+                styles={styles}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </List>
       {currentItem && (
         <>
@@ -88,7 +127,7 @@ const ProductListView = ({
             cancelText={getString("cancel")}
             confirmText={getString("confirm")}
             isDialogOpen={isEditDialogOpen}
-            onCancelClick={handleEditDialogClose}
+            setDialogIsOpen={setIsEditDialogOpen}
             onConfirmClick={(data) =>
               editFunction({ ...data, id: currentItem.id })
             }
@@ -100,7 +139,7 @@ const ProductListView = ({
             cancelText={getString("cancel")}
             confirmText={getString("add")}
             isDialogOpen={isDuplicateProductDialogOpen}
-            onCancelClick={handleDuplicateDialogClose}
+            setDialogIsOpen={setIsDuplicateProductDialogOpen}
             initialData={
               currentItem && "details" in currentItem ? currentItem : undefined
             }
