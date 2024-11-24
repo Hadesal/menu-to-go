@@ -12,7 +12,7 @@ interface StyleControlProps {
 
 const StyleControl: React.FC<StyleControlProps> = ({
   optionName,
-  options,
+  options = { type: "", color: "" },
   label,
   choices,
   updateOptions,

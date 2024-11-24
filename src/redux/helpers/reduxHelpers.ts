@@ -8,7 +8,6 @@ export const handlePending = (state: any) => {
 
 // Helper for setting error state
 export const handleRejected = (state: any, action: any) => {
-  console.log(action.payload);
   state.loading = false;
   state.error = action.payload || "An error occurred";
 };
@@ -19,7 +18,6 @@ export const handleFulfilled = (
   action: any,
   successMessage: string = ""
 ) => {
-  console.log(action);
   state.loading = false;
   state.successMessage = successMessage || "Operation successful";
 };
