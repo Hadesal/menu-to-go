@@ -8,6 +8,7 @@ export const handlePending = (state: any) => {
 
 // Helper for setting error state
 export const handleRejected = (state: any, action: any) => {
+  console.log(action.payload);
   state.loading = false;
   state.error = action.payload || "An error occurred";
 };

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Container, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { HexColorPicker } from "react-colorful"; // Import from react-colorful
+import { Button, Container, InputLabel, MenuItem, Select } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { ChromePicker } from "react-color";
 
 interface StyleControlProps {
   optionName: string;
@@ -61,7 +61,7 @@ const StyleControl: React.FC<StyleControlProps> = ({
       disableGutters
       sx={{
         display: "flex",
-        flexDirection: { xs: "column", sm: "row"},
+        flexDirection: { xs: "column", sm: "row" },
         justifyContent: "space-between",
         alignItems: "center",
         position: "relative",
@@ -98,7 +98,7 @@ const StyleControl: React.FC<StyleControlProps> = ({
           // width: "200px",
           height: "fit-content",
           minWidth: "200px",
-          alignSelf:{xs:"flex-start" , sm:"inherit"},
+          alignSelf: { xs: "flex-start", sm: "inherit" },
           backgroundColor: options.color,
         }}
         onClick={toggleColorPicker}
@@ -119,7 +119,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
             padding: "10px",
           }}
         >
-          <HexColorPicker color={options.color} onChange={handleColorChange} />
+          <ChromePicker
+            color={options.color}
+            onChangeComplete={(color) => {
+              handleColorChange(color.hex);
+            }}
+          />
         </div>
       )}
     </Container>

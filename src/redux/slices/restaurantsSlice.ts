@@ -574,10 +574,13 @@ const restaurantSlice = createSlice({
     );
     // Handle rejected state for all async thunks
     builder.addMatcher(isRejectedAction, (state, action) => {
+      console.log(action.payload)
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;
-      state.error = action.payload.errors.name || "Something went wrong!";
+      state.error =
+        (action.payload.errors && action.payload.errors.name) ||
+        "Something went wrong!";
     });
   },
 });

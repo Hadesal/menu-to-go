@@ -49,7 +49,9 @@ const QrCodePage = () => {
   const [open, setOpen] = useState(false);
   const [openToastMessage, setOpenToastMessage] = useState(false);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const { loading } = useAppSelector((state) => state.userData);
+  const { loading, successMessage, error } = useAppSelector(
+    (state) => state.userData
+  );
   const [dotsOptions, setDotsOptions] = useState<DotsOptionsDataType>({
     color: "#77675",
     type: "rounded",
@@ -89,7 +91,7 @@ const QrCodePage = () => {
     setToastMessageObject((prev) => ({ ...prev, show: false }));
   };
 
-  const handlePushNewQrStyle = () => {
+  const handlePushNewQrStyle = async () => {
     const newQrStyleObject = {
       dotsOptions,
       cornersSquareOptions,
@@ -117,10 +119,27 @@ const QrCodePage = () => {
 
       return;
     }
-    dispatch(
+
+    const result = await dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
-    ).unwrap();
+    );
+
+    console.log(result);
+    if (createOrUpdateQrCode.fulfilled.match(result)) {
+      setToastMessageObject({
+        success: true,
+        message: successMessage as string,
+        show: true,
+      });
+    } else {
+      setToastMessageObject({
+        success: false,
+        message: (result.error.message as string) || "QR code update failed",
+        show: true,
+      });
+    }
   };
+
   const handleOnRestaurantChange = (event: any) => {
     const selectedId = event.target.value as string;
     setSelectedRestaurantId(selectedId);

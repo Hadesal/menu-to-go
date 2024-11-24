@@ -95,9 +95,7 @@ export const updateUserPassword = createAsyncThunk<
       );
       return response;
     } catch (error: any) {
-      return rejectWithValue(
-        error.message || "Password update failed"
-      );
+      return rejectWithValue(error.message || "Password update failed");
     }
   }
 );
@@ -114,9 +112,7 @@ export const createOrUpdateQrCode = createAsyncThunk<
       const response = await apiCreateUpdateQrCode(userId, qrStyleDTO);
       return { qrCodeStyle: response };
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "QR code update failed"
-      );
+      return rejectWithValue(error);
     }
   }
 );
