@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import QRCodeStyling from "qr-code-styling";
-import { Container } from "@mui/material";
+import { Container, useMediaQuery, useTheme } from "@mui/material";
 
 const CustomQRCodeComponent = ({
   value = "google.com",
-  size = 400,
+  size = { xs: 200, sm: 300 },
   margin = 0,
   dotsOptions = {},
   cornersSquareOptions = {},
@@ -13,9 +13,15 @@ const CustomQRCodeComponent = ({
   imageOptions = { hideBackgroundDots: true, imageSize: 0.7, margin: 1 },
   imageSrc = "",
 }) => {
+  const theme = useTheme();
+  const isMediumUp = useMediaQuery(theme.breakpoints.up("sm"));
+
+  // Determine the size dynamically based on screen size
+  const qrSize = isMediumUp ? size.sm : size.xs;
+
   const qrCode = new QRCodeStyling({
-    width: size,
-    height: size,
+    width: qrSize,
+    height: qrSize,
     margin,
     dotsOptions,
     cornersSquareOptions,
@@ -33,8 +39,8 @@ const CustomQRCodeComponent = ({
     }
     qrCode.update({
       data: value,
-      width: size,
-      height: size,
+      width: qrSize,
+      height: qrSize,
       margin,
       dotsOptions,
       cornersSquareOptions,
@@ -42,8 +48,9 @@ const CustomQRCodeComponent = ({
       image: imageSrc,
     });
     qrCode.append(qrRef.current);
-  }, [value, dotsOptions, cornersSquareOptions, cornersDotOptions, imageSrc]);
+  }, [value, qrSize, dotsOptions, cornersSquareOptions, cornersDotOptions, imageSrc]);
 
   return <Container sx={{ width: "fit-content", padding: 0 }} ref={qrRef} />;
 };
+
 export default CustomQRCodeComponent;

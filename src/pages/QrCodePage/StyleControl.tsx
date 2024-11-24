@@ -58,11 +58,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
 
   return (
     <Container
+      disableGutters
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", sm: "row"},
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "",
         position: "relative",
       }}
     >
@@ -80,8 +81,8 @@ const StyleControl: React.FC<StyleControlProps> = ({
           id={`${optionName}-type-select`}
           value={options.type}
           onChange={handleSelectChange}
-          label={label}
-          sx={{ width: "100%", alignSelf: "start" }}
+          // label={label}
+          sx={{ width: "100%", alignSelf: "start", marginTop: 1 }}
         >
           {choices.map((choice) => (
             <MenuItem key={choice.value} value={choice.value}>
@@ -93,8 +94,11 @@ const StyleControl: React.FC<StyleControlProps> = ({
       <Button
         ref={buttonRef}
         sx={{
-          width: "200px",
+          marginTop: 1,
+          // width: "200px",
           height: "fit-content",
+          minWidth: "200px",
+          alignSelf:{xs:"flex-start" , sm:"inherit"},
           backgroundColor: options.color,
         }}
         onClick={toggleColorPicker}

@@ -93,6 +93,8 @@
   "productDeleteText": "هل أنت متأكد أنك تريد حذف المنتج {{productName}} بشكل دائم؟",
   "noDataChanged": "لم يتم تغيير البيانات.",
   "dotsStyle": "نمط النقاط",
+  "qrCodeLogo":"شعار",
+  "qrCodeStyle": "نمط",
   "cornerSquareStyle": "نمط المربعات الزاوية",
   "cornersDotsStyle": "نمط زوايا النقاط",
   "qrStyle": "نمط QR",

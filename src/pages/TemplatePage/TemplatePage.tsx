@@ -145,6 +145,7 @@ export default function TemplatePage() {
             marginTop: "1rem",
           }}
         />
+
         <Container
           id="mainContainer"
           disableGutters
@@ -195,7 +196,6 @@ export default function TemplatePage() {
               marginTop: { xs: "1rem", md: "3rem" },
               padding: 0,
               borderRadius: "2rem",
-              //width: bigScreen > 2000 ? "29vw" : "28vw",
               width: { lg: "29vw", xl: "28vw" },
             }}
           >

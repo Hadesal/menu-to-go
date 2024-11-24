@@ -8,7 +8,7 @@ import {
 import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
-export type AcceptedFileTypes = "svg" | "excel" | "json";
+export type AcceptedFileTypes = "image" | "excel" | "json";
 type FileTypeArray = AcceptedFileTypes | AcceptedFileTypes[];
 
 function Dropzone({
@@ -39,8 +39,16 @@ function Dropzone({
       : [acceptedFileTypes];
     return types.some((type) => {
       switch (type) {
-        case "svg":
-          return file.type === "image/svg+xml" || file.name.endsWith(".svg");
+        case "image":
+          return (
+            file.type === "image/svg+xml" ||
+            file.type === "image/png" ||
+            file.type === "image/jpeg" ||
+            file.name.toLowerCase().endsWith(".svg") ||
+            file.name.toLowerCase().endsWith(".png") ||
+            file.name.toLowerCase().endsWith(".jpg") ||
+            file.name.toLowerCase().endsWith(".jpeg")
+          );
         case "excel":
           return (
             file.type ===
@@ -102,8 +110,8 @@ function Dropzone({
     return types
       .map((type) => {
         switch (type) {
-          case "svg":
-            return ".svg";
+          case "image":
+            return ".svg,.png,.jpg,.jpeg";
           case "excel":
             return ".xlsx,.xls";
           case "json":
