@@ -9,6 +9,7 @@ import PrivateRoute from "@routes/PrivateRoute";
 import PublicRoute from "@routes/PublicRoute";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import theme from "./theme/theme";
+import LandingPage from "./pages/LandingPage/LandingPage";
 // Define your custom theme
 
 const App = () => {
@@ -33,6 +34,14 @@ const App = () => {
             element={
               <PublicRoute>
                 <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/landing"
+            element={
+              <PublicRoute>
+                <LandingPage />
               </PublicRoute>
             }
           />
