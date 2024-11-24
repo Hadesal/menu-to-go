@@ -3,8 +3,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
 import {
   Alert,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   IconButton,
@@ -37,8 +39,6 @@ import CustomQRCodeComponent from "./CustomQRCodeComponent";
 import "./qrcodeStyle.css";
 import StyleControl from "./StyleControl";
 
-const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
-
 const QrCodePage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userData);
@@ -49,6 +49,7 @@ const QrCodePage = () => {
   const [open, setOpen] = useState(false);
   const [openToastMessage, setOpenToastMessage] = useState(false);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
+  const { loading } = useAppSelector((state) => state.userData);
   const [dotsOptions, setDotsOptions] = useState<DotsOptionsDataType>({
     color: "#77675",
     type: "rounded",
@@ -218,6 +219,15 @@ const QrCodePage = () => {
 
   return (
     <Stack spacing={3} sx={{ width: "95%", margin: "0 auto" }}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         sx={{
           display: "flex",
@@ -488,7 +498,7 @@ const QrCodePage = () => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: { xs: "100%", sm: "50%"} ,
+              width: { xs: "100%", sm: "50%" },
 
               marginTop: 1,
             }}
