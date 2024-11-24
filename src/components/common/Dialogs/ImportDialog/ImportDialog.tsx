@@ -1,135 +1,129 @@
 import React, { useRef } from "react";
 import { Card, CardContent, Drawer, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { parseJsonObject } from "./ImportHandler";
-import { AcceptedFileTypes } from "@components/common/Dropzone";
-import { parseImageMenu } from "@utils/aiPdfExtractor";
+import { parseExcelFile, parseJsonObject } from "./ImportHandler";
+import { parseImageMenu } from "@utils/aiMenuImageExtractor";
 
-interface importDialog {
+interface ImportDialogProps {
   handleClose: () => void;
   isOpen: boolean;
   title: string;
-  fileType: AcceptedFileTypes[];
 }
 
-const importObjects = [
-  {
-    title: "Import Json Categories",
-    description: "Import from provided JSON to import all data",
-    onClickFunction: parseJsonObject,
-  },
-  {
-    title: "Import Excel Categories",
-    description: "Import from provided Excel to import all data",
-    onClickFunction: () => {},
-  },
-  {
-    title: "Export Categories in Excel form",
-    description: "Export all data in Excel form",
-    onClickFunction: () => {},
-  },
-  {
-    title: "Import PDF Menu",
-    description: "Import from provided PDF to extract menu data",
-    onClickFunction: parseImageMenu,
-  },
-];
+interface ImportOption {
+  title: string;
+  description: string;
+  accept: string;
+  onFileSelect: (file: File) => Promise<void>;
+}
 
-const ImportDialog = ({
-  handleClose,
-  isOpen,
-  title,
-  fileType,
-}: importDialog) => {
+const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const onFileSelectRef = useRef<(file: File) => Promise<void>>();
 
-  const handleOnFileUpload = async (file: File) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        try {
-          let categories;
-          if (file.type === "application/json") {
+  const importOptions: ImportOption[] = [
+    {
+      title: "Import JSON Categories",
+      description: "Import from a JSON file to import all data",
+      accept: ".json",
+      onFileSelect: async (file: File) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
             const jsonData = JSON.parse(reader.result as string);
-            categories = parseJsonObject(jsonData);
-          } else if (file.type.startsWith("image/")) {
-            categories = await parseImageMenu(file);
-          } else {
-            throw new Error("Unsupported file type");
+            const categories = parseJsonObject(jsonData);
+            console.log(categories);
+          } catch (error) {
+            console.error("Error parsing JSON file:", error);
           }
+        };
+        reader.readAsText(file);
+      },
+    },
+    {
+      title: "Import Excel Categories",
+      description: "Import from an Excel file to import all data",
+      accept:
+        ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      onFileSelect: async (file: File) => {
+        try {
+          const categories = await parseExcelFile(file);
           console.log(categories);
-          // dispatch(
-          //   addCategoriesToRestaurant({
-          //     restaurantId: selectedRestaurant.id,
-          //     categoryList: categories,
-          //   })
-          // );
         } catch (error) {
-          if (error instanceof Error) {
-            console.error(error.message);
-          } else {
-            console.error(error);
-          }
+          console.error("Error parsing Excel file:", error);
         }
-      };
-      reader.readAsArrayBuffer(file);
+      },
+    },
+    {
+      title: "Export Categories in Excel Form",
+      description: "Export all data in Excel format",
+      accept: "",
+      onFileSelect: async () => {
+        console.log("Exporting categories...");
+      },
+    },
+    {
+      title: "Import Image Menu",
+      description: "Import from an image to extract menu data",
+      accept: "image/*",
+      onFileSelect: async (file: File) => {
+        try {
+          const categories = await parseImageMenu(file);
+          console.log(categories);
+        } catch (error) {
+          console.error("Error parsing image:", error);
+        }
+      },
+    },
+  ];
+
+  const handleCardClick = (option: ImportOption) => {
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.accept = option.accept;
+      onFileSelectRef.current = option.onFileSelect;
+      hiddenFileInput.current.click();
     }
   };
 
-  const handleCardClick = () => {
-    hiddenFileInput.current?.click();
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file);
-    if (file) {
-      handleOnFileUpload(file);
+    if (file && onFileSelectRef.current) {
+      await onFileSelectRef.current(file);
+    }
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.value = "";
     }
   };
 
   return (
-    <>
-      <Drawer open={isOpen} onClose={handleClose} anchor="right">
-        <Box sx={{ margin: "1rem" }}>
-          <Typography sx={{ marginBottom: "1rem" }} variant="h4">
-            {title}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              height: "10rem",
-            }}
-          >
-            {importObjects.map((value, index) => (
-              <Paper elevation={2} sx={{ margin: 1 }} key={index}>
-                <Card
-                  onClick={handleCardClick}
-                  sx={{ cursor: "pointer" }}
-                  key={index}
-                >
-                  <CardContent>
-                    <Typography>{value.title}</Typography>
-                    <Typography variant="caption">
-                      {value.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Paper>
-            ))}
-          </Box>
-          <input
-            type="file"
-            accept=".json,image/*"
-            ref={hiddenFileInput}
-            onChange={handleChange}
-            style={{ display: "none" }}
-          />
+    <Drawer open={isOpen} onClose={handleClose} anchor="right">
+      <Box sx={{ margin: "1rem", width: "400px" }}>
+        <Typography sx={{ marginBottom: "1rem" }} variant="h4">
+          {title}
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          {importOptions.map((option, index) => (
+            <Paper elevation={2} sx={{ margin: 1 }} key={index}>
+              <Card
+                onClick={() => handleCardClick(option)}
+                sx={{ cursor: "pointer" }}
+              >
+                <CardContent>
+                  <Typography variant="h6">{option.title}</Typography>
+                  <Typography variant="body2">{option.description}</Typography>
+                </CardContent>
+              </Card>
+            </Paper>
+          ))}
         </Box>
-      </Drawer>
-    </>
+        <input
+          type="file"
+          ref={hiddenFileInput}
+          onChange={handleChange}
+          style={{ display: "none" }}
+        />
+      </Box>
+    </Drawer>
   );
 };
 

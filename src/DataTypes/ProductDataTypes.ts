@@ -2,15 +2,7 @@ export interface ProductData {
   id?: string;
   name: string;
   price: number;
-  details: {
-    detailsDescription: string;
-    extras: ExtrasData[];
-    ingredients: IngredientData[];
-    variants: {
-      name: string;
-      variantList: VariantData[];
-    };
-  };
+  details: ProductDetailsData;
   isAvailable: boolean;
   image?: string | undefined;
   uniqueProductOrderingName: string;
@@ -43,8 +35,6 @@ export interface ProductDetailsData {
 }
 
 export interface VariantsData {
-  id?: number;
   name: string;
   variantList: VariantData[];
-  productDetailsId: number;
 }
