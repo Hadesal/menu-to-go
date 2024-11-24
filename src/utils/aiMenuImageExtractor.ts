@@ -85,23 +85,30 @@ You are an expert data parser. Given the following menu text, convert it into a 
 Here's the menu text:
 ${extractedText}
 
-Please return the structured JSON in the specified format without any additional explanation, comments, or text. Ensure the JSON is valid.
+**Important Instructions:**
+- Output only the JSON data.
+- Do not include any explanations, comments, or extra text.
+- Do not use code blocks or markdown formatting.
+- Ensure the JSON is valid and properly formatted.
+- Use double quotes for all JSON keys and string values.
+- Avoid including null values; if a field is unknown, use an empty string or omit it.
+
+Begin outputting the JSON now:
 `;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2000,
+      max_tokens: 4000,
       temperature: 0,
     });
 
     const messageContent = response.choices[0]?.message?.content;
-
     if (!messageContent) {
       throw new Error("No content received from OpenAI.");
     }
 
-    const jsonString = messageContent.replace(/```json|```/g, "").trim();
+    const jsonString = extractJSONFromResponse(messageContent);
 
     const parsedData = JSON.parse(jsonString);
 
@@ -118,12 +125,28 @@ Please return the structured JSON in the specified format without any additional
 
 const extractTextFromImage = async (file: File): Promise<string> => {
   try {
-    const { data } = await Tesseract.recognize(file, "eng", {
-      logger: (m) => console.log(m),
-    });
+    const { data } = await Tesseract.recognize(file, "eng");
     return data.text;
   } catch (error) {
     console.error("Error extracting text:", error);
     return "";
   }
+};
+const extractJSONFromResponse = (responseText: string) => {
+  let jsonString = responseText.replace(/```json|```/g, "").trim();
+
+  const jsonStart = jsonString.indexOf("{");
+  const jsonEnd = jsonString.lastIndexOf("}");
+
+  if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd >= jsonStart) {
+    jsonString = jsonString.substring(jsonStart, jsonEnd + 1);
+  } else {
+    throw new Error("No JSON object found in the response.");
+  }
+
+  jsonString = jsonString.replace(/'/g, '"');
+
+  jsonString = jsonString.replace(/}\s*[^}]*$/, "}");
+
+  return jsonString;
 };
