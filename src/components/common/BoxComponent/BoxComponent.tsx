@@ -24,7 +24,7 @@ interface BoxComponentProps {
   items: itemsTypes;
   styles: Styles;
   editFunction: (item: any) => void;
-  deleteFunction: (item: any) => void;
+  deleteFunction: (id: string) => void;
   addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;

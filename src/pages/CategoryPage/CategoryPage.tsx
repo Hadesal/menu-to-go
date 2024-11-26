@@ -165,14 +165,6 @@ export default function CategoryPage() {
       console.error("No category selected");
     }
   };
-  const handleDuplicateProduct = (product: ProductData) => {
-    dispatch(
-      addProduct({
-        categoryId: selectedCategory!.id as string,
-        productData: product,
-      })
-    );
-  };
   const handleEditProduct = (product: ProductData) => {
     if (selectedCategory?.id && product?.id) {
       dispatch(
@@ -409,7 +401,7 @@ export default function CategoryPage() {
               addFunction={handleAddProduct}
               editFunction={handleEditProduct}
               deleteFunction={handleDeleteProduct}
-              duplicateFunction={handleDuplicateProduct}
+              duplicateFunction={handleAddProduct}
               styles={Styles}
               emptyStateTitle={getString("productEmptyStateTitle")}
               emptyStateMessage={getString("productEmptyStateInfo")}

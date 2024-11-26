@@ -3,6 +3,7 @@ export interface ProductData {
   name: string;
   price: number;
   details: {
+    id?: string;
     detailsDescription: string;
     extras: ExtrasData[];
     ingredients: IngredientData[];

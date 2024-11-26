@@ -105,7 +105,6 @@ export const removeProductFromCategory = createAsyncThunk(
   }
 );
 
-
 // Reorder categories for a specific restaurant
 export const reorderProductsForRestaurant = createAsyncThunk(
   "restaurants/reorderProducts",

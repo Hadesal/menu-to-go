@@ -118,6 +118,8 @@ const restaurantSlice = createSlice({
       state.categoryLoading = true;
     });
     builder.addCase(reorderCategoriesForRestaurant.pending, (state) => {
+      state.successMessage = null;
+      state.error = null;
       state.categoryLoading = true;
     });
 
