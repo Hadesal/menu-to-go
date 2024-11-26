@@ -92,6 +92,14 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         try {
           const categories = await parseImageMenu(file);
           console.log(categories);
+          if (restaurantId !== undefined) {
+            dispatch(
+              addCategoriesToRestaurant({
+                restaurantId,
+                categoryList: categories,
+              })
+            );
+          }
         } catch (error) {
           console.error("Error parsing image:", error);
         }
