@@ -3,6 +3,8 @@ import { Card, CardContent, Drawer, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { parseExcelFile, parseJsonObject } from "./ImportHandler";
 import { parseImageMenu } from "@utils/aiMenuImageExtractor";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { addCategoriesToRestaurant } from "@redux/thunks/categoryThunks";
 
 interface ImportDialogProps {
   handleClose: () => void;
@@ -20,7 +22,10 @@ interface ImportOption {
 const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const onFileSelectRef = useRef<(file: File) => Promise<void>>();
-
+  const dispatch = useAppDispatch();
+  const { id: restaurantId } = useAppSelector(
+    (state) => state.restaurantsData.selectedRestaurant
+  );
   const importOptions: ImportOption[] = [
     {
       title: "Import JSON Categories",
@@ -32,7 +37,16 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
           try {
             const jsonData = JSON.parse(reader.result as string);
             const categories = parseJsonObject(jsonData);
+            console.log(jsonData);
             console.log(categories);
+            if (restaurantId !== undefined) {
+              dispatch(
+                addCategoriesToRestaurant({
+                  restaurantId,
+                  categoryList: categories,
+                })
+              );
+            }
           } catch (error) {
             console.error("Error parsing JSON file:", error);
           }
@@ -49,6 +63,14 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         try {
           const categories = await parseExcelFile(file);
           console.log(categories);
+          if (restaurantId !== undefined) {
+            dispatch(
+              addCategoriesToRestaurant({
+                restaurantId,
+                categoryList: categories,
+              })
+            );
+          }
         } catch (error) {
           console.error("Error parsing Excel file:", error);
         }

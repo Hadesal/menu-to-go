@@ -7,6 +7,7 @@ import {
   removeRestaurant,
 } from "../thunks/restaurantThunks";
 import {
+  addCategoriesToRestaurant,
   addCategoryToRestaurant,
   editCategoryInRestaurant,
   removeCategoryFromRestaurant,
@@ -143,6 +144,48 @@ const restaurantSlice = createSlice({
     builder.addCase(reorderProductsForRestaurant.pending, (state) => {
       state.productLoading = true;
     });
+
+    builder.addCase(
+      addCategoriesToRestaurant.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          categoryList: CategoryData[];
+          restaurantId: string;
+        }>
+      ) => {
+        const restaurant = state.restaurantList.find(
+          (r) => r.id === action.payload.restaurantId
+        );
+
+        if (restaurant) {
+          // Append the new categories to the existing ones
+          restaurant.categories = [
+            ...restaurant.categories,
+            ...action.payload.categoryList,
+          ];
+
+          // Update the selectedRestaurant if necessary
+          if (state.selectedRestaurant?.id === action.payload.restaurantId) {
+            state.selectedRestaurant = {
+              ...state.selectedRestaurant,
+              categories: restaurant.categories,
+            };
+          }
+
+          // Optionally set the first imported category as selected
+          if (
+            !state.selectedCategory &&
+            action.payload.categoryList.length > 0
+          ) {
+            state.selectedCategory = action.payload.categoryList[0];
+          }
+        }
+
+        state.successMessage = "Categories imported successfully!";
+        state.categoryLoading = false;
+      }
+    );
 
     // Fulfilled states for restaurant-related thunks
     builder.addCase(
