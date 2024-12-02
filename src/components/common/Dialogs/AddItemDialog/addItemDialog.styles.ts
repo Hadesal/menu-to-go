@@ -107,4 +107,6 @@ export const Styles = {
       color: "var(--primary-color)",
     },
   },
+
+  variantPanel: {},
 };

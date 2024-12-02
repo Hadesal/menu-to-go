@@ -65,7 +65,7 @@ export const handleConfirm = <T extends itemType>(
     }
 
     if (
-      dialogData.details.detailsDescription.trim().length === 0 &&
+      (dialogData.details.detailsDescription?.trim().length === 0 || false) &&
       setErrorFlags.setShowDescriptionError
     ) {
       setErrorFlags.setShowDescriptionError(true);

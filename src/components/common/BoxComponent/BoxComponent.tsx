@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AddProductDialog from "@components/common/Dialogs/AddItemDialog/addProductDialog";
+import AddProductDialog from "@components/common/Dialogs/AddItemDialog/AddProductDialog/addProductDialog";
 import AddRestaurantDialog from "@components/common/Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
 import EmptyState from "@components/common/EmptyStateComponet/EmptyState";
@@ -183,7 +183,7 @@ const BoxComponent = ({
         setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
         errorMessage={getString("addCategoryInfoText")}
-        data={selectedCategory?.products}
+        existingProducts={selectedCategory?.products}
       />
 
       <AddCategoryDialog
