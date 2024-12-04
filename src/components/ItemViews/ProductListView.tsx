@@ -46,6 +46,10 @@ const ProductListView = ({
     setIsEditDialogOpen,
   } = useItemDialogHandlers();
 
+  const { selectedProductsIDs } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+
   const { checkedItems, handleCheckBoxChange, resetCheckedItems } =
     useCheckBoxHandler(items);
 
@@ -65,6 +69,12 @@ const ProductListView = ({
     //clear all selection
     resetCheckedItems();
   }, [items, checkedItems, resetCheckedItems]);
+
+  useEffect(() => {
+    if (selectedProductsIDs.length === 0) {
+      resetCheckedItems();
+    }
+  }, [selectedProductsIDs]);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;

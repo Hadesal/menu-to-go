@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 
 import ImportDialog from "@components/common/Dialogs/ImportDialog/ImportDialog";
+import { InfoDialog } from "@components/common/Dialogs/Info Dialog/InfoDialog";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import {
   addCategoryToRestaurant as addCategory,
@@ -55,12 +56,14 @@ export default function CategoryPage() {
     successMessage,
     categoryLoading,
     error: categoryError,
+    productActionErrorMessage,
   } = useAppSelector((state) => state.restaurantsData);
   const { error: productError, productLoading } = useAppSelector(
     (state) => state.restaurantsData
   );
   const dispatch = useAppDispatch();
   const [openImportDialog, setOpenImportDialog] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -108,12 +111,19 @@ export default function CategoryPage() {
   }, [successMessage]);
 
   useEffect(() => {
+    if (productActionErrorMessage) {
+      setIsInfoDialogOpen(true);
+    }
+  }, [productActionErrorMessage]);
+
+  useEffect(() => {
     return () => {
       // Clear success and error messages on unmount
       dispatch(clearSuccessMessage());
       dispatch(clearRestaurantError());
     };
   }, [dispatch]);
+
   const handleImportDialogClose = () => {
     setOpenImportDialog(false);
   };
@@ -205,6 +215,14 @@ export default function CategoryPage() {
         isOpen={openImportDialog}
         title={getString("importFileMessage")}
       />
+      {productActionErrorMessage && (
+        <InfoDialog
+          isDialogOpen={isInfoDialogOpen}
+          setIsDialogOpen={setIsInfoDialogOpen}
+          message={productActionErrorMessage}
+        />
+      )}
+
       <Stack spacing={3} sx={Styles.stack}>
         <Backdrop
           sx={{

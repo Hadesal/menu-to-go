@@ -18,6 +18,8 @@ import {
   updateProductInCategory,
   removeProductFromCategory,
   reorderProductsForRestaurant,
+  moveProductsToCategory,
+  copyProductsToCategory,
 } from "../thunks/productThunks";
 import { RestaurantData, UserUiPreferences } from "@dataTypes/RestaurantObject";
 import { RestaurantState } from "@redux/slicesInterfaces";
@@ -37,6 +39,7 @@ const initialState: RestaurantState = {
   categoryError: null,
   productError: null,
   successMessage: null,
+  productActionErrorMessage: null,
   selectedProductsIDs: [],
 };
 
@@ -61,6 +64,9 @@ const restaurantSlice = createSlice({
     },
     clearSuccessMessage(state) {
       state.successMessage = null;
+    },
+    clearProductActionErrorMessage(state) {
+      state.productActionErrorMessage = null;
     },
     setSelectedCategory(state, action: PayloadAction<CategoryData | null>) {
       state.selectedCategory = action.payload;
@@ -144,9 +150,22 @@ const restaurantSlice = createSlice({
     });
     builder.addCase(reorderProductsForRestaurant.pending, (state) => {
       state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
     });
-
-    // Fulfilled states for restaurant-related thunks
+    builder.addCase(moveProductsToCategory.pending, (state) => {
+      state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
+      state.productActionErrorMessage = null;
+    });
+    builder.addCase(copyProductsToCategory.pending, (state) => {
+      state.productLoading = true;
+      state.productLoading = true;
+      state.successMessage = null;
+      state.error = null;
+      state.productActionErrorMessage = null;
+    });
     builder.addCase(
       fetchAllRestaurants.fulfilled,
       (
@@ -525,6 +544,184 @@ const restaurantSlice = createSlice({
         state.productLoading = false;
       }
     );
+    builder.addCase(
+      moveProductsToCategory.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          sourceCategoryId: string;
+          targetCategoryId: string;
+          productIds: string[];
+          movedProducts: ProductData[];
+          notMovedProductNames: string[];
+        }>
+      ) => {
+        const {
+          sourceCategoryId,
+          targetCategoryId,
+          productIds,
+          movedProducts,
+          notMovedProductNames,
+        } = action.payload;
+        // Extract the IDs of moved products
+        const movedProductsIds = movedProducts.map((product) => product.id);
+
+        state.restaurantList.forEach((restaurant) => {
+          const srcCategory = restaurant.categories.find(
+            (cat) => cat.id === sourceCategoryId
+          );
+          const trgCategory = restaurant.categories.find(
+            (cat) => cat.id === targetCategoryId
+          );
+          if (trgCategory && trgCategory.products) {
+            trgCategory.products.push(...movedProducts);
+          }
+          if (srcCategory && srcCategory.products) {
+            srcCategory.products = srcCategory.products.filter((product) => {
+              if (product.id) {
+                return !movedProductsIds.includes(product.id);
+              }
+            });
+          }
+
+          if (state.selectedCategory && state.selectedCategory.products) {
+            state.selectedCategory.products =
+              state.selectedCategory.products.filter((product) => {
+                if (product.id) {
+                  return !movedProductsIds.includes(product.id);
+                }
+              });
+          }
+
+          if (
+            state.selectedRestaurant &&
+            state.selectedRestaurant.id === restaurant.id
+          ) {
+            const selectedCategory = state.selectedRestaurant.categories.find(
+              (cat) => cat.id === sourceCategoryId
+            );
+            const moveToCategory = state.selectedRestaurant.categories.find(
+              (cat) => cat.id === targetCategoryId
+            );
+
+            if (moveToCategory && moveToCategory.products) {
+              moveToCategory.products.push(...movedProducts);
+            }
+            if (selectedCategory && selectedCategory.products) {
+              selectedCategory.products = selectedCategory.products.filter(
+                (product) => {
+                  if (product.id) {
+                    return !movedProductsIds.includes(product.id);
+                  }
+                }
+              );
+            }
+          }
+        });
+
+        let targetCategoryName = "";
+
+        for (const restaurant of state.restaurantList) {
+          const trgCategory = restaurant.categories.find(
+            (cat) => cat.id === targetCategoryId
+          );
+          if (trgCategory) {
+            targetCategoryName = trgCategory.name || "";
+            break; // Exit the loop once the target category is found
+          }
+        }
+
+        state.productLoading = false;
+        state.successMessage = "Products moved successfully!";
+
+        if (notMovedProductNames.length > 0) {
+          const productWord =
+            notMovedProductNames.length === 1 ? "Product" : "Products";
+          state.productActionErrorMessage = `${productWord} '${notMovedProductNames.join(
+            ", "
+          )}' could not be moved because it already exists in ${
+            targetCategoryName || "the other category"
+          }.`;
+        }
+
+        state.selectedProductsIDs = [];
+      }
+    );
+
+    builder.addCase(
+      copyProductsToCategory.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          sourceCategoryId: string;
+          targetCategoryId: string;
+          productIds: string[];
+          copiedProducts: ProductData[];
+          notCopiedProductNames: string[];
+        }>
+      ) => {
+        const {
+          sourceCategoryId,
+          targetCategoryId,
+          copiedProducts,
+          notCopiedProductNames,
+        } = action.payload;
+
+        state.restaurantList.forEach((restaurant) => {
+          const targetCategory = restaurant.categories.find(
+            (cat) => cat.id === targetCategoryId
+          );
+
+          if (targetCategory && targetCategory.products) {
+            // Add copied products to the target category
+            targetCategory.products.push(...copiedProducts);
+          }
+
+          if (
+            state.selectedRestaurant &&
+            state.selectedRestaurant.id === restaurant.id
+          ) {
+            const targetSelectedCategory =
+              state.selectedRestaurant.categories.find(
+                (cat) => cat.id === targetCategoryId
+              );
+
+            if (targetSelectedCategory && targetSelectedCategory.products) {
+              // Add copied products to the selected target category
+              targetSelectedCategory.products.push(...copiedProducts);
+            }
+          }
+        });
+
+        let targetCategoryName = "";
+
+        for (const restaurant of state.restaurantList) {
+          const trgCategory = restaurant.categories.find(
+            (cat) => cat.id === targetCategoryId
+          );
+          if (trgCategory) {
+            targetCategoryName = trgCategory.name || "";
+            break;
+          }
+        }
+
+        // Update UI state
+        state.productLoading = false;
+        state.successMessage = "Products copied successfully!";
+
+        if (notCopiedProductNames.length > 0) {
+          const productWord =
+            notCopiedProductNames.length === 1 ? "Product" : "Products";
+          state.productActionErrorMessage = `${productWord} '${notCopiedProductNames.join(
+            ", "
+          )}' could not be copied because it already exists in ${
+            targetCategoryName || "the other category"
+          }`;
+        }
+
+        state.selectedProductsIDs = [];
+      }
+    );
 
     builder.addCase(
       removeProductFromCategory.fulfilled,
@@ -579,7 +776,10 @@ const restaurantSlice = createSlice({
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;
-      state.error = action.payload.errors.name || "Something went wrong!";
+      state.error =
+        (action.payload.errors && action.payload.errors.name) ||
+        action.payload.message ||
+        "Something went wrong!";
     });
   },
 });
@@ -594,6 +794,7 @@ export const {
   clearCategoryError,
   updateRestaurantUserUiPreferences,
   setSelectedProductsIDs,
+  clearProductActionErrorMessage,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;
