@@ -17,6 +17,7 @@ export interface RestaurantState {
   categoryError: string | null;
   productError: string | null;
   successMessage: string | null;
+  productActionErrorMessage: string | null;
   selectedProductsIDs: string[];
 }
 export interface ProductState {

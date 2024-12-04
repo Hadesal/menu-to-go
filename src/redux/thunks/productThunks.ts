@@ -105,7 +105,6 @@ export const removeProductFromCategory = createAsyncThunk(
   }
 );
 
-
 // Reorder categories for a specific restaurant
 export const reorderProductsForRestaurant = createAsyncThunk(
   "restaurants/reorderProducts",
@@ -125,6 +124,80 @@ export const reorderProductsForRestaurant = createAsyncThunk(
         reorderedCategoryIds
       );
       return { categoryId, reorderedProducts: response.data };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// Move products to another category
+export const moveProductsToCategory = createAsyncThunk(
+  "products/moveToCategory",
+  async (
+    {
+      sourceCategoryId,
+      targetCategoryId,
+      productIds,
+    }: {
+      sourceCategoryId: string;
+      targetCategoryId: string;
+      productIds: string[];
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.put(
+        `/categories/${sourceCategoryId}/products/move`, // Ensure sourceCategoryId is part of the URL
+        {
+          productIds, // Send productIds in the request body
+          targetCategoryId, // Send targetCategoryId in the request body
+        }
+      );
+      return {
+        sourceCategoryId,
+        targetCategoryId,
+        productIds,
+        movedProducts: response.data.moved, // List of products that were successfully moved
+        notMovedProductNames: response.data.notMoved, // List of product names that couldn't be moved
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// Copy products to another category
+export const copyProductsToCategory = createAsyncThunk(
+  "products/copyToCategory",
+  async (
+    {
+      sourceCategoryId,
+      targetCategoryId,
+      productIds,
+    }: {
+      sourceCategoryId: string;
+      targetCategoryId: string;
+      productIds: string[];
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      // Call the API to copy the products
+      const response = await privateApiService.post(
+        `/categories/${sourceCategoryId}/products/copy`,
+        {
+          productIds,
+          targetCategoryId,
+        }
+      );
+
+      return {
+        sourceCategoryId,
+        targetCategoryId,
+        productIds,
+        copiedProducts: response.data.copied || [], // Products that were successfully copied
+        notCopiedProductNames: response.data.notCopied || [], // Product names that couldn't be copied
+      };
     } catch (error) {
       return rejectWithValue(error);
     }

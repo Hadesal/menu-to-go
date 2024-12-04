@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import AddCategoryDialog from "@components/common/Dialogs/AddItemDialog/addCategoryDialog";
 import AddProductDialog from "@components/common/Dialogs/AddItemDialog/addProductDialog";
 import AddRestaurantDialog from "@components/common/Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
 import EmptyState from "@components/common/EmptyStateComponet/EmptyState";
+import CategoryListView from "@components/ItemViews/CategoryListView";
 import GridView from "@components/ItemViews/gridView";
 import ProductListView from "@components/ItemViews/ProductListView";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
@@ -11,20 +13,25 @@ import { RestaurantData } from "@dataTypes/RestaurantObject";
 import Styles from "@dataTypes/StylesTypes";
 import { Paper } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { removeProductFromCategory as deleteProduct } from "@redux/thunks/productThunks";
+import {
+  copyProductsToCategory,
+  removeProductFromCategory as deleteProduct,
+  moveProductsToCategory,
+} from "@redux/thunks/productThunks";
+import { itemsTypes } from "@utils/dataTypeCheck";
 import { debouncedSearch } from "@utils/searchHelper";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  CategoryActionDialog
+} from "../Dialogs/CategoryActionDialog/CategoryActionDialog";
 import HeaderComponent from "./BoxComponentHeader";
-import AddCategoryDialog from "@components/common/Dialogs/AddItemDialog/addCategoryDialog";
-import CategoryListView from "@components/ItemViews/CategoryListView";
-import { itemsTypes } from "@utils/dataTypeCheck";
 
 interface BoxComponentProps {
   items: itemsTypes;
   styles: Styles;
   editFunction: (item: any) => void;
-  deleteFunction: (item: any) => void;
+  deleteFunction: (id: string) => void;
   addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
@@ -57,6 +64,8 @@ const BoxComponent = ({
   const getString = t;
   const dispatch = useAppDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false); // State for Copy dialog
 
   const {
     restaurantList,
@@ -92,8 +101,12 @@ const BoxComponent = ({
         title={title}
         onSearch={onSearch}
         onAddClick={handleClickOpen}
-        onCopyClick={() => {}}
-        onMoveClick={() => {}}
+        onCopyClick={() => {
+          setIsCopyDialogOpen(true); // Open the copy dialog
+        }}
+        onMoveClick={() => {
+          setIsMoveDialogOpen(true);
+        }}
         onDeleteClick={() => {
           setIsDeleteDialogOpen(true);
         }}
@@ -196,6 +209,52 @@ const BoxComponent = ({
         onConfirmClick={addFunction}
         data={selectedRestaurant?.categories}
       />
+
+      {selectedRestaurant && selectedCategory && isMoveDialogOpen && (
+        <CategoryActionDialog
+          categories={selectedRestaurant.categories}
+          isDialogOpen={isMoveDialogOpen}
+          setIsDialogOpen={setIsMoveDialogOpen}
+          onConfirmClick={(selectedCategoryTarget) => {
+            dispatch(
+              moveProductsToCategory({
+                sourceCategoryId: selectedCategory.id as string,
+                targetCategoryId: selectedCategoryTarget,
+                productIds: selectedProductsIDs,
+              })
+            );
+
+            setIsMoveDialogOpen(false);
+          }}
+          selectedCategory={selectedCategory}
+          actionTitle="Move Product"
+          selectLabel="Move to this category"
+          buttonLabel="Move"
+        />
+      )}
+
+      {selectedRestaurant && selectedCategory && isCopyDialogOpen && (
+        <CategoryActionDialog
+          categories={selectedRestaurant.categories}
+          isDialogOpen={isCopyDialogOpen}
+          setIsDialogOpen={setIsCopyDialogOpen}
+          onConfirmClick={(selectedCategoryTarget) => {
+            dispatch(
+              copyProductsToCategory({
+                sourceCategoryId: selectedCategory.id as string,
+                targetCategoryId: selectedCategoryTarget,
+                productIds: selectedProductsIDs,
+              })
+            );
+
+            setIsCopyDialogOpen(false);
+          }}
+          selectedCategory={selectedCategory}
+          actionTitle="Copy Product"
+          selectLabel="Copy to this category"
+          buttonLabel="Copy"
+        />
+      )}
     </Paper>
   );
 };

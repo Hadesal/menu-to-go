@@ -17,7 +17,7 @@ import ListViewProductItem from "./ListViewItem/ProductListItem";
 interface ProductListViewProps {
   items: ProductData[];
   editFunction: (item: ProductData) => void;
-  deleteFunction: (item: ProductData) => void;
+  deleteFunction: (id: string) => void;
   duplicateFunction: (item: ProductData) => void;
   styles: Styles;
 }
@@ -46,6 +46,10 @@ const ProductListView = ({
     setIsEditDialogOpen,
   } = useItemDialogHandlers();
 
+  const { selectedProductsIDs } = useAppSelector(
+    (state) => state.restaurantsData
+  );
+
   const { checkedItems, handleCheckBoxChange, resetCheckedItems } =
     useCheckBoxHandler(items);
 
@@ -65,6 +69,12 @@ const ProductListView = ({
     //clear all selection
     resetCheckedItems();
   }, [items, checkedItems, resetCheckedItems]);
+
+  useEffect(() => {
+    if (selectedProductsIDs.length === 0) {
+      resetCheckedItems();
+    }
+  }, [selectedProductsIDs]);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -145,7 +155,9 @@ const ProductListView = ({
             }
             onConfirmClick={(item) => {
               if (item && duplicateFunction) {
-                duplicateFunction(item);
+                const { id, details, ...rest } = item;
+                const { id: _, ...sanitizedDetails } = details || {};
+                duplicateFunction({ ...rest, details: sanitizedDetails });
               }
             }}
             errorMessage={getString("duplicateProductError")}
@@ -154,7 +166,9 @@ const ProductListView = ({
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
-              deleteFunction(currentItem as ProductData);
+              if (currentItem.id) {
+                deleteFunction(currentItem.id);
+              }
               handleDeleteDialogClose();
             }}
             onSecondaryActionClick={handleDeleteDialogClose}

@@ -1,3 +1,5 @@
+import InputComponent from "@components/InputComponent/InputComponent";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import {
   Box,
   Button,
@@ -6,13 +8,10 @@ import {
   DialogTitle,
   InputLabel,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import InputComponent from "@components/InputComponent/InputComponent";
-import { Styles } from "./addItemDialog.styles";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
-import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { itemType } from "@utils/dataTypeCheck";
-import ItemList from "../ProductDetailsAccordion/accordionComponents/ItemList";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { handleCancel, handleConfirm } from "../helpers/handlers";
+import { Styles } from "./addItemDialog.styles";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;

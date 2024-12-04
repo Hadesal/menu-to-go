@@ -19,7 +19,13 @@ interface AccordionWrapperProps extends AccordionProps {
 }
 
 const StyledAccordion = styled((props: AccordionProps) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
+  <MuiAccordion
+    slotProps={{ transition: { unmountOnExit: true } }}
+    disableGutters
+    elevation={0}
+    square
+    {...props}
+  />
 ))(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
   "&::before": {
