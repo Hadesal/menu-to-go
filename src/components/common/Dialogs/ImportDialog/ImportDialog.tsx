@@ -65,9 +65,10 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       accept:
         ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       onFileSelect: async (file: File) => {
+        handleClose();
+        dispatch(setImportingLoading(true));
         try {
           const categories = await parseExcelFile(file);
-          console.log(categories);
           if (restaurantId !== undefined) {
             dispatch(
               addCategoriesToRestaurant({
@@ -77,6 +78,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
             );
           }
         } catch (error) {
+          dispatch(setImportingLoading(false));
           console.error("Error parsing Excel file:", error);
         }
       },
@@ -97,7 +99,6 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         handleClose();
         dispatch(setImportingLoading(true));
         try {
-          console.log("started");
           const categories = await parseImageMenu(file);
           console.log(categories);
           if (restaurantId !== undefined) {
@@ -108,7 +109,6 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
               })
             );
           }
-          console.log("done");
         } catch (error) {
           dispatch(setImportingLoading(false));
           console.error("Error parsing image:", error);

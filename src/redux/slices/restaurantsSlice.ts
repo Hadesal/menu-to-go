@@ -149,9 +149,7 @@ const restaurantSlice = createSlice({
       state.productLoading = true;
     });
     builder.addCase(addCategoriesToRestaurant.pending, (state) => {
-      console.log("loading");
-      state.importingLoading = false;
-      //state.categoryLoading = true;
+      state.importingLoading = true;
     });
 
     builder.addCase(
@@ -644,7 +642,7 @@ export const {
   clearCategoryError,
   updateRestaurantUserUiPreferences,
   setSelectedProductsIDs,
-  setImportingLoading
+  setImportingLoading,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;
