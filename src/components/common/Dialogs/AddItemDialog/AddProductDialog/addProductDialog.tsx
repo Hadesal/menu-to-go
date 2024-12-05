@@ -34,6 +34,7 @@ const AddProductDialog = ({
       onCancel={() => setDialogIsOpen(false)}
       footer={null}
       style={{}}
+      destroyOnClose={true}
     >
       <ProductForm
         initialData={initialData}
@@ -42,6 +43,7 @@ const AddProductDialog = ({
         confirmText={confirmText}
         cancelText={cancelText}
         existingProducts={existingProducts}
+        isDialogOpen={isDialogOpen}
       />
     </Modal>
   );

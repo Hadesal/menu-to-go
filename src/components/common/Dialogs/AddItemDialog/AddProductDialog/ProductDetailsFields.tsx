@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Typography, Form, Input, Collapse } from "antd";
+import { Typography, Form, Input } from "antd";
 import VariantPanel from "./VariantPanel";
 import IngredientPanel from "./IngredientPanel";
 import ExtraPanel from "./ExtraPanel";
 
-const { Panel } = Collapse;
-
 interface ProductDetailsFieldsProps {
   values: any;
   handleChange: any;
+  setFieldValue: (field: string, value: any) => void;
 }
 
 const ProductDetailsFields = ({
   values,
   handleChange,
+  setFieldValue,
 }: ProductDetailsFieldsProps) => {
   return (
     <>
@@ -34,7 +34,11 @@ const ProductDetailsFields = ({
       </Form.Item>
 
       <VariantPanel values={values} handleChange={handleChange} />
-      <IngredientPanel values={values} handleChange={handleChange} />
+      <IngredientPanel
+        values={values}
+        handleChange={handleChange}
+        setFieldValue={setFieldValue}
+      />
       <ExtraPanel values={values} handleChange={handleChange} />
     </>
   );

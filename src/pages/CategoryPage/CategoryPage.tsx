@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
 import BoxComponent from "@components/common/BoxComponent/BoxComponent";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
@@ -166,10 +167,30 @@ export default function CategoryPage() {
     }
   };
   const handleDuplicateProduct = (product: ProductData) => {
+    const newProduct = JSON.parse(JSON.stringify(product));
+
+    delete newProduct.id;
+    if (newProduct.details) {
+      delete newProduct.details.id;
+      if (newProduct.details.variants) {
+        delete newProduct.details.variants.id;
+        newProduct.details.variants.variantList.forEach((variant: any) => {
+          delete variant.id;
+        });
+      }
+      newProduct.details.ingredients.forEach((ingredient: any) => {
+        delete ingredient.id;
+      });
+
+      newProduct.details.extras.forEach((extra: any) => {
+        delete extra.id;
+      });
+    }
+
     dispatch(
       addProduct({
         categoryId: selectedCategory!.id as string,
-        productData: product,
+        productData: newProduct,
       })
     );
   };

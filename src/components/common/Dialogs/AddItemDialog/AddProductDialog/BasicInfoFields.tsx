@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
 import { Form, Input, InputNumber } from "antd";
 import { Styles } from "../addItemDialog.styles";
+import FileUploadComponent from "../fileUploadComponent";
+import { useState } from "react";
 
 interface BasicInfoFieldsProps {
   values: any;
   errors: any;
   touched: any;
   handleChange: any;
+  setFieldValue: (field: string, value: any) => void;
 }
 
 const BasicInfoFields = ({
@@ -15,9 +17,27 @@ const BasicInfoFields = ({
   errors,
   touched,
   handleChange,
+  setFieldValue,
 }: BasicInfoFieldsProps) => {
+  const [imageError, setImageError] = useState<string | null>(null);
+
   return (
     <>
+      <Form.Item
+        label="Product Image"
+        validateStatus={imageError ? "error" : ""}
+        help={imageError}
+        style={Styles.textFieldWrapper}
+      >
+        <FileUploadComponent
+          image={values.image}
+          onImageChange={(image: string | null) => {
+            setFieldValue("image", image);
+          }}
+          error={imageError}
+          setError={setImageError}
+        />
+      </Form.Item>
       <Form.Item
         label="Name"
         validateStatus={touched.name && errors.name ? "error" : ""}
@@ -48,7 +68,6 @@ const BasicInfoFields = ({
             handleChange({ target: { name: "price", value } })
           }
           style={{
-            width: "100%",
             ...Styles.textFieldStyle,
             ...Styles.inputPropStyle,
           }}
