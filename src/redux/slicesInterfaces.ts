@@ -18,6 +18,7 @@ export interface RestaurantState {
   productError: string | null;
   successMessage: string | null;
   selectedProductsIDs: string[];
+  importingLoading: boolean;
 }
 export interface ProductState {
   productList: ProductData[];

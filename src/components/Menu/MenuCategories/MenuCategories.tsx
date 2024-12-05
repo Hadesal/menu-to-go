@@ -19,13 +19,13 @@ export default function MenuCategories({
 
     if (categoryTag === "Food") {
       categoriesDataArray = categories.filter((category) => {
-        return category.categoryType === "Food";
+        return category.categoryType.toLowerCase() === "food";
       });
     } else {
       categoriesDataArray = categories.filter((category) => {
-        return category.categoryType === "Drinks";
+        return category.categoryType.toLowerCase() === "drinks";
       });
-    }
+    }    
 
     return categoriesDataArray;
   };
