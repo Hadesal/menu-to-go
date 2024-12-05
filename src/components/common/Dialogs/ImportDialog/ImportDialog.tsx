@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
 import { Card, CardContent, Drawer, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { parseExcelFile, parseJsonObject } from "./ImportHandler";
+import {
+  exportSampleExcel,
+  parseExcelFile,
+  parseJsonObject,
+} from "./ImportHandler";
 import { parseImageMenu } from "@utils/aiMenuImageExtractor";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { addCategoriesToRestaurant } from "@redux/thunks/categoryThunks";
@@ -82,7 +86,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       description: "Export all categories to an Excel file.",
       accept: "",
       onFileSelect: async () => {
-        console.log("Exporting categories...");
+        exportSampleExcel();
       },
     },
     {
@@ -93,7 +97,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         handleClose();
         dispatch(setImportingLoading(true));
         try {
-          console.log("started")
+          console.log("started");
           const categories = await parseImageMenu(file);
           console.log(categories);
           if (restaurantId !== undefined) {
@@ -104,7 +108,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
               })
             );
           }
-          console.log("done")
+          console.log("done");
         } catch (error) {
           dispatch(setImportingLoading(false));
           console.error("Error parsing image:", error);
@@ -114,10 +118,14 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   ];
 
   const handleCardClick = (option: ImportOption) => {
-    if (hiddenFileInput.current) {
-      hiddenFileInput.current.accept = option.accept;
-      onFileSelectRef.current = option.onFileSelect;
-      hiddenFileInput.current.click();
+    if (option.accept) {
+      if (hiddenFileInput.current) {
+        hiddenFileInput.current.accept = option.accept;
+        onFileSelectRef.current = option.onFileSelect;
+        hiddenFileInput.current.click();
+      }
+    } else {
+      option.onFileSelect(new File([], ""));
     }
   };
 
@@ -152,7 +160,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
                   border: "1px dotted var(--primary-color)",
                   transition: "background-color 0.3s ease, transform 0.2s ease",
                   "&:hover": {
-                    backgroundColor: "var(--primary-color)", 
+                    backgroundColor: "var(--primary-color)",
                     transform: "scale(1.02)",
                     color: "white",
                   },
