@@ -29,12 +29,34 @@ const AddProductDialog = ({
 }: AddProductDialogProps) => {
   return (
     <Modal
-      title={dialogTitle}
+      title={
+        <p
+          style={{
+            fontSize: "1.4rem",
+            paddingLeft: 0,
+            color: "#797979",
+          }}
+        >
+          {dialogTitle}
+        </p>
+      }
       open={isDialogOpen}
       onCancel={() => setDialogIsOpen(false)}
-      footer={null}
-      style={{}}
       destroyOnClose={true}
+      zIndex={10000000000000000}
+      footer={null}
+      style={{ top: 50 }}
+      styles={{
+        content: {
+          borderRadius: "24px",
+          padding: "10px 50px",
+        },
+        body: {
+          overflowY: "auto",
+          // maxHeight: "35.5rem",
+        },
+      }}
+      centered={false}
     >
       <ProductForm
         initialData={initialData}

@@ -1,7 +1,8 @@
 // src/theme.ts
 import { createTheme } from "@mui/material/styles";
 
-const theme = createTheme({
+// MUI Theme
+const muiTheme = createTheme({
   typography: {
     fontFamily: ["Poppins", "Arial", "sans-serif"].join(","),
   },
@@ -24,4 +25,13 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+// Ant Design Theme
+const antdTheme = {
+  token: {
+    colorPrimary: "#a4755d",
+    colorSecondary: "#d9b18f",
+  },
+};
+
+// Exporting both themes
+export { muiTheme, antdTheme };

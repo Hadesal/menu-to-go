@@ -81,6 +81,7 @@
   "categoryPageTitle": "Categories & Products",
   "categoryPagePreviewMenuText": "Preview Menu",
   "addCategoryText": "Add Category",
+  "addProductText": "Add Product",
   "addCategoryInfoText": "Please enter category name",
   "categoryDeleteText": "Are you sure you want to permanently delete category {{categoryName}}?",
   "categoryTypeTitle": "Category type",

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Input, InputNumber, Button, Collapse } from "antd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { Button, Collapse, Form, Input, InputNumber } from "antd";
 import { FieldArray } from "formik";
+import "./productDialog.css";
 
 interface VariantPanelProps {
   values: any;
@@ -14,15 +17,13 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
       label: "Variants",
       children: (
         <>
-          {" "}
-          <Form.Item label="Variants Name" style={{}}>
+          <Form.Item label="Variants Name" layout="vertical" colon={false}>
             <Input
               id="details.variants.name"
               name="details.variants.name"
               value={values.details.variants.name}
               onChange={handleChange}
-              style={{}}
-              placeholder="Enter variants name"
+              style={{ padding: "12px 10px" }}
             />
           </Form.Item>
           <FieldArray name="details.variants.variantList">
@@ -33,28 +34,32 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
                     <div
                       key={index}
                       style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
                         marginBottom: 16,
                         backgroundColor: "#F9FDFE",
                         padding: 16,
-                        borderRadius: 16,
+                        borderRadius: 10,
                         boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
+                        gap: 8,
                       }}
                     >
-                      <Form.Item label="Variant Name">
+                      <Form.Item style={{ marginBottom: "0px", width: "60%" }}>
                         <Input
                           id={`details.variants.variantList.${index}.name`}
                           name={`details.variants.variantList.${index}.name`}
                           value={variant.name}
                           onChange={handleChange}
-                          style={{}}
-                          placeholder="Enter variant name"
+                          placeholder="Variant name"
+                          style={{ padding: "0.7rem" }}
                         />
                       </Form.Item>
-                      <Form.Item label="Variant Price">
+                      <Form.Item style={{ marginBottom: "0px", width: "30%" }}>
                         <InputNumber
                           id={`details.variants.variantList.${index}.price`}
                           name={`details.variants.variantList.${index}.price`}
-                          value={variant.price}
+                          value={variant.price || undefined} // Ensure placeholder is shown when value is not set
                           onChange={(value) =>
                             handleChange({
                               target: {
@@ -63,27 +68,29 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
                               },
                             })
                           }
-                          style={{
-                            width: "100%",
-                          }}
-                          placeholder="Enter variant price"
+                          style={{ padding: "0.45rem" }}
+                          controls={false}
+                          placeholder="Price"
                         />
                       </Form.Item>
-                      <Button
+                      <IconButton
                         onClick={() => remove(index)}
-                        type="primary"
-                        danger
-                        style={{ marginTop: 8 }}
+                        aria-label="delete"
+                        size="small"
+                        style={{
+                          color: "var(--primary-color)",
+                          width: "10%",
+                        }}
                       >
-                        Remove Variant
-                      </Button>
+                        <DeleteIcon />
+                      </IconButton>
                     </div>
                   )
                 )}
                 <Button
                   onClick={() => push({ id: "", name: "", price: 0 })}
                   type="dashed"
-                  style={{ width: "100%", marginTop: 16 }}
+                  style={{ width: "100%", marginTop: 16}}
                 >
                   Add Variant
                 </Button>
@@ -94,7 +101,13 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
       ),
     },
   ];
-  return <Collapse items={items} defaultActiveKey={["1"]} />;
+  return (
+    <Collapse
+      style={{ marginBottom: "1rem" , marginLeft:"0.5rem" , marginRight:"0.5rem" }}
+      items={items}
+      defaultActiveKey={["1"]}
+    />
+  );
 };
 
 export default VariantPanel;

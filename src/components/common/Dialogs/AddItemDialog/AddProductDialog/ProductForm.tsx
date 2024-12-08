@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from "react";
-import { Formik, Form as FormikForm, FormikProps } from "formik";
-import { Typography, Form, Space, Button } from "antd";
-import * as Yup from "yup";
 import {
   ExtrasData,
   IngredientData,
   ProductData,
   VariantData,
 } from "@dataTypes/ProductDataTypes";
+import { Button, Form, Space } from "antd";
+import { Formik, Form as FormikForm, FormikProps } from "formik";
+import React, { useEffect, useRef } from "react";
+import * as Yup from "yup";
 import BasicInfoFields from "./BasicInfoFields";
 import ProductDetailsFields from "./ProductDetailsFields";
-
+import "./productDialog.css";
 interface ProductFormProps {
   initialData?: ProductData;
   onConfirmClick: (item: ProductData) => void;
@@ -252,8 +252,6 @@ const ProductForm = ({
       }) => {
         return (
           <FormikForm>
-            <Typography.Title level={4}>Product Information</Typography.Title>
-
             <BasicInfoFields
               values={values}
               errors={errors}
@@ -268,22 +266,19 @@ const ProductForm = ({
               setFieldValue={setFieldValue}
             />
 
-            <Form.Item>
-              <Space>
+            <Form.Item style={{ marginTop: "1rem" }}>
+              <Space style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ backgroundColor: "primary" }}
-                >
-                  {confirmText}
-                </Button>
-                <Button
+                  className="cancelButton"
                   onClick={() => {
                     setDialogIsOpen(false);
                     resetForm();
                   }}
                 >
                   {cancelText}
+                </Button>
+                <Button type="primary" htmlType="submit" className="addBtn">
+                  {confirmText}
                 </Button>
               </Space>
             </Form.Item>

@@ -177,7 +177,7 @@ const BoxComponent = ({
 
       <AddProductDialog
         isDialogOpen={product ? open : false}
-        dialogTitle={getString("addCategoryText")}
+        dialogTitle={getString("addProductText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
         setDialogIsOpen={setOpen}

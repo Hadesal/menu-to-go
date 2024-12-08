@@ -1,69 +1,69 @@
-// src/App.js
-import { ROUTES } from "@constants/constants";
 import { ThemeProvider } from "@mui/material";
+import { ConfigProvider } from "antd";
+import {antdTheme,muiTheme} from "./theme/theme";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "@pages/LoginPage/LoginPage";
-import MenuPage from "@pages/MenuPage/MenuPage";
 import RegisterPage from "@pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "@pages/UserDashboardPage/UserDashboardPage";
+import MenuPage from "@pages/MenuPage/MenuPage";
 import LandingPage from "@pages/LandingPage/LandingPage";
 import PrivateRoute from "@routes/PrivateRoute";
 import PublicRoute from "@routes/PublicRoute";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import theme from "./theme/theme";
-// Define your custom theme
+import "./App.css"; // Include Ant Design styles
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path={ROUTES.ROOT}
-            element={<Navigate to={ROUTES.DASHBOARD} replace />}
-          />
-          <Route
-            path={ROUTES.REGISTER}
-            element={
-              <PublicRoute>
-                <RegisterPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path={ROUTES.LOGIN}
-            element={
-              <PublicRoute>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/landing"
-            element={
-              <PublicRoute>
-                <LandingPage />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            path={ROUTES.DASHBOARD}
-            element={
-              <PrivateRoute>
-                <UserDashboardPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={ROUTES.MENU}
-            element={
-              <PublicRoute>
-                <MenuPage />
-              </PublicRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+    <ThemeProvider theme={muiTheme}>
+      <ConfigProvider theme={antdTheme}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={<Navigate to="/dashboard" replace />}
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <RegisterPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/landing"
+              element={
+                <PublicRoute>
+                  <LandingPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <UserDashboardPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/menu"
+              element={
+                <PublicRoute>
+                  <MenuPage />
+                </PublicRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </ConfigProvider>
     </ThemeProvider>
   );
 };

@@ -17,23 +17,39 @@ const ProductDetailsFields = ({
 }: ProductDetailsFieldsProps) => {
   return (
     <>
-      <Typography.Title level={4} style={{}}>
+      <Typography.Title
+        level={4}
+        style={{
+          padding: "0.5rem",
+        }}
+      >
         Product Details
       </Typography.Title>
 
-      <Form.Item label="Details Description" style={{}}>
+      <Form.Item
+        label="Details Description"
+        layout="vertical"
+        style={{
+          padding: "0.5rem",
+        }}
+      >
         <Input.TextArea
           id="details.detailsDescription"
           name="details.detailsDescription"
           value={values.details.detailsDescription}
           onChange={handleChange}
           rows={4}
-          style={{}}
-          placeholder="Enter product description"
+          style={{
+            padding: "16.5px 14px",
+            borderRadius: "1rem",
+            maxHeight: "250px", // Set maximum height (you can adjust this value as needed)
+            minHeight: "100px", // Set maximum height (you can adjust this value as needed)
+          }}
         />
       </Form.Item>
 
       <VariantPanel values={values} handleChange={handleChange} />
+
       <IngredientPanel
         values={values}
         handleChange={handleChange}

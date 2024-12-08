@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Input, InputNumber, Button, Collapse } from "antd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { Button, Collapse, Form, Input, InputNumber } from "antd";
 import { FieldArray } from "formik";
-
+import "./productDialog.css";
 interface ExtraPanelProps {
   values: any;
   handleChange: any;
@@ -22,28 +24,32 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
                   <div
                     key={index}
                     style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                       marginBottom: 16,
                       backgroundColor: "#F9FDFE",
                       padding: 16,
                       borderRadius: 16,
                       boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
+                      gap: 8,
                     }}
                   >
-                    <Form.Item label="Extra Name">
+                    <Form.Item style={{ marginBottom: "0px", width: "60%" }}>
                       <Input
                         id={`details.extras.${index}.name`}
                         name={`details.extras.${index}.name`}
                         value={extra.name}
                         onChange={handleChange}
-                        style={{}}
-                        placeholder="Enter extra name"
+                        style={{ padding: "0.7rem" }}
+                        placeholder="Extra name"
                       />
                     </Form.Item>
-                    <Form.Item label="Extra Price">
+                    <Form.Item style={{ marginBottom: "0px", width: "30%" }}>
                       <InputNumber
                         id={`details.extras.${index}.price`}
                         name={`details.extras.${index}.price`}
-                        value={extra.price}
+                        value={extra.price || undefined} // Ensure placeholder is shown when value is not set
                         onChange={(value) =>
                           handleChange({
                             target: {
@@ -52,18 +58,22 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
                             },
                           })
                         }
-                        style={{}}
-                        placeholder="Enter extra price"
+                        style={{ padding: "0.45rem" }}
+                        controls={false}
+                        placeholder="Price"
                       />
                     </Form.Item>
-                    <Button
+                    <IconButton
                       onClick={() => remove(index)}
-                      type="primary"
-                      danger
-                      style={{ marginTop: 8 }}
+                      aria-label="delete"
+                      size="small"
+                      style={{
+                        color: "var(--primary-color)",
+                        width: "10%",
+                      }}
                     >
-                      Remove Extra
-                    </Button>
+                      <DeleteIcon />
+                    </IconButton>
                   </div>
                 ))}
                 <Button
@@ -81,7 +91,16 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
     },
   ];
 
-  return <Collapse items={items} defaultActiveKey={["1"]} />;
+  return (
+    <Collapse
+      style={{
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem",
+      }}
+      items={items}
+      defaultActiveKey={["1"]}
+    />
+  );
 };
 
 export default ExtraPanel;
