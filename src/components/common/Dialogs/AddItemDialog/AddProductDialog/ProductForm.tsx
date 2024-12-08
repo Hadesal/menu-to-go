@@ -38,8 +38,6 @@ const ProductForm = ({
     }
   }, [isDialogOpen]);
 
-
-
   const initialValues = initialData || {
     name: "",
     price: 0,
@@ -64,9 +62,11 @@ const ProductForm = ({
       delete clonedValues.details.id;
       if (clonedValues.details.variants) {
         delete clonedValues.details.variants.id;
-        clonedValues.details.variants.variantList.forEach((variant: VariantData) => {
-          delete variant.id;
-        });
+        clonedValues.details.variants.variantList.forEach(
+          (variant: VariantData) => {
+            delete variant.id;
+          }
+        );
       }
       clonedValues.details.ingredients.forEach((ingredient: IngredientData) => {
         delete ingredient.id;
@@ -84,13 +84,13 @@ const ProductForm = ({
     <Formik
       innerRef={formikRef}
       initialValues={initialValues}
-      validationSchema={createValidationSchema( existingProducts, initialData)}
+      validationSchema={createValidationSchema(existingProducts, initialData)}
       onSubmit={handleSubmit}
       validateOnMount
       validateOnChange
       validateOnBlur
       context={{ values: initialValues, existingProducts, initialData }}
-      >
+    >
       {({
         values,
         errors,
@@ -100,8 +100,6 @@ const ProductForm = ({
         resetForm,
       }) => (
         <FormikForm>
-          <Typography.Title level={4}>Product Information</Typography.Title>
-
           <BasicInfoFields
             values={values}
             errors={errors}
@@ -116,16 +114,9 @@ const ProductForm = ({
             errors={errors}
             touched={touched}
           />
-          <Form.Item  style={{ marginTop: "1rem" }}>
+          <Form.Item style={{ marginTop: "1rem" }}>
             <Space style={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
-                type="primary"
-                htmlType="submit"
-                className="addBtn"
-              >
-                {confirmText}
-              </Button>
-              <Button 
                 className="cancelButton"
                 onClick={() => {
                   setDialogIsOpen(false);
@@ -134,11 +125,13 @@ const ProductForm = ({
               >
                 {cancelText}
               </Button>
+              <Button type="primary" htmlType="submit" className="addBtn">
+                {confirmText}
+              </Button>
             </Space>
           </Form.Item>
         </FormikForm>
       )}
-
     </Formik>
   );
 };

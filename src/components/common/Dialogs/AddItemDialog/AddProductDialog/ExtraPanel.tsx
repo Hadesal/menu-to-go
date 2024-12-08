@@ -11,7 +11,12 @@ interface ExtraPanelProps {
   touched: any;
 }
 
-const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) => {
+const ExtraPanel = ({
+  values,
+  handleChange,
+  errors,
+  touched,
+}: ExtraPanelProps) => {
   const items = [
     {
       key: "extraPanel",
@@ -22,12 +27,14 @@ const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) 
             <>
               {values.details.extras.map((extra: any, index: number) => {
                 const extraNameError =
-                  touched?.details?.extras?.[index]?.name && errors?.details?.extras?.[index]?.name
+                  touched?.details?.extras?.[index]?.name &&
+                  errors?.details?.extras?.[index]?.name
                     ? errors.details.extras[index].name
                     : null;
 
                 const extraPriceError =
-                  touched?.details?.extras?.[index]?.price && errors?.details?.extras?.[index]?.price
+                  touched?.details?.extras?.[index]?.price &&
+                  errors?.details?.extras?.[index]?.price
                     ? errors.details.extras[index].price
                     : null;
 
@@ -37,7 +44,7 @@ const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) 
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center",
+                      alignItems: "flex-start",
                       marginBottom: 16,
                       backgroundColor: "#F9FDFE",
                       padding: 16,
@@ -47,23 +54,25 @@ const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) 
                     }}
                   >
                     <Form.Item
-                      label="Extra Name"
                       validateStatus={extraNameError ? "error" : ""}
                       help={extraNameError}
                       style={{ marginBottom: "0px", width: "60%" }}
                     >
-
                       <Input
                         id={`details.extras.${index}.name`}
                         name={`details.extras.${index}.name`}
                         value={extra.name}
                         onChange={handleChange}
-                        placeholder="Enter extra name"
+                        style={{ padding: "0.7rem" }}
+                        placeholder="Extra name"
                       />
                     </Form.Item>
-                
-                    <Form.Item style={{ marginBottom: "0px", width: "30%" }}  validateStatus={extraPriceError ? "error" : ""}
-                      help={extraPriceError}>
+
+                    <Form.Item
+                      style={{ marginBottom: "0px", width: "30%" }}
+                      validateStatus={extraPriceError ? "error" : ""}
+                      help={extraPriceError}
+                    >
                       <InputNumber
                         id={`details.extras.${index}.price`}
                         name={`details.extras.${index}.price`}
@@ -76,7 +85,6 @@ const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) 
                             },
                           })
                         }
-
                         style={{ padding: "0.45rem" }}
                         controls={false}
                         placeholder="Price"
@@ -109,7 +117,6 @@ const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) 
       ),
     },
   ];
-
 
   return (
     <Collapse

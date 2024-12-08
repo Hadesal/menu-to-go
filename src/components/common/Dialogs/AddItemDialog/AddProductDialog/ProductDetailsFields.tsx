@@ -17,19 +17,10 @@ const ProductDetailsFields = ({
   handleChange,
   setFieldValue,
   errors,
-  touched
+  touched,
 }: ProductDetailsFieldsProps) => {
   return (
     <>
-      <Typography.Title
-        level={4}
-        style={{
-          padding: "0.5rem",
-        }}
-      >
-        Product Details
-      </Typography.Title>
-
       <Form.Item
         label="Details Description"
         layout="vertical"
@@ -52,7 +43,12 @@ const ProductDetailsFields = ({
         />
       </Form.Item>
 
-      <VariantPanel values={values} handleChange={handleChange} errors={errors} touched={touched} />
+      <VariantPanel
+        values={values}
+        handleChange={handleChange}
+        errors={errors}
+        touched={touched}
+      />
       <IngredientPanel
         values={values}
         handleChange={handleChange}
@@ -60,8 +56,12 @@ const ProductDetailsFields = ({
         errors={errors}
         touched={touched}
       />
-      <ExtraPanel values={values} handleChange={handleChange} errors={errors}
-        touched={touched}  />
+      <ExtraPanel
+        values={values}
+        handleChange={handleChange}
+        errors={errors}
+        touched={touched}
+      />
     </>
   );
 };
