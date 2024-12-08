@@ -5,7 +5,6 @@ export interface ProductData {
   details: ProductDetailsData;
   isAvailable: boolean;
   image?: string | undefined;
-  uniqueProductOrderingName: string;
 }
 export interface ExtrasData {
   id?: string;
@@ -16,7 +15,6 @@ export interface ExtrasData {
 export interface IngredientData {
   id?: string;
   name: string;
-  price?: number;
   image: string | null;
 }
 

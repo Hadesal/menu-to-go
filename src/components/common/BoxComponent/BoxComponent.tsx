@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AddCategoryDialog from "@components/common/Dialogs/AddItemDialog/addCategoryDialog";
-import AddProductDialog from "@components/common/Dialogs/AddItemDialog/addProductDialog";
+import AddProductDialog from "@components/common/Dialogs/AddItemDialog/AddProductDialog/addProductDialog";
 import AddRestaurantDialog from "@components/common/Dialogs/AddItemDialog/addRestaurantDialog";
 import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
 import EmptyState from "@components/common/EmptyStateComponet/EmptyState";
@@ -22,9 +22,7 @@ import { itemsTypes } from "@utils/dataTypeCheck";
 import { debouncedSearch } from "@utils/searchHelper";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  CategoryActionDialog
-} from "../Dialogs/CategoryActionDialog/CategoryActionDialog";
+import { CategoryActionDialog } from "../Dialogs/CategoryActionDialog/CategoryActionDialog";
 import HeaderComponent from "./BoxComponentHeader";
 
 interface BoxComponentProps {
@@ -190,13 +188,13 @@ const BoxComponent = ({
 
       <AddProductDialog
         isDialogOpen={product ? open : false}
-        dialogTitle={getString("addCategoryText")}
+        dialogTitle={getString("addProductText")}
         cancelText={getString("cancel")}
         confirmText={getString("add")}
         setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
         errorMessage={getString("addCategoryInfoText")}
-        data={selectedCategory?.products}
+        existingProducts={selectedCategory?.products}
       />
 
       <AddCategoryDialog

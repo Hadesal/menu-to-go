@@ -52,8 +52,6 @@ export const Styles = {
     textAlign: "center",
   },
   imageContainer: {
-    width: 150,
-    height: 150,
     borderRadius: "50%",
     backgroundColor: "#E0E0E0",
     display: "flex",
@@ -107,4 +105,6 @@ export const Styles = {
       color: "var(--primary-color)",
     },
   },
+
+  variantPanel: {},
 };

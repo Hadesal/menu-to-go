@@ -1,4 +1,4 @@
-import AddProductDialog from "@components/common/Dialogs/AddItemDialog/addProductDialog";
+import AddProductDialog from "@components/common/Dialogs/AddItemDialog/AddProductDialog/addProductDialog";
 import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
