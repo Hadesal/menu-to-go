@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // validationSchema.ts
 import * as Yup from "yup";
-import { ProductData, ExtrasData, IngredientData, VariantData } from "@dataTypes/ProductDataTypes";
+import { ProductData, ExtrasData, VariantData } from "@dataTypes/ProductDataTypes";
 
 const isUniqueAmongProducts = (
   fieldValue: string | undefined,
-  fieldName: "name" | "uniqueProductOrderingName",
+  fieldName: "name",
   existingProducts: ProductData[] | undefined,
   initialData: ProductData | undefined
 ): boolean => {
@@ -36,24 +37,12 @@ export const createValidationSchema = (existingProducts?: ProductData[], initial
 
     isAvailable: Yup.boolean(),
 
-    uniqueProductOrderingName: Yup.string()
-      .trim()
-      .required("Unique ordering name is required")
-      .test(
-        "unique-ordering-name",
-        "A product with this ordering name already exists.",
-        function (value) {
-          return (
-            isUniqueAmongProducts(value, "uniqueProductOrderingName", existingProducts, initialData) ||
-            this.createError({ message: "A product with this ordering name already exists." })
-          );
-        }
-      ),
 
     details: Yup.object().shape({
-      variants: Yup.object().shape({
-        name: Yup.string().when("variantList", (variantList: VariantData[] | undefined, schema) => {
-          if (Array.isArray(variantList) && variantList.length > 0) {
+ variants: Yup.object().shape({
+        name: Yup.string().when("variantList", (variantList: any | undefined, schema) => {
+          const variants = variantList[0]
+          if (Array.isArray(variants) && variants.length > 0) {
             return schema.trim().required("Variant group name is required since you have variants");
           }
           return schema.notRequired();
@@ -63,7 +52,19 @@ export const createValidationSchema = (existingProducts?: ProductData[], initial
           Yup.object().shape({
             name: Yup.string()
               .trim()
-              .required("Variant name is required"),
+              .required("Variant name is required")
+              .test("unique-variant-name", "Variant names must be unique", function (value) {
+                const formValues = this.options.context || {};
+                console.log(formValues)
+                const variantList = formValues.details?.variants?.variantList || [];
+                const variantNames = variantList.map((v: VariantData) =>
+                  (v.name || "").toLowerCase()
+                );
+                const occurrences = variantNames.filter(
+                  (name: string) => name === (value || "").toLowerCase()
+                ).length;
+                return occurrences <= 1 || this.createError({ message: "Variant names must be unique" });
+              }),
             price: Yup.number()
               .typeError("Variant price must be a number")
               .positive("Variant price must be greater than zero")

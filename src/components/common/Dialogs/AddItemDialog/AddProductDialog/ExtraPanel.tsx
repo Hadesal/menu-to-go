@@ -125,7 +125,7 @@ const ExtraPanel = ({
         marginRight: "0.5rem",
       }}
       items={items}
-      defaultActiveKey={["extraPanel"]}
+      defaultActiveKey={["1"]}
     />
   );
 };

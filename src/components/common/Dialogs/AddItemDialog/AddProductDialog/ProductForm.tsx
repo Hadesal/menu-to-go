@@ -4,13 +4,14 @@ import {
   ProductData,
   VariantData,
 } from "@dataTypes/ProductDataTypes";
-import { Button, Form, Space, Typography } from "antd";
+import { Button, Form, Space } from "antd";
 import { Formik, Form as FormikForm, FormikProps } from "formik";
 import React, { useEffect, useRef } from "react";
 import BasicInfoFields from "./BasicInfoFields";
 import ProductDetailsFields from "./ProductDetailsFields";
 import { createValidationSchema } from "./validationSchema";
 import "./productDialog.css";
+
 interface ProductFormProps {
   initialData?: ProductData;
   onConfirmClick: (item: ProductData) => void;
@@ -52,7 +53,6 @@ const ProductForm = ({
     },
     isAvailable: true,
     image: "",
-    uniqueProductOrderingName: "",
   };
 
   const handleSubmit = (values: ProductData) => {
@@ -98,6 +98,7 @@ const ProductForm = ({
         handleChange,
         setFieldValue,
         resetForm,
+        setErrors
       }) => (
         <FormikForm>
           <BasicInfoFields

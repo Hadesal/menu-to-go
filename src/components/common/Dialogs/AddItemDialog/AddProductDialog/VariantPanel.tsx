@@ -153,7 +153,7 @@ const VariantPanel = ({
         marginRight: "0.5rem",
       }}
       items={items}
-      defaultActiveKey={["variantPanel"]}
+      defaultActiveKey={["1"]}
     />
   );
 };

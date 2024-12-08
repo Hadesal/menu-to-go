@@ -20,7 +20,6 @@ const BasicInfoFields = ({
   setFieldValue,
 }: BasicInfoFieldsProps) => {
   const [imageError, setImageError] = useState<string | null>(null);
-
   return (
     <>
       <Form.Item
@@ -31,6 +30,7 @@ const BasicInfoFields = ({
         <FileUploadComponent
           image={values.image}
           onImageChange={(image: string | null) => {
+            console.log(values)
             setFieldValue("image", image);
           }}
           error={imageError}
@@ -81,35 +81,8 @@ const BasicInfoFields = ({
             borderRadius: "1rem",
             width: "100%",
             appearance: "textfield",
-            MozAppearance: "textfield", // Firefox
-            WebkitAppearance: "none", // Chrome, Safari
-          }}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label="Unique Product Ordering Name"
-        validateStatus={
-          touched.uniqueProductOrderingName && errors.uniqueProductOrderingName
-            ? "error"
-            : ""
-        }
-        help={
-          touched.uniqueProductOrderingName && errors.uniqueProductOrderingName
-        }
-        style={{
-          padding: "0.5rem",
-        }}
-        layout="vertical"
-      >
-        <Input
-          id="uniqueProductOrderingName"
-          name="uniqueProductOrderingName"
-          value={values.uniqueProductOrderingName}
-          onChange={handleChange}
-          style={{
-            padding: "16.5px 14px",
-            borderRadius: "1rem",
+            MozAppearance: "textfield",
+            WebkitAppearance: "none",
           }}
         />
       </Form.Item>

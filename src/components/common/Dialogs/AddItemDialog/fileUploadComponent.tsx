@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, IconButton, Typography, styled } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import UploadIcon from "@assets/material-symbols_image-outline (1).svg"; // Adjust the path as necessary
+import UploadIcon from "@assets/material-symbols_image-outline (1).svg";
 import { Styles } from "./addItemDialog.styles";
 
-const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
-const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
+const MAX_FILE_SIZE_MB = 2;
+const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; 
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -24,10 +24,10 @@ interface FileUploadComponentProps {
   onImageChange: (image: string | null) => void;
   error: string | null;
   setError: (error: string | null) => void;
-  width?: number; // Optional width prop
-  height?: number; // Optional height prop
-  imgWidth?: number; // Optional width prop
-  imgHeight?: number; // Optional height prop
+  width?: number;
+  height?: number;
+  imgWidth?: number;
+  imgHeight?: number;
 
 }
 
@@ -36,8 +36,8 @@ const FileUploadComponent = ({
   onImageChange,
   error,
   setError,
-  width = 150, // Default width
-  height = 150, // Default height
+  width = 150,
+  height = 150,
   imgWidth = 40,
   imgHeight = 40
 }: FileUploadComponentProps) => {
@@ -74,7 +74,6 @@ const FileUploadComponent = ({
     onImageChange(null);
     setError(null);
 
-    // Clear input value to allow re-selecting the same file
     if (inputRef.current) {
       inputRef.current.value = "";
     }
@@ -116,15 +115,6 @@ const FileUploadComponent = ({
           {error}
         </Typography>
       )}
-      {/* <Typography
-        variant="body1"
-        sx={{
-          ...Styles.imageLabel,
-          visibility: !image ? "visible" : "hidden",
-        }}
-      >
-        Upload Image
-      </Typography> */}
 
       <VisuallyHiddenInput
         id="upload-button"

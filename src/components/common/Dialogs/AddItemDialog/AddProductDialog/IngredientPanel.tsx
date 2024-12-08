@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
-import { Button, Collapse, Form, Input, InputNumber } from "antd";
-import { FieldArray } from "formik";
-import FileUploadComponent from "../fileUploadComponent";
+import { Box, IconButton, styled, Typography } from "@mui/material";
+import { Button, Collapse, Form, Input } from "antd";
+import { FieldArray, useFormikContext } from "formik";
 import "./productDialog.css";
+import { IngredientData, ProductData } from "@dataTypes/ProductDataTypes";
+import React from "react";
+import { Styles } from "../addItemDialog.styles";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@assets/material-symbols_image-outline (1).svg";
 
 interface IngredientPanelProps {
   values: any;
@@ -14,6 +18,21 @@ interface IngredientPanelProps {
   touched: any;
 }
 
+const MAX_FILE_SIZE_MB = 2;
+const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"];
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
 const IngredientPanel = ({
   values,
   handleChange,
@@ -21,6 +40,8 @@ const IngredientPanel = ({
   errors,
   touched,
 }: IngredientPanelProps) => {
+  const { setFieldError } = useFormikContext<ProductData>();
+
   const items = [
     {
       key: "ingredientPanel",
@@ -30,20 +51,81 @@ const IngredientPanel = ({
           {({ push, remove }) => (
             <>
               {values.details.ingredients.map(
-                (ingredient: any, index: number) => {
+                (ingredient: IngredientData, index: number) => {
                   const ingredientNameError =
                     touched?.details?.ingredients?.[index]?.name &&
                     errors?.details?.ingredients?.[index]?.name
                       ? errors.details.ingredients[index].name
                       : null;
+                  const ingredientImageError =
+                    touched?.details?.ingredients?.[index]?.image &&
+                    errors?.details?.ingredients?.[index]?.image
+                      ? errors.details.ingredients[index].image
+                      : null;
+                  const handleImageUpload = (
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                      const fileType = file.type;
+                      const fileSizeMB = file.size / (1024 * 1024);
 
+                      if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+                        setFieldError(
+                          `details.ingredients.${index}.image`,
+                          "Only PNG, JPG, and SVG files are allowed."
+                        );
+                        return;
+                      }
+
+                      if (fileSizeMB > MAX_FILE_SIZE_MB) {
+                        setFieldError(
+                          `details.ingredients.${index}.image`,
+                          `File size exceeds ${MAX_FILE_SIZE_MB} MB.`
+                        );
+                        return;
+                      }
+
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setFieldValue(
+                          `details.ingredients.${index}.image`,
+                          reader.result as string
+                        );
+                        setFieldError(
+                          `details.ingredients.${index}.image`,
+                          undefined
+                        );
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  };
+
+                  const handleRemoveImage = (event: React.MouseEvent) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    setFieldValue(`details.ingredients.${index}.image`, null);
+                    setFieldError(
+                      `details.ingredients.${index}.image`,
+                      undefined
+                    );
+
+                    const inputElement = document.getElementById(
+                      `details.ingredients.${index}.image-upload`
+                    ) as HTMLInputElement | null;
+                    if (inputElement) {
+                      inputElement.value = "";
+                    }
+                  };
                   return (
                     <div
                       key={index}
                       style={{
                         display: "flex",
                         flexDirection: "row",
-                        alignItems: ingredientNameError? "self-start" :"center",
+                        alignItems: ingredientNameError
+                          ? "self-start"
+                          : "center",
                         marginBottom: 16,
                         backgroundColor: "#F9FDFE",
                         padding: 16,
@@ -53,21 +135,63 @@ const IngredientPanel = ({
                       }}
                     >
                       <Form.Item style={{ marginBottom: "0px", width: "20%" }}>
-                        <FileUploadComponent
-                          image={ingredient.image}
-                          onImageChange={(image: string | null) => {
-                            setFieldValue(
-                              `details.ingredients.${index}.image`,
-                              image
-                            );
-                          }}
-                          error={null}
-                          setError={() => {}}
-                          width={60}
-                          height={60}
-                          imgHeight={20}
-                          imgWidth={20}
-                        />
+                        <Box sx={Styles.fileUpload}>
+                          <label
+                            htmlFor={`details.ingredients.${index}.image-upload`}
+                          >
+                            {ingredient.image ? (
+                              <Box sx={Styles.uploadedImageWrapper}>
+                                <img
+                                  src={ingredient.image}
+                                  alt="Uploaded"
+                                  style={{
+                                    width: 60,
+                                    height: 60,
+                                    borderRadius: "50%",
+                                  }}
+                                />
+                                <IconButton
+                                  onClick={handleRemoveImage}
+                                  sx={Styles.closeIconButton}
+                                >
+                                  <CloseIcon sx={Styles.closeIcon} />
+                                </IconButton>
+                              </Box>
+                            ) : (
+                              <Box sx={Styles.imageWrapper}>
+                                <Box
+                                  sx={{
+                                    ...Styles.imageContainer,
+                                    width: 60,
+                                    height: 60,
+                                  }}
+                                >
+                                  <img
+                                    src={UploadIcon}
+                                    alt="Upload Icon"
+                                    style={{ width: 20, height: 20 }}
+                                  />
+                                </Box>
+                              </Box>
+                            )}
+                          </label>
+
+                          <VisuallyHiddenInput
+                            id={`details.ingredients.${index}.image-upload`}
+                            type="file"
+                            onChange={handleImageUpload}
+                            accept={ALLOWED_FILE_TYPES.join(",")}
+                          />
+                        </Box>
+                        {ingredientImageError && (
+                          <Typography
+                            color="error"
+                            variant="caption"
+                            sx={Styles.imageError}
+                          >
+                            {ingredientImageError}
+                          </Typography>
+                        )}
                       </Form.Item>
 
                       <Form.Item
@@ -101,7 +225,7 @@ const IngredientPanel = ({
                 }
               )}
               <Button
-                onClick={() => push({ id: "", name: "", price: 0 })}
+                onClick={() => push({ id: "", name: "", price: 0, image: "" })}
                 type="dashed"
                 style={{ width: "100%", marginTop: 16 }}
               >
@@ -121,7 +245,7 @@ const IngredientPanel = ({
         marginRight: "0.5rem",
       }}
       items={items}
-      defaultActiveKey={["ingredientPanel"]}
+      defaultActiveKey={["1"]}
     />
   );
 };

@@ -120,8 +120,6 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                     productRow["Is Available"].toString().toLowerCase() ===
                     "true",
                   image: productRow["Image"] || null,
-                  uniqueProductOrderingName:
-                    productRow["Unique Product Ordering Name"],
                 };
 
                 return product;

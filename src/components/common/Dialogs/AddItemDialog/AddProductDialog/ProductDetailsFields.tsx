@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Typography, Form, Input } from "antd";
+import {Form, Input } from "antd";
 import VariantPanel from "./VariantPanel";
 import IngredientPanel from "./IngredientPanel";
 import ExtraPanel from "./ExtraPanel";
@@ -17,7 +17,7 @@ const ProductDetailsFields = ({
   handleChange,
   setFieldValue,
   errors,
-  touched,
+  touched
 }: ProductDetailsFieldsProps) => {
   return (
     <>
@@ -37,8 +37,8 @@ const ProductDetailsFields = ({
           style={{
             padding: "16.5px 14px",
             borderRadius: "1rem",
-            maxHeight: "250px", // Set maximum height (you can adjust this value as needed)
-            minHeight: "100px", // Set maximum height (you can adjust this value as needed)
+            maxHeight: "250px",
+            minHeight: "100px", 
           }}
         />
       </Form.Item>
@@ -55,6 +55,7 @@ const ProductDetailsFields = ({
         setFieldValue={setFieldValue}
         errors={errors}
         touched={touched}
+        
       />
       <ExtraPanel
         values={values}
