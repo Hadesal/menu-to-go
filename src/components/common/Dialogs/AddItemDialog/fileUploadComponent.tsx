@@ -24,6 +24,11 @@ interface FileUploadComponentProps {
   onImageChange: (image: string | null) => void;
   error: string | null;
   setError: (error: string | null) => void;
+  width?: number; // Optional width prop
+  height?: number; // Optional height prop
+  imgWidth?: number; // Optional width prop
+  imgHeight?: number; // Optional height prop
+
 }
 
 const FileUploadComponent = ({
@@ -31,7 +36,13 @@ const FileUploadComponent = ({
   onImageChange,
   error,
   setError,
+  width = 150, // Default width
+  height = 150, // Default height
+  imgWidth = 40,
+  imgHeight = 40
 }: FileUploadComponentProps) => {
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -53,13 +64,20 @@ const FileUploadComponent = ({
         onImageChange(reader.result as string);
         setError(null);
       };
-      reader.readAsDataURL(file); // This will read the file as a Base64 encoded string
+      reader.readAsDataURL(file);
     }
   };
+
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
     onImageChange(null);
+    setError(null);
+
+    // Clear input value to allow re-selecting the same file
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   return (
@@ -70,7 +88,11 @@ const FileUploadComponent = ({
             <img
               src={image}
               alt="Uploaded"
-              style={{ width: 150, height: 150, borderRadius: "50%" }}
+              style={{
+                width,
+                height,
+                borderRadius: "50%",
+              }}
             />
             <IconButton onClick={handleRemoveImage} sx={Styles.closeIconButton}>
               <CloseIcon sx={Styles.closeIcon} />
@@ -78,11 +100,11 @@ const FileUploadComponent = ({
           </Box>
         ) : (
           <Box sx={Styles.imageWrapper}>
-            <Box sx={Styles.imageContainer}>
+            <Box sx={{ ...Styles.imageContainer, width: width, height: height }}>
               <img
                 src={UploadIcon}
                 alt="Upload Icon"
-                style={{ width: 40, height: 40 }}
+                style={{ width: imgWidth, height: imgHeight }}
               />
             </Box>
           </Box>
@@ -94,19 +116,20 @@ const FileUploadComponent = ({
           {error}
         </Typography>
       )}
-      <Typography
+      {/* <Typography
         variant="body1"
         sx={{
           ...Styles.imageLabel,
-          visibility: image === null ? "visible" : "hidden",
+          visibility: !image ? "visible" : "hidden",
         }}
       >
-        Load Image
-      </Typography>
+        Upload Image
+      </Typography> */}
 
       <VisuallyHiddenInput
         id="upload-button"
         type="file"
+        ref={inputRef} // Attach ref to the input
         onChange={handleImageUpload}
         accept={ALLOWED_FILE_TYPES.join(",")}
       />

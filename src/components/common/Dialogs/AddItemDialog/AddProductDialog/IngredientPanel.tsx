@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Input, InputNumber, Button, Collapse } from "antd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { Button, Collapse, Form, Input, InputNumber } from "antd";
 import { FieldArray } from "formik";
 import FileUploadComponent from "../fileUploadComponent";
+import "./productDialog.css";
 
 interface IngredientPanelProps {
   values: any;
@@ -37,14 +40,18 @@ const IngredientPanel = ({
                   <div
                     key={index}
                     style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                       marginBottom: 16,
                       backgroundColor: "#F9FDFE",
                       padding: 16,
                       borderRadius: 16,
                       boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
+                      gap: 8,
                     }}
                   >
-                    <Form.Item label="Ingredient Image">
+                    <Form.Item style={{ marginBottom: "0px", width: "20%" }}>
                       <FileUploadComponent
                         image={ingredient.image}
                         onImageChange={(image: string | null) => {
@@ -52,11 +59,15 @@ const IngredientPanel = ({
                         }}
                         error={null}
                         setError={() => {}}
+                        width={60}
+                        height={60}
+                        imgHeight={20}
+                        imgWidth={20}
                       />
                     </Form.Item>
 
                     <Form.Item
-                      label="Ingredient Name"
+                      style={{ marginBottom: "0px", width: "70%" }}
                       validateStatus={ingredientNameError ? "error" : ""}
                       help={ingredientNameError}
                     >
@@ -65,7 +76,8 @@ const IngredientPanel = ({
                         name={`details.ingredients.${index}.name`}
                         value={ingredient.name}
                         onChange={handleChange}
-                        placeholder="Enter ingredient name"
+                        placeholder="Ingredient name"
+                        style={{ padding: "0.7rem" }}
                       />
                     </Form.Item>
                     <Form.Item label="Ingredient Price">
@@ -85,14 +97,17 @@ const IngredientPanel = ({
                         placeholder="Enter ingredient price"
                       />
                     </Form.Item>
-                    <Button
-                      onClick={() => remove(index)}
-                      type="primary"
-                      danger
-                      style={{ marginTop: 8 }}
-                    >
-                      Remove Ingredient
-                    </Button>
+                    <IconButton
+                        onClick={() => remove(index)}
+                        aria-label="delete"
+                        size="small"
+                        style={{
+                          color: "var(--primary-color)",
+                          width: "10%",
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                   </div>
                 );
               })}
@@ -109,8 +124,17 @@ const IngredientPanel = ({
       ),
     },
   ];
-
-  return <Collapse items={items} defaultActiveKey={["ingredientPanel"]} />;
+  return (
+    <Collapse
+      style={{
+        marginBottom: "1rem",
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem",
+      }}
+      items={items}
+      defaultActiveKey={["ingredientPanel"]}
+    />
+  );
 };
 
 export default IngredientPanel;

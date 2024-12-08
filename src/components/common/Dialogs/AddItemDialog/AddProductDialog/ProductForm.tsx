@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from "react";
-import { Formik, Form as FormikForm, FormikProps } from "formik";
-import { Typography, Form, Space, Button } from "antd";
 import {
   ExtrasData,
   IngredientData,
   ProductData,
   VariantData,
 } from "@dataTypes/ProductDataTypes";
+import { Button, Form, Space, Typography } from "antd";
+import { Formik, Form as FormikForm, FormikProps } from "formik";
+import React, { useEffect, useRef } from "react";
 import BasicInfoFields from "./BasicInfoFields";
 import ProductDetailsFields from "./ProductDetailsFields";
 import { createValidationSchema } from "./validationSchema";
-
+import "./productDialog.css";
 interface ProductFormProps {
   initialData?: ProductData;
   onConfirmClick: (item: ProductData) => void;
@@ -116,16 +116,17 @@ const ProductForm = ({
             errors={errors}
             touched={touched}
           />
-          <Form.Item>
-            <Space>
+          <Form.Item  style={{ marginTop: "1rem" }}>
+            <Space style={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: "primary" }}
+                className="addBtn"
               >
                 {confirmText}
               </Button>
-              <Button
+              <Button 
+                className="cancelButton"
                 onClick={() => {
                   setDialogIsOpen(false);
                   resetForm();
@@ -137,6 +138,7 @@ const ProductForm = ({
           </Form.Item>
         </FormikForm>
       )}
+
     </Formik>
   );
 };

@@ -24,7 +24,6 @@ const BasicInfoFields = ({
   return (
     <>
       <Form.Item
-        label="Product Image"
         validateStatus={imageError ? "error" : ""}
         help={imageError}
         style={Styles.textFieldWrapper}
@@ -40,17 +39,23 @@ const BasicInfoFields = ({
       </Form.Item>
       <Form.Item
         label="Name"
+        colon={false}
         validateStatus={touched.name && errors.name ? "error" : ""}
         help={touched.name && errors.name}
-        style={Styles.textFieldWrapper}
+        layout="vertical"
+        style={{
+          padding: "0.5rem",
+        }}
       >
         <Input
           id="name"
           name="name"
           value={values.name}
           onChange={handleChange}
-          style={{ ...Styles.textFieldStyle, ...Styles.inputPropStyle }}
-          placeholder="Enter product name"
+          style={{
+            padding: "16.5px 14px",
+            borderRadius: "1rem",
+          }}
         />
       </Form.Item>
 
@@ -58,7 +63,10 @@ const BasicInfoFields = ({
         label="Price"
         validateStatus={touched.price && errors.price ? "error" : ""}
         help={touched.price && errors.price}
-        style={Styles.textFieldWrapper}
+        style={{
+          padding: "0.5rem",
+        }}
+        layout="vertical"
       >
         <InputNumber
           id="price"
@@ -67,11 +75,15 @@ const BasicInfoFields = ({
           onChange={(value) =>
             handleChange({ target: { name: "price", value } })
           }
+          controls={false}
           style={{
-            ...Styles.textFieldStyle,
-            ...Styles.inputPropStyle,
+            padding: "16.5px 14px",
+            borderRadius: "1rem",
+            width: "100%",
+            appearance: "textfield",
+            MozAppearance: "textfield", // Firefox
+            WebkitAppearance: "none", // Chrome, Safari
           }}
-          placeholder="Enter product price"
         />
       </Form.Item>
 
@@ -85,15 +97,20 @@ const BasicInfoFields = ({
         help={
           touched.uniqueProductOrderingName && errors.uniqueProductOrderingName
         }
-        style={Styles.textFieldWrapper}
+        style={{
+          padding: "0.5rem",
+        }}
+        layout="vertical"
       >
         <Input
           id="uniqueProductOrderingName"
           name="uniqueProductOrderingName"
           value={values.uniqueProductOrderingName}
           onChange={handleChange}
-          style={{ ...Styles.textFieldStyle, ...Styles.inputPropStyle }}
-          placeholder="Enter unique ordering name"
+          style={{
+            padding: "16.5px 14px",
+            borderRadius: "1rem",
+          }}
         />
       </Form.Item>
     </>

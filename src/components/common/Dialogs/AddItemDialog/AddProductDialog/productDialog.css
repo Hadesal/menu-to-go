@@ -1,0 +1,50 @@
+.addBtn {
+  border-radius: 20px !important;
+  padding: 5px 25px !important;
+  background-color: var(--primary-color) !important;
+  border: 1px solid transparent !important;
+}
+
+.addBtn:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: none !important;
+  color: var(--primary-color) !important;
+}
+
+.cancelButton {
+  margin-right: 2px;
+  border-radius: 20px;
+  padding: 5px 25px;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+.cancelButton:hover {
+  border-color: var(--primary-color) !important;
+  box-shadow: none !important;
+  color: var(--primary-color) !important;
+}
+
+/* Customize the label color */
+.ant-collapse-header {
+  color: var(--primary-color) !important;
+  display: flex  !important;
+  align-items: center  !important;
+  justify-content: center  !important;
+}
+
+.ant-collapse-header-text {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Customize the chevron color */
+.ant-collapse-arrow {
+  color: var(--primary-color) !important;
+  /* Replace with your desired color */
+  font-weight: bold;
+  font-size: 1rem;
+
+}
