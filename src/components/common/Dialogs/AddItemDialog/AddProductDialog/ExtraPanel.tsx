@@ -5,20 +5,31 @@ import { FieldArray } from "formik";
 interface ExtraPanelProps {
   values: any;
   handleChange: any;
+  errors: any;
+  touched: any;
 }
 
-const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
+const ExtraPanel = ({ values, handleChange, errors, touched }: ExtraPanelProps) => {
   const items = [
     {
       key: "extraPanel",
       label: "Extras",
       children: (
-        <>
-          {" "}
-          <FieldArray name="details.extras">
-            {({ push, remove }) => (
-              <>
-                {values.details.extras.map((extra: any, index: number) => (
+        <FieldArray name="details.extras">
+          {({ push, remove }) => (
+            <>
+              {values.details.extras.map((extra: any, index: number) => {
+                const extraNameError =
+                  touched?.details?.extras?.[index]?.name && errors?.details?.extras?.[index]?.name
+                    ? errors.details.extras[index].name
+                    : null;
+
+                const extraPriceError =
+                  touched?.details?.extras?.[index]?.price && errors?.details?.extras?.[index]?.price
+                    ? errors.details.extras[index].price
+                    : null;
+
+                return (
                   <div
                     key={index}
                     style={{
@@ -29,17 +40,24 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
                       boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
                     }}
                   >
-                    <Form.Item label="Extra Name">
+                    <Form.Item
+                      label="Extra Name"
+                      validateStatus={extraNameError ? "error" : ""}
+                      help={extraNameError}
+                    >
                       <Input
                         id={`details.extras.${index}.name`}
                         name={`details.extras.${index}.name`}
                         value={extra.name}
                         onChange={handleChange}
-                        style={{}}
                         placeholder="Enter extra name"
                       />
                     </Form.Item>
-                    <Form.Item label="Extra Price">
+                    <Form.Item
+                      label="Extra Price"
+                      validateStatus={extraPriceError ? "error" : ""}
+                      help={extraPriceError}
+                    >
                       <InputNumber
                         id={`details.extras.${index}.price`}
                         name={`details.extras.${index}.price`}
@@ -52,7 +70,7 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
                             },
                           })
                         }
-                        style={{}}
+                        style={{ width: "100%" }}
                         placeholder="Enter extra price"
                       />
                     </Form.Item>
@@ -65,23 +83,23 @@ const ExtraPanel = ({ values, handleChange }: ExtraPanelProps) => {
                       Remove Extra
                     </Button>
                   </div>
-                ))}
-                <Button
-                  onClick={() => push({ id: "", name: "", price: 0 })}
-                  type="dashed"
-                  style={{ width: "100%", marginTop: 16 }}
-                >
-                  Add Extra
-                </Button>
-              </>
-            )}
-          </FieldArray>
-        </>
+                );
+              })}
+              <Button
+                onClick={() => push({ id: "", name: "", price: 0 })}
+                type="dashed"
+                style={{ width: "100%", marginTop: 16 }}
+              >
+                Add Extra
+              </Button>
+            </>
+          )}
+        </FieldArray>
       ),
     },
   ];
 
-  return <Collapse items={items} defaultActiveKey={["1"]} />;
+  return <Collapse items={items} defaultActiveKey={["extraPanel"]} />;
 };
 
 export default ExtraPanel;

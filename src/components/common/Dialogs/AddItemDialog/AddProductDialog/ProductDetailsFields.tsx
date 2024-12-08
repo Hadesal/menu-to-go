@@ -8,12 +8,16 @@ interface ProductDetailsFieldsProps {
   values: any;
   handleChange: any;
   setFieldValue: (field: string, value: any) => void;
+  errors: any;
+  touched: any;
 }
 
 const ProductDetailsFields = ({
   values,
   handleChange,
   setFieldValue,
+  errors,
+  touched
 }: ProductDetailsFieldsProps) => {
   return (
     <>
@@ -33,13 +37,16 @@ const ProductDetailsFields = ({
         />
       </Form.Item>
 
-      <VariantPanel values={values} handleChange={handleChange} />
+      <VariantPanel values={values} handleChange={handleChange} errors={errors} touched={touched} />
       <IngredientPanel
         values={values}
         handleChange={handleChange}
         setFieldValue={setFieldValue}
+        errors={errors}
+        touched={touched}
       />
-      <ExtraPanel values={values} handleChange={handleChange} />
+      <ExtraPanel values={values} handleChange={handleChange} errors={errors}
+        touched={touched}  />
     </>
   );
 };

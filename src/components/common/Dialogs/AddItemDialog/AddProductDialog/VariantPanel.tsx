@@ -5,31 +5,54 @@ import { FieldArray } from "formik";
 interface VariantPanelProps {
   values: any;
   handleChange: any;
+  errors: any;
+  touched: any;
 }
 
-const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
+const VariantPanel = ({ values, handleChange, errors, touched }: VariantPanelProps) => {
+  // Compute error for variant group name
+  const variantGroupNameError =
+    touched?.details?.variants?.name && errors?.details?.variants?.name
+      ? errors.details.variants.name
+      : null;
+
   const items = [
     {
       key: "variantPanel",
       label: "Variants",
       children: (
         <>
-          {" "}
-          <Form.Item label="Variants Name" style={{}}>
+          <Form.Item
+            label="Variant Group Name"
+            validateStatus={variantGroupNameError ? "error" : ""}
+            help={variantGroupNameError}
+          >
             <Input
               id="details.variants.name"
               name="details.variants.name"
               value={values.details.variants.name}
               onChange={handleChange}
-              style={{}}
               placeholder="Enter variants name"
             />
           </Form.Item>
+
           <FieldArray name="details.variants.variantList">
             {({ push, remove }) => (
               <>
-                {values.details.variants.variantList.map(
-                  (variant: any, index: number) => (
+                {values.details.variants.variantList.map((variant: any, index: number) => {
+                  const variantNameError =
+                    touched?.details?.variants?.variantList?.[index]?.name &&
+                    errors?.details?.variants?.variantList?.[index]?.name
+                      ? errors.details.variants.variantList[index].name
+                      : null;
+
+                  const variantPriceError =
+                    touched?.details?.variants?.variantList?.[index]?.price &&
+                    errors?.details?.variants?.variantList?.[index]?.price
+                      ? errors.details.variants.variantList[index].price
+                      : null;
+
+                  return (
                     <div
                       key={index}
                       style={{
@@ -40,17 +63,24 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
                         boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.25)",
                       }}
                     >
-                      <Form.Item label="Variant Name">
+                      <Form.Item
+                        label="Variant Name"
+                        validateStatus={variantNameError ? "error" : ""}
+                        help={variantNameError}
+                      >
                         <Input
                           id={`details.variants.variantList.${index}.name`}
                           name={`details.variants.variantList.${index}.name`}
                           value={variant.name}
                           onChange={handleChange}
-                          style={{}}
                           placeholder="Enter variant name"
                         />
                       </Form.Item>
-                      <Form.Item label="Variant Price">
+                      <Form.Item
+                        label="Variant Price"
+                        validateStatus={variantPriceError ? "error" : ""}
+                        help={variantPriceError}
+                      >
                         <InputNumber
                           id={`details.variants.variantList.${index}.price`}
                           name={`details.variants.variantList.${index}.price`}
@@ -63,9 +93,7 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
                               },
                             })
                           }
-                          style={{
-                            width: "100%",
-                          }}
+                          style={{ width: "100%" }}
                           placeholder="Enter variant price"
                         />
                       </Form.Item>
@@ -78,8 +106,8 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
                         Remove Variant
                       </Button>
                     </div>
-                  )
-                )}
+                  );
+                })}
                 <Button
                   onClick={() => push({ id: "", name: "", price: 0 })}
                   type="dashed"
@@ -94,7 +122,7 @@ const VariantPanel = ({ values, handleChange }: VariantPanelProps) => {
       ),
     },
   ];
-  return <Collapse items={items} defaultActiveKey={["1"]} />;
+  return <Collapse items={items} defaultActiveKey={["variantPanel"]} />;
 };
 
 export default VariantPanel;
