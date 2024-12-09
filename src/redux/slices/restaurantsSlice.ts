@@ -213,6 +213,7 @@ const restaurantSlice = createSlice({
 
         state.successMessage = "Categories imported successfully!";
         state.categoryLoading = false;
+        state.importingLoading = false;
       }
     );
 
@@ -827,6 +828,7 @@ const restaurantSlice = createSlice({
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;
+      state.importingLoading = false;
       state.error =
         (action.payload.errors && action.payload.errors.name) ||
         action.payload.message ||
