@@ -98,6 +98,7 @@ export const MenuSlice = createSlice({
         state.restaurantData = action.payload.data;
         state.loading = false;
         if (state?.restaurantData.categories.length !== 0) {
+          console.log(state?.restaurantData.categories[0])
           state.selectedCategory = state?.restaurantData.categories[0];
         }
       })

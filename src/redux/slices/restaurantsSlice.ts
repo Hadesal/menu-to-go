@@ -42,6 +42,7 @@ const initialState: RestaurantState = {
   successMessage: null,
   productActionErrorMessage: null,
   selectedProductsIDs: [],
+  importingLoading: false,
 };
 
 const isRejectedAction = (
@@ -88,6 +89,9 @@ const restaurantSlice = createSlice({
     },
     setSelectedProductsIDs(state, action: PayloadAction<string[]>) {
       state.selectedProductsIDs = action.payload;
+    },
+    setImportingLoading(state, action: PayloadAction<boolean>) {
+      state.importingLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -166,6 +170,9 @@ const restaurantSlice = createSlice({
       state.successMessage = null;
       state.error = null;
       state.productActionErrorMessage = null;
+    });
+    builder.addCase(addCategoriesToRestaurant.pending, (state) => {
+      state.importingLoading = true;
     });
     builder.addCase(
       addCategoriesToRestaurant.fulfilled,
@@ -839,6 +846,7 @@ export const {
   updateRestaurantUserUiPreferences,
   setSelectedProductsIDs,
   clearProductActionErrorMessage,
+  setImportingLoading,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

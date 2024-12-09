@@ -148,3 +148,131 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
     reader.readAsArrayBuffer(file);
   });
 };
+
+export const exportSampleExcel = () => {
+  const categoriesData = [
+    {
+      Name: "Beverages",
+      "Category Type": "Drink",
+    },
+    {
+      Name: "Desserts",
+      "Category Type": "Food",
+    },
+  ];
+
+  const productsData = [
+    {
+      Name: "Coffee",
+      Category: "Beverages",
+      Price: 2.5,
+      "Is Available": "true",
+      "Unique Product Ordering Name": "coffee-001",
+    },
+    {
+      Name: "Chocolate Cake",
+      Category: "Desserts",
+      Price: 5.0,
+      "Is Available": "true",
+      "Unique Product Ordering Name": "cake-001",
+    },
+  ];
+
+  const productDetailsData = [
+    {
+      "Product Name": "Coffee",
+      "Details Description": "A hot beverage made from roasted coffee beans.",
+    },
+    {
+      "Product Name": "Chocolate Cake",
+      "Details Description": "Delicious chocolate layered cake.",
+    },
+  ];
+
+  const ingredientsData = [
+    {
+      "Product Name": "Coffee",
+      "Ingredient Name": "Water",
+      Price: 0,
+    },
+    {
+      "Product Name": "Coffee",
+      "Ingredient Name": "Coffee Beans",
+      Price: 0,
+    },
+    {
+      "Product Name": "Chocolate Cake",
+      "Ingredient Name": "Chocolate",
+      Price: 0,
+    },
+    {
+      "Product Name": "Chocolate Cake",
+      "Ingredient Name": "Flour",
+      Price: 0,
+    },
+  ];
+
+  const extrasData = [
+    {
+      "Product Name": "Coffee",
+      "Extra Name": "Milk",
+      Price: 0.5,
+    },
+    {
+      "Product Name": "Coffee",
+      "Extra Name": "Sugar",
+      Price: 0.2,
+    },
+  ];
+
+  const variantsData = [
+    {
+      "Product Name": "Coffee",
+      "Variant Group Name": "Size",
+      "Variant Name": "Small",
+      Price: 2.0,
+    },
+    {
+      "Product Name": "Coffee",
+      "Variant Group Name": "Size",
+      "Variant Name": "Medium",
+      Price: 2.5,
+    },
+    {
+      "Product Name": "Coffee",
+      "Variant Group Name": "Size",
+      "Variant Name": "Large",
+      Price: 3.0,
+    },
+  ];
+
+  const categoriesSheet = XLSX.utils.json_to_sheet(categoriesData);
+  const productsSheet = XLSX.utils.json_to_sheet(productsData);
+  const productDetailsSheet = XLSX.utils.json_to_sheet(productDetailsData);
+  const ingredientsSheet = XLSX.utils.json_to_sheet(ingredientsData);
+  const extrasSheet = XLSX.utils.json_to_sheet(extrasData);
+  const variantsSheet = XLSX.utils.json_to_sheet(variantsData);
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, categoriesSheet, "Categories");
+  XLSX.utils.book_append_sheet(workbook, productsSheet, "Products");
+  XLSX.utils.book_append_sheet(
+    workbook,
+    productDetailsSheet,
+    "Product Details"
+  );
+  XLSX.utils.book_append_sheet(workbook, ingredientsSheet, "Ingredients");
+  XLSX.utils.book_append_sheet(workbook, extrasSheet, "Extras");
+  XLSX.utils.book_append_sheet(workbook, variantsSheet, "Variants");
+
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  const url = URL.createObjectURL(blob);
+
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "sample_menu_template.xlsx";
+  anchor.click();
+
+  URL.revokeObjectURL(url);
+};

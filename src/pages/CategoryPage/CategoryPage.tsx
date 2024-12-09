@@ -58,6 +58,7 @@ export default function CategoryPage() {
     categoryLoading,
     error: categoryError,
     productActionErrorMessage,
+    importingLoading,
   } = useAppSelector((state) => state.restaurantsData);
   const { error: productError, productLoading } = useAppSelector(
     (state) => state.restaurantsData
@@ -230,9 +231,30 @@ export default function CategoryPage() {
             color: "var(--primary-color)",
             zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
-          open={restaurantLoading || productLoading || categoryLoading}
+          open={
+            restaurantLoading ||
+            productLoading ||
+            categoryLoading ||
+            importingLoading
+          }
         >
-          <CircularProgress color="inherit" />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <CircularProgress color="inherit" />
+            {importingLoading ? (
+              <Typography sx={{ color: "white", fontWeight: 500 }}>
+                Importing in progress...
+              </Typography>
+            ) : (
+              ""
+            )}
+          </Box>
         </Backdrop>
 
         {/* Error Snackbar */}

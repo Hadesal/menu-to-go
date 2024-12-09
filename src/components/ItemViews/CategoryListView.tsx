@@ -56,7 +56,7 @@ const CategoryListView = ({
     }
     dispatch(setSelectedCategory(item));
   };
-
+  
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (over && active.id !== over.id) {

@@ -1,10 +1,15 @@
 import React, { useRef } from "react";
 import { Card, CardContent, Drawer, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { parseExcelFile, parseJsonObject } from "./ImportHandler";
+import {
+  exportSampleExcel,
+  parseExcelFile,
+  parseJsonObject,
+} from "./ImportHandler";
 import { parseImageMenu } from "@utils/aiMenuImageExtractor";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { addCategoriesToRestaurant } from "@redux/thunks/categoryThunks";
+import { setImportingLoading } from "@redux/slices/restaurantsSlice";
 
 interface ImportDialogProps {
   handleClose: () => void;
@@ -28,8 +33,8 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   );
   const importOptions: ImportOption[] = [
     {
-      title: "Import JSON Categories",
-      description: "Import from a JSON file to import all data",
+      title: "Import Categories from JSON",
+      description: "Upload a JSON file to import category data.",
       accept: ".json",
       onFileSelect: async (file: File) => {
         const reader = new FileReader();
@@ -55,14 +60,15 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       },
     },
     {
-      title: "Import Excel Categories",
-      description: "Import from an Excel file to import all data",
+      title: "Import Categories from Excel",
+      description: "Upload an Excel file to import category data.",
       accept:
         ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       onFileSelect: async (file: File) => {
+        handleClose();
+        dispatch(setImportingLoading(true));
         try {
           const categories = await parseExcelFile(file);
-          console.log(categories);
           if (restaurantId !== undefined) {
             dispatch(
               addCategoriesToRestaurant({
@@ -72,23 +78,26 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
             );
           }
         } catch (error) {
+          dispatch(setImportingLoading(false));
           console.error("Error parsing Excel file:", error);
         }
       },
     },
     {
-      title: "Export Categories in Excel Form",
-      description: "Export all data in Excel format",
+      title: "Export Categories as Excel",
+      description: "Export all categories to an Excel file.",
       accept: "",
       onFileSelect: async () => {
-        console.log("Exporting categories...");
+        exportSampleExcel();
       },
     },
     {
-      title: "Import Image Menu",
-      description: "Import from an image to extract menu data",
+      title: "Import Menu from Image",
+      description: "Upload an image to extract menu category data.",
       accept: "image/*",
       onFileSelect: async (file: File) => {
+        handleClose();
+        dispatch(setImportingLoading(true));
         try {
           const categories = await parseImageMenu(file);
           console.log(categories);
@@ -101,6 +110,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
             );
           }
         } catch (error) {
+          dispatch(setImportingLoading(false));
           console.error("Error parsing image:", error);
         }
       },
@@ -108,10 +118,14 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   ];
 
   const handleCardClick = (option: ImportOption) => {
-    if (hiddenFileInput.current) {
-      hiddenFileInput.current.accept = option.accept;
-      onFileSelectRef.current = option.onFileSelect;
-      hiddenFileInput.current.click();
+    if (option.accept) {
+      if (hiddenFileInput.current) {
+        hiddenFileInput.current.accept = option.accept;
+        onFileSelectRef.current = option.onFileSelect;
+        hiddenFileInput.current.click();
+      }
+    } else {
+      option.onFileSelect(new File([], ""));
     }
   };
 
@@ -127,19 +141,42 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
 
   return (
     <Drawer open={isOpen} onClose={handleClose} anchor="right">
-      <Box sx={{ margin: "1rem", width: "400px" }}>
-        <Typography sx={{ marginBottom: "1rem" }} variant="h4">
+      <Box sx={{ width: "400px", padding: 4 }}>
+        <Typography sx={{ marginBottom: "1rem", fontWeight: 500 }} variant="h6">
           {title}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {importOptions.map((option, index) => (
-            <Paper elevation={2} sx={{ margin: 1 }} key={index}>
+            <Paper
+              elevation={0}
+              sx={{ marginTop: 2, borderRadius: 4 }}
+              key={index}
+            >
               <Card
                 onClick={() => handleCardClick(option)}
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  cursor: "pointer",
+                  borderRadius: 4,
+                  border: "1px dotted var(--primary-color)",
+                  transition: "background-color 0.3s ease, transform 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: "var(--primary-color)",
+                    transform: "scale(1.02)",
+                    color: "white",
+                  },
+                }}
+                elevation={0}
               >
                 <CardContent>
-                  <Typography variant="h6">{option.title}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "1.1rem",
+                      marginBottom: 1,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {option.title}
+                  </Typography>
                   <Typography variant="body2">{option.description}</Typography>
                 </CardContent>
               </Card>
