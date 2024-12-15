@@ -1,33 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
 import {
+  Alert,
+  Backdrop,
+  Box,
   Button,
-  Card,
-  CardContent,
+  CircularProgress,
   Container,
+  Divider,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
   Stack,
   Typography,
-  Alert,
-  Snackbar,
-  Divider,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
-import CustomQRCodeComponent from "./CustomQRCodeComponent";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+
 import logo from "@assets/logo.svg";
-import html2canvas from "html2canvas";
-import "./qrcodeStyle.css";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
-import { useTranslation } from "react-i18next";
-import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
-import StyleControl from "./StyleControl";
 import Dropzone from "@components/common/Dropzone";
+import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx";
 import {
   CornerDotsOptionsDataType,
   CornerSquareOptionsDataType,
   DotsOptionsDataType,
 } from "@dataTypes/QrStyleDataType";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import html2canvas from "html2canvas";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
+import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
+import CustomQRCodeComponent from "./CustomQRCodeComponent";
+import "./qrcodeStyle.css";
+import StyleControl from "./StyleControl";
 
 const QrCodePage = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +47,11 @@ const QrCodePage = () => {
   const getString = t;
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [openToastMessage, setOpenToastMessage] = useState(false);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
+  const { loading, successMessage, error } = useAppSelector(
+    (state) => state.userData
+  );
   const [dotsOptions, setDotsOptions] = useState<DotsOptionsDataType>({
     color: "#77675",
     type: "rounded",
@@ -56,27 +70,28 @@ const QrCodePage = () => {
     restaurantList[0]?.id || ""
   );
 
+  const [toastMessageObject, setToastMessageObject] = useState<{
+    success: boolean;
+    message: string;
+    show: boolean;
+  }>({
+    success: true,
+    message: "",
+    show: openToastMessage,
+  });
+
   const [urlPath, setUrlPath] = useState<string>(
     `http://192.168.1.203:5173/menu/${selectedRestaurantId}`
   );
   const [imageSrc, setImageSrc] = useState<string>(logo);
   const frameRef: MutableRefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (user && user.qrCodeStyle) {
-      const { qrCodeStyle } = user;
-      setUrlPath(qrCodeStyle.generalUrlPath || "www.google.com");
-      setDotsOptions(qrCodeStyle.dotsOptions);
-      setCornersSquareOptions(qrCodeStyle.cornersSquareOptions);
-      setCornersDotOptions(qrCodeStyle.cornersDotOptions);
-      setImageSrc(qrCodeStyle.imageSrc);
-    }
-    if (restaurantList[0].id) {
-      setSelectedRestaurantId(restaurantList[0].id);
-    }
-  }, [user, restaurantList]);
-  useEffect(() => {}, [dispatch]);
-  const handlePushNewQrStyle = () => {
+
+  const handleToastClose = () => {
+    setToastMessageObject((prev) => ({ ...prev, show: false }));
+  };
+
+  const handlePushNewQrStyle = async () => {
     const newQrStyleObject = {
       dotsOptions,
       cornersSquareOptions,
@@ -104,10 +119,27 @@ const QrCodePage = () => {
 
       return;
     }
-    dispatch(
+
+    const result = await dispatch(
       createOrUpdateQrCode({ userId: id, qrCodeStyle: newQrStyleObject })
-    ).unwrap();
+    );
+
+    console.log(result);
+    if (createOrUpdateQrCode.fulfilled.match(result)) {
+      setToastMessageObject({
+        success: true,
+        message: successMessage as string,
+        show: true,
+      });
+    } else {
+      setToastMessageObject({
+        success: false,
+        message: (result.error.message as string) || "QR code update failed",
+        show: true,
+      });
+    }
   };
+
   const handleOnRestaurantChange = (event: any) => {
     const selectedId = event.target.value as string;
     setSelectedRestaurantId(selectedId);
@@ -168,42 +200,74 @@ const QrCodePage = () => {
     }
   };
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(urlPath).then(
+      () => {
+        setOpenToastMessage(true);
+        setToastMessageObject({
+          success: true,
+          message: "URL copied to clipboard!",
+          show: true,
+        });
+      },
+      (err) => {
+        setOpenToastMessage(true);
+        setToastMessageObject({
+          success: false,
+          message: "Failed to copy the URL.",
+          show: true,
+        });
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (user && user.qrCodeStyle) {
+      const { qrCodeStyle } = user;
+      setUrlPath(qrCodeStyle.generalUrlPath || "www.google.com");
+      setDotsOptions(qrCodeStyle.dotsOptions);
+      setCornersSquareOptions(qrCodeStyle.cornersSquareOptions);
+      setCornersDotOptions(qrCodeStyle.cornersDotOptions);
+      setImageSrc(qrCodeStyle.imageSrc);
+    }
+    if (restaurantList[0].id) {
+      setSelectedRestaurantId(restaurantList[0].id);
+    }
+  }, [user, restaurantList]);
+  useEffect(() => {}, [dispatch]);
+
   return (
-    <>
-      <div
-        style={{
-          width: "100%",
+    <Stack spacing={3} sx={{ width: "95%", margin: "0 auto" }}>
+      <Backdrop
+        sx={{
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Box
+        sx={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          marginTop: "0 !important",
         }}
       >
-        <Typography
-          sx={{
-            width: "fit-content",
-            margin: 5,
-            marginBottom: 2,
-            marginTop: 3,
-          }}
-          variant="h5"
-        >
+        <Typography variant="h5" sx={{ alignSelf: "end" }}>
           {getString("qrStyle")}
         </Typography>
-        <div
-          style={{
-            width: "25%",
-            margin: 5,
-            marginBottom: 5,
-            marginTop: 3,
-          }}
-        >
-          <InputLabel id="restaurantDropdownLabel">Restaurant</InputLabel>
+
+        <Box sx={{ width: "25%" }}>
+          <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
+
           <Select
             labelId="restaurantDropdownLabel"
             id="restaurantDropdownId"
             value={selectedRestaurantId}
             onChange={handleOnRestaurantChange}
-            sx={{ width: "100%", alignSelf: "end" }}
+            sx={{ width: "100%" }}
           >
             {restaurantList &&
               restaurantList.map((restaurantItem) => (
@@ -212,60 +276,107 @@ const QrCodePage = () => {
                 </MenuItem>
               ))}
           </Select>
-        </div>
-      </div>
-      <Divider sx={{ marginBottom: 3 }} />
+        </Box>
+      </Box>
 
-      <Stack
-        direction={"row"}
-        spacing={3}
+      <Divider
         sx={{
-          width: "95%",
-          margin: "0 auto",
+          marginTop: "1rem",
+        }}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      <Container
+        id="mainContainer"
+        disableGutters
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "column", xl: "row" },
+          justifyContent: "space-between",
+          padding: "0 !important",
+          margin: "0 !important",
+          minWidth: "inherit !important",
+          maxWidth: "inherit !important",
+          gap: 4,
         }}
       >
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <Alert
-            onClose={handleClose}
-            severity="warning"
-            sx={{ width: "100%" }}
-          >
-            {errorMessage}
-          </Alert>
-        </Snackbar>
-
         <Container
           className="qrCodeStyleCardsContainer"
           sx={{
             borderRadius: "2rem",
-            boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
             alignItems: "center",
             display: "flex",
             flexDirection: "column",
-            padding: 3,
+            marginTop: "3rem",
+            paddingLeft: "0 !important",
+            paddingRight: "0 !important",
           }}
         >
-          {/**Dots Style Card */}
-          <Card
-            className="dotsStyleCard"
-            sx={{ marginBottom: "1rem", width: "100%" }}
+          <Accordion
+            elevation={6}
+            sx={{
+              width: "100%",
+              padding: 1,
+              borderRadius: "15px",
+              borderTopLeftRadius: "15px !important",
+              borderTopRightRadius: "15px !important",
+              "&:before": {
+                display: "none",
+              },
+            }}
           >
-            <CardContent
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingLeft: 0,
-              }}
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel3-content"
+              id="panel3-header"
+              sx={{ fontSize: "1.1rem" }}
             >
+              {getString("qrCodeLogo")}
+            </AccordionSummary>
+            <AccordionDetails>
+              <Dropzone
+                onFileUpload={(file) =>
+                  handlefileUploaded({ target: { files: [file] } })
+                }
+                acceptedFileTypes={"image"}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            defaultExpanded
+            elevation={6}
+            sx={{
+              width: "100%",
+              padding: 1,
+              borderRadius: "15px",
+              marginTop: "1rem",
+              "&:before": {
+                display: "none",
+              },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+              sx={{ fontSize: "1.1rem" }}
+            >
+              {getString("dotsStyle")}
+            </AccordionSummary>
+            <AccordionDetails>
               <StyleControl
                 optionName="dots"
                 options={dotsOptions}
-                label={getString("dotsStyle")}
+                label={getString("qrCodeStyle")}
                 choices={[
                   { value: "dots", label: "Dots" },
                   { value: "rounded", label: "Rounded" },
@@ -276,24 +387,33 @@ const QrCodePage = () => {
                 ]}
                 updateOptions={updateOptions}
               />
-            </CardContent>
-          </Card>
-          {/**Corner square Style Card */}
-          <Card
-            className="cornerSquareStyleCard"
-            sx={{ marginBottom: "1rem", width: "100%" }}
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            elevation={6}
+            sx={{
+              width: "100%",
+              marginTop: "1rem",
+              padding: 1,
+              borderRadius: "15px",
+              "&:before": {
+                display: "none",
+              },
+            }}
           >
-            <CardContent
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingLeft: 0,
-              }}
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+              sx={{ fontSize: "1.1rem" }}
             >
+              {getString("cornerSquareStyle")}
+            </AccordionSummary>
+            <AccordionDetails>
               <StyleControl
                 optionName="cornersSquare"
                 options={cornersSquareOptions}
-                label={getString("cornerSquareStyle")}
+                label={getString("qrCodeStyle")}
                 choices={[
                   { value: "dot", label: "Dot" },
                   { value: "square", label: "Square" },
@@ -301,49 +421,51 @@ const QrCodePage = () => {
                 ]}
                 updateOptions={updateOptions}
               />
-            </CardContent>
-          </Card>
-          {/**Corners Dots Style Card */}
-          <Card
-            className="CornersDotsStyleCard"
-            sx={{ marginBottom: "1rem", width: "100%" }}
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            elevation={6}
+            sx={{
+              width: "100%",
+              marginTop: "1rem",
+              padding: 1,
+              borderRadius: "15px",
+              borderBottomLeftRadius: "15px !important",
+              borderBottomRightRadius: "15px !important",
+              "&:before": {
+                display: "none",
+              },
+            }}
           >
-            <CardContent
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingLeft: 0,
-              }}
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel3-content"
+              id="panel3-header"
+              sx={{ fontSize: "1.1rem" }}
             >
+              {getString("cornersDotsStyle")}
+            </AccordionSummary>
+            <AccordionDetails>
               <StyleControl
                 optionName="cornersDot"
                 options={cornersDotOptions}
-                label={getString("cornersDotsStyle")}
+                label={getString("qrCodeStyle")}
                 choices={[
                   { value: "dot", label: "Dot" },
                   { value: "square", label: "Square" },
                 ]}
                 updateOptions={updateOptions}
               />
-            </CardContent>
-          </Card>
-
-          <Dropzone
-            onFileUpload={(file) =>
-              handlefileUploaded({ target: { files: [file] } })
-            }
-            acceptedFileType="svg"
-          />
-
+            </AccordionDetails>
+          </Accordion>
           <Button
             variant="contained"
             sx={{
-              justifySelf: "end",
               alignSelf: "end",
-              margin: 2,
               width: "200px",
               height: "50px",
               borderRadius: "1.5rem",
+              marginTop: 2,
             }}
             onClick={handlePushNewQrStyle}
           >
@@ -352,20 +474,27 @@ const QrCodePage = () => {
         </Container>
 
         <Container
+          disableGutters
           className="MainQrSection"
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            marginTop: "3rem",
+            padding: "0 !important",
           }}
         >
+          <Alert sx={{ width: "100%" }} severity="info">
+            Always scan to test that your QR works
+          </Alert>
           <Container
+            disableGutters
             sx={{
-              margin: "10px",
-              padding: "50px",
+              padding: "20px",
               borderRadius: "2rem",
               boxShadow: "0 0 40px rgba(0, 0, 0, 0.2)",
               width: "fit-content",
+              marginTop: 2,
             }}
             ref={frameRef}
           >
@@ -382,24 +511,43 @@ const QrCodePage = () => {
               />
             </Container>
           </Container>
-          <Button
-            variant="contained"
+
+          <Box
             sx={{
-              justifySelf: "center",
-              alignSelf: "center",
-              marginLeft: 3,
-              marginTop: "5vh",
-              width: "200px",
-              height: "50px",
-              borderRadius: "1.5rem",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: { xs: "100%", sm: "50%" },
+
+              marginTop: 1,
             }}
-            onClick={downloadImage}
           >
-            {getString("download")}
-          </Button>
+            <IconButton onClick={downloadImage}>
+              <SimCardDownloadIcon sx={{ color: "var(--primary-color)" }} />
+            </IconButton>
+            <IconButton onClick={handleCopyToClipboard}>
+              <ContentCopyIcon sx={{ color: "var(--primary-color)" }} />
+            </IconButton>
+            <Typography
+              sx={{
+                color: "var(--primary-color)",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {urlPath}
+            </Typography>
+          </Box>
         </Container>
-      </Stack>
-    </>
+      </Container>
+      <ToastNotification
+        severity={toastMessageObject.success === true ? "success" : "error"}
+        message={toastMessageObject.message}
+        show={toastMessageObject.show}
+        onClose={handleToastClose}
+      />
+    </Stack>
   );
 };
 export default QrCodePage;

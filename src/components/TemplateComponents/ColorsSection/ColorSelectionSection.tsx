@@ -1,20 +1,14 @@
-import { Typography, Container, Button, Box, IconButton } from "@mui/material";
-import { useState, useRef, useEffect } from "react";
-import { HexColorPicker } from "react-colorful";
-import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
-import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
-import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import { Colors } from "@dataTypes/RestaurantObject";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import { Box, Container, IconButton, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
+import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
+import { useEffect, useRef, useState } from "react";
 import { ChromePicker } from "react-color";
+import { useTranslation } from "react-i18next";
 
-const defaultColorsList = [
-  { id: 0, color: "#A4755D" },
-  { id: 1, color: "#D9B18F" },
-  { id: 2, color: "#4B49A6" },
-  { id: 3, color: "#802571" },
-];
+
 const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const colorPickerRef = useRef<HTMLDivElement | null>(null);
@@ -26,7 +20,6 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
   };
 
   const { t } = useTranslation();
-  const getString = t;
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences

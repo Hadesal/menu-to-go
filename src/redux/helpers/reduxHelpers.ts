@@ -18,7 +18,6 @@ export const handleFulfilled = (
   action: any,
   successMessage: string = ""
 ) => {
-  console.log(action);
   state.loading = false;
   state.successMessage = successMessage || "Operation successful";
 };

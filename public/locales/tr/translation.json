@@ -93,6 +93,8 @@
   "productDeleteText": "Ürün {{productName}} kalıcı olarak silmek istediğinizden emin misiniz?",
   "noDataChanged": "Veriler değiştirilmedi.",
   "dotsStyle": "Nokta Stili",
+  "qrCodeLogo":"Logo",
+  "qrCodeStyle": "Stil",
   "cornerSquareStyle": "Köşe Kare Stili",
   "cornersDotsStyle": "Köşe Noktalar Stili",
   "qrStyle": "QR Stili",

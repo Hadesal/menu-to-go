@@ -93,6 +93,8 @@
   "productDeleteText": "¿Estás seguro de que quieres eliminar permanentemente el producto {{productName}}?",
   "noDataChanged": "No se han cambiado los datos.",
   "dotsStyle": "Estilo de puntos",
+  "qrCodeLogo":"Logo",
+  "qrCodeStyle": "Estilo",
   "cornerSquareStyle": "Estilo de esquinas cuadradas",
   "cornersDotsStyle": "Estilo de esquinas con puntos",
   "qrStyle": "Estilo de QR",

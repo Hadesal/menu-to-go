@@ -59,9 +59,9 @@ export default function ChooseViewTypeSection() {
         elevation={6}
         sx={{
           borderRadius: "2rem",
-          marginTop: "3rem",
           width: "100%",
           height: "fit-content",
+          marginTop: "1rem",
         }}
       >
         <Card sx={{ borderRadius: "2rem", height: "100%" }}>

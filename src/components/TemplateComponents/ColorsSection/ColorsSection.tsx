@@ -4,34 +4,10 @@ import {
   CardContent,
   Container,
   Paper,
-  Typography
+  Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { useTranslation } from "react-i18next";
 import ColorSelectionSection from "./ColorSelectionSection";
-
 const ColorsSection = () => {
-  const { t } = useTranslation();
-  const getString = t;
-
-
-  const dispatch = useAppDispatch();
-  const userUiPreferences = useAppSelector(
-    (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
-  );
-
-  // const handleEffectedSpace = async (effectedSpace: string) => {
-  //   dispatch(
-  //     updateRestaurantUserUiPreferences({
-  //       ...userUiPreferences,
-  //       colors: {
-  //         ...userUiPreferences.colors,
-  //         effectedSpace: effectedSpace,
-  //       },
-  //     })
-  //   );
-  // };
-
   return (
     <>
       <Paper

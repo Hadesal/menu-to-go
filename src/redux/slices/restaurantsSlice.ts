@@ -825,6 +825,7 @@ const restaurantSlice = createSlice({
     );
     // Handle rejected state for all async thunks
     builder.addMatcher(isRejectedAction, (state, action) => {
+      console.log(action.payload)
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;

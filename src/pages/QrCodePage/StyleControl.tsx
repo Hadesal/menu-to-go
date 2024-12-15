@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Container, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { HexColorPicker } from "react-colorful"; // Import from react-colorful
+import { Button, Container, InputLabel, MenuItem, Select } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { ChromePicker } from "react-color";
 
 interface StyleControlProps {
   optionName: string;
@@ -12,7 +12,7 @@ interface StyleControlProps {
 
 const StyleControl: React.FC<StyleControlProps> = ({
   optionName,
-  options,
+  options = { type: "", color: "" },
   label,
   choices,
   updateOptions,
@@ -58,11 +58,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
 
   return (
     <Container
+      disableGutters
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "",
         position: "relative",
       }}
     >
@@ -80,8 +81,8 @@ const StyleControl: React.FC<StyleControlProps> = ({
           id={`${optionName}-type-select`}
           value={options.type}
           onChange={handleSelectChange}
-          label={label}
-          sx={{ width: "100%", alignSelf: "start" }}
+          // label={label}
+          sx={{ width: "100%", alignSelf: "start", marginTop: 1 }}
         >
           {choices.map((choice) => (
             <MenuItem key={choice.value} value={choice.value}>
@@ -93,8 +94,11 @@ const StyleControl: React.FC<StyleControlProps> = ({
       <Button
         ref={buttonRef}
         sx={{
-          width: "200px",
+          marginTop: 1,
+          // width: "200px",
           height: "fit-content",
+          minWidth: "200px",
+          alignSelf: { xs: "flex-start", sm: "inherit" },
           backgroundColor: options.color,
         }}
         onClick={toggleColorPicker}
@@ -115,7 +119,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
             padding: "10px",
           }}
         >
-          <HexColorPicker color={options.color} onChange={handleColorChange} />
+          <ChromePicker
+            color={options.color}
+            onChangeComplete={(color) => {
+              handleColorChange(color.hex);
+            }}
+          />
         </div>
       )}
     </Container>
