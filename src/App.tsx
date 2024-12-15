@@ -1,15 +1,15 @@
 import { ThemeProvider } from "@mui/material";
-import { ConfigProvider } from "antd";
-import {antdTheme,muiTheme} from "./theme/theme";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import LandingPage from "@pages/LandingPage/LandingPage";
 import LoginPage from "@pages/LoginPage/LoginPage";
+import MenuPage from "@pages/MenuPage/MenuPage";
 import RegisterPage from "@pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "@pages/UserDashboardPage/UserDashboardPage";
-import MenuPage from "@pages/MenuPage/MenuPage";
-import LandingPage from "@pages/LandingPage/LandingPage";
 import PrivateRoute from "@routes/PrivateRoute";
 import PublicRoute from "@routes/PublicRoute";
+import { ConfigProvider } from "antd";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css"; // Include Ant Design styles
+import { antdTheme, muiTheme } from "./theme/theme";
 
 const App = () => {
   return (
@@ -17,10 +17,7 @@ const App = () => {
       <ConfigProvider theme={antdTheme}>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="/dashboard" replace />}
-            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route
               path="/register"
               element={
@@ -54,7 +51,7 @@ const App = () => {
               }
             />
             <Route
-              path="/menu"
+              path="/menu/:id"
               element={
                 <PublicRoute>
                   <MenuPage />

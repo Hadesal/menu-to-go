@@ -38,12 +38,12 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       accept: ".json",
       onFileSelect: async (file: File) => {
         const reader = new FileReader();
+        handleClose();
+        dispatch(setImportingLoading(true));
         reader.onload = () => {
           try {
             const jsonData = JSON.parse(reader.result as string);
-            const categories = parseJsonObject(jsonData);
-            console.log(jsonData);
-            console.log(categories);
+            const categories = parseJsonObject(jsonData.categories);
             if (restaurantId !== undefined) {
               dispatch(
                 addCategoriesToRestaurant({
@@ -54,6 +54,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
             }
           } catch (error) {
             console.error("Error parsing JSON file:", error);
+            dispatch(setImportingLoading(false));
           }
         };
         reader.readAsText(file);

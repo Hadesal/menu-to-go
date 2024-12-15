@@ -180,7 +180,7 @@ const AddCategoryDialog = ({
           }}
         >
           <FormControlLabel
-            value={getString("food")}
+            value={getString("food").toLocaleLowerCase()}
             control={
               <Radio
                 sx={{
@@ -192,7 +192,7 @@ const AddCategoryDialog = ({
             sx={{ width: "fit-content" }}
           />
           <FormControlLabel
-            value={getString("drinks")}
+            value={getString("drinks").toLocaleLowerCase()}
             control={
               <Radio
                 sx={{

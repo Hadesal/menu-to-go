@@ -194,8 +194,6 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
             sx={{
               marginTop: "1rem",
               width: "100%",
-              //overflowY: "scroll",
-              //height: "400px",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               paddingBottom: "1rem",
@@ -230,8 +228,6 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
             sx={{
               marginTop: "1rem",
               width: "100%",
-              //overflowY: "scroll",
-              //height: "400px",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               paddingBottom: "1rem",
@@ -312,7 +308,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
         )}
       </Box>
 
-      <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
+      <Divider variant="fullWidth" />
 
       {/* Footer */}
       <Box
@@ -320,7 +316,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           textAlign: "center",
           fontSize: "14px",
           width: "100%",
-          marginBottom: "1rem",
+          padding: 1,
         }}
       >
         <a

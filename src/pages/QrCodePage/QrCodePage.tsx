@@ -15,6 +15,7 @@ import {
   Select,
   Snackbar,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -522,22 +523,29 @@ const QrCodePage = () => {
               marginTop: 1,
             }}
           >
-            <IconButton onClick={downloadImage}>
-              <SimCardDownloadIcon sx={{ color: "var(--primary-color)" }} />
-            </IconButton>
-            <IconButton onClick={handleCopyToClipboard}>
-              <ContentCopyIcon sx={{ color: "var(--primary-color)" }} />
-            </IconButton>
-            <Typography
-              sx={{
-                color: "var(--primary-color)",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {urlPath}
-            </Typography>
+            <Tooltip arrow title={"Download"}>
+              <IconButton onClick={downloadImage}>
+                <SimCardDownloadIcon sx={{ color: "var(--primary-color)" }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title={"Copy"}>
+              <IconButton onClick={handleCopyToClipboard}>
+                <ContentCopyIcon sx={{ color: "var(--primary-color)" }} />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip arrow title={urlPath}>
+              <Typography
+                sx={{
+                  color: "var(--primary-color)",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {urlPath}
+              </Typography>
+            </Tooltip>
           </Box>
         </Container>
       </Container>
