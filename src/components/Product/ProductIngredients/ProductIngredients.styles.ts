@@ -1,16 +1,30 @@
+
 export const Styles = {
   IngredientItemContainer: {
-    width: "50px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    gap: "0.5rem",
+    width:"70px"
   },
   IngredientItemName: {
     fontSize: "12px",
     fontWeight: "400",
-    lineHeight: "14px",
+    lineHeight: "1.1rem",
+    overflow: "hidden",
+    display: "-webkit-box", // Enables multi-line ellipsis
+    WebkitLineClamp: 3, // Limits text to 3 lines
+    WebkitBoxOrient: "vertical", // Specifies vertical layout for the box
+    textOverflow: "ellipsis", // Adds ellipsis at overflow
+    wordBreak: "break-word", // Breaks long words to prevent overflow
+    overflowWrap: "break-word", // Ensures long text wraps appropriately
   },
   cardContainer: {
     display: "flex",
+    alignItems: "flex-start",
     overflowX: "auto",
-    gap: "1.5rem",
+    gap: "1rem",
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
     "&::-webkit-scrollbar": {
@@ -28,8 +42,7 @@ export const Styles = {
   },
   ingredientListItem: {
     display: "list-item",
-    listStyleType: "disc", 
-    color: "var(--primary-color)",
+    listStyleType: "disc",
     marginLeft: "20px",
     marginBottom: "0.5rem",
   },

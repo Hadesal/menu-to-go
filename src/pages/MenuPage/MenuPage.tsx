@@ -7,8 +7,6 @@ import { productDefaultData } from "@constants/constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
-import SearchIcon from "@mui/icons-material/Search";
-import LanguageIcon from "@mui/icons-material/Language";
 import {
   Box,
   Container,
@@ -26,8 +24,6 @@ import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
 import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import logo from "../../assets/logo.png";
 
 // Define menu selection options
 const menuSelections = [
@@ -93,8 +89,9 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
   const categoryLabels = filteredCategories.map(
     (category) => category.categoryType
   );
+  console.log(categoryLabels)
   const showMenuSelection =
-    categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
+    categoryLabels.includes("food") && categoryLabels.includes("drinks");
 
   if (
     filteredCategories.length === 0 ||
@@ -126,11 +123,12 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           restaurantData.userUiPreferences.colors.backgroundColor,
         display: "flex",
         flexDirection: "column",
-        //minHeight: "100vh",
+        justifyContent: "space-between",
+        height:"100%"
       }}
       maxWidth="sm"
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <Box>
         {restaurantData?.userUiPreferences?.logo &&
           restaurantData.userUiPreferences.logo.length > 0 && (
             <>
@@ -160,7 +158,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
                   />
                 </Box>
               </Box>
-              <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
+              <Divider variant="fullWidth" />
             </>
           )}
 
@@ -175,157 +173,151 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           />
         </Box>
         <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
-        <Typography
-          color={restaurantData.userUiPreferences.colors.primaryColor}
+        <Box>
+          <Typography
+            color={restaurantData.userUiPreferences.colors.primaryColor}
+            sx={{
+              paddingLeft: "1rem",
+              paddingTop: "2rem",
+              fontWeight: 500,
+              fontFamily: restaurantData.userUiPreferences.fontType,
+            }}
+            variant="h6"
+          >
+            {selectedCategory.name}
+          </Typography>
+          {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                marginTop: "1rem",
+                width: "100%",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                paddingBottom: "1rem",
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+                paddingRight: "1rem",
+                marginLeft: 0,
+                marginBottom: 5,
+              }}
+            >
+              {selectedCategory.products!.map((product, index) => (
+                <Grid item xs={6} sm={6} key={index}>
+                  <MenuProductsCard key={index} product={product} />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                marginTop: "1rem",
+                width: "100%",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                paddingBottom: "1rem",
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                marginLeft: 0,
+                marginBottom: 5,
+              }}
+            >
+              {selectedCategory?.products!.map((product, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  key={index}
+                  sx={{
+                    paddingLeft: "0 !important",
+                    // paddingTop: index < 2 ? "0 !important" : "0px",
+                  }}
+                >
+                  <MenuProductsList key={index} product={product} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Box>
+      </Box>
+
+      <Box>
+        <Box
           sx={{
-            paddingLeft: "1rem",
-            paddingTop: "2rem",
-            fontWeight: 500,
-            fontFamily: restaurantData.userUiPreferences.fontType,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 1,
+            width: "100%",
           }}
-          variant="h6"
         >
-          {selectedCategory.name}
-        </Typography>
-        {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
-          <Grid
-            spacing={2}
-            container
-            sx={{
-              marginTop: "1rem",
-              width: "100%",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              paddingBottom: "1rem",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-              marginLeft: 0,
-              marginBottom: 5,
-            }}
-          >
-            {selectedCategory.products!.map((product, index) => (
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                key={index}
+          {restaurantData.userUiPreferences.contactLinks.facebook.length >
+            0 && (
+            <IconButton
+              component="a"
+              href={`https://${restaurantData.userUiPreferences.contactLinks.facebook}`}
+              target="_blank"
+            >
+              <FacebookIcon
                 sx={{
-                  paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
-                  paddingTop: index < 2 ? "0 !important" : "0px",
+                  color: restaurantData.userUiPreferences?.colors.primaryColor,
                 }}
-              >
-                <MenuProductsCard key={index} product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <Grid
-            spacing={2}
-            container
-            sx={{
-              marginTop: "1rem",
-              width: "100%",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              paddingBottom: "1rem",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-              marginLeft: 0,
-              marginBottom: 5,
-            }}
-          >
-            {selectedCategory?.products!.map((product, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                key={index}
+              />
+            </IconButton>
+          )}
+          {restaurantData.userUiPreferences.contactLinks.twitter.length > 0 && (
+            <IconButton
+              component="a"
+              href={`https://${restaurantData.userUiPreferences.contactLinks.twitter}`}
+              target="_blank"
+            >
+              <XIcon
                 sx={{
-                  paddingLeft: "0 !important",
-                  // paddingTop: index < 2 ? "0 !important" : "0px",
+                  color: restaurantData.userUiPreferences?.colors.primaryColor,
                 }}
-              >
-                <MenuProductsList key={index} product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 1,
-          width: "100%",
-        }}
-      >
-        {restaurantData.userUiPreferences.contactLinks.facebook.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.facebook}`}
-            target="_blank"
-          >
-            <FacebookIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-        {restaurantData.userUiPreferences.contactLinks.twitter.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.twitter}`}
-            target="_blank"
-          >
-            <XIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-        {restaurantData.userUiPreferences.contactLinks.instagram.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.instagram}`}
-            target="_blank"
-          >
-            <InstagramIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-      </Box>
-
-      <Divider variant="fullWidth" />
-
-      {/* Footer */}
-      <Box
-        sx={{
-          textAlign: "center",
-          fontSize: "14px",
-          width: "100%",
-          padding: 1,
-        }}
-      >
-        <a
-          style={{ textDecoration: "none", color: "black" }}
-          target="_blank"
-          href=""
+              />
+            </IconButton>
+          )}
+          {restaurantData.userUiPreferences.contactLinks.instagram.length >
+            0 && (
+            <IconButton
+              component="a"
+              href={`https://${restaurantData.userUiPreferences.contactLinks.instagram}`}
+              target="_blank"
+            >
+              <InstagramIcon
+                sx={{
+                  color: restaurantData.userUiPreferences?.colors.primaryColor,
+                }}
+              />
+            </IconButton>
+          )}
+        </Box>
+        <Divider variant="fullWidth" />
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "14px",
+            width: "100%",
+            padding: 1,
+          }}
         >
-          Powered by MenuToGo®
-        </a>
+          <a
+            style={{ textDecoration: "none", color: "black" }}
+            target="_blank"
+            href=""
+          >
+            Powered by MenuToGo®
+          </a>
+        </Box>
       </Box>
     </Container>
   );

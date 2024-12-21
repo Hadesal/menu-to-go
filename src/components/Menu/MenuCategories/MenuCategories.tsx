@@ -56,8 +56,8 @@ export default function MenuCategories({
                   ? "20%"
                   : "0%",
             }}
-            width={50}
-            height={50}
+            width={75}
+            height={75}
           />
           <Typography
             variant="h6"
@@ -80,7 +80,7 @@ export default function MenuCategories({
               sx={{
                 ...Styles.selectedCategoryIndicator,
                 background:
-                  restaurantData.userUiPreferences?.colors.primaryColor,
+                  restaurantData.userUiPreferences?.colors.secondaryColor,
               }}
             />
           )}

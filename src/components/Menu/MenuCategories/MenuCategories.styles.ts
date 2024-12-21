@@ -1,6 +1,6 @@
 export const Styles = {
   categoriesContainer: {
-    marginTop: "2rem",
+    marginTop: "1rem",
     display: "flex",
     flexDirection: "row",
     gap: "0.5rem",
@@ -27,7 +27,7 @@ export const Styles = {
   categoryLabel: {
     fontSize: "16px",
     fontWeight: 500,
-    lineHeight: "1rem",
+    lineHeight: "1.2rem",
     textAlign: "center",
     marginTop: "0.8rem",
     overflowWrap: "break-word", // Ensure long words break to fit
