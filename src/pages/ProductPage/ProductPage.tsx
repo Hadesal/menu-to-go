@@ -49,7 +49,7 @@ export default function ProductPage() {
                 children={
                   <IngredientList
                     listView={
-                      restaurantData.userUiPreferences?.ingredientViewType !==
+                      restaurantData.userUiPreferences?.ingredientViewType ===
                       "LIST"
                     }
                     ingredients={selectedProduct.details.ingredients}
