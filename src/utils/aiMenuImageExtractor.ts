@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import OpenAI from "openai";
-import Tesseract from "tesseract.js";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -42,6 +40,7 @@ const validateCategoryData = (
 export const parseImageMenu = async (file: File): Promise<CategoryData[]> => {
   try {
     const extractedText = await extractTextFromImage(file);
+    console.log("Extracted Text:", extractedText);
 
     const prompt = `
 You are an expert data parser. Given the following menu text, convert it into a structured JSON format that adheres to this schema:
@@ -49,13 +48,11 @@ You are an expert data parser. Given the following menu text, convert it into a 
 {
   "categories": [
     {
-      "id": "string",
       "name": "string",
       "image": "string | null",
       "categoryType": "string",
       "products": [
         {
-          "id": "string",
           "name": "string",
           "price": "number",
           "details": {
@@ -89,9 +86,9 @@ ${extractedText}
 - Output only the JSON data.
 - Do not include any explanations, comments, or extra text.
 - Do not use code blocks or markdown formatting.
-- Ensure the JSON is valid and properly formatted.
-- Use double quotes for all JSON keys and string values.
-- Avoid including null values; if a field is unknown, use an empty string or omit it.
+- Ensure the JSON is valid and strictly adheres to the JSON format.
+- Avoid trailing commas and ensure all keys and string values use double quotes.
+- Use only standard ASCII characters.
 
 Begin outputting the JSON now:
 `;
@@ -109,14 +106,22 @@ Begin outputting the JSON now:
     }
 
     const jsonString = extractJSONFromResponse(messageContent);
+    console.log("Raw JSON from OpenAI:", jsonString);
 
-    const parsedData = JSON.parse(jsonString);
+    try {
+      const parsedData = JSON.parse(jsonString);
 
-    if (!validateCategoryData(parsedData)) {
-      throw new Error("Parsed data does not match the expected schema.");
+      if (!validateCategoryData(parsedData)) {
+        console.error("Validation Failed for Parsed Data:", parsedData);
+        throw new Error("Parsed data does not match the expected schema.");
+      }
+
+      console.log("Parsed Categories:", parsedData.categories);
+      return parsedData.categories;
+    } catch (jsonError) {
+      console.error("Error parsing JSON:", jsonString);
+      throw new Error(`Failed to parse JSON: ${jsonError.message}`);
     }
-    console.log(parsedData.categories);
-    return parsedData.categories;
   } catch (error) {
     console.error("Failed to parse image menu:", error);
     return [];
@@ -125,28 +130,50 @@ Begin outputting the JSON now:
 
 const extractTextFromImage = async (file: File): Promise<string> => {
   try {
-    const { data } = await Tesseract.recognize(file, "eng");
-    return data.text;
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const OCR_BACKEND_URL =
+      process.env.OCR_BACKEND_URL || "http://46.202.140.217:5001/ocr";
+
+    const response = await fetch(OCR_BACKEND_URL, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`OCR service returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("OCR Response Data:", data);
+
+    return data.text || "";
   } catch (error) {
-    console.error("Error extracting text:", error);
+    console.error("Error extracting text with EasyOCR:", error);
     return "";
   }
 };
-const extractJSONFromResponse = (responseText: string) => {
-  let jsonString = responseText.replace(/```json|```/g, "").trim();
 
-  const jsonStart = jsonString.indexOf("{");
-  const jsonEnd = jsonString.lastIndexOf("}");
+const extractJSONFromResponse = (responseText: string): string => {
+  try {
+    let jsonString = responseText.replace(/```json|```/g, "").trim();
 
-  if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd >= jsonStart) {
-    jsonString = jsonString.substring(jsonStart, jsonEnd + 1);
-  } else {
-    throw new Error("No JSON object found in the response.");
+    const jsonStart = jsonString.indexOf("{");
+    const jsonEnd = jsonString.lastIndexOf("}");
+
+    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd >= jsonStart) {
+      jsonString = jsonString.substring(jsonStart, jsonEnd + 1);
+    } else {
+      throw new Error("No valid JSON object found in the response.");
+    }
+
+    // Validate and sanitize JSON
+    JSON.parse(jsonString); // Ensure it is a valid JSON string
+
+    return jsonString;
+  } catch (error) {
+    console.error("Error extracting or validating JSON:", error);
+    throw new Error("Invalid JSON format received from OpenAI response.");
   }
-
-  jsonString = jsonString.replace(/'/g, '"');
-
-  jsonString = jsonString.replace(/}\s*[^}]*$/, "}");
-
-  return jsonString;
 };
