@@ -36,6 +36,7 @@ export const Styles = {
   },
   inputStyle: {
     width: "100%",
+    marginTop: "0.5rem",
   },
   button: {
     marginTop: 4,

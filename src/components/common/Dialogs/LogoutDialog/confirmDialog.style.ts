@@ -3,6 +3,7 @@ export const Styles = {
     width: "580px",
     height: "500px",
     borderRadius: "32px",
+    padding: "10px 20px",
   },
   title: {
     fontWeight: 500,
@@ -14,6 +15,7 @@ export const Styles = {
     lineHeight: 2,
     paddingRight: 2,
     paddingLeft: 2,
+    whiteSpace: "normal",
   },
   actionBox: {
     display: "flex",
@@ -35,11 +37,11 @@ export const Styles = {
     marginRight: 2,
     borderRadius: "20px",
     padding: "5px 25px 5px 25px",
-    //border: "1px solid transparent",
+    border: "1px solid var(--primary-color) !important",
     borderColor: "var(--primary-color)",
     //backgroundColor: "transparent",
     "&:hover": {
-      //backgroundColor: "transparent",
+      backgroundColor: "transparent",
       borderColor: "var(--primary-color)",
       boxShadow: "none",
       color: "var(--primary-color)",
