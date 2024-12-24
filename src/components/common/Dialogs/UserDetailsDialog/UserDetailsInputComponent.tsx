@@ -10,6 +10,8 @@ import {
   Select,
   Typography,
   FormControl,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
@@ -54,6 +56,8 @@ const UserDetailsInputComponent = ({
     currency: false,
   });
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setUserDetails((prevState) => {
       return {
@@ -64,6 +68,7 @@ const UserDetailsInputComponent = ({
       };
     });
   }, [restaurantList, user?.billingData?.country, user?.currency]);
+
   const handleUserDetails = async () => {
     const newErrors = {
       restaurantName: !userDetails.restaurantName.trim(),
@@ -79,6 +84,7 @@ const UserDetailsInputComponent = ({
       !newErrors.country &&
       !newErrors.currency
     ) {
+      setLoading(true);
       await dispatch(
         addRestaurant({
           name: userDetails?.restaurantName,
@@ -101,6 +107,7 @@ const UserDetailsInputComponent = ({
         })
       );
       await fetchAllData(dispatch);
+      setLoading(false);
     }
   };
 
@@ -135,126 +142,138 @@ const UserDetailsInputComponent = ({
   };
 
   return (
-    <Dialog
-      PaperProps={{ sx: { ...Styles.dialog, width: width, height: height } }}
-      onClose={onClose}
-      open={isOpen}
-    >
-      <DialogTitle
+    <>
+      <Backdrop
         sx={{
-          fontSize: "1.4rem",
-          color: "#797979",
-          textAlign: "center",
-          paddingBottom: 0,
+          color: "var(--primary-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 999999,
         }}
+        open={loading}
+        inert={loading ? true : undefined} // Adds `inert` to non-interactive elements
       >
-        Let's get your restaurant ready!
-      </DialogTitle>
-      <DialogContent sx={{ alignContent: "center" }}>
-        <Typography
-          width={"100%"}
-          variant="subtitle2"
-          textAlign={"center"}
-          sx={Styles.subTitle}
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Dialog
+        PaperProps={{ sx: { ...Styles.dialog, width: width, height: height } }}
+        onClose={onClose}
+        open={isOpen}
+      >
+        <DialogTitle
+          sx={{
+            fontSize: "1.4rem",
+            color: "#797979",
+            textAlign: "center",
+            paddingBottom: 0,
+          }}
         >
-          {getString("detailsText")}
-        </Typography>
-        <Box sx={{ marginTop: 3 }}>
-          <InputLabel
-            sx={{
-              textFieldLabelStyle: {
-                color: "#797979",
-                fontWeight: "400",
-                marginBottom: 0,
-              },
-            }}
+          Let's get your restaurant ready!
+        </DialogTitle>
+        <DialogContent sx={{ alignContent: "center" }}>
+          <Typography
+            width={"100%"}
+            variant="subtitle2"
+            textAlign={"center"}
+            sx={Styles.subTitle}
           >
-            Restaurant Name
+            {getString("detailsText")}
+          </Typography>
+          <Box sx={{ marginTop: 3 }}>
+            <InputLabel
+              sx={{
+                textFieldLabelStyle: {
+                  color: "#797979",
+                  fontWeight: "400",
+                  marginBottom: 0,
+                },
+              }}
+            >
+              Restaurant Name
+            </InputLabel>
+            <InputComponent
+              id="restaurantNameField"
+              type="name"
+              label=""
+              required
+              value={userDetails.restaurantName}
+              InputPropStyle={{ borderRadius: "1rem" }}
+              onChange={(e) => {
+                setUserDetails((prevState) => ({
+                  ...prevState,
+                  restaurantName: e.target.value,
+                }));
+
+                setErrors((prev) => ({
+                  ...prev,
+                  restaurantName: !e.target.value.trim(),
+                }));
+              }}
+              boxStyle={inputStyles.input_box}
+              textFieldStyle={inputStyles.inputStyle}
+              error={errors.restaurantName}
+              MAXCHARSLENGTH={25}
+              helperText={
+                errors.restaurantName
+                  ? "Name cannot be empty"
+                  : `${userDetails.restaurantName.length}/25`
+              }
+            />
+          </Box>
+
+          <InputLabel id="restaurant-country">Country</InputLabel>
+          <FormControl sx={{ width: "100%" }} error={errors.country === true}>
+            <Select
+              labelId="restaurant-country"
+              id="restaurantCountryDropdownId"
+              value={selectedCountry}
+              onChange={handleCountryChange}
+              sx={{
+                width: "100%",
+                borderRadius: "1rem",
+                marginTop: "0.5rem",
+              }}
+            >
+              {countries.map((country) => (
+                <MenuItem key={country.id} value={country.name}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <InputLabel sx={{ marginTop: 2 }} id="restaurant-currency">
+            Currency
           </InputLabel>
-          <InputComponent
-            id="restaurantNameField"
-            type="name"
-            label=""
-            required
-            value={userDetails.restaurantName}
-            InputPropStyle={{ borderRadius: "1rem" }}
-            onChange={(e) => {
-              setUserDetails((prevState) => ({
-                ...prevState,
-                restaurantName: e.target.value,
-              }));
-
-              setErrors((prev) => ({
-                ...prev,
-                restaurantName: !e.target.value.trim(),
-              }));
-            }}
-            boxStyle={inputStyles.input_box}
-            textFieldStyle={inputStyles.inputStyle}
-            error={errors.restaurantName}
-            MAXCHARSLENGTH={25}
-            helperText={
-              errors.restaurantName
-                ? "Name cannot be empty"
-                : `${userDetails.restaurantName.length}/25`
-            }
-          />
-        </Box>
-
-        <InputLabel id="restaurant-country">Country</InputLabel>
-        <FormControl sx={{ width: "100%" }} error={errors.country === true}>
-          <Select
-            labelId="restaurant-country"
-            id="restaurantCountryDropdownId"
-            value={selectedCountry}
-            onChange={handleCountryChange}
-            sx={{
-              width: "100%",
-              borderRadius: "1rem",
-              marginTop: "0.5rem",
-            }}
-          >
-            {countries.map((country) => (
-              <MenuItem key={country.id} value={country.name}>
-                {country.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <InputLabel sx={{ marginTop: 2 }} id="restaurant-currency">
-          Currency
-        </InputLabel>
-        <FormControl sx={{ width: "100%" }} error={errors.currency === true}>
-          <Select
-            labelId="restaurant-currency"
-            id="restaurantCurrencyDropdownId"
-            value={selectedCurrency}
-            onChange={handleCurrencyChange}
-            sx={{
-              width: "100%",
-              borderRadius: "1rem",
-              marginTop: "0.5rem",
-            }}
-          >
-            {currencies.map((currency) => (
-              <MenuItem key={currency.currency} value={currency.currency}>
-                {currency.currency}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Box sx={Styles.actionBox} justifyContent={"center"}>
-          <Button
-            variant="contained"
-            onClick={handleUserDetails}
-            sx={Styles.secondaryActionButton}
-          >
-            {getString("completeAccount")}
-          </Button>
-        </Box>
-      </DialogContent>
-    </Dialog>
+          <FormControl sx={{ width: "100%" }} error={errors.currency === true}>
+            <Select
+              labelId="restaurant-currency"
+              id="restaurantCurrencyDropdownId"
+              value={selectedCurrency}
+              onChange={handleCurrencyChange}
+              sx={{
+                width: "100%",
+                borderRadius: "1rem",
+                marginTop: "0.5rem",
+              }}
+            >
+              {currencies.map((currency) => (
+                <MenuItem key={currency.currency} value={currency.currency}>
+                  {currency.currency}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Box sx={Styles.actionBox} justifyContent={"center"}>
+            <Button
+              variant="contained"
+              onClick={handleUserDetails}
+              sx={Styles.secondaryActionButton}
+            >
+              {getString("completeAccount")}
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 export default UserDetailsInputComponent;
