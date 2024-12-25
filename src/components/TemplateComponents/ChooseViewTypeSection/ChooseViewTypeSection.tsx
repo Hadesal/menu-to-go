@@ -109,7 +109,7 @@ export default function ChooseViewTypeSection() {
                             color: "var(--primary-color)",
                           }}
                         />
-                        Grid
+                        {getString("viewTypeGrid")}
                       </span>
                     }
                   />
@@ -130,7 +130,7 @@ export default function ChooseViewTypeSection() {
                             color: "var(--primary-color)",
                           }}
                         />
-                        List
+                        {getString("viewTypeList")}
                       </span>
                     }
                   />

@@ -48,12 +48,6 @@ interface FormData {
   typeOfInquiry?: string;
 }
 
-const sentiments = [
-  { name: "Awful", icon: SentimentVeryDissatisfied },
-  { name: "Bad", icon: SentimentDissatisfied },
-  { name: "Good", icon: SentimentSatisfied },
-  { name: "Great", icon: SentimentVerySatisfied },
-];
 
 export default function Form({
   feedback,
@@ -74,15 +68,22 @@ export default function Form({
     sentiments: "",
     typeOfInquiry: "General Inquiry",
   });
-
+  
   const [formErrors, setFormErrors] = useState<FormData>({
     message: "",
   });
-
+  
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
     null
   );
-
+  
+  const sentiments = [
+    { name: getString("sentimentAwful") , icon: SentimentVeryDissatisfied },
+    { name: getString("sentimentBad"), icon: SentimentDissatisfied },
+    { name: getString("sentimentGood"), icon: SentimentSatisfied },
+    { name: getString("sentimentGreat"), icon: SentimentVerySatisfied },
+  ];
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormValuesLocal((prevValues) => ({
@@ -179,10 +180,14 @@ export default function Form({
               setSelectedSentiment("");
             }}
           >
-            <MenuItem value={"General Inquiry"}>General Inquiry</MenuItem>
-            <MenuItem value={"Feedback"}>Feedback</MenuItem>
-            <MenuItem value={"Feature Request"}>Feature Request</MenuItem>
-            <MenuItem value={"Bug Report"}> Bug Report</MenuItem>
+            <MenuItem value={"General Inquiry"}>
+              {getString("GeneralInquiry")}
+            </MenuItem>
+            <MenuItem value={"Feedback"}>{getString("Feedback")}</MenuItem>
+            <MenuItem value={"Feature Request"}>
+              {getString("FeatureRequest")}
+            </MenuItem>
+            <MenuItem value={"Bug Report"}>{getString("BugReport")}</MenuItem>
           </Select>
         </Box>
         {formValuesLocal.typeOfInquiry === "Feedback" && (
@@ -221,7 +226,7 @@ export default function Form({
       </Box>
       <TextField
         id="message"
-        label="Message"
+        label={getString("contactFormMessage")}
         placeholder={textFiledLabel}
         multiline
         required

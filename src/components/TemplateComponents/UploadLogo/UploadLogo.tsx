@@ -13,12 +13,15 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@redux/slices/restaurantsSlice";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
 const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
 
 export default function UploadLogo() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const getString = t;
 
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -31,7 +34,7 @@ export default function UploadLogo() {
   const [selectedImage, setSelectedImage] = useState<string>(
     selectedRestaurant && selectedRestaurant.userUiPreferences.logo
   );
-  
+
   const dispatch = useAppDispatch();
 
   // Create a ref for the file input
@@ -100,7 +103,7 @@ export default function UploadLogo() {
       <Card sx={{ borderRadius: "2rem", height: "100%" }}>
         <CardContent sx={{ padding: 4 }}>
           <Typography sx={{ color: "#000000" }} variant="h6">
-            Logo
+            {getString("Logo")}
           </Typography>
           <Container
             disableGutters
@@ -170,7 +173,7 @@ export default function UploadLogo() {
               variant="contained"
               component="label"
             >
-              CHOOSE FILE
+              {getString("ChooseFileLogo")}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -201,7 +204,7 @@ export default function UploadLogo() {
                 marginTop: "0.5rem",
               }}
             >
-              JPG, PNG, SVG; Max: 60MB
+              {getString("LogoSizeInfo")}
             </Typography>
           )}
         </CardContent>
