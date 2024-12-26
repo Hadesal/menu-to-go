@@ -16,7 +16,7 @@ export default function MenuProductsCard({ product }) {
       onClick={() => {
         dispatch(setSelectedProduct(product));
       }}
-      sx={{borderRadius: "5px" }}
+      sx={{ borderRadius: "5px" }}
     >
       <CardActionArea>
         <CardMedia
@@ -42,6 +42,7 @@ export default function MenuProductsCard({ product }) {
               fontSize: "14px",
               fontWeight: 400,
               fontFamily: restaurantData.userUiPreferences.fontType,
+              wordBreak: "break-word",
             }}
             gutterBottom
             component="div"

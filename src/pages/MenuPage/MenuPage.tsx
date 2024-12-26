@@ -123,7 +123,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           restaurantData.userUiPreferences.colors.backgroundColor,
         display: "flex",
         flexDirection: "column",
-        //minHeight: "100vh",
+        height:"100%"
       }}
       maxWidth="sm"
     >

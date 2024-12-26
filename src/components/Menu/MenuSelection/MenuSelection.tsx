@@ -61,6 +61,7 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
               borderRadius: "25px",
               padding: "0.7rem",
               width: "140px",
+              
               fontWeight: "500",
               fontFamily: restaurantData.userUiPreferences.fontType,
             }}
