@@ -32,9 +32,7 @@ export default function MenuProductsCard({ product }) {
             flexDirection: "column",
             padding: 1,
             marginTop: "0.5rem",
-            //justifyContent: "space-between",
             color: "#A4755D",
-            //lineHeight: "1rem",
           }}
         >
           <Typography
