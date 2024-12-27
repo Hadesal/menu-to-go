@@ -1,6 +1,7 @@
 import { Button, Container, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { ChromePicker } from "react-color";
+import { useTranslation } from "react-i18next";
 
 interface StyleControlProps {
   optionName: string;
@@ -20,6 +21,8 @@ const StyleControl: React.FC<StyleControlProps> = ({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const colorPickerRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const { t } = useTranslation();
+  const getString = t;
 
   const handleSelectChange = (event: any) => {
     updateOptions(optionName, { type: event.target.value });
@@ -81,7 +84,6 @@ const StyleControl: React.FC<StyleControlProps> = ({
           id={`${optionName}-type-select`}
           value={options.type}
           onChange={handleSelectChange}
-          // label={label}
           sx={{ width: "100%", alignSelf: "start", marginTop: 1 }}
         >
           {choices.map((choice) => (
@@ -103,7 +105,7 @@ const StyleControl: React.FC<StyleControlProps> = ({
         }}
         onClick={toggleColorPicker}
       >
-        Choose Color
+        {getString("chooseColorLabel")}
       </Button>
       {showColorPicker && (
         <div

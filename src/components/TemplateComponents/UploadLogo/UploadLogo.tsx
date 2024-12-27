@@ -47,10 +47,14 @@ export default function UploadLogo() {
       const fileSizeMB = file.size / (1024 * 1024);
 
       if (!ALLOWED_FILE_TYPES.includes(fileType)) {
-        setErrorMessage("Only PNG, JPG, and SVG files are allowed.");
+        setErrorMessage(getString("LogoTypeError"));
         return;
       } else if (fileSizeMB > MAX_FILE_SIZE_MB) {
-        setErrorMessage(`File size exceeds ${MAX_FILE_SIZE_MB} MB.`);
+        setErrorMessage(
+          getString("LogoSizeErrors", {
+            MAX_FILE_SIZE_MB: MAX_FILE_SIZE_MB,
+          })
+        );
         return;
       }
       const reader = new FileReader();
@@ -164,7 +168,7 @@ export default function UploadLogo() {
                     fontSize: "0.8rem",
                   }}
                 >
-                  Logo
+                  {getString("Logo")}
                 </Typography>
               )}
             </Box>

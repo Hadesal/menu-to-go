@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import { Button, Collapse, Form, Input, InputNumber } from "antd";
 import { FieldArray } from "formik";
 import "./productDialog.css";
+import { useLanguage } from "src/hooks/useLanguage";
 interface ExtraPanelProps {
   values: any;
   handleChange: any;
@@ -17,10 +18,12 @@ const ExtraPanel = ({
   errors,
   touched,
 }: ExtraPanelProps) => {
+  const { getString } = useLanguage();
+
   const items = [
     {
       key: "extraPanel",
-      label: "Extras",
+      label: getString("extrasLabel"),
       children: (
         <FieldArray name="details.extras">
           {({ push, remove }) => (
@@ -64,7 +67,7 @@ const ExtraPanel = ({
                         value={extra.name}
                         onChange={handleChange}
                         style={{ padding: "0.7rem" }}
-                        placeholder="Extra name"
+                        placeholder={getString("extrasNamePlaceHolder")}
                       />
                     </Form.Item>
 
@@ -87,7 +90,7 @@ const ExtraPanel = ({
                         }
                         style={{ padding: "0.45rem" }}
                         controls={false}
-                        placeholder="Price"
+                        placeholder={getString("extrasNamePriceHolder")}
                       />
                     </Form.Item>
                     <IconButton
@@ -109,7 +112,7 @@ const ExtraPanel = ({
                 type="dashed"
                 style={{ width: "100%", marginTop: 16 }}
               >
-                Add Extra
+                {getString("addExtrasBtnLabel")}
               </Button>
             </>
           )}

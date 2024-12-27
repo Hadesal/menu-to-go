@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogContent, Typography } from "@mui/material";
 import logoutImage from "@assets/logoutImg.svg";
 import { Styles } from "./confirmDialog.style";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -32,9 +33,11 @@ const ConfirmDialog = ({
   const handleSecondaryAction = () =>
     onSecondaryActionClick ? onSecondaryActionClick() : () => {};
   const handlePrimaryAction = () => onPrimaryActionClick();
+  const { currentLanguage } = useLanguage();
 
   return (
     <Dialog
+      dir={currentLanguage === "ar" ? "rtl" : ""}
       PaperProps={{ sx: { ...Styles.dialog, width: width, height: height } }}
       onClose={onClose}
       open={isOpen}

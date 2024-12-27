@@ -16,11 +16,11 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useLanguage } from "src/hooks/useLanguage";
 
 export default function ChooseViewTypeSection() {
-  const { t } = useTranslation();
-  const getString = t;
+    const { getString, currentLanguage } = useLanguage();
+  
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -106,6 +106,7 @@ export default function ChooseViewTypeSection() {
                         <GridViewIcon
                           style={{
                             marginRight: "8px",
+                            marginLeft: currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />
@@ -127,6 +128,7 @@ export default function ChooseViewTypeSection() {
                         <ViewListIcon
                           style={{
                             marginRight: "8px",
+                            marginLeft: currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />

@@ -16,7 +16,11 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import { UserSignupDataType } from "../../DataTypes/UserDataTypes";
 import { handleSignup } from "../../utils/auth-handlers";
 import { Styles } from "./RegisterPage.style";
+import { useLanguage } from "src/hooks/useLanguage";
+import LanguageMenu from "@components/AppBar/LanguageMenuComponent";
 export default function LoginPage() {
+  const { getString, currentLanguage } = useLanguage();
+
   const [userData, setUserData] = useState<UserSignupDataType>({
     name: "",
     email: "",
@@ -38,7 +42,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <Box sx={Styles.mainBox}>
+    <Box dir={currentLanguage === "ar" ? "rtl" : ""} sx={Styles.mainBox}>
       <Backdrop
         sx={{
           color: "var(--primary-color)",
@@ -52,24 +56,27 @@ export default function LoginPage() {
         <Grid item xs={0} md={7} sx={Styles.gridItem2}></Grid>
         <Grid item xs={12} md={5} sx={Styles.gridItem1}>
           <Box sx={Styles.gridWrapperBox}>
+            <Box sx={{ position: "absolute", top: 5, right: 10 }}>
+              <LanguageMenu hideBorder={true} color="#000000" />
+            </Box>
             <Typography
               variant="h4"
               textAlign={"center"}
               sx={Styles.signUpHeading}
             >
-              Sign up
+              {getString("signUpLabel")}
             </Typography>
             <Typography
               variant="body1"
               textAlign={"center"}
               sx={Styles.signUpWelcomeText}
             >
-              Sign up and start your journey today.
+              {getString("signUpMessage")}
             </Typography>
             <InputComponent
               id="nameField"
               type="name"
-              label="Name"
+              label={getString("name")}
               RightIcon={Person}
               required
               onChange={(e) => {
@@ -86,7 +93,7 @@ export default function LoginPage() {
             <InputComponent
               id="emailField"
               type="email"
-              label="Email"
+              label={getString("email")}
               RightIcon={Email}
               required
               onChange={(e) => {
@@ -104,7 +111,7 @@ export default function LoginPage() {
               id="passwordField"
               required
               type="password"
-              label="Password"
+              label={getString("signInPasswordLabel")}
               boxStyle={Styles.inputBox}
               textFieldStyle={Styles.inputStyle}
               onChange={(e) => {
@@ -134,7 +141,7 @@ export default function LoginPage() {
                 }}
               />
               <Typography variant="body2">
-                I have read and agree to the{" "}
+                {getString("agreementText")}{" "}
                 <Link
                   href=""
                   sx={
@@ -144,9 +151,9 @@ export default function LoginPage() {
                   }
                   underline="hover"
                 >
-                  Terms of Service{" "}
+                  {getString("termsOfService")}{" "}
                 </Link>
-                and{" "}
+                {getString("and")}{" "}
                 <Link
                   href=""
                   sx={
@@ -156,7 +163,7 @@ export default function LoginPage() {
                   }
                   underline="hover"
                 >
-                  Privacy Policy{" "}
+                  {getString("termsOfService")}{" "}
                 </Link>
               </Typography>
             </Box>
@@ -177,18 +184,18 @@ export default function LoginPage() {
               }}
               sx={Styles.button}
             >
-              Create an Account
+              {getString("signUpButtonLabel")}
             </Button>
             <Box sx={Styles.signInBox}>
               <Typography variant="body2" sx={Styles.signInText}>
-                Already have an account?
+                {getString("signUpAlreadyHaveAnAccount")}
               </Typography>
               <Button
                 variant="text"
                 onClick={() => navigate("/login")}
                 sx={Styles.signInButton}
               >
-                Sign In
+                {getString("signInTextLabel")}
               </Button>
             </Box>
           </Box>

@@ -125,6 +125,7 @@ const GridView = ({
                       sx={styles.cardContentBodyText}
                       noWrap
                       variant="h6"
+                      textAlign="center"
                     >
                       {item.name}
                     </Typography>

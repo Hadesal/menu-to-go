@@ -1,30 +1,31 @@
+import AppBarComponent from "@components/AppBar/AppBarComponent";
+import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
+import UserDetailsInputComponent from "@components/common/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
+import SideDrawer from "@components/SideDrawerComponent/SideDrawerComponent";
+import {
+  CHECK_INTERVAL,
+  drawerWidth,
+  INACTIVITY_PERIOD,
+  PROMPT_BEFORE_IDLE,
+} from "@constants/constants";
+import { Box, CssBaseline, Drawer, Toolbar } from "@mui/material";
+import ContactPage from "@pages/ContactPage/Contact";
+import ProfilePage from "@pages/ProfilePage/ProfilePage";
+import QrCodePage from "@pages/QrCodePage/QrCodePage";
+import RestaurantSection from "@pages/RestaurantSection/RestaurantSection";
+import SplashScreen from "@pages/SplashScreen/SplashScreen";
+import TemplatePage from "@pages/TemplatePage/TemplatePage";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { deleteUser } from "@redux/thunks/userThunks";
+import { resetActiveTab, selectActiveTab } from "@slices/mainViewSlice";
+import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
 import { useEffect, useState } from "react";
-import { Box, CssBaseline, Toolbar, Drawer } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
 import { useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { resetActiveTab, selectActiveTab } from "@slices/mainViewSlice";
-import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
-import { deleteUser } from "@redux/thunks/userThunks";
-import ConfirmDialog from "@components/common/Dialogs/LogoutDialog/confirmDialog";
-import SplashScreen from "@pages/SplashScreen/SplashScreen";
-import UserDetailsInputComponent from "@components/common/Dialogs/UserDetailsDialog/UserDetailsInputComponent";
+import { useNavigate } from "react-router-dom";
 import DashboardView from "./DashboardQuickLinks/DashboardQuickLinksPage";
-import RestaurantSection from "@pages/RestaurantSection/RestaurantSection";
-import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import TemplatePage from "@pages/TemplatePage/TemplatePage";
-import QrCodePage from "@pages/QrCodePage/QrCodePage";
-import ContactPage from "@pages/ContactPage/Contact";
-import AppBarComponent from "@components/AppBar/AppBarComponent";
-import SideDrawer from "@components/SideDrawerComponent/SideDrawerComponent";
-import {
-  INACTIVITY_PERIOD,
-  PROMPT_BEFORE_IDLE,
-  CHECK_INTERVAL,
-  drawerWidth,
-} from "@constants/constants";
+import { useLanguage } from "src/hooks/useLanguage";
 
 const UserDashboardPage = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,8 +39,7 @@ const UserDashboardPage = () => {
   const [remaining, setRemaining] = useState<number>(10 * 6000);
   const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
 
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
 
   const activeTab = useSelector(selectActiveTab);
   const navigate = useNavigate();
@@ -178,7 +178,7 @@ const UserDashboardPage = () => {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box dir={currentLanguage === "ar" ? "rtl" : ""} sx={{ display: "flex" }}>
       <CssBaseline />
       <UserDetailsInputComponent isOpen={userDetailsisOpen} />
       <AppBarComponent
@@ -196,6 +196,7 @@ const UserDashboardPage = () => {
         aria-label="mailbox folders"
       >
         <Drawer
+          dir={currentLanguage === "ar" ? "rtl" : ""}
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}

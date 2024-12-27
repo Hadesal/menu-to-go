@@ -166,7 +166,7 @@ const UserDetailsInputComponent = ({
             paddingBottom: 0,
           }}
         >
-          Let's get your restaurant ready!
+          {getString("completeRegistrationDialogTitle")}
         </DialogTitle>
         <DialogContent sx={{ alignContent: "center" }}>
           <Typography
@@ -219,7 +219,9 @@ const UserDetailsInputComponent = ({
             />
           </Box>
 
-          <InputLabel id="restaurant-country">Country</InputLabel>
+          <InputLabel id="restaurant-country">
+            {getString("country")}
+          </InputLabel>
           <FormControl sx={{ width: "100%" }} error={errors.country === true}>
             <Select
               labelId="restaurant-country"
@@ -241,7 +243,7 @@ const UserDetailsInputComponent = ({
           </FormControl>
 
           <InputLabel sx={{ marginTop: 2 }} id="restaurant-currency">
-            Currency
+            {getString("completeRegistrationCurrencyLabel")}
           </InputLabel>
           <FormControl sx={{ width: "100%" }} error={errors.currency === true}>
             <Select
