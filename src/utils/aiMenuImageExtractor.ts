@@ -50,7 +50,7 @@ You are an expert data parser. Given the following menu text, convert it into a 
     {
       "name": "string",
       "image": "string | null",
-      "categoryType": "string",
+      "categoryType": "food|drinks",
       "products": [
         {
           "name": "string",
