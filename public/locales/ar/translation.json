@@ -13,6 +13,7 @@
   "completeRegistrationDialogTitle": "لنجهز مطعمك!",
   "detailsText": "يرجى ملء الحقول أدناه لإكمال حسابك. يمكنك تعديلها لاحقًا في الإعدادات.",
   "completeRegistrationRestaurantNameLabel": "اسم المطعم",
+  "completeRegistrationRestaurantNameError": "الاسم لا يمكن أن يكون فارغًا",
   "completeRegistrationCurrencyLabel": "العملة",
   "completeAccount": "أكمل حسابك",
   "close": "إغلاق",

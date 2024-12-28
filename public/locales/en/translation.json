@@ -13,6 +13,7 @@
   "completeRegistrationDialogTitle": "Let's get your restaurant ready!",
   "detailsText": "Please fill in the fields below to complete your account. You can edit this later in your settings.",
   "completeRegistrationRestaurantNameLabel": "Restaurant Name",
+  "completeRegistrationRestaurantNameError": "Name cannot be empty",
   "completeRegistrationCurrencyLabel": "Currency",
   "completeAccount": "Complete Your Account",
   "close": "close",

@@ -1,17 +1,17 @@
 import InputComponent from "@components/InputComponent/InputComponent";
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   InputLabel,
   MenuItem,
   Select,
   Typography,
-  FormControl,
-  Backdrop,
-  CircularProgress,
 } from "@mui/material";
 import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
@@ -19,10 +19,9 @@ import { addRestaurant } from "@redux/thunks/restaurantThunks";
 import { updateUser } from "@redux/thunks/userThunks";
 import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Styles } from "../LogoutDialog/confirmDialog.style";
 import { countries, currencies } from "./Data/userDetailsData";
-
+import { useLanguage } from "src/hooks/useLanguage";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -40,8 +39,8 @@ const UserDetailsInputComponent = ({
   onClose,
   isOpen,
 }: UserDetailsInputComponentProps) => {
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
+
   const [userDetails, setUserDetails] = useState<userDetails>({
     restaurantName: "",
     currency: "",
@@ -154,6 +153,7 @@ const UserDetailsInputComponent = ({
         <CircularProgress color="inherit" />
       </Backdrop>
       <Dialog
+        dir={currentLanguage === "ar" ? "rtl" : ""}
         PaperProps={{ sx: { ...Styles.dialog, width: width, height: height } }}
         onClose={onClose}
         open={isOpen}
@@ -187,7 +187,7 @@ const UserDetailsInputComponent = ({
                 },
               }}
             >
-              Restaurant Name
+              {getString("completeRegistrationRestaurantNameLabel")}
             </InputLabel>
             <InputComponent
               id="restaurantNameField"
@@ -213,7 +213,7 @@ const UserDetailsInputComponent = ({
               MAXCHARSLENGTH={25}
               helperText={
                 errors.restaurantName
-                  ? "Name cannot be empty"
+                  ? getString("completeRegistrationRestaurantNameError")
                   : `${userDetails.restaurantName.length}/25`
               }
             />
