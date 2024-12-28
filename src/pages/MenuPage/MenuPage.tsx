@@ -25,7 +25,6 @@ import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-
 // Define menu selection options
 const menuSelections = [
   {
@@ -91,7 +90,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
     (category) => category.categoryType
   );
   const showMenuSelection =
-    categoryLabels.includes("Food") && categoryLabels.includes("Drinks");
+    categoryLabels.includes("food") && categoryLabels.includes("drinks");
 
   if (
     filteredCategories.length === 0 ||
@@ -123,7 +122,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           restaurantData.userUiPreferences.colors.backgroundColor,
         display: "flex",
         flexDirection: "column",
-        height:"100%"
+        height: "100%",
       }}
       maxWidth="sm"
     >
@@ -148,9 +147,9 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
                 >
                   <img
                     style={{
-                      width: "70px",
-                      height: "70px",
-                      borderRadius: "50%",
+                      width: "100px",
+                      height: "100px",
+                      // borderRadius: "50%",
                     }}
                     src={restaurantData.userUiPreferences.logo}
                     alt="Logo"

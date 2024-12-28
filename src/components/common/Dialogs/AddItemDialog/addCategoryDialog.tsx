@@ -54,7 +54,7 @@ const AddCategoryDialog = ({
   const { t } = useTranslation();
   const getString = t;
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-  const MAXCHARSLENGTH = 20;
+  const MAXCHARSLENGTH = 35;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData(initialData);

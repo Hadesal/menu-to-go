@@ -44,7 +44,7 @@ const initialState: MenuState = {
     image: null,
     categoryType: "",
   },
-  selectedCategoryType: "Food",
+  selectedCategoryType: "",
   loading: false,
   error: null,
 };
@@ -98,7 +98,18 @@ export const MenuSlice = createSlice({
         state.restaurantData = action.payload.data;
         state.loading = false;
         if (state?.restaurantData.categories.length !== 0) {
-          console.log(state?.restaurantData.categories[0])
+          if (state?.restaurantData.categories.length > 1) {
+            const foodCategory = state?.restaurantData.categories.find(
+              (category) => {
+                return category.categoryType.toLocaleLowerCase() === "food";
+              }
+            );
+            if (foodCategory) {
+              state.selectedCategory = foodCategory;
+              state.selectedCategoryType = "Food";
+            }
+            return;
+          }
           state.selectedCategory = state?.restaurantData.categories[0];
         }
       })

@@ -25,10 +25,12 @@ export default function MenuProductsList({ product }) {
         dispatch(setSelectedProduct(product));
       }}
       sx={{
-        height:"150px",
+        height: "155px",
         marginBottom: "10px",
+        borderRadius: "15px",
+        padding: 2,
       }}
-      elevation={0}
+      elevation={2}
     >
       <CardActionArea
         sx={{
@@ -44,10 +46,11 @@ export default function MenuProductsList({ product }) {
           image={product.image || PlaceHolder}
           alt={product.name}
           sx={{
-            width: "40%",
-            height:"150px",
+            width: "30%",
+            height: "110px",
             objectFit: "cover",
-            objectPosition: "center", 
+            objectPosition: "center",
+            borderRadius: "15px",
           }}
         />
         <CardContent
@@ -57,9 +60,10 @@ export default function MenuProductsList({ product }) {
             position: "relative",
             boxSizing: "border-box",
             height: "100%",
-            padding: "10px 0px 10px 10px",
+            padding: "10px 0px 15px 10px",
             justifyContent: "space-between",
-            width: "60%",
+            width: "70%",
+            gap: 1,
           }}
         >
           <Box>
@@ -67,12 +71,13 @@ export default function MenuProductsList({ product }) {
               sx={{
                 fontSize: "16px",
                 fontFamily: restaurantData.userUiPreferences.fontType,
-                overflow: "hidden",
-                wordBreak:"break-all",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                textOverflow: "ellipsis",
+                gap: 1,
+                //overflow: "hidden",
+                // wordBreak: "break-all",
+                // display: "-webkit-box",
+                // WebkitLineClamp: 2,
+                // WebkitBoxOrient: "vertical",
+                // textOverflow: "ellipsis",
               }}
               component="div"
               color={restaurantData.userUiPreferences.colors.primaryColor}
@@ -85,10 +90,9 @@ export default function MenuProductsList({ product }) {
                 fontWeight: 400,
                 fontFamily: restaurantData.userUiPreferences.fontType,
                 color: lighterOpacityColor,
-                marginTop: 0.2,
                 overflow: "hidden",
                 display: "-webkit-box",
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 textOverflow: "ellipsis",
               }}
@@ -102,6 +106,7 @@ export default function MenuProductsList({ product }) {
           <Typography
             sx={{
               fontSize: "16px",
+              fontWeight: "500",
               color: restaurantData.userUiPreferences.colors.secondaryColor,
             }}
           >

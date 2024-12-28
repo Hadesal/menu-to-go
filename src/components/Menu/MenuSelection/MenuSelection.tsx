@@ -45,23 +45,29 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
         {menuSelections.map((selection) => (
           <Box
             key={selection.id}
-            onClick={() => dispatch(setSelectedCategoryType(selection.Label))}
+            onClick={() =>
+              dispatch(
+                setSelectedCategoryType(selection.Label.toUpperCase())
+              )
+            }
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               background:
-                selection.Label === selectedCategoryType
+                selection.Label.toLowerCase() ===
+                selectedCategoryType.toLowerCase()
                   ? restaurantData.userUiPreferences.colors.secondaryColor
                   : "transparent",
               color:
-                selection.Label === selectedCategoryType
+                selection.Label.toLowerCase() ===
+                selectedCategoryType.toLowerCase()
                   ? "#F9FDFE"
                   : "#797979",
               borderRadius: "25px",
               padding: "0.7rem",
               width: "140px",
-              
+
               fontWeight: "500",
               fontFamily: restaurantData.userUiPreferences.fontType,
             }}

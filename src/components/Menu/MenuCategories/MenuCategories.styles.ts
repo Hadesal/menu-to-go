@@ -1,3 +1,5 @@
+import { width } from "@mui/system";
+
 export const Styles = {
   categoriesContainer: {
     marginTop: "1rem",
@@ -15,6 +17,7 @@ export const Styles = {
   categoryBox: {
     display: "flex",
     minWidth: 100,
+    width:"120px",
     // border:"1px solid black",
     flexDirection: "column",
     alignItems: "center",

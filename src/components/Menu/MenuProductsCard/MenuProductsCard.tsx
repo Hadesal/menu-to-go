@@ -16,7 +16,10 @@ export default function MenuProductsCard({ product }) {
       onClick={() => {
         dispatch(setSelectedProduct(product));
       }}
-      sx={{ borderRadius: "5px" }}
+      sx={{
+        borderRadius: "5px",
+        padding: 0,
+      }}
     >
       <CardActionArea>
         <CardMedia
@@ -25,6 +28,7 @@ export default function MenuProductsCard({ product }) {
           width="100%"
           image={product.image ? product.image : PlaceHolder}
           alt={product.name}
+          sx={{objectPosition:product.image ? "top" :"center"}}
         />
         <CardContent
           sx={{
@@ -33,6 +37,7 @@ export default function MenuProductsCard({ product }) {
             padding: 1,
             marginTop: "0.5rem",
             color: "#A4755D",
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -41,6 +46,12 @@ export default function MenuProductsCard({ product }) {
               fontWeight: 400,
               fontFamily: restaurantData.userUiPreferences.fontType,
               wordBreak: "break-word",
+              height: "40px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 2, // Number of lines to show before ellipsis
+              WebkitBoxOrient: "vertical",
             }}
             gutterBottom
             component="div"
