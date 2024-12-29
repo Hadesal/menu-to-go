@@ -63,21 +63,20 @@ export default function MenuProductsList({ product }) {
             padding: "10px 0px 15px 10px",
             justifyContent: "space-between",
             width: "70%",
-            gap: 1,
           }}
         >
-          <Box>
+          <Box sx={{ display: "flex", flexDirection: "column" , gap:0.5 }}>
             <Typography
               sx={{
                 fontSize: "16px",
                 fontFamily: restaurantData.userUiPreferences.fontType,
                 gap: 1,
-                //overflow: "hidden",
-                // wordBreak: "break-all",
-                // display: "-webkit-box",
-                // WebkitLineClamp: 2,
-                // WebkitBoxOrient: "vertical",
-                // textOverflow: "ellipsis",
+                overflow: "hidden",
+                wordBreak: "break-all",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                textOverflow: "ellipsis",
               }}
               component="div"
               color={restaurantData.userUiPreferences.colors.primaryColor}
