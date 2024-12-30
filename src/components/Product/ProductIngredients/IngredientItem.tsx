@@ -17,8 +17,8 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
         src={ingredient.image ? ingredient.image : PlaceHolder}
         alt={ingredient.name}
         style={{ borderRadius: "8px", backgroundSize: "contain" }}
-        width={50}
-        height={50}
+        width={70}
+        height={70}
       />
       <Typography
         variant="body2"

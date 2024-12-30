@@ -4,7 +4,6 @@ export const Styles = {
     paddingRight: "1.5rem",
     display: "flex",
     flexDirection: "column",
-    background: "#F9FDFE",
   },
   variantsList: {
     listStyleType: "none",

@@ -10,6 +10,7 @@ import { parseImageMenu } from "@utils/aiMenuImageExtractor";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { addCategoriesToRestaurant } from "@redux/thunks/categoryThunks";
 import { setImportingLoading } from "@redux/slices/restaurantsSlice";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface ImportDialogProps {
   handleClose: () => void;
@@ -25,6 +26,8 @@ interface ImportOption {
 }
 
 const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
+  const { getString, currentLanguage } = useLanguage();
+
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const onFileSelectRef = useRef<(file: File) => Promise<void>>();
   const dispatch = useAppDispatch();
@@ -33,8 +36,8 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   );
   const importOptions: ImportOption[] = [
     {
-      title: "Import Categories from JSON",
-      description: "Upload a JSON file to import category data.",
+      title: getString("importDialogJSONLabel"),
+      description: getString("importDialogJSONDescription"),
       accept: ".json",
       onFileSelect: async (file: File) => {
         const reader = new FileReader();
@@ -61,8 +64,8 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       },
     },
     {
-      title: "Import Categories from Excel",
-      description: "Upload an Excel file to import category data.",
+      title: getString("importDialogFromExcelLabel"),
+      description: getString("importDialogFromExcelDescription"),
       accept:
         ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       onFileSelect: async (file: File) => {
@@ -85,16 +88,16 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       },
     },
     {
-      title: "Export Categories as Excel",
-      description: "Export all categories to an Excel file.",
+      title: getString("importDialogAsExcelLabel"),
+      description: getString("importDialogAsExcelDescription"),
       accept: "",
       onFileSelect: async () => {
         exportSampleExcel();
       },
     },
     {
-      title: "Import Menu from Image",
-      description: "Upload an image to extract menu category data.",
+      title: getString("importDialogImageLabel"),
+      description: getString("importDialogImageDescription"),
       accept: "image/*",
       onFileSelect: async (file: File) => {
         handleClose();
@@ -143,7 +146,11 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   return (
     <Drawer open={isOpen} onClose={handleClose} anchor="right">
       <Box sx={{ width: "400px", padding: 4 }}>
-        <Typography sx={{ marginBottom: "1rem", fontWeight: 500 }} variant="h6">
+        <Typography
+          dir={currentLanguage === "ar" ? "rtl" : ""}
+          sx={{ marginBottom: "1rem", fontWeight: 500 }}
+          variant="h6"
+        >
           {title}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -152,6 +159,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
               elevation={0}
               sx={{ marginTop: 2, borderRadius: 4 }}
               key={index}
+              dir={currentLanguage === "ar" ? "rtl" : ""}
             >
               <Card
                 onClick={() => handleCardClick(option)}

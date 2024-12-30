@@ -3,20 +3,21 @@ export const Styles = {
     display: "flex",
     flexDirection: "column",
     gap: "8px",
-    marginTop: "0.3rem",
+    marginTop: "1rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
   },
   title: {
     fontWeight: "500",
   },
+  price: {
+    fontWeight: "500",
+  },
   subTitle: {
     fontWeight: "400",
-    color: "#BCB8B1",
   },
   productImage: {
-    borderRadius: "24px",
     backgroundSize: "cover",
     backgroundPosition: "left",
-    // width: "100%",
-    // height: 200,
   },
 };

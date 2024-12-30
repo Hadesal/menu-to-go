@@ -1,56 +1,47 @@
-import { Box, Container, IconButton } from "@mui/material";
+import { Box, Container, Divider } from "@mui/material";
 
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import ProductDetails from "@components/Product/ProductDetails/ProductDetails";
 import ExtrasList from "@components/Product/ProductExtras/ExtrasList";
 import IngredientList from "@components/Product/ProductIngredients/IngredientList";
 import VariantList from "@components/Product/ProductVariants/ProductVariants";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
-import { Styles } from "./ProductPage.styles";
+import { useAppSelector } from "../../redux/reduxHooks";
 import Section from "./Section";
-import { setSelectedProduct } from "@redux/slices/menuSlice";
-import { hexToRgba } from "@utils/colors";
-import { productDefaultData } from "@constants/constants";
+import { useEffect } from "react";
 
 export default function ProductPage() {
-  const dispatch = useAppDispatch();
-
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
   );
 
-  const backgroundColor = hexToRgba(
-    restaurantData.userUiPreferences.colors.primaryColor,
-    0.19
-  );
+  useEffect(() => {
+    // Scroll to the top when the component mounts
+    window.scrollTo(-10, -10);
+  }, []);
 
   return (
-    <Container disableGutters={true} sx={{ ...Styles.container }} maxWidth="sm">
-      <Box sx={Styles.box}>
-        <IconButton
-          onClick={() => dispatch(setSelectedProduct(productDefaultData))}
-          sx={{
-            ...Styles.iconButton,
-            background: backgroundColor,
-            "&:hover": {
-              background: backgroundColor,
-            },
-          }}
-          aria-label="arrowback"
-        >
-          <NavigateBeforeIcon
-            fontSize="large"
-            sx={{
-              color: restaurantData.userUiPreferences?.colors.primaryColor,
-            }}
-          />
-        </IconButton>
+    <Container
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+      disableGutters={true}
+      maxWidth="sm"
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {selectedProduct && (
           <>
             <ProductDetails
               productName={selectedProduct.name}
-              productDescription={selectedProduct.details.detailsDescription}
+              productDescription={selectedProduct.details.detailsDescription as string}
               productImg={selectedProduct.image}
+              productPrice={selectedProduct.price}
             />
             {selectedProduct.details.ingredients.length !== 0 && (
               <Section
@@ -58,8 +49,8 @@ export default function ProductPage() {
                 children={
                   <IngredientList
                     listView={
-                      restaurantData.userUiPreferences?.ingredientViewType !==
-                      "GRID"
+                      restaurantData.userUiPreferences?.ingredientViewType ===
+                      "LIST"
                     }
                     ingredients={selectedProduct.details.ingredients}
                   />
@@ -89,6 +80,27 @@ export default function ProductPage() {
             )}
           </>
         )}
+      </Box>
+
+      <Box>
+        <Divider sx={{ marginTop: 4 }} variant="fullWidth" />
+
+        <Box
+          sx={{
+            textAlign: "center",
+            fontSize: "14px",
+            width: "100%",
+            padding: 1,
+          }}
+        >
+          <a
+            style={{ textDecoration: "none", color: "black" }}
+            target="_blank"
+            href=""
+          >
+            Powered by MenuToGo®
+          </a>
+        </Box>
       </Box>
     </Container>
   );

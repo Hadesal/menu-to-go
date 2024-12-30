@@ -9,6 +9,7 @@ import React from "react";
 import { Styles } from "../addItemDialog.styles";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@assets/material-symbols_image-outline (1).svg";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface IngredientPanelProps {
   values: any;
@@ -41,11 +42,12 @@ const IngredientPanel = ({
   touched,
 }: IngredientPanelProps) => {
   const { setFieldError } = useFormikContext<ProductData>();
+  const { getString } = useLanguage();
 
   const items = [
     {
       key: "ingredientPanel",
-      label: "Ingredients",
+      label: getString("ingredientsLabel"),
       children: (
         <FieldArray name="details.ingredients">
           {({ push, remove }) => (
@@ -204,7 +206,7 @@ const IngredientPanel = ({
                           name={`details.ingredients.${index}.name`}
                           value={ingredient.name}
                           onChange={handleChange}
-                          placeholder="Ingredient name"
+                          placeholder={getString("ingredientNamePlaceHolder")}
                           style={{ padding: "0.7rem" }}
                         />
                       </Form.Item>
@@ -229,7 +231,7 @@ const IngredientPanel = ({
                 type="dashed"
                 style={{ width: "100%", marginTop: 16 }}
               >
-                Add Ingredient
+                {getString("addIngredientBtnLabel")}
               </Button>
             </>
           )}

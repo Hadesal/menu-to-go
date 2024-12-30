@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx.tsx";
 import CategoryShapesComponent from "@components/TemplateComponents/CategoryShapesSection/CategoryShapesComponent";
+import ChooseIngredientsViewTypeSection from "@components/TemplateComponents/ChooseIngredientsViewTypeSection/ChooseIngredientsViewTypeSection";
 import ChooseViewTypeSection from "@components/TemplateComponents/ChooseViewTypeSection/ChooseViewTypeSection";
 import ColorsSection from "@components/TemplateComponents/ColorsSection/ColorsSection";
 import ContactLinksComponent from "@components/TemplateComponents/ContactLinksSection/ContactLinksComponent";
@@ -27,8 +28,10 @@ import MenuPage from "@pages/MenuPage/MenuPage";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
 import { setSelectedRestaurant } from "@slices/restaurantsSlice";
+import { setSelectedProduct } from "@slices/menuSlice";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { productDefaultData } from "@constants/constants";
 
 export default function TemplatePage() {
   const { t } = useTranslation();
@@ -52,6 +55,7 @@ export default function TemplatePage() {
     const selected = restaurantList.find(
       (restaurant) => restaurant.name === selectedName
     );
+    dispatch(setSelectedProduct(productDefaultData));
     dispatch(setSelectedRestaurant(selected as RestaurantData));
   };
 
@@ -112,7 +116,9 @@ export default function TemplatePage() {
           </Typography>
 
           <Box sx={{ width: "25%" }}>
-            <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
+            <InputLabel id="restaurant-select-label">
+              {getString("selectRestaurantDropDownLabel")}
+            </InputLabel>
 
             <Select
               key="restaurantSelect"
@@ -172,6 +178,7 @@ export default function TemplatePage() {
           >
             <UploadLogo />
             <ChooseViewTypeSection />
+            <ChooseIngredientsViewTypeSection />
             <ColorsSection />
             <FontSectionComponent />
             <CategoryShapesComponent />

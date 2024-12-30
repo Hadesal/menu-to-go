@@ -1,6 +1,7 @@
 import { ViewType } from "@dataTypes/RestaurantObject";
-import GridViewIcon from "@mui/icons-material/GridView";
+import ImageIcon from "@mui/icons-material/Image";
 import ViewListIcon from "@mui/icons-material/ViewList";
+
 import {
   Card,
   CardContent,
@@ -17,9 +18,8 @@ import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
 import { useLanguage } from "src/hooks/useLanguage";
-
-export default function ChooseViewTypeSection() {
-    const { getString, currentLanguage } = useLanguage();
+export default function ChooseIngredientsViewTypeSection() {
+    const { getString , currentLanguage } = useLanguage();
   
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
@@ -31,7 +31,8 @@ export default function ChooseViewTypeSection() {
   );
 
   const [selectedView, setSelectedView] = useState(
-    (userUiPreferences && selectedRestaurant.userUiPreferences.itemsViewType) ??
+    (userUiPreferences &&
+      selectedRestaurant.userUiPreferences.ingredientViewType) ??
       ViewType.GRID
   );
 
@@ -40,7 +41,7 @@ export default function ChooseViewTypeSection() {
 
     const newUserUiPreferences = {
       ...userUiPreferences,
-      itemsViewType: selectedView,
+      ingredientViewType: selectedView,
     };
 
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
@@ -49,7 +50,7 @@ export default function ChooseViewTypeSection() {
 
   useEffect(() => {
     if (selectedRestaurant) {
-      setSelectedView(selectedRestaurant.userUiPreferences.itemsViewType);
+      setSelectedView(selectedRestaurant.userUiPreferences.ingredientViewType);
     }
   }, [selectedRestaurant]);
 
@@ -72,7 +73,7 @@ export default function ChooseViewTypeSection() {
               }}
               variant="h6"
             >
-              {getString("viewType")}
+              {getString("ingredientsViewTypeSectionHeader")}
             </Typography>
             <Container
               disableGutters
@@ -103,14 +104,14 @@ export default function ChooseViewTypeSection() {
                     }
                     label={
                       <span style={{ display: "flex", alignItems: "center" }}>
-                        <GridViewIcon
+                        <ImageIcon
                           style={{
                             marginRight: "8px",
                             marginLeft: currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />
-                        {getString("viewTypeGrid")}
+                        {getString("ingredientsViewTypeVisualCards")}
                       </span>
                     }
                   />
@@ -132,7 +133,7 @@ export default function ChooseViewTypeSection() {
                             color: "var(--primary-color)",
                           }}
                         />
-                        {getString("viewTypeList")}
+                        {getString("ingredientsViewTypeList")}
                       </span>
                     }
                   />

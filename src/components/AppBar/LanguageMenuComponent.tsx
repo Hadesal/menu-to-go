@@ -6,7 +6,13 @@ import { useTranslation } from "react-i18next";
 import LanguageIcon from "@mui/icons-material/Language";
 type LanguageKeys = keyof typeof langs;
 
-const LanguageMenu = () => {
+const LanguageMenu = ({
+  color,
+  hideBorder,
+}: {
+  color?: string;
+  hideBorder?: boolean;
+}) => {
   const { i18n } = useTranslation();
 
   const [anchorElLang, setAnchorElLang] = React.useState<null | HTMLElement>(
@@ -25,7 +31,7 @@ const LanguageMenu = () => {
   return (
     <Box
       sx={{
-        borderLeft: "1px solid #F9FDFE",
+        borderLeft: hideBorder ? "0px" : "1px solid #F9FDFE",
         marginLeft: "0.5rem",
         paddingLeft: "0.5rem",
       }}
@@ -37,7 +43,7 @@ const LanguageMenu = () => {
         aria-haspopup="true"
         aria-expanded={openLang ? "true" : undefined}
         onClick={openLanguageMenu}
-        sx={{ color: "#F9FDFE" }}
+        sx={{ color: color ? color : "#F9FDFE" }}
       >
         <LanguageIcon />
       </IconButton>
