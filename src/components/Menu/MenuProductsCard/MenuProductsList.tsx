@@ -25,10 +25,12 @@ export default function MenuProductsList({ product }) {
         dispatch(setSelectedProduct(product));
       }}
       sx={{
-        height: product.details.ingredients.length > 0 ? "110px" : "100px",
-        borderRadius: "16px",
+        height: "155px",
         marginBottom: "10px",
+        borderRadius: "15px",
+        padding: 2,
       }}
+      elevation={2}
     >
       <CardActionArea
         sx={{
@@ -36,18 +38,19 @@ export default function MenuProductsList({ product }) {
           flexDirection: "row",
           height: "100%",
           width: "100%",
+          justifyContent: "start",
         }}
       >
         <CardMedia
           component="img"
-          image={product.image || PlaceHolder} // Use a default placeholder if no image exists
+          image={product.image || PlaceHolder}
           alt={product.name}
           sx={{
-            width: "115px",
-            height: "125px",
-            borderRadius: "16px 0 0 16px",
-            objectFit: "cover", // Ensures the image scales properly within the dimensions
-            objectPosition: "center", // Centers the image
+            width: "30%",
+            height: "110px",
+            objectFit: "cover",
+            objectPosition: "center",
+            borderRadius: "15px",
           }}
         />
         <CardContent
@@ -55,28 +58,21 @@ export default function MenuProductsList({ product }) {
             display: "flex",
             flexDirection: "column",
             position: "relative",
-            boxSizing: "border-box", // Ensure padding is included in the width/height
-            flex: 1, // Fill the remaining space in the row layout
-            padding: "10px", // Apply desired padding
-            height:"100%"
+            boxSizing: "border-box",
+            height: "100%",
+            padding: "10px 0px 15px 10px",
+            justifyContent: "space-between",
+            width: "70%",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-              gap: 1,
-            }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column" , gap:0.5 }}>
             <Typography
               sx={{
                 fontSize: "16px",
-                fontWeight: 500,
                 fontFamily: restaurantData.userUiPreferences.fontType,
+                gap: 1,
                 overflow: "hidden",
-                width: "calc(100% - 50px)", // Ensure it doesn't exceed parent width
+                wordBreak: "break-all",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -89,31 +85,31 @@ export default function MenuProductsList({ product }) {
             </Typography>
             <Typography
               sx={{
-                fontSize: "16px",
-                fontWeight: 600,
-                color: restaurantData.userUiPreferences.colors.secondaryColor,
+                fontSize: "13px",
+                fontWeight: 400,
+                fontFamily: restaurantData.userUiPreferences.fontType,
+                color: lighterOpacityColor,
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                textOverflow: "ellipsis",
               }}
             >
-              {product.price}€
+              {product.details.ingredients
+                .map((ingredient) => ingredient.name)
+                .join(", ")}
             </Typography>
           </Box>
+
           <Typography
             sx={{
-              fontSize: "14px",
-              fontWeight: 400,
-              fontFamily: restaurantData.userUiPreferences.fontType,
-              color: lighterOpacityColor,
-              marginTop: 0.5,
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              textOverflow: "ellipsis",
+              fontSize: "16px",
+              fontWeight: "500",
+              color: restaurantData.userUiPreferences.colors.secondaryColor,
             }}
           >
-            {product.details.ingredients
-              .map((ingredient) => ingredient.name)
-              .join(", ")}
+            {product.price}€
           </Typography>
         </CardContent>
       </CardActionArea>

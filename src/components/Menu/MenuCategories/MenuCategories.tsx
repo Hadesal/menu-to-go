@@ -17,7 +17,7 @@ export default function MenuCategories({
   const categoriesData = (categoryTag: string) => {
     let categoriesDataArray = [];
 
-    if (categoryTag === "Food") {
+    if (categoryTag.toLocaleLowerCase() === "food") {
       categoriesDataArray = categories.filter((category) => {
         return category.categoryType.toLowerCase() === "food";
       });
