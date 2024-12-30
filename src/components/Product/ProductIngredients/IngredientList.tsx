@@ -24,6 +24,7 @@ export default function IngredientList({
               key={index}
               style={{
                 ...Styles.ingredientListItem,
+                color: restaurantData.userUiPreferences.colors.primaryColor,
                 fontFamily: restaurantData.userUiPreferences.fontType,
               }}
             >

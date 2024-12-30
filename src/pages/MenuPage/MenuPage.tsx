@@ -7,8 +7,6 @@ import { productDefaultData } from "@constants/constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
-import SearchIcon from "@mui/icons-material/Search";
-import LanguageIcon from "@mui/icons-material/Language";
 import {
   Box,
   Container,
@@ -27,7 +25,6 @@ import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
 
 // Define menu selection options
 const menuSelections = [

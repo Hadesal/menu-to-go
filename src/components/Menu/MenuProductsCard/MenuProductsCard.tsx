@@ -56,7 +56,7 @@ export default function MenuProductsCard({ product }) {
               fontFamily: restaurantData.userUiPreferences.fontType,
             }}
             component="div"
-            color={restaurantData.userUiPreferences.colors.primaryColor}
+            color={restaurantData.userUiPreferences.colors.secondaryColor}
           >
             {product.price}$
           </Typography>
