@@ -17,8 +17,11 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
+import { useLanguage } from "src/hooks/useLanguage";
 
 export default function ChooseIngredientsViewTypeSection() {
+  const { getString, currentLanguage } = useLanguage();
+
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -75,7 +78,7 @@ export default function ChooseIngredientsViewTypeSection() {
               }}
               variant="h6"
             >
-              Ingredients view type
+              {getString("ingredientsViewTypeSectionHeader")}
             </Typography>
             <Container
               disableGutters
@@ -109,10 +112,12 @@ export default function ChooseIngredientsViewTypeSection() {
                         <ImageIcon
                           style={{
                             marginRight: "8px",
+                            marginLeft:
+                              currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />
-                        Visual Cards
+                        {getString("ingredientsViewTypeVisualCards")}
                       </span>
                     }
                   />
@@ -130,10 +135,12 @@ export default function ChooseIngredientsViewTypeSection() {
                         <ViewListIcon
                           style={{
                             marginRight: "8px",
+                            marginLeft:
+                              currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />
-                        List
+                        {getString("ingredientsViewTypeList")}
                       </span>
                     }
                   />

@@ -29,6 +29,7 @@ interface InputComponentProps {
   name?: string;
   disabled?: boolean;
   MAXCHARSLENGTH?: number;
+  currentLanguage?: string;
 }
 
 export default function InputComponent({
@@ -52,6 +53,7 @@ export default function InputComponent({
   name,
   disabled,
   MAXCHARSLENGTH,
+  currentLanguage,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 

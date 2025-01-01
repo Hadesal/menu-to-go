@@ -12,6 +12,8 @@ import { itemType } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { Styles } from "./addItemDialog.styles";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;
@@ -36,6 +38,8 @@ const AddRestaurantDialog = ({
   initialData,
   data,
 }: AddAddRestaurantDialogProps) => {
+  const { getString, currentLanguage } = useLanguage();
+
   const [dialogData, setDialogData] = useState<
     Omit<RestaurantData, "userUiPreferences">
   >({
@@ -77,6 +81,7 @@ const AddRestaurantDialog = ({
 
   return (
     <Dialog
+      dir={currentLanguage === "ar" ? "rtl" : ""}
       disableRestoreFocus
       PaperProps={{
         sx: {
@@ -90,7 +95,9 @@ const AddRestaurantDialog = ({
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <Box sx={Styles.textFieldWrapper}>
-        <InputLabel sx={Styles.textFieldLabelStyle}>Name</InputLabel>
+        <InputLabel sx={Styles.textFieldLabelStyle}>
+          {getString("nameInputLabel")}
+        </InputLabel>
         <InputComponent
           id="nameField"
           type="Name"

@@ -3,6 +3,7 @@ import { Form, Input, InputNumber } from "antd";
 import { Styles } from "../addItemDialog.styles";
 import FileUploadComponent from "../fileUploadComponent";
 import { useState } from "react";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface BasicInfoFieldsProps {
   values: any;
@@ -19,6 +20,8 @@ const BasicInfoFields = ({
   handleChange,
   setFieldValue,
 }: BasicInfoFieldsProps) => {
+  const { getString } = useLanguage();
+
   const [imageError, setImageError] = useState<string | null>(null);
   return (
     <>
@@ -30,7 +33,6 @@ const BasicInfoFields = ({
         <FileUploadComponent
           image={values.image}
           onImageChange={(image: string | null) => {
-            console.log(values)
             setFieldValue("image", image);
           }}
           error={imageError}
@@ -38,7 +40,7 @@ const BasicInfoFields = ({
         />
       </Form.Item>
       <Form.Item
-        label="Name"
+        label={getString("name")}
         colon={false}
         validateStatus={touched.name && errors.name ? "error" : ""}
         help={touched.name && errors.name}
@@ -60,7 +62,7 @@ const BasicInfoFields = ({
       </Form.Item>
 
       <Form.Item
-        label="Price"
+        label={getString("price")}
         validateStatus={touched.price && errors.price ? "error" : ""}
         help={touched.price && errors.price}
         style={{

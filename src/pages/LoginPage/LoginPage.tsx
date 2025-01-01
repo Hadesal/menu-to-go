@@ -20,7 +20,11 @@ import ResetPasswordDialog from "@components/common/Dialogs/ResetPasswordDialog/
 import CheckIcon from "@mui/icons-material/Check";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import { useLanguage } from "src/hooks/useLanguage";
+import LanguageMenu from "@components/AppBar/LanguageMenuComponent";
 export default function LoginPage() {
+  const { getString, currentLanguage } = useLanguage();
+
   const [pathToken, setPathToken] = useState<string>("");
   const [showToast, setShowToast] = useState<boolean>(false);
   const [severity, setSeverity] = useState<
@@ -82,7 +86,7 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <Box sx={Styles.mainBox}>
+    <Box dir={currentLanguage === "ar" ? "rtl" : ""} sx={Styles.mainBox}>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showToast}
@@ -118,25 +122,29 @@ export default function LoginPage() {
       <Grid container sx={Styles.grid}>
         <Grid item xs={12} md={5} sx={Styles.grid_item_1}>
           <Box sx={Styles.grid1WrapperBox}>
+            <Box sx={{ position: "absolute", top: 5, left: 0 }}>
+              <LanguageMenu hideBorder={true} color="#000000" />
+            </Box>
+
             <Typography
               variant="h4"
               textAlign={"center"}
               sx={Styles.sign_in_heading}
             >
-              Sign in
+              {getString("signInLabel")}
             </Typography>
             <Typography
               variant="body1"
               textAlign={"center"}
               sx={Styles.sign_in_welcome_text}
             >
-              Hi Welcome Back, You’ve been Missed
+              {getString("signInMessage")}
             </Typography>
 
             <InputComponent
               id="emailField"
               type="email"
-              label="Email"
+              label={getString("email")}
               RightIcon={Email}
               error={errorMessages.email ? true : false}
               helperText={errorMessages.email}
@@ -154,7 +162,7 @@ export default function LoginPage() {
               id="passwordField"
               required
               type="password"
-              label="Password"
+              label={getString("signInPasswordLabel")}
               textFieldStyle={Styles.inputStyle}
               boxStyle={Styles.input_box}
               onChange={(e) => {
@@ -173,7 +181,7 @@ export default function LoginPage() {
                 setIsForgetPasswordOpen(true);
               }}
             >
-              Forget Password!
+              {getString("signInForgetPassword")}
             </Button>
             <ForgetPasswordDialog
               isOpen={isForgetPasswordOpen}
@@ -197,18 +205,18 @@ export default function LoginPage() {
               }}
               sx={Styles.button}
             >
-              Sign in
+              {getString("signInButtonLabel")}
             </Button>
             <Box sx={Styles.signUpBox}>
               <Typography variant="body2" sx={Styles.signUpText}>
-                Don't have an account?
+                {getString("signUpText")}
               </Typography>
               <Button
                 variant="text"
                 onClick={() => navigate("/register")}
                 sx={Styles.signUpButton}
               >
-                Sign Up
+                {getString("signUpLabel")}
               </Button>
             </Box>
           </Box>

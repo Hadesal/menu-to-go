@@ -39,10 +39,28 @@ export default function ProductPage() {
           <>
             <ProductDetails
               productName={selectedProduct.name}
-              productDescription={selectedProduct.details.detailsDescription as string}
+              productDescription={
+                selectedProduct.details.detailsDescription as string
+              }
               productImg={selectedProduct.image}
               productPrice={selectedProduct.price}
+              productLabels={selectedProduct.details.labels}
+              productDietaryOption={selectedProduct.details.dietaryOptions}
             />
+            {selectedProduct.details.allergies.length !== 0 && (
+              <Section name="Allergies">
+                <div>
+                  {selectedProduct.details.allergies.map((allergy, index) => (
+                    <span key={allergy.value}>
+                      {allergy.label}
+                      {index < selectedProduct.details.allergies.length - 1 &&
+                        " |"}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+            )}
+
             {selectedProduct.details.ingredients.length !== 0 && (
               <Section
                 name="Ingredients"

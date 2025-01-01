@@ -1,3 +1,6 @@
+import InputComponent from "@components/InputComponent/InputComponent";
+import { categoryDefaultData } from "@constants/constants";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import {
   Alert,
   Box,
@@ -12,15 +15,12 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { itemType } from "@utils/dataTypeCheck";
 import { useEffect, useState } from "react";
-import InputComponent from "@components/InputComponent/InputComponent";
+import { useLanguage } from "src/hooks/useLanguage";
+import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
-import { CategoryData } from "@dataTypes/CategoryDataTypes";
-import { useTranslation } from "react-i18next";
-import { handleCancel, handleConfirm } from "../helpers/handlers";
-import { categoryDefaultData } from "@constants/constants";
-import { itemType } from "@utils/dataTypeCheck";
 
 interface AddCategoryDialogProps {
   isDialogOpen: boolean;
@@ -51,10 +51,9 @@ const AddCategoryDialog = ({
   const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
-  const MAXCHARSLENGTH = 20;
+  const MAXCHARSLENGTH = 35;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData(initialData);
@@ -96,6 +95,7 @@ const AddCategoryDialog = ({
 
   return (
     <Dialog
+      dir={currentLanguage === "ar" ? "rtl" : ""}
       disableRestoreFocus
       PaperProps={{
         sx: {
@@ -107,7 +107,12 @@ const AddCategoryDialog = ({
       onClose={handleOnCancel}
       open={isOpen}
     >
-      <DialogTitle sx={Styles.title}>{title}</DialogTitle>
+      <DialogTitle
+        //dir={currentLanguage === "ar" ? "rtl" : ""}
+        sx={Styles.title}
+      >
+        {title}
+      </DialogTitle>
       <FileUploadComponent
         image={dialogData.image}
         onImageChange={(image) => {
@@ -123,11 +128,14 @@ const AddCategoryDialog = ({
         </Alert>
       )}
       <Box sx={Styles.textFieldWrapper}>
-        <InputLabel sx={Styles.textFieldLabelStyle}>Name</InputLabel>
+        <InputLabel sx={Styles.textFieldLabelStyle}>
+          {getString("nameInputLabel")}
+        </InputLabel>
         <InputComponent
           id="nameField"
           type="Name"
           label=""
+          currentLanguage={currentLanguage}
           required
           textFieldStyle={Styles.textFieldStyle}
           InputPropStyle={Styles.inputPropStyle}
@@ -189,7 +197,7 @@ const AddCategoryDialog = ({
               />
             }
             label={getString("categoryTypeFood")}
-            sx={{ width: "fit-content" }}
+            sx={{ width: "fit-content", marginRight: 0 }}
           />
           <FormControlLabel
             value={getString("drinks").toLocaleLowerCase()}
@@ -201,7 +209,7 @@ const AddCategoryDialog = ({
               />
             }
             label={getString("categoryTypeDrink")}
-            sx={{ width: "fit-content" }}
+            sx={{ width: "fit-content", marginRight: 0 }}
           />
         </RadioGroup>
       </FormControl>
@@ -217,7 +225,9 @@ const AddCategoryDialog = ({
           <Button
             variant="contained"
             onClick={handleOnConfirm}
-            sx={Styles.logoutButton}
+            sx={{
+              ...Styles.logoutButton,
+            }}
           >
             {confirmText}
           </Button>

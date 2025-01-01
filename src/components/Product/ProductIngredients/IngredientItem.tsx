@@ -26,6 +26,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
         sx={{
           ...Styles.IngredientItemName,
           fontFamily: restaurantData.userUiPreferences.fontType,
+          width: "80px",
         }}
       >
         {ingredient.name}

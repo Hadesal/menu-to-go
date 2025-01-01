@@ -50,7 +50,6 @@ const AddProductDialog = ({
         },
         body: {
           overflowY: "auto",
-          // maxHeight: "35.5rem",
         },
       }}
       centered={false}

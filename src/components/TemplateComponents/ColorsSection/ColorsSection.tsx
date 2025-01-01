@@ -7,7 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import ColorSelectionSection from "./ColorSelectionSection";
+import { useTranslation } from "react-i18next";
 const ColorsSection = () => {
+  const { t } = useTranslation();
+  const getString = t;
   return (
     <>
       <Paper
@@ -33,7 +36,7 @@ const ColorsSection = () => {
               }}
               variant="h6"
             >
-              Color
+              {getString("templateColorSectionHeader")}
             </Typography>
 
             <Container
@@ -60,7 +63,7 @@ const ColorsSection = () => {
                 }}
               >
                 <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
-                  Background color:
+                  {getString("templateColorSectionBckColor")}
                 </Typography>
                 <ColorSelectionSection type="backgroundColor" />
               </Box>
@@ -75,7 +78,7 @@ const ColorsSection = () => {
                 }}
               >
                 <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
-                  Text color:
+                  {getString("templateColorSectionTextColor")}
                 </Typography>
                 <ColorSelectionSection type="primaryColor" />
               </Box>
@@ -90,7 +93,7 @@ const ColorsSection = () => {
                 }}
               >
                 <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
-                  Highlight color:
+                  {getString("templateColorSectionHighlightColor")}
                 </Typography>
                 <ColorSelectionSection type="secondaryColor" />
               </Box>

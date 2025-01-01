@@ -13,12 +13,15 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@redux/slices/restaurantsSlice";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
 const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; // only accepted extensions
 
 export default function UploadLogo() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const getString = t;
 
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -44,10 +47,14 @@ export default function UploadLogo() {
       const fileSizeMB = file.size / (1024 * 1024);
 
       if (!ALLOWED_FILE_TYPES.includes(fileType)) {
-        setErrorMessage("Only PNG, JPG, and SVG files are allowed.");
+        setErrorMessage(getString("LogoTypeError"));
         return;
       } else if (fileSizeMB > MAX_FILE_SIZE_MB) {
-        setErrorMessage(`File size exceeds ${MAX_FILE_SIZE_MB} MB.`);
+        setErrorMessage(
+          getString("LogoSizeErrors", {
+            MAX_FILE_SIZE_MB: MAX_FILE_SIZE_MB,
+          })
+        );
         return;
       }
       const reader = new FileReader();
@@ -104,7 +111,7 @@ export default function UploadLogo() {
       <Card sx={{ borderRadius: "2rem", height: "100%" }}>
         <CardContent sx={{ padding: 4 }}>
           <Typography sx={{ color: "#000000" }} variant="h6">
-            Logo
+            {getString("Logo")}
           </Typography>
           <Container
             disableGutters
@@ -165,7 +172,7 @@ export default function UploadLogo() {
                     fontSize: "0.8rem",
                   }}
                 >
-                  Logo
+                  {getString("Logo")}
                 </Typography>
               )}
             </Box>
@@ -174,7 +181,7 @@ export default function UploadLogo() {
               variant="contained"
               component="label"
             >
-              CHOOSE FILE
+              {getString("ChooseFileLogo")}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -205,7 +212,7 @@ export default function UploadLogo() {
                 marginTop: "0.5rem",
               }}
             >
-              JPG, PNG, SVG; Max: 60MB
+              {getString("LogoSizeInfo")}
             </Typography>
           )}
         </CardContent>

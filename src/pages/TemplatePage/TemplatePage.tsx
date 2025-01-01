@@ -116,7 +116,9 @@ export default function TemplatePage() {
           </Typography>
 
           <Box sx={{ width: "25%" }}>
-            <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
+            <InputLabel id="restaurant-select-label">
+              {getString("selectRestaurantDropDownLabel")}
+            </InputLabel>
 
             <Select
               key="restaurantSelect"

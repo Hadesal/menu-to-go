@@ -352,7 +352,7 @@ export default function CategoryPage() {
                 setOpenImportDialog(true);
               }}
             >
-              {getString("import")}
+              {getString("categoryPageImportLabel")}
             </Button>
             <Button
               sx={{

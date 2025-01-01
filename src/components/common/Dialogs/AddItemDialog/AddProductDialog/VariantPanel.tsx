@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import { Button, Collapse, Form, Input, InputNumber } from "antd";
 import { FieldArray } from "formik";
 import "./productDialog.css";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface VariantPanelProps {
   values: any;
@@ -18,6 +19,8 @@ const VariantPanel = ({
   errors,
   touched,
 }: VariantPanelProps) => {
+  const { getString } = useLanguage();
+
   const variantGroupNameError =
     touched?.details?.variants?.name && errors?.details?.variants?.name
       ? errors.details.variants.name
@@ -26,13 +29,13 @@ const VariantPanel = ({
   const items = [
     {
       key: "variantPanel",
-      label: "Variants",
+      label: getString("VariantsLabel"),
       children: (
         <>
           <Form.Item
             validateStatus={variantGroupNameError ? "error" : ""}
             help={variantGroupNameError}
-            label="Variants Name"
+            label={getString("VariantsNameLabel")}
             layout="vertical"
             colon={false}
             style={{
@@ -90,7 +93,7 @@ const VariantPanel = ({
                             name={`details.variants.variantList.${index}.name`}
                             value={variant.name}
                             onChange={handleChange}
-                            placeholder="Variant name"
+                            placeholder={getString("VariantNamePlaceHolder")}
                             style={{ padding: "0.7rem" }}
                           />
                         </Form.Item>
@@ -113,7 +116,7 @@ const VariantPanel = ({
                             }
                             style={{ padding: "0.45rem" }}
                             controls={false}
-                            placeholder="Price"
+                            placeholder={getString("VariantPricePlaceHolder")}
                           />
                         </Form.Item>
                         <IconButton
@@ -136,7 +139,7 @@ const VariantPanel = ({
                   type="dashed"
                   style={{ width: "100%", marginTop: 16 }}
                 >
-                  Add Variant
+                  {getString("addVariantBtnLabel")}
                 </Button>
               </>
             )}

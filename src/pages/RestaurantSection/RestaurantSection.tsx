@@ -1,3 +1,7 @@
+import RestaurantIcon from "@assets/restaurant-icon.jpg";
+import BoxComponent from "@components/common/BoxComponent/BoxComponent";
+import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import {
   Backdrop,
   CircularProgress,
@@ -5,25 +9,21 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import BoxComponent from "@components/common/BoxComponent/BoxComponent";
-import styles from "./RestaurantSection.styles";
-import { useEffect, useState } from "react";
-import RestaurantIcon from "@assets/restaurant-icon.jpg";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
-import {
-  clearRestaurantError,
-  clearSuccessMessage,
-  setSelectedRestaurant,
-} from "@slices/restaurantsSlice.ts";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import {
   addRestaurant,
   editRestaurant,
   removeRestaurant,
 } from "@redux/thunks/restaurantThunks.ts";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
-import { useTranslation } from "react-i18next";
+import {
+  clearRestaurantError,
+  clearSuccessMessage,
+  setSelectedRestaurant,
+} from "@slices/restaurantsSlice.ts";
+import { useEffect, useState } from "react";
 import CategoryPage from "../CategoryPage/CategoryPage";
-import ToastNotification from "@components/common/ToastNotification/ToastNotification.tsx";
+import styles from "./RestaurantSection.styles";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface RestaurantSectionProps {
   label: string;
@@ -42,8 +42,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   const [showToast, setShowToast] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString } = useLanguage();
 
   useEffect(() => {
     if (error) {
@@ -126,7 +125,9 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         onClose={() => setShowSuccessToast(false)}
       />
 
-      <Typography variant="h5">{label}</Typography>
+      <Typography variant="h5">
+        {label}
+      </Typography>
       <Divider />
       <BoxComponent
         CardIcon={RestaurantIcon}

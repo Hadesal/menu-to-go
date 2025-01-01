@@ -9,8 +9,8 @@ import { Formik, Form as FormikForm, FormikProps } from "formik";
 import React, { useEffect, useRef } from "react";
 import BasicInfoFields from "./BasicInfoFields";
 import ProductDetailsFields from "./ProductDetailsFields";
-import { createValidationSchema } from "./validationSchema";
 import "./productDialog.css";
+import { createValidationSchema } from "./validationSchema";
 
 interface ProductFormProps {
   initialData?: ProductData;
@@ -44,6 +44,9 @@ const ProductForm = ({
     price: 0,
     details: {
       detailsDescription: "",
+      allergies: [],
+      labels: [],
+      dietaryOptions: { value: "", label: "" },
       variants: {
         name: "",
         variantList: [],

@@ -91,7 +91,7 @@ const CategoryShapesComponent = () => {
                       }}
                     />
                   }
-                  label="Circle"
+                  label={getString("categoryShapeCircle")}
                 />
                 <FormControlLabel
                   value="rounded"
@@ -102,7 +102,7 @@ const CategoryShapesComponent = () => {
                       }}
                     />
                   }
-                  label="Rounded"
+                  label={getString("categoryShapeRounded")}
                 />
                 <FormControlLabel
                   value="square"
@@ -113,7 +113,7 @@ const CategoryShapesComponent = () => {
                       }}
                     />
                   }
-                  label="Square"
+                  label={getString("categoryShapeSquare")}
                 />
               </RadioGroup>
             </FormControl>

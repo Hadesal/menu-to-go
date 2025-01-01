@@ -23,6 +23,7 @@ import {
 import React, { useState } from "react";
 import { Styles } from "./Form.styles";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface FormProps {
   feedback: boolean;
@@ -48,13 +49,6 @@ interface FormData {
   typeOfInquiry?: string;
 }
 
-const sentiments = [
-  { name: "Awful", icon: SentimentVeryDissatisfied },
-  { name: "Bad", icon: SentimentDissatisfied },
-  { name: "Good", icon: SentimentSatisfied },
-  { name: "Great", icon: SentimentVerySatisfied },
-];
-
 export default function Form({
   feedback,
   title,
@@ -67,8 +61,8 @@ export default function Form({
   handleSubmit,
   setShowToast,
 }: FormProps) {
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
+
   const [formValuesLocal, setFormValuesLocal] = useState<FormData>({
     message: "",
     sentiments: "",
@@ -82,6 +76,13 @@ export default function Form({
   const [selectedSentiment, setSelectedSentiment] = useState<string | null>(
     null
   );
+
+  const sentiments = [
+    { name: getString("sentimentAwful"), icon: SentimentVeryDissatisfied },
+    { name: getString("sentimentBad"), icon: SentimentDissatisfied },
+    { name: getString("sentimentGood"), icon: SentimentSatisfied },
+    { name: getString("sentimentGreat"), icon: SentimentVerySatisfied },
+  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -163,10 +164,14 @@ export default function Form({
 
       <Box sx={Styles.formWrapper}>
         <Box sx={Styles.selectWrapper}>
-          <InputLabel sx={Styles.selectLabel} id="select-label">
+          <InputLabel
+            dir={currentLanguage === "ar" ? "rtl" : ""}
+            id="select-label"
+          >
             {getString("TypeofInquiry")}
           </InputLabel>
           <Select
+            dir={currentLanguage === "ar" ? "rtl" : ""}
             sx={Styles.select}
             labelId="select-label"
             id="typeOfInquiry"
@@ -179,10 +184,30 @@ export default function Form({
               setSelectedSentiment("");
             }}
           >
-            <MenuItem value={"General Inquiry"}>General Inquiry</MenuItem>
-            <MenuItem value={"Feedback"}>Feedback</MenuItem>
-            <MenuItem value={"Feature Request"}>Feature Request</MenuItem>
-            <MenuItem value={"Bug Report"}> Bug Report</MenuItem>
+            <MenuItem
+              dir={currentLanguage === "ar" ? "rtl" : ""}
+              value={"General Inquiry"}
+            >
+              {getString("GeneralInquiry")}
+            </MenuItem>
+            <MenuItem
+              dir={currentLanguage === "ar" ? "rtl" : ""}
+              value={"Feedback"}
+            >
+              {getString("Feedback")}
+            </MenuItem>
+            <MenuItem
+              dir={currentLanguage === "ar" ? "rtl" : ""}
+              value={"Feature Request"}
+            >
+              {getString("FeatureRequest")}
+            </MenuItem>
+            <MenuItem
+              dir={currentLanguage === "ar" ? "rtl" : ""}
+              value={"Bug Report"}
+            >
+              {getString("BugReport")}
+            </MenuItem>
           </Select>
         </Box>
         {formValuesLocal.typeOfInquiry === "Feedback" && (
@@ -220,8 +245,9 @@ export default function Form({
         )}
       </Box>
       <TextField
+        dir={currentLanguage === "ar" ? "rtl" : ""}
         id="message"
-        label="Message"
+        label={getString("contactFormMessage")}
         placeholder={textFiledLabel}
         multiline
         required

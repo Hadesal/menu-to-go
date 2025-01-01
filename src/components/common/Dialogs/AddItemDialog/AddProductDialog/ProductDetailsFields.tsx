@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Form, Input } from "antd";
+import { Form, Input } from "antd";
 import VariantPanel from "./VariantPanel";
 import IngredientPanel from "./IngredientPanel";
 import ExtraPanel from "./ExtraPanel";
+import { useLanguage } from "src/hooks/useLanguage";
+import ProductLabelsFields from "./ProductLabelsFields";
 
 interface ProductDetailsFieldsProps {
   values: any;
@@ -17,12 +19,14 @@ const ProductDetailsFields = ({
   handleChange,
   setFieldValue,
   errors,
-  touched
+  touched,
 }: ProductDetailsFieldsProps) => {
+  const { getString } = useLanguage();
+
   return (
     <>
       <Form.Item
-        label="Details Description"
+        label={getString("productDescription")}
         layout="vertical"
         style={{
           padding: "0.5rem",
@@ -38,10 +42,15 @@ const ProductDetailsFields = ({
             padding: "16.5px 14px",
             borderRadius: "1rem",
             maxHeight: "250px",
-            minHeight: "100px", 
+            minHeight: "100px",
           }}
         />
       </Form.Item>
+
+      <ProductLabelsFields
+        values={values}
+        setFieldValue={setFieldValue}
+      />
 
       <VariantPanel
         values={values}
@@ -55,7 +64,6 @@ const ProductDetailsFields = ({
         setFieldValue={setFieldValue}
         errors={errors}
         touched={touched}
-        
       />
       <ExtraPanel
         values={values}

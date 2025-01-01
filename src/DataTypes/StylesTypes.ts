@@ -27,6 +27,7 @@ interface Styles {
   productCheckBox?: SxProps<Theme>;
   productName?: SxProps<Theme>;
   productPrice?: SxProps<Theme>;
+  iconsBox?: SxProps<Theme>;
   productMoreIcon?: SxProps<Theme>;
   categoryListItem?: SxProps<Theme>;
   categoryListItemBox?: SxProps<Theme>;

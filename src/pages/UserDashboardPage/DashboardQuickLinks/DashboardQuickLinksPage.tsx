@@ -1,21 +1,21 @@
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import ContactCardImg from "@assets/contactus-card.svg";
 import QRCodeCardImg from "@assets/generateqrcode-card.svg";
 import RestaurantCardImg from "@assets/resturant-card.svg";
 import TemplatesCardImg from "@assets/templates-card.svg";
-import { setActiveTab } from "@slices/mainViewSlice";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { useAppSelector } from "@redux/reduxHooks";
+import { setActiveTab } from "@slices/mainViewSlice";
+import { useDispatch } from "react-redux";
+import { useLanguage } from "src/hooks/useLanguage";
 import { TabType } from "@constants/types";
 
 export default function DashboardView() {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
+
   const dashboardCards = [
     {
       id: "restaurant",
@@ -32,7 +32,10 @@ export default function DashboardView() {
   ];
   const { user } = useAppSelector((state) => state.userData);
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}>
+    <Box
+      dir={currentLanguage === "ar" ? "rtl" : ""}
+      sx={{ display: "flex", flexDirection: "column", marginLeft: "4rem" }}
+    >
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
           sx={{

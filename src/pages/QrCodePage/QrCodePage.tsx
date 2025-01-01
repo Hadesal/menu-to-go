@@ -33,19 +33,19 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import html2canvas from "html2canvas";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import { createOrUpdateQrCode } from "../../redux/thunks/userThunks";
 import CustomQRCodeComponent from "./CustomQRCodeComponent";
 import "./qrcodeStyle.css";
 import StyleControl from "./StyleControl";
+import { useLanguage } from "src/hooks/useLanguage";
 
 const QrCodePage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userData);
   const { qrCodeStyle, id } = user;
-  const { t } = useTranslation();
-  const getString = t;
+  const { getString, currentLanguage } = useLanguage();
+
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [openToastMessage, setOpenToastMessage] = useState(false);
@@ -259,7 +259,9 @@ const QrCodePage = () => {
         </Typography>
 
         <Box sx={{ width: "25%" }}>
-          <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
+          <InputLabel id="restaurant-select-label">
+            {getString("selectRestaurantDropDownLabel")}
+          </InputLabel>
 
           <Select
             labelId="restaurantDropdownLabel"
@@ -483,8 +485,12 @@ const QrCodePage = () => {
             padding: "0 !important",
           }}
         >
-          <Alert sx={{ width: "100%" }} severity="info">
-            Always scan to test that your QR works
+          <Alert
+            dir={currentLanguage === "ar" ? "rtl" : ""}
+            sx={{ width: "100%" }}
+            severity="info"
+          >
+            {getString("qrSectionInfo")}
           </Alert>
           <Container
             disableGutters
@@ -521,12 +527,12 @@ const QrCodePage = () => {
               marginTop: 1,
             }}
           >
-            <Tooltip arrow title={"Download"}>
+            <Tooltip arrow title={getString("download")}>
               <IconButton onClick={downloadImage}>
                 <SimCardDownloadIcon sx={{ color: "var(--primary-color)" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip arrow title={"Copy"}>
+            <Tooltip arrow title={getString("copy")}>
               <IconButton onClick={handleCopyToClipboard}>
                 <ContentCopyIcon sx={{ color: "var(--primary-color)" }} />
               </IconButton>
