@@ -1,3 +1,4 @@
+
 export const Styles = {
   ExtrasItemWrapper: {
     display: "flex",
@@ -8,11 +9,12 @@ export const Styles = {
     flex: "0 0 calc(50% - 0.5rem)",
     borderRadius: "8px",
     marginBottom: "0.5rem",
-    background: "#F9FDFE",
+    gap:"0.2rem"
   },
   ExtrasItemName: {
     fontWeight: "500",
     fontSize: "14px",
+    lineHeight:"18px"
   },
   ExtrasItemPrice: {
     fontWeight: "500",

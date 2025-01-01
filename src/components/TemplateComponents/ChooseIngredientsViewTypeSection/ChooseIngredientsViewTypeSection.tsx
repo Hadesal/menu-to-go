@@ -1,6 +1,7 @@
 import { ViewType } from "@dataTypes/RestaurantObject";
-import GridViewIcon from "@mui/icons-material/GridView";
+import ImageIcon from "@mui/icons-material/Image";
 import ViewListIcon from "@mui/icons-material/ViewList";
+
 import {
   Card,
   CardContent,
@@ -16,11 +17,8 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
-export default function ChooseViewTypeSection() {
-  const { t } = useTranslation();
-  const getString = t;
+export default function ChooseIngredientsViewTypeSection() {
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -31,7 +29,8 @@ export default function ChooseViewTypeSection() {
   );
 
   const [selectedView, setSelectedView] = useState(
-    (userUiPreferences && selectedRestaurant.userUiPreferences.itemsViewType) ??
+    (userUiPreferences &&
+      selectedRestaurant.userUiPreferences.ingredientViewType) ??
       ViewType.GRID
   );
 
@@ -40,7 +39,7 @@ export default function ChooseViewTypeSection() {
 
     const newUserUiPreferences = {
       ...userUiPreferences,
-      itemsViewType: selectedView,
+      ingredientViewType: selectedView,
     };
 
     dispatch(updateRestaurantUserUiPreferences(newUserUiPreferences));
@@ -51,9 +50,9 @@ export default function ChooseViewTypeSection() {
     if (
       selectedRestaurant &&
       selectedRestaurant.userUiPreferences &&
-      selectedRestaurant.userUiPreferences.itemsViewType
+      selectedRestaurant.userUiPreferences.ingredientViewType
     ) {
-      setSelectedView(selectedRestaurant.userUiPreferences.itemsViewType);
+      setSelectedView(selectedRestaurant.userUiPreferences.ingredientViewType);
     }
   }, [selectedRestaurant]);
 
@@ -76,7 +75,7 @@ export default function ChooseViewTypeSection() {
               }}
               variant="h6"
             >
-              {getString("viewType")}
+              Ingredients view type
             </Typography>
             <Container
               disableGutters
@@ -107,13 +106,13 @@ export default function ChooseViewTypeSection() {
                     }
                     label={
                       <span style={{ display: "flex", alignItems: "center" }}>
-                        <GridViewIcon
+                        <ImageIcon
                           style={{
                             marginRight: "8px",
                             color: "var(--primary-color)",
                           }}
                         />
-                        Grid
+                        Visual Cards
                       </span>
                     }
                   />

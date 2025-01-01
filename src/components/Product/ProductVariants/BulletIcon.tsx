@@ -1,4 +1,13 @@
-const BulletIcon = ({
+import React from "react";
+
+interface BulletIconProps {
+  color?: string;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
+}
+
+const BulletIcon: React.FC<BulletIconProps> = ({
   color = "#A4755D",
   width = 10,
   height = 10,

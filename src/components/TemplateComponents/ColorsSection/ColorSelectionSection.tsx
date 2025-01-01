@@ -6,8 +6,6 @@ import { updateMenuUiPreferences } from "@redux/slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useRef, useState } from "react";
 import { ChromePicker } from "react-color";
-import { useTranslation } from "react-i18next";
-
 
 const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -19,7 +17,6 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
     setShowColorPicker((prev) => !prev);
   };
 
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences

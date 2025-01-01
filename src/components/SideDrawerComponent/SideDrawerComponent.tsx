@@ -12,7 +12,7 @@ import logo from "../../assets/qr-code-logo.svg";
 import { buttonData } from "@constants/constants";
 import { useAppDispatch } from "../../redux/reduxHooks";
 import { setActiveTab } from "../../redux/slices/mainViewSlice";
-import { useNavigate } from "react-router-dom";
+import { TabType } from "@constants/types";
 
 interface SideDrawerProps {
   getString: (key: string) => string;
@@ -25,8 +25,6 @@ const SideDrawerComponent: React.FC<SideDrawerProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const activeTab = useSelector(selectActiveTab);
-
-  const navigate = useNavigate();
 
   const buttons = buttonData(getString);
 
@@ -54,7 +52,7 @@ const SideDrawerComponent: React.FC<SideDrawerProps> = ({
               if (btn.id === "logout") {
                 handleLogoutClick();
               } else {
-                dispatch(setActiveTab(btn.id));
+                dispatch(setActiveTab(btn.id as TabType));
               }
             }}
           >

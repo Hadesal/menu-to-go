@@ -1,10 +1,10 @@
 export const Styles = {
   container: {
-    background: "#F9FDFE",
-    height: "100%",
+    background: "#FFFFFF",
+    // height: "100%",
   },
   box: {
-    paddingTop: "2rem",
+    paddingTop: "1rem",
     paddingLeft: "1rem",
     paddingRight: "1rem",
   },
@@ -15,6 +15,8 @@ export const Styles = {
 
   sectionWrapper: {
     marginBottom: "1rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
   },
   sectionName: {
     fontWeight: "500",

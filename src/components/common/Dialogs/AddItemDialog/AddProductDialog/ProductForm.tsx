@@ -57,6 +57,8 @@ const ProductForm = ({
 
   const handleSubmit = (values: ProductData) => {
     const clonedValues = JSON.parse(JSON.stringify(values));
+    console.log("values: ", values);
+    console.log(clonedValues);
     delete clonedValues.id;
     if (clonedValues.details) {
       delete clonedValues.details.id;
@@ -98,7 +100,6 @@ const ProductForm = ({
         handleChange,
         setFieldValue,
         resetForm,
-        setErrors
       }) => (
         <FormikForm>
           <BasicInfoFields

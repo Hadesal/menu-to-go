@@ -1,10 +1,8 @@
 import {
   Card,
   CardContent,
-  Container,
   Paper,
   Typography,
-  InputLabel,
   MenuItem,
   Select,
   FormControl,
@@ -28,7 +26,7 @@ const FontSectionComponent = () => {
 
   // Ensure the selectedFont has a default value
   const [selectedFont, setSelectedFont] = useState<string>(
-    selectedRestaurant?.userUiPreferences.fontType || "" // Default to empty string
+    selectedRestaurant?.userUiPreferences?.fontType || "" // Default to empty string
   );
 
   const handleSelectFontType = (fontValue: string) => {
@@ -41,7 +39,11 @@ const FontSectionComponent = () => {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.fontType
+    ) {
       setSelectedFont(selectedRestaurant.userUiPreferences.fontType);
     }
   }, [selectedRestaurant]);

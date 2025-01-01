@@ -28,6 +28,7 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
         height: "64px",
         background: "#FCFDFD",
         position: "relative",
+        marginBottom: 5,
       }}
       elevation={6}
     >
@@ -51,7 +52,7 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
               alignItems: "center",
               background:
                 selection.Label === selectedCategoryType
-                  ? restaurantData.userUiPreferences.colors.primaryColor
+                  ? restaurantData.userUiPreferences.colors.secondaryColor
                   : "transparent",
               color:
                 selection.Label === selectedCategoryType

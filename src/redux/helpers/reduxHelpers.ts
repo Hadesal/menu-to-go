@@ -13,11 +13,7 @@ export const handleRejected = (state: any, action: any) => {
 };
 
 // Helper for setting success state
-export const handleFulfilled = (
-  state: any,
-  action: any,
-  successMessage: string = ""
-) => {
+export const handleFulfilled = (state: any, successMessage: string = "") => {
   state.loading = false;
   state.successMessage = successMessage || "Operation successful";
 };

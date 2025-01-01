@@ -5,12 +5,19 @@ import { setSelectedCategory } from "@redux/slices/menuSlice";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { Styles } from "./MenuCategories.styles";
 import { adjustBrightness } from "@utils/colors";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+
+interface MenuCategoriesProps {
+  categories: CategoryData[];
+  categoryTag: string;
+  selectedCategory: string;
+}
 
 export default function MenuCategories({
   categories,
   categoryTag,
   selectedCategory,
-}) {
+}: MenuCategoriesProps) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
 
@@ -25,7 +32,7 @@ export default function MenuCategories({
       categoriesDataArray = categories.filter((category) => {
         return category.categoryType.toLowerCase() === "drinks";
       });
-    }    
+    }
 
     return categoriesDataArray;
   };
@@ -56,8 +63,8 @@ export default function MenuCategories({
                   ? "20%"
                   : "0%",
             }}
-            width={50}
-            height={50}
+            width={75}
+            height={75}
           />
           <Typography
             variant="h6"
@@ -80,7 +87,7 @@ export default function MenuCategories({
               sx={{
                 ...Styles.selectedCategoryIndicator,
                 background:
-                  restaurantData.userUiPreferences?.colors.primaryColor,
+                  restaurantData.userUiPreferences?.colors.secondaryColor,
               }}
             />
           )}

@@ -1,4 +1,18 @@
-const PlusIcon = ({ color, width = 12, height = 12, style }) => (
+import React from "react";
+
+interface PlusIconProps {
+  color: string;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
+}
+
+const PlusIcon: React.FC<PlusIconProps> = ({
+  color,
+  width = 12,
+  height = 12,
+  style,
+}) => (
   <svg
     width={width}
     height={height}

@@ -8,7 +8,12 @@ import {
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-export default function MenuProductsCard({ product }) {
+import { ProductData } from "@dataTypes/ProductDataTypes";
+export default function MenuProductsCard({
+  product,
+}: {
+  product: ProductData;
+}) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
   return (
@@ -16,7 +21,7 @@ export default function MenuProductsCard({ product }) {
       onClick={() => {
         dispatch(setSelectedProduct(product));
       }}
-      sx={{borderRadius: "5px" }}
+      sx={{ borderRadius: "5px" }}
     >
       <CardActionArea>
         <CardMedia
@@ -56,7 +61,7 @@ export default function MenuProductsCard({ product }) {
               fontFamily: restaurantData.userUiPreferences.fontType,
             }}
             component="div"
-            color={restaurantData.userUiPreferences.colors.primaryColor}
+            color={restaurantData.userUiPreferences.colors.secondaryColor}
           >
             {product.price}$
           </Typography>

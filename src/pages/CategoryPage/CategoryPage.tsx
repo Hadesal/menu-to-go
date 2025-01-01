@@ -45,6 +45,7 @@ import { itemType } from "@utils/dataTypeCheck";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Styles from "./CategorySection.styles";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 
 export default function CategoryPage() {
   const {
@@ -212,7 +213,6 @@ export default function CategoryPage() {
   return (
     <>
       <ImportDialog
-        fileType={["excel", "json"]}
         handleClose={handleImportDialogClose}
         isOpen={openImportDialog}
         title={getString("importFileMessage")}
@@ -318,7 +318,7 @@ export default function CategoryPage() {
               }}
               aria-label="back"
               onClick={() => {
-                dispatch(setSelectedRestaurant(null));
+                dispatch(setSelectedRestaurant({} as RestaurantData));
                 dispatch(setSelectedCategory(null));
                 dispatch(setSelectedProductsIDs([]));
               }}

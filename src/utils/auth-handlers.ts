@@ -4,7 +4,6 @@ import {
 } from "@dataTypes/UserDataTypes";
 import { login, register } from "@api/userCrud";
 import { validateEmail, validateName, validatePassword } from "./validator";
-import { AxiosError } from "axios";
 import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 
 // Error message type definition

@@ -611,7 +611,6 @@ const restaurantSlice = createSlice({
         const {
           sourceCategoryId,
           targetCategoryId,
-          productIds,
           movedProducts,
           notMovedProductNames,
         } = action.payload;
@@ -712,12 +711,8 @@ const restaurantSlice = createSlice({
           notCopiedProductNames: string[];
         }>
       ) => {
-        const {
-          sourceCategoryId,
-          targetCategoryId,
-          copiedProducts,
-          notCopiedProductNames,
-        } = action.payload;
+        const { targetCategoryId, copiedProducts, notCopiedProductNames } =
+          action.payload;
 
         state.restaurantList.forEach((restaurant) => {
           const targetCategory = restaurant.categories.find(
@@ -825,7 +820,7 @@ const restaurantSlice = createSlice({
     );
     // Handle rejected state for all async thunks
     builder.addMatcher(isRejectedAction, (state, action) => {
-      console.log(action.payload)
+      console.log(action.payload);
       state.restaurantLoading = false;
       state.categoryLoading = false;
       state.productLoading = false;

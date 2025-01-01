@@ -24,7 +24,6 @@ const ContactLinksComponent = () => {
   const [twitterOpenPopover, setTwitterOpenPopover] = useState<boolean>(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const handleClose = () => {};
 
   return (
     <>
@@ -55,8 +54,8 @@ const ContactLinksComponent = () => {
               disableGutters
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column" , lg:"row" },
-                alignItems:"flex-start",
+                flexDirection: { xs: "column", lg: "row" },
+                alignItems: "flex-start",
                 gap: 2,
                 marginTop: "1rem",
                 padding: 0,

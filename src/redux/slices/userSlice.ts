@@ -22,7 +22,7 @@ import { QrCodeStyleDataType } from "@dataTypes/QrStyleDataType";
 import { UserState } from "@redux/slicesInterfaces";
 
 const initialState: UserState = {
-  user: null,
+  user: {} as UserDataType,
   loading: false,
   error: null,
   successMessage: null,
@@ -39,7 +39,7 @@ const userSlice = createSlice({
       state.successMessage = null;
     },
     logout(state) {
-      state.user = null;
+      state.user = {} as UserDataType;
     },
   },
   extraReducers: (builder) => {
@@ -71,7 +71,7 @@ const userSlice = createSlice({
       ),
       (state, action: PayloadAction<UserDataType>) => {
         state.user = action.payload;
-        handleFulfilled(state, action, "Operation successful");
+        handleFulfilled(state, "Operation successful");
       }
     );
 
@@ -96,7 +96,7 @@ const userSlice = createSlice({
         deleteUser.fulfilled
       ),
       (state) => {
-        handleFulfilled(state, null, "Operation successful");
+        handleFulfilled(state, "Operation successful");
       }
     );
 

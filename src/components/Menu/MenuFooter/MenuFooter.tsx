@@ -1,4 +1,3 @@
-import React from "react";
 import { Styles } from "./MenuFooter.styles";
 import { Box } from "@mui/material";
 import BottomRightVector from "@assets/bottomrightvector.svg";

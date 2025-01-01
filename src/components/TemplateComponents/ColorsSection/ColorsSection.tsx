@@ -75,7 +75,7 @@ const ColorsSection = () => {
                 }}
               >
                 <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
-                  Main color:
+                  Text color:
                 </Typography>
                 <ColorSelectionSection type="primaryColor" />
               </Box>
@@ -90,7 +90,7 @@ const ColorsSection = () => {
                 }}
               >
                 <Typography sx={{ whiteSpace: "nowrap", width: "28%" }}>
-                  Help color:
+                  Highlight color:
                 </Typography>
                 <ColorSelectionSection type="secondaryColor" />
               </Box>
