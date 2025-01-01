@@ -10,6 +10,7 @@ import { useAppSelector } from "@redux/reduxHooks";
 import { setActiveTab } from "@slices/mainViewSlice";
 import { useDispatch } from "react-redux";
 import { useLanguage } from "src/hooks/useLanguage";
+import { TabType } from "@constants/types";
 
 export default function DashboardView() {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ export default function DashboardView() {
               },
               cursor: "pointer",
             }}
-            onClick={() => dispatch(setActiveTab(card.id as string))}
+            onClick={() => dispatch(setActiveTab(card.id as TabType))}
           >
             <Box>
               <img

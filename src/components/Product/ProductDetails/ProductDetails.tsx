@@ -5,9 +5,9 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
-import vegetarianLogo from "../../../assets/veggie.png";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
+import vegetarianLogo from "../../../assets/veggie.png";
 import { Styles } from "./ProductDetails.styles";
 
 interface productDetailsProps {

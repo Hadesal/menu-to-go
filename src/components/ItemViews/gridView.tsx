@@ -31,7 +31,7 @@ export type itemsType = ProductData[] | CategoryData[] | RestaurantData[];
 
 interface GridViewProps {
   items: RestaurantData[];
-  deleteFunction: (item: object) => void;
+  deleteFunction: (id: string) => void;
   editFunction: (item: object) => void;
   styles: any;
   CardIcon: string;
@@ -152,13 +152,14 @@ const GridView = ({
         }}
         initialData={currentItem as RestaurantData}
         data={restaurantList}
-        setDialogIsOpen={handleEditDialogClose}
       />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {
-          deleteFunction(currentItem!);
-          handleDeleteDialogClose();
+          if (currentItem && currentItem.id) {
+            deleteFunction(currentItem.id);
+            handleDeleteDialogClose();
+          }
         }}
         onSecondaryActionClick={handleDeleteDialogClose}
         onClose={handleDeleteDialogClose}

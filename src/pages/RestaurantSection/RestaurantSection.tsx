@@ -68,7 +68,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
   }, [selectedRestaurant, dispatch]);
 
   useEffect(() => {
-    dispatch(setSelectedRestaurant(null));
+    dispatch(setSelectedRestaurant({} as RestaurantData));
   }, [dispatch]);
 
   const handleAddRestaurant = (restaurant: RestaurantData) => {
@@ -86,9 +86,9 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
     });
   };
 
-  const handleDeleteRestaurant = (restaurant: RestaurantData) => {
+  const handleDeleteRestaurant = (restaurantid: string) => {
     if (restaurantList.length > 1) {
-      dispatch(removeRestaurant(restaurant.id as string));
+      dispatch(removeRestaurant(restaurantid));
     } else if (restaurantList.length < 2) {
       setErrorMessage(getString("errorDeleteRestaurant"));
       setShowToast(true);

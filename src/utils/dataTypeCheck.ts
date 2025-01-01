@@ -4,7 +4,10 @@ import { RestaurantData } from "@dataTypes/RestaurantObject";
 
 // utils/dataTypeCheck.ts
 export type dataTypesString = "product" | "category" | "restaurant";
-export type itemType = ProductData | CategoryData | RestaurantData;
+export type itemType =
+  | ProductData
+  | CategoryData
+  | Omit<RestaurantData, "userUiPreferences">;
 export type itemsTypes = ProductData[] | CategoryData[] | RestaurantData[];
 
 export function isProductData(item: itemType): item is ProductData {

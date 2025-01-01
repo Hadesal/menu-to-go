@@ -36,7 +36,6 @@ const UserDashboardPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showSessionTimeoutDialog, setShowSessionTimeoutDialog] =
     useState(false);
-  const [remaining, setRemaining] = useState<number>(10 * 6000);
   const [userDetailsisOpen, setUserDetailsisOpen] = useState(false);
 
   const { getString, currentLanguage } = useLanguage();
@@ -92,7 +91,7 @@ const UserDashboardPage = () => {
     setShowSessionTimeoutDialog(true);
   };
 
-  const { getRemainingTime, activate } = useIdleTimer({
+  const { activate } = useIdleTimer({
     onIdle,
     onPrompt,
     crossTab: true,
@@ -129,16 +128,6 @@ const UserDashboardPage = () => {
 
     fetchDataAndHandleLoading();
   }, [dispatch, navigate]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRemaining(Math.ceil(getRemainingTime() / 1000));
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [getRemainingTime]);
 
   useEffect(() => {
     const createdAtDate = new Date(userData?.createdAt);
@@ -184,7 +173,6 @@ const UserDashboardPage = () => {
       <AppBarComponent
         handleDrawerToggle={handleDrawerToggle}
         drawerWidth={drawerWidth}
-        handleLogoutClick={handleLogoutClick}
       />
       <Box
         component="nav"

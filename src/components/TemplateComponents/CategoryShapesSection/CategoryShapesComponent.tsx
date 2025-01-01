@@ -42,7 +42,11 @@ const CategoryShapesComponent = () => {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.categoryShape
+    ) {
       setSelecteCategoryShape(
         selectedRestaurant.userUiPreferences.categoryShape
       );

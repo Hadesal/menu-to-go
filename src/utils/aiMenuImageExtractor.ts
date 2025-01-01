@@ -1,17 +1,17 @@
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey:
+    "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",
   dangerouslyAllowBrowser: true,
 });
 
-const validateCategoryData = (
-  data: any
-): data is { categories: CategoryData[] } => {
+const validateCategoryData = (data: { categories: CategoryData[] }) => {
   if (!data || !Array.isArray(data.categories)) return false;
 
-  return data.categories.every((category: any) => {
+  return data.categories.every((category: CategoryData) => {
     if (
       typeof category.name !== "string" ||
       (typeof category.image !== "string" && category.image !== null) ||
@@ -21,12 +21,11 @@ const validateCategoryData = (
       return false;
     }
 
-    return category.products.every((product: any) => {
+    return category.products.every((product: ProductData) => {
       if (
         typeof product.name !== "string" ||
         typeof product.price !== "number" ||
         typeof product.isAvailable !== "boolean" ||
-        typeof product.uniqueProductOrderingName !== "string" ||
         typeof product.details !== "object"
       ) {
         return false;
@@ -120,7 +119,11 @@ Begin outputting the JSON now:
       return parsedData.categories;
     } catch (jsonError) {
       console.error("Error parsing JSON:", jsonString);
-      throw new Error(`Failed to parse JSON: ${jsonError.message}`);
+      if (jsonError instanceof Error) {
+        throw new Error(`Failed to parse JSON: ${jsonError.message}`);
+      } else {
+        throw new Error("Failed to parse JSON: Unknown error");
+      }
     }
   } catch (error) {
     console.error("Failed to parse image menu:", error);
@@ -133,8 +136,7 @@ const extractTextFromImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
 
-    const OCR_BACKEND_URL =
-      process.env.OCR_BACKEND_URL || "http://46.202.140.217:5001/ocr";
+    const OCR_BACKEND_URL = "http://46.202.140.217:5001/ocr";
 
     const response = await fetch(OCR_BACKEND_URL, {
       method: "POST",

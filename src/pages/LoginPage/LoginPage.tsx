@@ -27,7 +27,9 @@ export default function LoginPage() {
 
   const [pathToken, setPathToken] = useState<string>("");
   const [showToast, setShowToast] = useState<boolean>(false);
-  const [severity, setSeverity] = useState<any>("");
+  const [severity, setSeverity] = useState<
+    "success" | "warning" | "error" | undefined
+  >(undefined);
   const [toastMessage, setToastMessage] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState({
     email: "",

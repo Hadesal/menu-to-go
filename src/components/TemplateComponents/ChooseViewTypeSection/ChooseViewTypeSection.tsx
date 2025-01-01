@@ -48,7 +48,11 @@ export default function ChooseViewTypeSection() {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.itemsViewType
+    ) {
       setSelectedView(selectedRestaurant.userUiPreferences.itemsViewType);
     }
   }, [selectedRestaurant]);

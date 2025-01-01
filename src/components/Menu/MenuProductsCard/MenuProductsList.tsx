@@ -18,6 +18,7 @@ import { ProductData } from "@dataTypes/ProductDataTypes";
 interface MenuProductsListProps {
   product: ProductData;
 }
+
 export default function MenuProductsList({ product }: MenuProductsListProps) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);

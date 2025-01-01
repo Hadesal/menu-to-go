@@ -5,7 +5,7 @@ import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import { ProductData } from "@dataTypes/ProductDataTypes";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
+import { RestaurantData, ViewType } from "@dataTypes/RestaurantObject";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
 // Time constants
@@ -80,11 +80,12 @@ export const Colors = {
   danger: "#dc3545",
 };
 
-export const restaurantDefaultData: RestaurantData = {
-  name: "",
-  categories: [],
-  tables: [],
-};
+export const restaurantDefaultData: Omit<RestaurantData, "userUiPreferences"> =
+  {
+    name: "",
+    categories: [],
+    tables: [],
+  };
 export const productDefaultData: ProductData = {
   name: "",
   price: 0,
@@ -99,7 +100,6 @@ export const productDefaultData: ProductData = {
   },
   isAvailable: true,
   image: undefined,
-  uniqueProductOrderingName: "",
 };
 
 export const categoryDefaultData: CategoryData = {

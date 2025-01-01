@@ -24,14 +24,18 @@ export const debouncedSearch = debounce(
   (
     items: ProductData[] | CategoryData[] | RestaurantData[],
     searchText: string,
-    callback: (filteredItems: ProductData[] | RestaurantData[]) => void
+    callback: (
+      filteredItems: ProductData[] | RestaurantData[] | CategoryData[]
+    ) => void
   ) => {
     const filtered = items.filter((item) => {
-      const nameValue = findNameProperty(item);
+      const nameValue = (item as ProductData | RestaurantData).name
+        ? findNameProperty(item as ProductData | RestaurantData)
+        : null;
       return nameValue && nameValue.toLowerCase().includes(searchText);
-    });
+    }) as (ProductData | RestaurantData | CategoryData)[];
 
-    callback(filtered);
+    callback(filtered as ProductData[] | RestaurantData[] | CategoryData[]);
   },
   300 // You can adjust the debounce time here
 );

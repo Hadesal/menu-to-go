@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -47,27 +46,27 @@ export const InfoDialog = ({
       </DialogContent>
 
       <DialogActions>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setIsDialogOpen(false);
-              dispatch(clearProductActionErrorMessage());
-            }}
-            sx={{
-              borderRadius: "20px",
-              padding: "5px 25px 5px 25px",
-              backgroundColor: "var(--primary-color)",
-              border: "1px solid transparent",
-              "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "var(--primary-color)",
-                boxShadow: "none",
-                color: "var(--primary-color)",
-              },
-            }}
-          >
-            Ok
-          </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setIsDialogOpen(false);
+            dispatch(clearProductActionErrorMessage());
+          }}
+          sx={{
+            borderRadius: "20px",
+            padding: "5px 25px 5px 25px",
+            backgroundColor: "var(--primary-color)",
+            border: "1px solid transparent",
+            "&:hover": {
+              backgroundColor: "transparent",
+              borderColor: "var(--primary-color)",
+              boxShadow: "none",
+              color: "var(--primary-color)",
+            },
+          }}
+        >
+          Ok
+        </Button>
       </DialogActions>
     </Dialog>
   );

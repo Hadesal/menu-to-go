@@ -193,7 +193,6 @@ const BoxComponent = ({
         confirmText={getString("add")}
         setDialogIsOpen={setOpen}
         onConfirmClick={addFunction}
-        errorMessage={getString("addCategoryInfoText")}
         existingProducts={selectedCategory?.products}
       />
 

@@ -11,6 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
@@ -19,9 +20,9 @@ import { addRestaurant } from "@redux/thunks/restaurantThunks";
 import { updateUser } from "@redux/thunks/userThunks";
 import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
 import { useEffect, useState } from "react";
+import { useLanguage } from "src/hooks/useLanguage";
 import { Styles } from "../LogoutDialog/confirmDialog.style";
 import { countries, currencies } from "./Data/userDetailsData";
-import { useLanguage } from "src/hooks/useLanguage";
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -89,7 +90,6 @@ const UserDetailsInputComponent = ({
           name: userDetails?.restaurantName,
           tables: [],
           categories: [],
-          userUiPreferences: undefined,
         })
       );
       await dispatch(
@@ -113,12 +113,12 @@ const UserDetailsInputComponent = ({
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState("");
 
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
+  const handleCountryChange = (event: SelectChangeEvent<string>) => {
+    setSelectedCountry(event.target.value as string);
 
     setUserDetails((prevState) => ({
       ...prevState,
-      country: event.target.value,
+      country: event.target.value as string,
     }));
 
     setErrors((prevState) => ({
@@ -126,12 +126,12 @@ const UserDetailsInputComponent = ({
       country: false,
     }));
   };
-  const handleCurrencyChange = (event) => {
-    setSelectedCurrency(event.target.value);
+  const handleCurrencyChange = (event: SelectChangeEvent<string>) => {
+    setSelectedCurrency(event.target.value as string);
 
     setUserDetails((prevState) => ({
       ...prevState,
-      currency: event.target.value,
+      currency: event.target.value as string,
     }));
 
     setErrors((prevState) => ({
@@ -148,7 +148,6 @@ const UserDetailsInputComponent = ({
           zIndex: (theme) => theme.zIndex.drawer + 999999,
         }}
         open={loading}
-        inert={loading ? true : undefined} // Adds `inert` to non-interactive elements
       >
         <CircularProgress color="inherit" />
       </Backdrop>

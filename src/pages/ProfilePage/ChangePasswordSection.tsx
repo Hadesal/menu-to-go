@@ -99,16 +99,14 @@ const ChangePasswordSection = () => {
       const response = value.payload;
 
       // Handle API response
-      if (response?.body) {
-        setToastMessage(response?.body);
+      if (typeof response === "string") {
+        setToastMessage(response);
         setSeverity("success");
         onReset();
-      } else if (typeof response === "string") {
-        setToastMessage(response);
-        setSeverity("warning");
       } else {
         const errorMessage =
-          (response as any)?.message || getString("unknownError");
+          (response as unknown as { message?: string })?.message ||
+          getString("unknownError");
         setToastMessage(errorMessage);
         setSeverity("error");
       }

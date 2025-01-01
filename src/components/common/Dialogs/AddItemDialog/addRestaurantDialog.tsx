@@ -40,7 +40,9 @@ const AddRestaurantDialog = ({
 }: AddAddRestaurantDialogProps) => {
   const { getString, currentLanguage } = useLanguage();
 
-  const [dialogData, setDialogData] = useState<RestaurantData>({
+  const [dialogData, setDialogData] = useState<
+    Omit<RestaurantData, "userUiPreferences">
+  >({
     name: "",
     categories: [],
     tables: [],

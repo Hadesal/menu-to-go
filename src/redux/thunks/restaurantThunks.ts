@@ -36,7 +36,10 @@ export const fetchRestaurantById = createAsyncThunk(
 // Create a new restaurant
 export const addRestaurant = createAsyncThunk(
   "restaurants/addRestaurant",
-  async (restaurantData: RestaurantData, { rejectWithValue }) => {
+  async (
+    restaurantData: Omit<RestaurantData, "userUiPreferences">,
+    { rejectWithValue }
+  ) => {
     try {
       const response = await privateApiService.post(
         "/restaurants",

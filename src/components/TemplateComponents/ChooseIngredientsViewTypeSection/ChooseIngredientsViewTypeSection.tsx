@@ -18,9 +18,10 @@ import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
 import { useLanguage } from "src/hooks/useLanguage";
+
 export default function ChooseIngredientsViewTypeSection() {
-    const { getString , currentLanguage } = useLanguage();
-  
+  const { getString, currentLanguage } = useLanguage();
+
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -49,7 +50,11 @@ export default function ChooseIngredientsViewTypeSection() {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.ingredientViewType
+    ) {
       setSelectedView(selectedRestaurant.userUiPreferences.ingredientViewType);
     }
   }, [selectedRestaurant]);
@@ -107,7 +112,8 @@ export default function ChooseIngredientsViewTypeSection() {
                         <ImageIcon
                           style={{
                             marginRight: "8px",
-                            marginLeft: currentLanguage === "ar" ? "8px" : "0px",
+                            marginLeft:
+                              currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />
@@ -129,7 +135,8 @@ export default function ChooseIngredientsViewTypeSection() {
                         <ViewListIcon
                           style={{
                             marginRight: "8px",
-                            marginLeft: currentLanguage === "ar" ? "8px" : "0px",
+                            marginLeft:
+                              currentLanguage === "ar" ? "8px" : "0px",
                             color: "var(--primary-color)",
                           }}
                         />

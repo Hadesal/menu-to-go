@@ -12,7 +12,7 @@ import useMenu from "src/hooks/useMenu";
 import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import CategoryListItemItem from "./ListViewItem/CategoryListItem";
-import { DndContext, DragEndEvent, UniqueIdentifier } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { reorderCategoriesForRestaurant } from "@redux/thunks/categoryThunks";
@@ -56,7 +56,7 @@ const CategoryListView = ({
     }
     dispatch(setSelectedCategory(item));
   };
-  
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (over && active.id !== over.id) {

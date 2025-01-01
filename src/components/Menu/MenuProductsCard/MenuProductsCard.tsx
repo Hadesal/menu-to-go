@@ -12,8 +12,13 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import vegetarianLogo from "../../../assets/veggie.png";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 
-export default function MenuProductsCard({ product }) {
+export default function MenuProductsCard({
+  product,
+}: {
+  product: ProductData;
+}) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
 

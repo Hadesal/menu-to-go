@@ -50,9 +50,7 @@ const QrCodePage = () => {
   const [open, setOpen] = useState(false);
   const [openToastMessage, setOpenToastMessage] = useState(false);
   const { restaurantList } = useAppSelector((state) => state.restaurantsData);
-  const { loading, successMessage, error } = useAppSelector(
-    (state) => state.userData
-  );
+  const { loading, successMessage } = useAppSelector((state) => state.userData);
   const [dotsOptions, setDotsOptions] = useState<DotsOptionsDataType>({
     color: "#77675",
     type: "rounded",
@@ -211,7 +209,7 @@ const QrCodePage = () => {
           show: true,
         });
       },
-      (err) => {
+      () => {
         setOpenToastMessage(true);
         setToastMessageObject({
           success: false,

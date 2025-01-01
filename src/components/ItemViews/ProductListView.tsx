@@ -74,7 +74,7 @@ const ProductListView = ({
     if (selectedProductsIDs.length === 0) {
       resetCheckedItems();
     }
-  }, [selectedProductsIDs]);
+  }, [resetCheckedItems, selectedProductsIDs]);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -133,16 +133,17 @@ const ProductListView = ({
         <>
           <AddProductDialog
             dialogTitle={getString("editProduct")}
-            errorMessage={getString("editProductInfoText")}
             cancelText={getString("cancel")}
             confirmText={getString("confirm")}
             isDialogOpen={isEditDialogOpen}
             setDialogIsOpen={setIsEditDialogOpen}
-            onConfirmClick={(data) =>
-              editFunction({ ...data, id: currentItem.id })
-            }
+            onConfirmClick={(data) => {
+              if (currentItem && currentItem.id) {
+                editFunction({ ...data, id: currentItem.id });
+              }
+            }}
             initialData={currentItem as ProductData}
-            data={items}
+            existingProducts={items}
           />
           <AddProductDialog
             dialogTitle={getString("DuplicateProduct")}
@@ -160,8 +161,7 @@ const ProductListView = ({
                 duplicateFunction({ ...rest, details: sanitizedDetails });
               }
             }}
-            errorMessage={getString("duplicateProductError")}
-            data={selectedCategory?.products || []}
+            existingProducts={selectedCategory?.products || []}
           />
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}

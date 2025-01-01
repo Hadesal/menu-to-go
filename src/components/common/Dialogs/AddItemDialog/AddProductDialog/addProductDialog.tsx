@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
 import { ProductData } from "@dataTypes/ProductDataTypes";
-import { itemType } from "@utils/dataTypeCheck";
 import ProductForm from "./ProductForm";
 
 interface AddProductDialogProps {
@@ -9,8 +8,7 @@ interface AddProductDialogProps {
   dialogTitle: string;
   cancelText: string;
   confirmText: string;
-  errorMessage: string;
-  onConfirmClick: (item: itemType) => void;
+  onConfirmClick: (item: ProductData) => void;
   setDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialData?: ProductData;
   existingProducts: ProductData[] | undefined;
@@ -25,7 +23,6 @@ const AddProductDialog = ({
   setDialogIsOpen,
   initialData,
   existingProducts,
-  errorMessage,
 }: AddProductDialogProps) => {
   return (
     <Modal
