@@ -1,19 +1,14 @@
 import {
-  restaurantDefaultData,
-  categoryDefaultData,
-  productDefaultData,
-} from "@constants/constants";
-import {
   isCategoryData,
   isProductData,
   isRestaurantData,
-  itemsType,
+  itemType,
 } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction } from "react";
 
 export const checkTypeAndSet = (
-  dataToCheck: itemsType,
-  setDialogData: Dispatch<SetStateAction<itemsType | null>>
+  dataToCheck: itemType,
+  setDialogData: Dispatch<SetStateAction<itemType | null>>
 ) => {
   if (!dataToCheck) return null;
   if (isProductData(dataToCheck)) {
@@ -28,7 +23,6 @@ export const checkTypeAndSet = (
       },
       isAvailable: dataToCheck.isAvailable,
       image: dataToCheck.image,
-      uniqueProductOrderingName: dataToCheck.uniqueProductOrderingName,
     });
   } else if (isCategoryData(dataToCheck)) {
     setDialogData(dataToCheck);
@@ -36,12 +30,3 @@ export const checkTypeAndSet = (
     setDialogData(dataToCheck);
   }
 };
-
-export const getDefaultDataByType = (dataType: string) =>
-  dataType === "restaurant"
-    ? restaurantDefaultData
-    : dataType === "category"
-    ? categoryDefaultData
-    : dataType === "product"
-    ? productDefaultData
-    : null;

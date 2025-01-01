@@ -10,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface ICategoryActionDialog {
   categories: CategoryData[];

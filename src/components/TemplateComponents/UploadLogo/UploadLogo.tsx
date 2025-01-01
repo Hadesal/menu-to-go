@@ -29,9 +29,9 @@ export default function UploadLogo() {
   );
 
   const [selectedImage, setSelectedImage] = useState<string>(
-    selectedRestaurant && selectedRestaurant.userUiPreferences.logo
+    selectedRestaurant?.userUiPreferences?.logo || ""
   );
-  
+
   const dispatch = useAppDispatch();
 
   // Create a ref for the file input
@@ -82,8 +82,12 @@ export default function UploadLogo() {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
-      setSelectedImage(selectedRestaurant.userUiPreferences.logo);
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.logo
+    ) {
+      setSelectedImage(selectedRestaurant?.userUiPreferences?.logo);
     }
   }, [selectedRestaurant]);
 

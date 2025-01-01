@@ -36,7 +36,9 @@ const AddRestaurantDialog = ({
   initialData,
   data,
 }: AddAddRestaurantDialogProps) => {
-  const [dialogData, setDialogData] = useState<RestaurantData>({
+  const [dialogData, setDialogData] = useState<
+    Omit<RestaurantData, "userUiPreferences">
+  >({
     name: "",
     categories: [],
     tables: [],

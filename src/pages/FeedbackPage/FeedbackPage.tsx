@@ -10,13 +10,20 @@ import { useTranslation } from "react-i18next";
 // }
 
 export default function FeedbackPage() {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [severity, setSeverity] = useState<"success" | "error">("success");
+  // const [toastMessage, setToastMessage] = useState("");
+  // const [severity, setSeverity] = useState<"success" | "error">("success");
   const { t } = useTranslation();
   const getString = t;
-  const handleSubmit = (formValues) => {
+  interface FormValues {
+    name?: string;
+    email?: string;
+    message: string;
+    sentiments?: string;
+  }
+
+  const handleSubmit = (formValues: FormValues) => {
     console.log(formValues);
   };
 
@@ -50,9 +57,9 @@ export default function FeedbackPage() {
       }
       textFiledLabel={getString("pleaseTellUsInFewWords")}
       handleSubmit={handleSubmit}
-      loading={loading}
-      toastMessage={toastMessage}
-      severity={severity}
+      loading={false}
+      toastMessage={""}
+      severity={"success"}
       showToast={showToast}
       setShowToast={setShowToast}
     />

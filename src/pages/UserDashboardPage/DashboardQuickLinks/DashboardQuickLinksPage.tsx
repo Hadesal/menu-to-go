@@ -10,6 +10,7 @@ import RestaurantCardImg from "@assets/resturant-card.svg";
 import TemplatesCardImg from "@assets/templates-card.svg";
 import { setActiveTab } from "@slices/mainViewSlice";
 import { useAppSelector } from "@redux/reduxHooks";
+import { TabType } from "@constants/types";
 
 export default function DashboardView() {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ export default function DashboardView() {
               },
               cursor: "pointer",
             }}
-            onClick={() => dispatch(setActiveTab(card.id as string))}
+            onClick={() => dispatch(setActiveTab(card.id as TabType))}
           >
             <Box>
               <img

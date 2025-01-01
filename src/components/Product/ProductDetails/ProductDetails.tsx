@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { Styles } from "./ProductDetails.styles";
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
@@ -23,7 +23,7 @@ export default function ProductDetails({
   const dispatch = useAppDispatch();
 
   return (
-    <Box sx={{position:"relative"}}>
+    <Box sx={{ position: "relative" }}>
       <IconButton
         onClick={() => dispatch(setSelectedProduct(productDefaultData))}
         sx={{
@@ -79,7 +79,7 @@ export default function ProductDetails({
         <Typography
           sx={{
             ...Styles.subTitle,
-            color:restaurantData.userUiPreferences.colors.primaryColor,
+            color: restaurantData.userUiPreferences.colors.primaryColor,
             fontFamily: restaurantData.userUiPreferences.fontType,
           }}
           variant="body2"

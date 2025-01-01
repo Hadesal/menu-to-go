@@ -18,13 +18,11 @@ import { UserDataType } from "@dataTypes/UserDataTypes";
 interface AppBarComponentProps {
   handleDrawerToggle: () => void;
   drawerWidth: number;
-  handleLogoutClick: () => void;
 }
 
 const AppBarComponent: React.FC<AppBarComponentProps> = ({
   handleDrawerToggle,
   drawerWidth,
-  handleLogoutClick,
 }) => {
   const { t } = useTranslation();
   const getString = t;
@@ -48,7 +46,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
           aria-label="open drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "block" , md:"none" } }}
+          sx={{ mr: 2, display: { sm: "block", md: "none" } }}
         >
           <MenuIcon />
         </IconButton>
@@ -65,7 +63,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
               fontFamily: "Lucida Calligraphy",
               fontStyle: "italic",
               fontWeight: 400,
-              fontSize: {xs:"24px",sm:"28px"},
+              fontSize: { xs: "24px", sm: "28px" },
               lineHeight: "36px",
             }}
             variant="h6"

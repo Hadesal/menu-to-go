@@ -17,11 +17,8 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateMenuUiPreferences } from "@slices/menuSlice";
 import { updateRestaurantUserUiPreferences } from "@slices/restaurantsSlice";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export default function ChooseIngredientsViewTypeSection() {
-  const { t } = useTranslation();
-  const getString = t;
   const dispatch = useAppDispatch();
   const userUiPreferences = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant?.userUiPreferences
@@ -50,7 +47,11 @@ export default function ChooseIngredientsViewTypeSection() {
   };
 
   useEffect(() => {
-    if (selectedRestaurant) {
+    if (
+      selectedRestaurant &&
+      selectedRestaurant.userUiPreferences &&
+      selectedRestaurant.userUiPreferences.ingredientViewType
+    ) {
       setSelectedView(selectedRestaurant.userUiPreferences.ingredientViewType);
     }
   }, [selectedRestaurant]);

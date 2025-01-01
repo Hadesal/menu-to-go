@@ -31,7 +31,7 @@ const CustomQRCodeComponent = ({
     image: imageSrc,
   });
 
-  const qrRef = useRef(null);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (qrRef.current) {
@@ -47,8 +47,15 @@ const CustomQRCodeComponent = ({
       cornersDotOptions,
       image: imageSrc,
     });
-    qrCode.append(qrRef.current);
-  }, [value, qrSize, dotsOptions, cornersSquareOptions, cornersDotOptions, imageSrc]);
+    qrCode.append(qrRef.current as HTMLElement);
+  }, [
+    value,
+    qrSize,
+    dotsOptions,
+    cornersSquareOptions,
+    cornersDotOptions,
+    imageSrc,
+  ]);
 
   return <Container sx={{ width: "fit-content", padding: 0 }} ref={qrRef} />;
 };

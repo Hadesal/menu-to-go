@@ -10,8 +10,13 @@ import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { hexToRgba } from "@utils/colors";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 
-export default function MenuProductsList({ product }) {
+export default function MenuProductsList({
+  product,
+}: {
+  product: ProductData;
+}) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
 
@@ -58,7 +63,7 @@ export default function MenuProductsList({ product }) {
             boxSizing: "border-box", // Ensure padding is included in the width/height
             flex: 1, // Fill the remaining space in the row layout
             padding: "10px", // Apply desired padding
-            height:"100%"
+            height: "100%",
           }}
         >
           <Box

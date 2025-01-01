@@ -80,7 +80,7 @@ export default function TemplatePage() {
       } else {
         setToastMessageObject({
           success: false,
-          message: result.error.message,
+          message: result.error.message || "An error occurred",
           show: true,
         });
       }
@@ -122,7 +122,7 @@ export default function TemplatePage() {
               key="restaurantSelect"
               labelId="restaurant-select-label"
               value={
-                selectedRestaurant
+                selectedRestaurant.name
                   ? selectedRestaurant.name
                   : restaurantList[0].name
               }

@@ -12,6 +12,7 @@ import {
   FormControl,
   Backdrop,
   CircularProgress,
+  SelectChangeEvent,
 } from "@mui/material";
 import { Styles as inputStyles } from "@pages/LoginPage/LoginPage.style";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
@@ -90,7 +91,6 @@ const UserDetailsInputComponent = ({
           name: userDetails?.restaurantName,
           tables: [],
           categories: [],
-          userUiPreferences: undefined,
         })
       );
       await dispatch(
@@ -114,12 +114,12 @@ const UserDetailsInputComponent = ({
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState("");
 
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
+  const handleCountryChange = (event: SelectChangeEvent<string>) => {
+    setSelectedCountry(event.target.value as string);
 
     setUserDetails((prevState) => ({
       ...prevState,
-      country: event.target.value,
+      country: event.target.value as string,
     }));
 
     setErrors((prevState) => ({
@@ -127,12 +127,12 @@ const UserDetailsInputComponent = ({
       country: false,
     }));
   };
-  const handleCurrencyChange = (event) => {
-    setSelectedCurrency(event.target.value);
+  const handleCurrencyChange = (event: SelectChangeEvent<string>) => {
+    setSelectedCurrency(event.target.value as string);
 
     setUserDetails((prevState) => ({
       ...prevState,
-      currency: event.target.value,
+      currency: event.target.value as string,
     }));
 
     setErrors((prevState) => ({
@@ -149,7 +149,6 @@ const UserDetailsInputComponent = ({
           zIndex: (theme) => theme.zIndex.drawer + 999999,
         }}
         open={loading}
-        inert={loading ? true : undefined} // Adds `inert` to non-interactive elements
       >
         <CircularProgress color="inherit" />
       </Backdrop>
