@@ -97,6 +97,11 @@ export const MenuSlice = createSlice({
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload.data;
         state.loading = false;
+        if (state?.restaurantData.categories.length === 1) {
+          state.selectedCategory = state?.restaurantData.categories[0];
+          state.selectedCategoryType = "";
+          return;
+        }
         if (state?.restaurantData.categories.length !== 0) {
           if (state?.restaurantData.categories.length > 1) {
             const foodCategory = state?.restaurantData.categories.find(
@@ -110,7 +115,7 @@ export const MenuSlice = createSlice({
             }
             return;
           }
-          state.selectedCategory = state?.restaurantData.categories[0];
+          console.log(state?.restaurantData.categories[0]);
         }
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {

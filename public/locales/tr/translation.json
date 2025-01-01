@@ -211,5 +211,8 @@
   "agreementText": "Okudum ve kabul ediyorum",
   "termsOfService": "Hizmet Şartları",
   "and": "ve",
-  "privacyPolicy": "Gizlilik Politikası"
+  "privacyPolicy": "Gizlilik Politikası",
+  "productOutOfStock": "Mevcut Değil",
+  "productAvailable": "Mevcut",
+  "productNotAvailable": "Mevcut değil"
 }

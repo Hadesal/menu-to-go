@@ -3,6 +3,11 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   Box,
   Checkbox,
@@ -10,17 +15,16 @@ import {
   ListItem,
   ListItemText,
   Paper,
-  Typography,
   Tooltip,
+  Typography,
 } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { updateProductInCategory as editProduct } from "@redux/thunks/productThunks";
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.png";
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
-import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 import Styles from "../../../DataTypes/StylesTypes";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-
+import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
 interface ProductListItemProps {
   item: ProductData;
   index: number;
@@ -59,6 +63,8 @@ const ListViewProductItem = ({
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  const dispatch = useAppDispatch();
+  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const menuItems = () => [
     {
       text: getString("duplicate"),
@@ -167,13 +173,47 @@ const ListViewProductItem = ({
           >
             {item.price}$
           </Typography>
-          <IconButton
-            sx={styles.productMoreIcon}
-            aria-label="more"
-            onClick={(event) => onMenuClick(event, index)}
-          >
-            <MoreVertIcon fontSize="medium" />
-          </IconButton>
+          <Box sx={styles.iconsBox}>
+            <Tooltip
+              title={
+                item.isAvailable
+                  ? getString("productAvailable")
+                  : getString("productNotAvailable")
+              }
+            >
+              <IconButton
+                sx={{ ...styles.productMoreIcon, marginRight: 1 }}
+                aria-label="availability"
+                onClick={() => {
+                  if (selectedCategory?.id && item?.id) {
+                    dispatch(
+                      editProduct({
+                        categoryId: selectedCategory.id,
+                        productId: item.id,
+                        updatedProduct: {
+                          ...item,
+                          isAvailable: !item.isAvailable,
+                        },
+                      })
+                    );
+                  }
+                }}
+              >
+                {item.isAvailable ? (
+                  <VisibilityIcon fontSize="medium" />
+                ) : (
+                  <VisibilityOffIcon fontSize="medium" />
+                )}
+              </IconButton>
+            </Tooltip>
+            <IconButton
+              sx={styles.productMoreIcon}
+              aria-label="more"
+              onClick={(event) => onMenuClick(event, index)}
+            >
+              <MoreVertIcon fontSize="medium" />
+            </IconButton>
+          </Box>
           <DropDownMenuComponent
             menuItems={menuItems()}
             open={Boolean(anchorEl)}

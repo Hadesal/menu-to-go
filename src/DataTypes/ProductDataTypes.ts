@@ -23,10 +23,24 @@ export interface VariantData {
   name: string;
   price: number;
 }
-
+export interface Allergies {
+  label: string;
+  value: string;
+}
+export interface Labels {
+  label: string;
+  value: string;
+}
+export interface DietaryOptions {
+  label: string;
+  value: string;
+}
 export interface ProductDetailsData {
   id?: string;
   detailsDescription: string | null;
+  allergies: Allergies[];
+  labels: Labels[];
+  dietaryOptions: DietaryOptions ;
   variants: VariantsData;
   ingredients: IngredientData[];
   extras: ExtrasData[];

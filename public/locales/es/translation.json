@@ -211,5 +211,8 @@
   "agreementText": "He leído y acepto los",
   "termsOfService": "Términos de servicio",
   "and": "y",
-  "privacyPolicy": "Política de privacidad"
+  "privacyPolicy": "Política de privacidad",
+  "productOutOfStock": "No disponible",
+  "productAvailable": "Disponible",
+  "productNotAvailable": "No disponible"
 }

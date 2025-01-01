@@ -211,5 +211,8 @@
   "agreementText": "لقد قرأت وأوافق على",
   "termsOfService": "شروط الخدمة",
   "and": "و",
-  "privacyPolicy": "سياسة الخصوصية"
+  "privacyPolicy": "سياسة الخصوصية",
+  "productOutOfStock": "غير متوفر",
+  "productAvailable": "متوفر",
+  "productNotAvailable": "غير متوفر"
 }

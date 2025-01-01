@@ -211,5 +211,8 @@
   "agreementText": "Ich habe die",
   "termsOfService": "Nutzungsbedingungen",
   "and": "und",
-  "privacyPolicy": "Datenschutzrichtlinie" 
+  "privacyPolicy": "Datenschutzrichtlinie",
+  "productOutOfStock": "Nicht verfügbar",
+  "productAvailable": "Verfügbar",
+  "productNotAvailable": "Nicht verfügbar"
 }

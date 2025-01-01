@@ -4,6 +4,7 @@ import VariantPanel from "./VariantPanel";
 import IngredientPanel from "./IngredientPanel";
 import ExtraPanel from "./ExtraPanel";
 import { useLanguage } from "src/hooks/useLanguage";
+import ProductLabelsFields from "./ProductLabelsFields";
 
 interface ProductDetailsFieldsProps {
   values: any;
@@ -45,6 +46,11 @@ const ProductDetailsFields = ({
           }}
         />
       </Form.Item>
+
+      <ProductLabelsFields
+        values={values}
+        setFieldValue={setFieldValue}
+      />
 
       <VariantPanel
         values={values}

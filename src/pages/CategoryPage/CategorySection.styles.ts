@@ -1,3 +1,4 @@
+
 const Styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
@@ -129,12 +130,14 @@ const Styles = {
     fontWeight: 500,
     fontSize: "18px",
   },
+  iconsBox: {
+    marginLeft: { xs: 2, md: 4 },
+  },
   productMoreIcon: {
-    padding: 0.8,
+    padding: 0,
     "&:hover": {
       background: "transparent",
     },
-    marginLeft: { xs: 0, md: 4 },
     color: "var(--primary-color)",
   },
   /**Category item styles */
