@@ -20,7 +20,6 @@ import { deleteUser } from "@redux/thunks/userThunks";
 import { resetActiveTab, selectActiveTab } from "@slices/mainViewSlice";
 import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useIdleTimer } from "react-idle-timer";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

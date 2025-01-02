@@ -104,6 +104,15 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                 };
 
                 const productDetails: ProductDetailsData = {
+                  allergies: productDetailsRow
+                    ? productDetailsRow["Allergies"] || []
+                    : [],
+                  labels: productDetailsRow
+                    ? productDetailsRow["Labels"] || []
+                    : [],
+                  dietaryOptions: productDetailsRow
+                    ? productDetailsRow["Dietary Options"] || []
+                    : [],
                   detailsDescription: productDetailsRow
                     ? productDetailsRow["Details Description"]
                     : "",

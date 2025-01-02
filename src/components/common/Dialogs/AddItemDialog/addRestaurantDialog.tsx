@@ -12,7 +12,6 @@ import { itemType } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { Styles } from "./addItemDialog.styles";
-import { useTranslation } from "react-i18next";
 import { useLanguage } from "src/hooks/useLanguage";
 
 interface AddAddRestaurantDialogProps {

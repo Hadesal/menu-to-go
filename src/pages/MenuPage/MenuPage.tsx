@@ -181,7 +181,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           }}
           variant="h6"
         >
-          {selectedCategory.name}
+          {selectedCategory && selectedCategory.name}
         </Typography>
         {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
           <Grid
@@ -202,20 +202,21 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
               marginBottom: 5,
             }}
           >
-            {selectedCategory.products!.map((product, index) => (
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                key={index}
-                sx={{
-                  paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
-                  paddingTop: index < 2 ? "0 !important" : "0px",
-                }}
-              >
-                <MenuProductsCard key={index} product={product} />
-              </Grid>
-            ))}
+            {selectedCategory &&
+              selectedCategory.products!.map((product, index) => (
+                <Grid
+                  item
+                  xs={6}
+                  sm={6}
+                  key={index}
+                  sx={{
+                    paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
+                    paddingTop: index < 2 ? "0 !important" : "0px",
+                  }}
+                >
+                  <MenuProductsCard key={index} product={product} />
+                </Grid>
+              ))}
           </Grid>
         ) : (
           <Grid

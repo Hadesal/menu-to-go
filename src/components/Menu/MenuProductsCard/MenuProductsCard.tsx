@@ -102,32 +102,35 @@ export default function MenuProductsCard({
             image={product.image ? product.image : PlaceHolder}
             alt={product.name}
           />
-          {product.details.dietaryOptions.value.length > 0 && (
-            <Box
-              sx={{
-                position: "absolute",
-                right: 5,
-                bottom: 5,
-                backgroundColor: "white",
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <img
-                src={getDietaryOptionLogo(product.details.dietaryOptions.label)}
-                alt={product.details.dietaryOptions.value}
-                style={{
-                  width: "40px",
-                  height: "40px",
+          {product.details.dietaryOptions &&
+            product.details.dietaryOptions.value.length > 0 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  right: 5,
+                  bottom: 5,
+                  backgroundColor: "white",
+                  width: 40,
+                  height: 40,
                   borderRadius: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              />
-            </Box>
-          )}
+              >
+                <img
+                  src={getDietaryOptionLogo(
+                    product.details.dietaryOptions.label
+                  )}
+                  alt={product.details.dietaryOptions.value}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                  }}
+                />
+              </Box>
+            )}
         </Box>
         <CardContent
           sx={{

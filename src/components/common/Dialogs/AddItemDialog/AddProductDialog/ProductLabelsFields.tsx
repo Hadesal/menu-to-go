@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Allergies, DietaryOptions, Labels } from "@dataTypes/ProductDataTypes";
 import { Form, Select } from "antd";
 import vegetarianLogo from "../../../../../assets/veggie.png";
@@ -86,7 +87,7 @@ const ProductLabelsFields = ({
           placeholder="Select allergens for this product"
           mode="multiple"
           options={allergensOptions}
-          value={values.details.allergies?.map((item) => item.value)} // map to values array
+          value={values.details.allergies?.map((item: Allergies) => item.value)} // map to values array
           onChange={handleAllergyChange}
         />
       </Form.Item>
@@ -101,7 +102,7 @@ const ProductLabelsFields = ({
           placeholder="Select labels for this product"
           mode="multiple"
           options={labelsOptions}
-          value={values.details.labels?.map((item) => item.value)} // map to values array
+          value={values.details.labels?.map((item: Labels) => item.value)} // map to values array
           onChange={handleLabelChange}
         />
       </Form.Item>

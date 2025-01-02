@@ -3,6 +3,19 @@ import {
   productDefaultData,
   restaurantDefaultData,
 } from "@constants/constants";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import {
+  ProductData,
+  ProductDetailsData,
+  DietaryOptions,
+  VariantsData,
+} from "@dataTypes/ProductDataTypes";
+import {
+  RestaurantData,
+  UserUiPreferences,
+  ContactLinks,
+  TableData,
+} from "@dataTypes/RestaurantObject";
 import {
   dataTypesString,
   isCategoryData,
@@ -105,20 +118,26 @@ export const handleConfirm = <T extends itemType>(
 
   // Check if data is unchanged
   if (initialData) {
-    if (
-      dialogData?.name === initialData.name &&
-      ((isProductData(dialogData) &&
-        isProductData(initialData) &&
-        dialogData.price === initialData.price) ||
-        (isCategoryData(dialogData) &&
-          isCategoryData(initialData) &&
-          dialogData.categoryType === initialData.categoryType) ||
-        (isRestaurantData(dialogData) &&
-          isRestaurantData(initialData) &&
-          dialogData.name === initialData.name))
-    ) {
-      setErrorFlags.setIsDataUnchanged?.(true);
-      return;
+    if (isRestaurantData(dialogData) && isRestaurantData(initialData)) {
+      if (isDataUnchanged(initialData, dialogData)) {
+        console.log("data changed");
+        setErrorFlags.setIsDataUnchanged?.(true);
+        return;
+      }
+    } else if (isCategoryData(dialogData) && isCategoryData(initialData)) {
+      if (isCategoryDataUnchanged(initialData, dialogData)) {
+        console.log("data changed");
+
+        setErrorFlags.setIsDataUnchanged?.(true);
+        return;
+      }
+    } else if (isProductData(dialogData) && isProductData(initialData)) {
+      if (isProductDataUnchanged(initialData, dialogData)) {
+        console.log("data changed");
+
+        setErrorFlags.setIsDataUnchanged?.(true);
+        return;
+      }
     }
   }
 
@@ -185,3 +204,190 @@ export const handleCancel = <T extends itemType>(
   setErrorFlags.setVariantsErrors && setErrorFlags.setVariantsErrors([]);
   onCancelClick(false);
 };
+// Check if data is unchanged
+function isDataUnchanged(
+  currentData: RestaurantData,
+  newData: RestaurantData
+): boolean {
+  if (currentData.name !== newData.name) return false;
+  if (!currentData.categories || !newData.categories) return false;
+  if (currentData.categories.length !== newData.categories.length) return false;
+  for (let i = 0; i < currentData.categories.length; i++) {
+    if (
+      !isCategoryDataUnchanged(currentData.categories[i], newData.categories[i])
+    )
+      return false;
+  }
+  if (!currentData.tables || !newData.tables) return false;
+  if (currentData.tables.length !== newData.tables.length) return false;
+  for (let i = 0; i < currentData.tables.length; i++) {
+    if (!isTableDataUnchanged(currentData.tables[i], newData.tables[i]))
+      return false;
+  }
+  if (!currentData.userUiPreferences || !newData.userUiPreferences)
+    return false;
+  if (
+    !isUserUiPreferencesUnchanged(
+      currentData.userUiPreferences,
+      newData.userUiPreferences
+    )
+  )
+    return false;
+  return true;
+}
+
+function isCategoryDataUnchanged(
+  currentCategory: CategoryData,
+  newCategory: CategoryData
+): boolean {
+  if (currentCategory.name !== newCategory.name) return false;
+  if (currentCategory.image !== newCategory.image) return false;
+  if (currentCategory.categoryType !== newCategory.categoryType) return false;
+  if (currentCategory.categoryOrder !== newCategory.categoryOrder) return false;
+  if (currentCategory.products?.length !== newCategory.products?.length)
+    return false;
+  for (let i = 0; i < (currentCategory.products?.length || 0); i++) {
+    if (
+      !isProductDataUnchanged(
+        currentCategory.products![i],
+        newCategory.products![i]
+      )
+    )
+      return false;
+  }
+  return true;
+}
+
+function isProductDataUnchanged(
+  currentProduct: ProductData,
+  newProduct: ProductData
+): boolean {
+  if (currentProduct.name !== newProduct.name) return false;
+  if (currentProduct.price !== newProduct.price) return false;
+  if (currentProduct.isAvailable !== newProduct.isAvailable) return false;
+  if (currentProduct.image !== newProduct.image) return false;
+  if (
+    !isProductDetailsDataUnchanged(currentProduct.details, newProduct.details)
+  )
+    return false;
+  return true;
+}
+
+function isProductDetailsDataUnchanged(
+  currentDetails: ProductDetailsData,
+  newDetails: ProductDetailsData
+): boolean {
+  if (currentDetails.detailsDescription !== newDetails.detailsDescription)
+    return false;
+  if (!isArrayUnchanged(currentDetails.allergies, newDetails.allergies))
+    return false;
+  if (!isArrayUnchanged(currentDetails.labels, newDetails.labels)) return false;
+  if (
+    !isDietaryOptionsUnchanged(
+      currentDetails.dietaryOptions,
+      newDetails.dietaryOptions
+    )
+  )
+    return false;
+  if (!isVariantsDataUnchanged(currentDetails.variants, newDetails.variants))
+    return false;
+  if (!isArrayUnchanged(currentDetails.ingredients, newDetails.ingredients))
+    return false;
+  if (!isArrayUnchanged(currentDetails.extras, newDetails.extras)) return false;
+  return true;
+}
+
+function isDietaryOptionsUnchanged(
+  currentOptions: DietaryOptions,
+  newOptions: DietaryOptions
+): boolean {
+  return (
+    currentOptions.label === newOptions.label &&
+    currentOptions.value === newOptions.value
+  );
+}
+
+function isVariantsDataUnchanged(
+  currentVariants: VariantsData,
+  newVariants: VariantsData
+): boolean {
+  if (currentVariants.name !== newVariants.name) return false;
+  if (!isArrayUnchanged(currentVariants.variantList, newVariants.variantList))
+    return false;
+  return true;
+}
+
+function isUserUiPreferencesUnchanged(
+  currentPreferences: UserUiPreferences,
+  newPreferences: UserUiPreferences
+): boolean {
+  if (
+    currentPreferences.colors.primaryColor !==
+    newPreferences.colors.primaryColor
+  )
+    return false;
+  if (
+    currentPreferences.colors.secondaryColor !==
+    newPreferences.colors.secondaryColor
+  )
+    return false;
+  if (
+    currentPreferences.colors.backgroundColor !==
+    newPreferences.colors.backgroundColor
+  )
+    return false;
+  if (
+    currentPreferences.colors.effectedSpace !==
+    newPreferences.colors.effectedSpace
+  )
+    return false;
+  if (currentPreferences.fontType !== newPreferences.fontType) return false;
+  if (currentPreferences.categoryShape !== newPreferences.categoryShape)
+    return false;
+  if (
+    !isContactLinksUnchanged(
+      currentPreferences.contactLinks,
+      newPreferences.contactLinks
+    )
+  )
+    return false;
+  if (
+    currentPreferences.ingredientViewType !== newPreferences.ingredientViewType
+  )
+    return false;
+  if (currentPreferences.itemsViewType !== newPreferences.itemsViewType)
+    return false;
+  if (currentPreferences.logo !== newPreferences.logo) return false;
+  return true;
+}
+
+function isContactLinksUnchanged(
+  currentLinks: ContactLinks,
+  newLinks: ContactLinks
+): boolean {
+  return (
+    currentLinks.facebook === newLinks.facebook &&
+    currentLinks.twitter === newLinks.twitter &&
+    currentLinks.instagram === newLinks.instagram
+  );
+}
+
+function isTableDataUnchanged(
+  currentTable: TableData,
+  newTable: TableData
+): boolean {
+  return (
+    currentTable.id === newTable.id &&
+    currentTable.number === newTable.number &&
+    currentTable.capacity === newTable.capacity
+  );
+}
+
+function isArrayUnchanged<T>(currentArray: T[], newArray: T[]): boolean {
+  if (currentArray.length !== newArray.length) return false;
+  for (let i = 0; i < currentArray.length; i++) {
+    if (JSON.stringify(currentArray[i]) !== JSON.stringify(newArray[i]))
+      return false;
+  }
+  return true;
+}

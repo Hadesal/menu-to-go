@@ -76,7 +76,7 @@ export default function ProductDetails({
           height={400}
         />
 
-        {productDietaryOption.value.length > 0 && (
+        {productDietaryOption && productDietaryOption.value.length > 0 && (
           <Box
             sx={{
               position: "absolute",

@@ -5,7 +5,7 @@ import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import { ProductData } from "@dataTypes/ProductDataTypes";
-import { RestaurantData, ViewType } from "@dataTypes/RestaurantObject";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
 // Time constants
@@ -97,6 +97,9 @@ export const productDefaultData: ProductData = {
       name: "",
       variantList: [],
     },
+    allergies: [],
+    labels: [],
+    dietaryOptions: { label: "", value: "" },
   },
   isAvailable: true,
   image: undefined,

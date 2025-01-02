@@ -53,7 +53,6 @@ export default function InputComponent({
   name,
   disabled,
   MAXCHARSLENGTH,
-  currentLanguage,
 }: InputComponentProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
