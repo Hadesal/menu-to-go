@@ -1,3 +1,5 @@
+import { TFunction } from "i18next";
+
 // Options for password validation that allow customization of rules
 interface PasswordValidationOptions {
   minLength?: number;
@@ -44,7 +46,8 @@ const isPasswordCompromised = async (password: string): Promise<boolean> => {
 // Validates if the password meets all the required conditions and checks against HIBP
 const validatePassword = async (
   password: string,
-  options: PasswordValidationOptions = {}
+  getString: TFunction<"translation", undefined>,
+  options: PasswordValidationOptions = {},
 ): Promise<string> => {
   const {
     minLength = 8,
@@ -55,82 +58,90 @@ const validatePassword = async (
   } = options;
 
   if (!password) {
-    return "Please enter your password.";
+    return getString("passwordRequired");
   }
 
   // Password length checks
   if (password.length < minLength) {
-    return `Password must be at least ${minLength} characters long.`;
+    return getString("passwordMinLength", {
+      minLength: minLength,
+    });
   }
 
   if (password.length > maxLength) {
-    return `Password must be no longer than ${maxLength} characters.`;
+    return getString("passwordMaxLength", {
+      maxLength: maxLength,
+    });
   }
 
   // Check for common passwords (if enabled)
   if (disallowCommonPasswords && commonPasswords.includes(password)) {
-    return "Password is too common. Please choose a more secure password.";
+    return getString("passwordTooCommon");
   }
 
   // Check for lowercase letter and digit
   const basicPasswordRegex = /^(?=.*[a-z])(?=.*\d)/;
   if (!basicPasswordRegex.test(password)) {
-    return "Password must contain at least one number and one lowercase letter.";
+    return getString("passwordBasicRegex");
   }
 
   // Check for an uppercase letter (if required)
   if (requireUppercase && !/[A-Z]/.test(password)) {
-    return "Password must contain at least one uppercase letter.";
+    return getString("passwordUppercase");
   }
 
   // Check for a special character (if required)
   if (requireSpecialCharacter && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    return "Password must contain at least one special character.";
+    return getString("passwordSpecialCharacter");
   }
 
   // Check if the password is compromised via HIBP API
   const isCompromised = await isPasswordCompromised(password);
   if (isCompromised) {
-    return "This password has been compromised in a data breach. Please choose a different password.";
+    return getString("passwordCompromised");
   }
 
   return "";
 };
 
 // Validates if the repeated password matches the original one
-const validateRePassword = (password: string, rePassword: string): string => {
+const validateRePassword = (
+  password: string,
+  rePassword: string,
+  getString: TFunction<"translation", undefined>
+): string => {
   if (password !== rePassword) {
-    return "Passwords do not match.";
+    return getString("rePasswordMismatch");
   }
   return "";
 };
 
 // Validates email format
-const validateEmail = (email: string): string => {
+const validateEmail = (email: string, getString: TFunction<"translation", undefined>): string => {
   if (email.length === 0) {
-    return "Please enter your email.";
+    return getString("emailRequired");
   }
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email)) {
-    return "Invalid email format.";
+    return getString("emailInvalidFormat");
   }
   return "";
 };
 
 // Validates the name according to specified rules
-const validateName = (name: string): string => {
+const validateName = (name: string, getString: TFunction<"translation", undefined>): string => {
   if (name.trim().length === 0) {
-    return "Please enter your name.";
+    return getString("nameRequired");
   }
   if (name.length < 2) {
-    return "Name must be at least 2 characters long.";
+    return getString("nameMinLength");
   }
   if (name.length > 50) {
-    return "Name must be less than 50 characters long.";
+    return getString("nameMaxLength");
   }
   const nameRegex = /^[a-zA-Z\s'-]+$/;
   if (!nameRegex.test(name)) {
-    return "Name can only contain letters, spaces, hyphens, and apostrophes.";
+    return getString("nameInvalidFormat");
   }
   return "";
 };

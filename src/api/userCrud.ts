@@ -12,7 +12,6 @@ import privateApiService from "./services/privateApiService";
 export const register = async (userData: UserSignupDataType) => {
   try {
     const response = await publicApiService.post("/users/register", userData);
-    console.log(response);
     return response.data;
   } catch (error) {
     return Promise.reject(error);

@@ -1,10 +1,11 @@
+import { login, register } from "@api/userCrud";
+import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 import {
   UserSignInDataType,
   UserSignupDataType,
 } from "@dataTypes/UserDataTypes";
-import { login, register } from "@api/userCrud";
+import { TFunction } from "i18next";
 import { validateEmail, validateName, validatePassword } from "./validator";
-import { ErrorResponseObject } from "@dataTypes/ErrorResponsObject";
 
 // Error message type definition
 type ErrorMessages = {
@@ -18,19 +19,14 @@ type ErrorMessages = {
 const isSignupDataValid = async (
   userData: UserSignupDataType,
   setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>,
-  setLastAttemptedEmail: React.Dispatch<React.SetStateAction<string>>
+  getString: TFunction<"translation", undefined>
 ): Promise<boolean> => {
   const errors: ErrorMessages = {
-    name: validateName(userData.name),
-    email: validateEmail(userData.email),
-    password: await validatePassword(userData.password),
+    name: validateName(userData.name, getString),
+    email: validateEmail(userData.email, getString),
+    password: await validatePassword(userData.password, getString),
     agreed: !userData.agreedTermsAndConditions,
   };
-
-  // Reset the email if there's an email validation error
-  if (errors.email) {
-    setLastAttemptedEmail("");
-  }
 
   // Set errors and return validation result
   if (errors.name || errors.email || errors.password || errors.agreed) {
@@ -45,15 +41,19 @@ const isSignupDataValid = async (
 const handleSignup = async (
   userData: UserSignupDataType,
   setErrorMessages: React.Dispatch<React.SetStateAction<ErrorMessages>>,
-  setLastAttemptedEmail: React.Dispatch<React.SetStateAction<string>>,
-  lastAttemptedEmail: string,
   setApiError: React.Dispatch<React.SetStateAction<string>>,
   apiError: string,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  navigate: (path: string) => void
+  navigate: (path: string) => void,
+  getString: TFunction<"translation", undefined>
 ): Promise<void> => {
   // Validate input data
-  if (!isSignupDataValid(userData, setErrorMessages, setLastAttemptedEmail)) {
+  const isValid = await isSignupDataValid(
+    userData,
+    setErrorMessages,
+    getString
+  );
+  if (!isValid) {
     return;
   }
 
@@ -65,13 +65,7 @@ const handleSignup = async (
     agreed: false,
   });
 
-  // Check if the email has been used in a previous attempt
-  if (lastAttemptedEmail === userData.email) {
-    return;
-  }
-
   setLoading(true);
-  setLastAttemptedEmail(userData.email);
 
   try {
     const registerResponse = await register({
@@ -109,20 +103,23 @@ const handleSignup = async (
         "timestamp" in error
       );
     };
-
     if (isErrorResponseObject(error)) {
-      setErrorMessages((prev) => ({ ...prev, email: error.message }));
-      setApiError(error.message);
+      if (error.status === 500) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          email: "An error occurred during registration. Please try again.",
+        }));
+        setApiError("An error occurred during registration. Please try again.");
+      } else {
+        setErrorMessages((prev) => ({ ...prev, email: error.message }));
+        setApiError(error.message);
+      }
     } else if (error instanceof Error) {
-      // Handles standard Error objects
       setApiError(error.message);
     } else {
-      // Handles unknown error types
       setApiError("An unknown error occurred.");
     }
-
     setLoading(false);
-    setApiError("An error occurred during registration. Please try again.");
   }
 };
 
@@ -136,7 +133,8 @@ const handleSignIn = async (
     }>
   >,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  navigate: (path: string) => void
+  navigate: (path: string) => void,
+  getString: TFunction<"translation", undefined>
 ): Promise<void> => {
   const errors = {
     email: "",
@@ -144,7 +142,7 @@ const handleSignIn = async (
   };
 
   // Validate email and password
-  const emailError = validateEmail(userData.email);
+  const emailError = validateEmail(userData.email, getString);
   if (emailError) errors.email = emailError;
   if (userData.password.length === 0)
     errors.password = "Please enter your password";
@@ -180,7 +178,7 @@ const handleSignIn = async (
   } catch (error) {
     setLoading(false);
     setErrorMessages({
-      email: "Login failed. Please check your credentials.",
+      email: getString("signInError"),
       password: "",
     });
   }
@@ -203,4 +201,5 @@ const getUserToken = (): string => {
   return userToken.token;
 };
 
-export { handleSignIn, handleSignup, getUserToken };
+export { getUserToken, handleSignIn, handleSignup };
+

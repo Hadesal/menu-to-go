@@ -22,6 +22,7 @@ import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import { useLanguage } from "src/hooks/useLanguage";
 import LanguageMenu from "@components/AppBar/LanguageMenuComponent";
+import { validateEmail } from "@utils/validator";
 export default function LoginPage() {
   const { getString, currentLanguage } = useLanguage();
 
@@ -156,6 +157,11 @@ export default function LoginPage() {
                   ...prevState,
                   email: e.target.value,
                 }));
+
+                setErrorMessages((prevErrors) => ({
+                  ...prevErrors,
+                  email: validateEmail(e.target.value, getString),
+                }));
               }}
             />
             <InputComponent
@@ -169,6 +175,13 @@ export default function LoginPage() {
                 setUserData((prevState) => ({
                   ...prevState,
                   password: e.target.value,
+                }));
+                setErrorMessages((prevErrors) => ({
+                  ...prevErrors,
+                  password:
+                    e.target.value.length === 0
+                      ? "Please enter your password"
+                      : "",
                 }));
               }}
               error={errorMessages.password ? true : false}
@@ -201,7 +214,13 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               onClick={() => {
-                handleSignIn(userData, setErrorMessages, setLoading, navigate);
+                handleSignIn(
+                  userData,
+                  setErrorMessages,
+                  setLoading,
+                  navigate,
+                  getString
+                );
               }}
               sx={Styles.button}
             >

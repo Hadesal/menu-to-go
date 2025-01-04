@@ -18,6 +18,11 @@ import { handleSignup } from "../../utils/auth-handlers";
 import { Styles } from "./RegisterPage.style";
 import { useLanguage } from "src/hooks/useLanguage";
 import LanguageMenu from "@components/AppBar/LanguageMenuComponent";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "@utils/validator";
 export default function LoginPage() {
   const { getString, currentLanguage } = useLanguage();
 
@@ -34,7 +39,6 @@ export default function LoginPage() {
     agreed: false,
   });
 
-  const [lastAttemptedEmail, setLastAttemptedEmail] = useState("");
   const [apiError, setApiError] = useState("");
 
   const navigate = useNavigate();
@@ -84,6 +88,11 @@ export default function LoginPage() {
                   ...prevState,
                   name: e.target.value,
                 }));
+
+                setErrorMessages((prevErrors) => ({
+                  ...prevErrors,
+                  name: validateName(e.target.value, getString), // Show error when unchecked, remove when checked
+                }));
               }}
               boxStyle={Styles.inputBox}
               textFieldStyle={Styles.inputStyle}
@@ -101,6 +110,12 @@ export default function LoginPage() {
                   ...prevState,
                   email: e.target.value,
                 }));
+
+                setErrorMessages((prevErrors) => ({
+                  ...prevErrors,
+                  email: validateEmail(e.target.value, getString),
+                }));
+                setApiError(""); // Clear any API errors related to email (optional)
               }}
               boxStyle={Styles.inputBox}
               textFieldStyle={Styles.inputStyle}
@@ -114,58 +129,95 @@ export default function LoginPage() {
               label={getString("signInPasswordLabel")}
               boxStyle={Styles.inputBox}
               textFieldStyle={Styles.inputStyle}
-              onChange={(e) => {
+              onChange={async (e) => {
+                const password = e.target.value;
+
+                // Update user data state with the new password
                 setUserData((prevState) => ({
                   ...prevState,
-                  password: e.target.value,
+                  password: password,
+                }));
+
+                // Validate the password asynchronously
+                const passwordError = await validatePassword(
+                  password,
+                  getString
+                );
+
+                // Update error messages state with the validation result
+                setErrorMessages((prevErrors) => ({
+                  ...prevErrors,
+                  password: passwordError,
                 }));
               }}
               error={errorMessages.password ? true : false}
               helperText={errorMessages.password}
             />
 
-            <Box sx={Styles.checkbox_wrapper}>
-              <Checkbox
-                sx={{
-                  ...Styles.checkbox,
-                  color: errorMessages.agreed
-                    ? "#d32f2f"
-                    : "var(--primary-color)",
-                }}
-                required
-                onChange={(e) => {
-                  setUserData((prev) => ({
-                    ...prev,
-                    agreedTermsAndConditions: e.currentTarget.checked,
-                  }));
-                }}
-              />
-              <Typography variant="body2">
-                {getString("agreementText")}{" "}
-                <Link
-                  href=""
+            <Box>
+              <Box sx={Styles.checkbox_wrapper}>
+                <Checkbox
+                  sx={{
+                    ...Styles.checkbox,
+                    color: errorMessages.agreed
+                      ? "#d32f2f"
+                      : "var(--primary-color)",
+                  }}
+                  required
+                  onChange={(e) => {
+                    const isChecked = e.currentTarget.checked;
+                    setUserData((prev) => ({
+                      ...prev,
+                      agreedTermsAndConditions: isChecked,
+                    }));
+
+                    // If unchecked, show error; if checked, clear error
+                    setErrorMessages((prevErrors) => ({
+                      ...prevErrors,
+                      agreed: !isChecked, // Show error when unchecked, remove when checked
+                    }));
+                  }}
+                />
+                <Typography variant="body2">
+                  {getString("agreementText")}{" "}
+                  <Link
+                    href=""
+                    sx={
+                      errorMessages.agreed
+                        ? Styles.termsConditionsError
+                        : Styles.termsConditions
+                    }
+                    underline="hover"
+                  >
+                    {getString("termsOfService")}{" "}
+                  </Link>
+                  {getString("and")}{" "}
+                  <Link
+                    href=""
+                    sx={
+                      errorMessages.agreed
+                        ? Styles.termsConditionsError
+                        : Styles.termsConditions
+                    }
+                    underline="hover"
+                  >
+                    {getString("termsOfService")}
+                  </Link>
+                </Typography>
+              </Box>
+
+              {errorMessages.agreed && (
+                <Typography
+                  variant="caption"
                   sx={
                     errorMessages.agreed
                       ? Styles.termsConditionsError
                       : Styles.termsConditions
                   }
-                  underline="hover"
                 >
-                  {getString("termsOfService")}{" "}
-                </Link>
-                {getString("and")}{" "}
-                <Link
-                  href=""
-                  sx={
-                    errorMessages.agreed
-                      ? Styles.termsConditionsError
-                      : Styles.termsConditions
-                  }
-                  underline="hover"
-                >
-                  {getString("termsOfService")}{" "}
-                </Link>
-              </Typography>
+                  {getString("termsOfServiceError")}
+                </Typography>
+              )}
             </Box>
             <Button
               variant="contained"
@@ -174,12 +226,11 @@ export default function LoginPage() {
                 handleSignup(
                   userData,
                   setErrorMessages,
-                  setLastAttemptedEmail,
-                  lastAttemptedEmail,
                   setApiError,
                   apiError,
                   setLoading,
-                  navigate
+                  navigate,
+                  getString
                 );
               }}
               sx={Styles.button}
