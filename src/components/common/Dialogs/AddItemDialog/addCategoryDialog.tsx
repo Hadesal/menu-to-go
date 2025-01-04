@@ -15,12 +15,15 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { itemType } from "@utils/dataTypeCheck";
 import { useEffect, useState } from "react";
 import { useLanguage } from "src/hooks/useLanguage";
-import { handleCancel, handleConfirm } from "../helpers/handlers";
+import {
+  handleCategoryCancel,
+  handleCategoryConfirm,
+} from "../helpers/addCategoryValidators";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
+import { isEqual } from "lodash";
 
 interface AddCategoryDialogProps {
   isDialogOpen: boolean;
@@ -45,8 +48,9 @@ const AddCategoryDialog = ({
   initialData,
   data,
 }: AddCategoryDialogProps) => {
-  const [dialogData, setDialogData] =
-    useState<CategoryData>(categoryDefaultData);
+  const [dialogData, setDialogData] = useState<CategoryData>(
+    initialData || categoryDefaultData
+  );
   const [showNameError, setShowNameError] = useState<boolean>(false);
   const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
@@ -60,27 +64,33 @@ const AddCategoryDialog = ({
     }
   }, [isOpen, initialData]);
 
+  useEffect(() => {
+    if (initialData) {
+      setIsDataUnchanged(isEqual(dialogData, initialData));
+    } else {
+      setIsDataUnchanged(isEqual(dialogData, categoryDefaultData));
+    }
+  }, [dialogData, initialData]);
   const handleOnConfirm = () => {
-    handleConfirm(
+    handleCategoryConfirm(
       dialogData,
       {
         setShowNameError,
         setShowCategoryError,
-        setIsDataUnchanged,
         setIsNameDuplicate,
         setImageError,
       },
+      onConfirmClick as (item: CategoryData) => void,
       handleOnCancel,
-      onConfirmClick as (item: itemType) => void,
       data,
       initialData
     );
   };
 
   const handleOnCancel = () => {
-    return handleCancel(
+    return handleCategoryCancel(
       setDialogData,
-      "category",
+      categoryDefaultData,
       onCancelClick,
       {
         setImageError,
@@ -228,6 +238,7 @@ const AddCategoryDialog = ({
             sx={{
               ...Styles.logoutButton,
             }}
+            disabled={isDataUnchanged}
           >
             {confirmText}
           </Button>

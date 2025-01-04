@@ -5,12 +5,14 @@ import {
   VariantData,
 } from "@dataTypes/ProductDataTypes";
 import { Button, Form, Space } from "antd";
-import { Formik, Form as FormikForm, FormikProps } from "formik";
+import { Formik, Form as FormikForm, FormikHelpers, FormikProps } from "formik";
 import React, { useEffect, useRef } from "react";
 import BasicInfoFields from "./BasicInfoFields";
 import ProductDetailsFields from "./ProductDetailsFields";
 import "./productDialog.css";
 import { createValidationSchema } from "./validationSchema";
+import { handleProductCancel } from "../../helpers/addProductValidators";
+import { isEqual } from "lodash";
 
 interface ProductFormProps {
   initialData?: ProductData;
@@ -58,10 +60,17 @@ const ProductForm = ({
     image: "",
   };
 
-  const handleSubmit = (values: ProductData) => {
+  const handleSubmit = (
+    values: ProductData,
+    actions: FormikHelpers<ProductData>
+  ) => {
+    if (isEqual(values, initialValues)) {
+      actions.setSubmitting(false);
+      return;
+    }
+
+    // Proceed with the update
     const clonedValues = JSON.parse(JSON.stringify(values));
-    console.log("values: ", values);
-    console.log(clonedValues);
     delete clonedValues.id;
     if (clonedValues.details) {
       delete clonedValues.details.id;
@@ -83,8 +92,19 @@ const ProductForm = ({
 
     onConfirmClick(clonedValues);
     setDialogIsOpen(false);
+    actions.setSubmitting(false);
   };
-
+  const handleCancel = () => {
+    handleProductCancel(
+      () => setDialogIsOpen(false),
+      initialValues,
+      () => setDialogIsOpen(false),
+      {
+        // Pass error flag setters if using
+      },
+      initialData
+    );
+  };
   return (
     <Formik
       innerRef={formikRef}
@@ -103,6 +123,7 @@ const ProductForm = ({
         handleChange,
         setFieldValue,
         resetForm,
+        dirty,
       }) => (
         <FormikForm>
           <BasicInfoFields
@@ -124,13 +145,18 @@ const ProductForm = ({
               <Button
                 className="cancelButton"
                 onClick={() => {
-                  setDialogIsOpen(false);
+                  handleCancel();
                   resetForm();
                 }}
               >
                 {cancelText}
               </Button>
-              <Button type="primary" htmlType="submit" className="addBtn">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="addBtn"
+                disabled={!dirty}
+              >
                 {confirmText}
               </Button>
             </Space>
