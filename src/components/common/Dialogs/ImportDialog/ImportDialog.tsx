@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Card, CardContent, Drawer, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import {
+  categoriesToExcelExporter,
   exportSampleExcel,
   parseExcelFile,
   parseJsonObject,
@@ -31,7 +32,7 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const onFileSelectRef = useRef<(file: File) => Promise<void>>();
   const dispatch = useAppDispatch();
-  const { id: restaurantId } = useAppSelector(
+  const { id: restaurantId, categories } = useAppSelector(
     (state) => state.restaurantsData.selectedRestaurant
   );
   const importOptions: ImportOption[] = [
@@ -72,12 +73,12 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         handleClose();
         dispatch(setImportingLoading(true));
         try {
-          const categories = await parseExcelFile(file);
+          const parsedCategories = await parseExcelFile(file);
           if (restaurantId !== undefined) {
             dispatch(
               addCategoriesToRestaurant({
                 restaurantId,
-                categoryList: categories,
+                categoryList: parsedCategories,
               })
             );
           }
@@ -88,8 +89,16 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
       },
     },
     {
-      title: getString("importDialogAsExcelLabel"),
-      description: getString("importDialogAsExcelDescription"),
+      title: getString("importDialogExportAsExcelLabel"),
+      description: getString("importDialogExportAsExcelDescription"),
+      accept: "",
+      onFileSelect: async () => {
+        categoriesToExcelExporter(categories);
+      },
+    },
+    {
+      title: getString("importDialogExportSampleExcelFile"),
+      description: getString("importDialogExportSampleExcelFileDescription"),
       accept: "",
       onFileSelect: async () => {
         exportSampleExcel();

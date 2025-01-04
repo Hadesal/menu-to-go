@@ -159,102 +159,206 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
 };
 
 export const exportSampleExcel = () => {
-  const categoriesData = [
+  const sampleCategories: CategoryData[] = [
     {
-      Name: "Beverages",
-      "Category Type": "Drink",
+      name: "Beverages",
+      categoryType: "Drink",
+      image: "beverages.png",
+      products: [
+        {
+          name: "Coffee",
+          price: 2.5,
+          isAvailable: true,
+          image: "coffee.png",
+          details: {
+            detailsDescription:
+              "A hot beverage made from roasted coffee beans.",
+            allergies: [],
+            labels: [],
+            dietaryOptions: { label: "Vegan", value: "vegan" },
+            variants: {
+              name: "Size",
+              variantList: [
+                { name: "Small", price: 2.0 },
+                { name: "Medium", price: 2.5 },
+                { name: "Large", price: 3.0 },
+              ],
+            },
+            ingredients: [
+              { name: "Water", price: 0, image: null },
+              { name: "Coffee Beans", price: 0, image: null },
+            ],
+            extras: [
+              { name: "Milk", price: 0.5 },
+              { name: "Sugar", price: 0.2 },
+            ],
+          },
+        },
+      ],
+      categoryOrder: 1,
     },
     {
-      Name: "Desserts",
-      "Category Type": "Food",
-    },
-  ];
-
-  const productsData = [
-    {
-      Name: "Coffee",
-      Category: "Beverages",
-      Price: 2.5,
-      "Is Available": "true",
-      "Unique Product Ordering Name": "coffee-001",
-    },
-    {
-      Name: "Chocolate Cake",
-      Category: "Desserts",
-      Price: 5.0,
-      "Is Available": "true",
-      "Unique Product Ordering Name": "cake-001",
-    },
-  ];
-
-  const productDetailsData = [
-    {
-      "Product Name": "Coffee",
-      "Details Description": "A hot beverage made from roasted coffee beans.",
-    },
-    {
-      "Product Name": "Chocolate Cake",
-      "Details Description": "Delicious chocolate layered cake.",
-    },
-  ];
-
-  const ingredientsData = [
-    {
-      "Product Name": "Coffee",
-      "Ingredient Name": "Water",
-      Price: 0,
-    },
-    {
-      "Product Name": "Coffee",
-      "Ingredient Name": "Coffee Beans",
-      Price: 0,
-    },
-    {
-      "Product Name": "Chocolate Cake",
-      "Ingredient Name": "Chocolate",
-      Price: 0,
-    },
-    {
-      "Product Name": "Chocolate Cake",
-      "Ingredient Name": "Flour",
-      Price: 0,
-    },
-  ];
-
-  const extrasData = [
-    {
-      "Product Name": "Coffee",
-      "Extra Name": "Milk",
-      Price: 0.5,
-    },
-    {
-      "Product Name": "Coffee",
-      "Extra Name": "Sugar",
-      Price: 0.2,
+      name: "Desserts",
+      categoryType: "Food",
+      image: "desserts.png",
+      products: [
+        {
+          name: "Chocolate Cake",
+          price: 5.0,
+          isAvailable: true,
+          image: "chocolate_cake.png",
+          details: {
+            detailsDescription: "Delicious chocolate layered cake.",
+            allergies: [],
+            labels: [],
+            dietaryOptions: { label: "Vegetarian", value: "vegetarian" },
+            variants: {
+              name: "",
+              variantList: [],
+            },
+            ingredients: [
+              { name: "Chocolate", price: 0, image: null },
+              { name: "Flour", price: 0, image: null },
+            ],
+            extras: [],
+          },
+        },
+      ],
+      categoryOrder: 2,
     },
   ];
 
-  const variantsData = [
-    {
-      "Product Name": "Coffee",
-      "Variant Group Name": "Size",
-      "Variant Name": "Small",
-      Price: 2.0,
-    },
-    {
-      "Product Name": "Coffee",
-      "Variant Group Name": "Size",
-      "Variant Name": "Medium",
-      Price: 2.5,
-    },
-    {
-      "Product Name": "Coffee",
-      "Variant Group Name": "Size",
-      "Variant Name": "Large",
-      Price: 3.0,
-    },
-  ];
+  // Call the converter with sample data
+  categoriesToExcelExporter(sampleCategories);
+};
 
+/**
+ * Converts an array of CategoryData into an Excel file and triggers a download.
+ * @param categories - Array of CategoryData objects to export.
+ */
+export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
+  // Define interfaces for sheet rows
+  interface CategoriesSheetRow {
+    Name: string;
+    "Category Type": string;
+    Image: string | null;
+    "Category Order": number | string;
+  }
+
+  interface ProductsSheetRow {
+    Name: string;
+    Category: string;
+    Price: number;
+    "Is Available": boolean;
+    Image: string | null;
+    "Unique Product Ordering Name": string;
+  }
+
+  interface ProductDetailsSheetRow {
+    "Product Name": string;
+    "Details Description": string | null;
+    Allergies: string;
+    Labels: string;
+    "Dietary Options": string;
+  }
+
+  interface IngredientsSheetRow {
+    "Product Name": string;
+    "Ingredient Name": string;
+    Price: number;
+    Image: string | null;
+  }
+
+  interface ExtrasSheetRow {
+    "Product Name": string;
+    "Extra Name": string;
+    Price: number;
+  }
+
+  interface VariantsSheetRow {
+    "Product Name": string;
+    "Variant Group Name": string;
+    "Variant Name": string;
+    Price: number;
+  }
+
+  // Initialize arrays to hold sheet data
+  const categoriesData: CategoriesSheetRow[] = [];
+  const productsData: ProductsSheetRow[] = [];
+  const productDetailsData: ProductDetailsSheetRow[] = [];
+  const ingredientsData: IngredientsSheetRow[] = [];
+  const extrasData: ExtrasSheetRow[] = [];
+  const variantsData: VariantsSheetRow[] = [];
+
+  categories.forEach((category) => {
+    // Populate Categories Sheet
+    categoriesData.push({
+      Name: category.name,
+      "Category Type": category.categoryType,
+      Image: category.image,
+      "Category Order": category.categoryOrder ?? "",
+    });
+
+    // Populate Products and related sheets
+    category.products?.forEach((product) => {
+      // Products Sheet
+      productsData.push({
+        Name: product.name,
+        Category: category.name,
+        Price: product.price,
+        "Is Available": product.isAvailable,
+        Image: product.image ?? null,
+        "Unique Product Ordering Name": product.id ?? "",
+      });
+      console.log(product.details);
+      // Product Details Sheet
+      const allergies =
+        product.details.allergies?.map((a) => a?.value || "").join(", ") || "";
+
+      const labels =
+        product.details.labels?.map((l) => l?.value || "").join(", ") || "";
+
+      const dietaryOptions = product.details.dietaryOptions?.value || "";
+      productDetailsData.push({
+        "Product Name": product.name,
+        "Details Description": product.details.detailsDescription,
+        Allergies: allergies,
+        Labels: labels,
+        "Dietary Options": dietaryOptions,
+      });
+
+      // Ingredients Sheet
+      product.details.ingredients.forEach((ingredient) => {
+        ingredientsData.push({
+          "Product Name": product.name,
+          "Ingredient Name": ingredient.name,
+          Price: 0, // Assuming price is not part of IngredientData, set to 0 or handle accordingly
+          Image: ingredient.image,
+        });
+      });
+
+      // Extras Sheet
+      product.details.extras.forEach((extra) => {
+        extrasData.push({
+          "Product Name": product.name,
+          "Extra Name": extra.name,
+          Price: extra.price,
+        });
+      });
+
+      // Variants Sheet
+      product.details.variants.variantList.forEach((variant) => {
+        variantsData.push({
+          "Product Name": product.name,
+          "Variant Group Name": product.details.variants.name,
+          "Variant Name": variant.name,
+          Price: variant.price,
+        });
+      });
+    });
+  });
+
+  // Convert arrays to sheets
   const categoriesSheet = XLSX.utils.json_to_sheet(categoriesData);
   const productsSheet = XLSX.utils.json_to_sheet(productsData);
   const productDetailsSheet = XLSX.utils.json_to_sheet(productDetailsData);
@@ -262,6 +366,7 @@ export const exportSampleExcel = () => {
   const extrasSheet = XLSX.utils.json_to_sheet(extrasData);
   const variantsSheet = XLSX.utils.json_to_sheet(variantsData);
 
+  // Create a new workbook and append sheets
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, categoriesSheet, "Categories");
   XLSX.utils.book_append_sheet(workbook, productsSheet, "Products");
@@ -274,14 +379,16 @@ export const exportSampleExcel = () => {
   XLSX.utils.book_append_sheet(workbook, extrasSheet, "Extras");
   XLSX.utils.book_append_sheet(workbook, variantsSheet, "Variants");
 
+  // Generate Excel file and trigger download
   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
 
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "sample_menu_template.xlsx";
+  anchor.download = "categories_export.xlsx";
   anchor.click();
 
+  // Clean up
   URL.revokeObjectURL(url);
 };
