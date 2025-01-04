@@ -185,8 +185,8 @@ export const exportSampleExcel = () => {
               ],
             },
             ingredients: [
-              { name: "Water", price: 0, image: null },
-              { name: "Coffee Beans", price: 0, image: null },
+              { name: "Water", image: null },
+              { name: "Coffee Beans", image: null },
             ],
             extras: [
               { name: "Milk", price: 0.5 },
@@ -217,8 +217,8 @@ export const exportSampleExcel = () => {
               variantList: [],
             },
             ingredients: [
-              { name: "Chocolate", price: 0, image: null },
-              { name: "Flour", price: 0, image: null },
+              { name: "Chocolate", image: null },
+              { name: "Flour", image: null },
             ],
             extras: [],
           },

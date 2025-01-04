@@ -1,24 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 
-function isCategoryDataIdentical(
-  catA: CategoryData,
-  catB: CategoryData
-): boolean {
-  if (catA.name !== catB.name) return false;
-  if (catA.image !== catB.image) return false;
-  if (catA.categoryType !== catB.categoryType) return false;
-  if (catA.categoryOrder !== catB.categoryOrder) return false;
-
-  if (catA.products && catB.products) {
-    if (catA.products.length !== catB.products.length) return false;
-  } else if (catA.products || catB.products) {
-    return false;
-  }
-
-  return true;
-}
-
 type ErrorFlags = {
   setShowNameError?: Dispatch<SetStateAction<boolean>>;
   setIsNameDuplicate?: Dispatch<SetStateAction<boolean>>;
