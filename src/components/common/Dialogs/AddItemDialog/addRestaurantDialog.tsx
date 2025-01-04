@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { itemType } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { handleCancel, handleConfirm } from "../helpers/handlers";
 import { Styles } from "./addItemDialog.styles";
 import { useLanguage } from "src/hooks/useLanguage";
 
@@ -24,6 +23,12 @@ interface AddAddRestaurantDialogProps {
   onCancelClick: Dispatch<SetStateAction<boolean>>;
   initialData?: RestaurantData;
   data?: RestaurantData[];
+}
+interface ErrorFlags {
+  showNameError: boolean;
+  isNameDuplicate: boolean;
+  isNameUnchanged: boolean;
+  imageError: string | null;
 }
 
 const AddRestaurantDialog = ({
@@ -46,36 +51,131 @@ const AddRestaurantDialog = ({
     categories: [],
     tables: [],
   });
-  const [showError, setShowError] = useState<boolean>(false);
-  const [isNameUnchanged, setIsNameUnchanged] = useState<boolean>(false);
-  const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
+
+  const [errorFlags, setErrorFlags] = useState<ErrorFlags>({
+    showNameError: false,
+    isNameDuplicate: false,
+    isNameUnchanged: false,
+    imageError: null,
+  });
   const MAXCHARSLENGTH = 25;
   useEffect(() => {
     if (isOpen && initialData) {
       setDialogData((prev) => ({ ...prev, name: initialData.name }));
+      setErrorFlags({
+        showNameError: false,
+        isNameDuplicate: false,
+        isNameUnchanged: false,
+        imageError: null,
+      });
+    } else if (!isOpen) {
+      // Reset form when dialog is closed
+      setDialogData({
+        name: "",
+        categories: [],
+        tables: [],
+      });
+      setErrorFlags({
+        showNameError: false,
+        isNameDuplicate: false,
+        isNameUnchanged: false,
+        imageError: null,
+      });
     }
   }, [isOpen, initialData]);
 
-  const onHandleCancel = () => {
-    return handleCancel(setDialogData, "restaurant", onCancelClick, {
-      setShowNameError: setShowError,
-      setIsDataUnchanged: setIsNameUnchanged,
-      setIsNameDuplicate: setIsNameDuplicate,
-    });
+  /**
+   * validateRestaurant
+   * Validates the restaurant name.
+   */
+  const validateRestaurant = (): boolean => {
+    let hasError = false;
+    const trimmedName = dialogData.name.trim();
+
+    // Reset previous error flags
+    setErrorFlags((prev) => ({
+      ...prev,
+      showNameError: false,
+      isNameDuplicate: false,
+      isNameUnchanged: false,
+      imageError: null,
+    }));
+
+    // 1. Check if name is empty
+    if (trimmedName.length === 0) {
+      setErrorFlags((prev) => ({ ...prev, showNameError: true }));
+      hasError = true;
+    }
+
+    // 2. Check if name is unchanged (if editing)
+    if (initialData && trimmedName === initialData.name) {
+      setErrorFlags((prev) => ({ ...prev, isNameUnchanged: true }));
+      hasError = true;
+    }
+
+    // 3. Check for duplicate name
+    const lowerCaseName = trimmedName.toLowerCase();
+    if ((data ?? []).length > 0) {
+      const duplicate = data?.some(
+        (restaurant) =>
+          restaurant.name.trim().toLowerCase() === lowerCaseName &&
+          restaurant.id !== initialData?.id // Exclude current restaurant in edit mode
+      );
+
+      if (duplicate) {
+        setErrorFlags((prev) => ({ ...prev, isNameDuplicate: true }));
+        hasError = true;
+      }
+    }
+
+    return hasError;
   };
 
-  const onHandleConfirm = () => {
-    handleConfirm(
-      dialogData,
-      {
-        setShowNameError: setShowError,
-        setIsDataUnchanged: setIsNameUnchanged,
-        setIsNameDuplicate: setIsNameDuplicate,
-      },
-      onHandleCancel,
-      onConfirmClick,
-      data
-    );
+  /**
+   * handleConfirm
+   * Handles the confirm action with validation.
+   */
+  const handleConfirm = () => {
+    const hasError = validateRestaurant();
+
+    if (hasError) {
+      return;
+    }
+
+    // Proceed with confirmation
+    onConfirmClick(dialogData);
+    handleCancel();
+  };
+
+  /**
+   * handleCancel
+   * Handles the cancel action by resetting the form and closing the dialog.
+   */
+  const handleCancel = () => {
+    if (!initialData) {
+      setDialogData({
+        name: "",
+        categories: [],
+        tables: [],
+      });
+    } else {
+      setDialogData({
+        name: initialData.name,
+        categories: initialData.categories,
+        tables: initialData.tables,
+      });
+    }
+
+    // Reset error flags
+    setErrorFlags({
+      showNameError: false,
+      isNameDuplicate: false,
+      isNameUnchanged: false,
+      imageError: null,
+    });
+
+    // Close the dialog
+    onCancelClick(false);
   };
 
   return (
@@ -89,7 +189,7 @@ const AddRestaurantDialog = ({
           height: "17.5rem",
         },
       }}
-      onClose={onHandleCancel}
+      onClose={handleCancel}
       open={isOpen}
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
@@ -109,27 +209,34 @@ const AddRestaurantDialog = ({
               ...dialogData,
               name: e.target.value,
             });
-            setShowError(e.target.value.trim().length === 0);
-            setIsNameDuplicate(false);
-            setIsNameUnchanged(
-              initialData ? e.target.value === initialData.name : false
-            );
+            setErrorFlags((prev) => ({
+              ...prev,
+              showNameError: e.target.value.trim().length === 0,
+              isNameDuplicate: false,
+              isNameUnchanged: initialData
+                ? e.target.value === initialData.name
+                : false,
+            }));
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              onHandleConfirm();
+              handleConfirm();
             }
           }}
           value={dialogData.name}
-          error={showError || isNameUnchanged || isNameDuplicate}
+          error={
+            errorFlags.showNameError ||
+            errorFlags.isNameUnchanged ||
+            errorFlags.isNameDuplicate
+          }
           MAXCHARSLENGTH={MAXCHARSLENGTH}
           helperText={
-            showError
+            errorFlags.showNameError
               ? errorMessage
-              : isNameUnchanged
+              : errorFlags.isNameUnchanged
               ? "Name is unchanged"
-              : isNameDuplicate
+              : errorFlags.isNameDuplicate
               ? "A restaurant with the same name already exists"
               : `${dialogData.name.length}/${MAXCHARSLENGTH}`
           }
@@ -139,16 +246,14 @@ const AddRestaurantDialog = ({
         <Box sx={Styles.actionBox}>
           <Button
             variant="outlined"
-            onClick={onHandleCancel}
+            onClick={handleCancel}
             sx={Styles.cancelButton}
           >
             {cancelText}
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              onHandleConfirm();
-            }}
+            onClick={handleConfirm}
             sx={Styles.logoutButton}
           >
             {confirmText}
