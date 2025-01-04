@@ -107,9 +107,9 @@ const handleSignup = async (
       if (error.status === 500) {
         setErrorMessages((prev) => ({
           ...prev,
-          email: "An error occurred during registration. Please try again.",
+          email: getString("registrationError"),
         }));
-        setApiError("An error occurred during registration. Please try again.");
+        setApiError(getString("registrationError"));
       } else {
         setErrorMessages((prev) => ({ ...prev, email: error.message }));
         setApiError(error.message);
@@ -117,7 +117,7 @@ const handleSignup = async (
     } else if (error instanceof Error) {
       setApiError(error.message);
     } else {
-      setApiError("An unknown error occurred.");
+      setApiError(getString("unknownError"));
     }
     setLoading(false);
   }
@@ -202,4 +202,3 @@ const getUserToken = (): string => {
 };
 
 export { getUserToken, handleSignIn, handleSignup };
-

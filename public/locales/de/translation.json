@@ -231,5 +231,7 @@
   "nameRequired": "Bitte geben Sie Ihren Namen ein.",
   "nameMinLength": "Der Name muss mindestens 2 Zeichen lang sein.",
   "nameMaxLength": "Der Name darf höchstens 50 Zeichen lang sein.",
-  "nameInvalidFormat": "Der Name darf nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe enthalten."
+  "nameInvalidFormat": "Der Name darf nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe enthalten.",
+  "registrationError": "Ein Fehler ist bei der Registrierung aufgetreten. Bitte versuche es erneut.",
+  "unknownError": "Ein unbekannter Fehler ist aufgetreten."
 }

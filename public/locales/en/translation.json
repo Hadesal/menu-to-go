@@ -231,5 +231,7 @@
   "nameRequired": "Please enter your name.",
   "nameMinLength": "Name must be at least 2 characters long.",
   "nameMaxLength": "Name must be less than 50 characters long.",
-  "nameInvalidFormat": "Name can only contain letters, spaces, hyphens, and apostrophes."
+  "nameInvalidFormat": "Name can only contain letters, spaces, hyphens, and apostrophes.",
+  "registrationError": "An error occurred during registration. Please try again.",
+  "unknownError": "An unknown error occurred."
 }

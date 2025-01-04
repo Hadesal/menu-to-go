@@ -231,5 +231,7 @@
   "nameRequired": "Veuillez entrer votre nom.",
   "nameMinLength": "Le nom doit comporter au moins 2 caractères.",
   "nameMaxLength": "Le nom ne doit pas dépasser 50 caractères.",
-  "nameInvalidFormat": "Le nom ne peut contenir que des lettres, des espaces, des tirets et des apostrophes."
+  "nameInvalidFormat": "Le nom ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.",
+  "registrationError": "Une erreur est survenue lors de l'inscription. Veuillez réessayer.",
+  "unknownError": "Une erreur inconnue est survenue."
 }

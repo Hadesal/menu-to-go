@@ -231,5 +231,7 @@
   "nameRequired": "Lütfen adınızı girin.",
   "nameMinLength": "Adınız en az 2 karakter uzunluğunda olmalıdır.",
   "nameMaxLength": "Adınız en fazla 50 karakter uzunluğunda olmalıdır.",
-  "nameInvalidFormat": "Adınız sadece harfler, boşluklar, tireler ve apostroflar içerebilir."
+  "nameInvalidFormat": "Adınız sadece harfler, boşluklar, tireler ve apostroflar içerebilir.",
+  "registrationError": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+  "unknownError": "Bilinmeyen bir hata oluştu."
 }
