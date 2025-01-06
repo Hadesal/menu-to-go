@@ -133,7 +133,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
             }}
           />
 
-          {product.details.dietaryOptions.value.length > 0 && (
+          {product.details.dietaryOptions && product.details.dietaryOptions.value.length > 0 && (
             <Box
               sx={{
                 position: "absolute",

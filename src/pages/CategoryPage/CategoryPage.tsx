@@ -46,6 +46,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Styles from "./CategorySection.styles";
 import { RestaurantData } from "@dataTypes/RestaurantObject";
+import PreviewMenu from "@components/PreviewMenu/PreviewMenu";
 
 export default function CategoryPage() {
   const {
@@ -67,6 +68,7 @@ export default function CategoryPage() {
   const dispatch = useAppDispatch();
   const [openImportDialog, setOpenImportDialog] = useState(false);
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
+  const [openPreviewMenu, setOpenPreviewMenu] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -225,6 +227,10 @@ export default function CategoryPage() {
         />
       )}
 
+      <PreviewMenu
+        openPreviewMenu={openPreviewMenu}
+        setOpenPreviewMenu={setOpenPreviewMenu}
+      />
       <Stack spacing={3} sx={Styles.stack}>
         <Backdrop
           sx={{
@@ -360,6 +366,9 @@ export default function CategoryPage() {
                 display: { xs: "none", sm: "block" },
               }}
               variant="contained"
+              onClick={() => {
+                setOpenPreviewMenu(true);
+              }}
             >
               {getString("categoryPagePreviewMenuText")}
             </Button>
@@ -393,9 +402,15 @@ export default function CategoryPage() {
                   setOpenImportDialog(true);
                 }}
               >
-                {getString("import")}
+                {getString("categoryPageImportLabel")}
               </MenuItem>
-              <MenuItem>{getString("categoryPagePreviewMenuText")}</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setOpenPreviewMenu(true);
+                }}
+              >
+                {getString("categoryPagePreviewMenuText")}
+              </MenuItem>
             </Menu>
           </Box>
         </Box>

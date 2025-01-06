@@ -99,24 +99,22 @@ export const MenuSlice = createSlice({
         state.loading = false;
         if (state?.restaurantData.categories.length === 1) {
           state.selectedCategory = state?.restaurantData.categories[0];
-          state.selectedCategoryType = "";
+          state.selectedCategoryType = state.restaurantData.categories[0].categoryType;
           return;
         }
-        if (state?.restaurantData.categories.length !== 0) {
-          if (state?.restaurantData.categories.length > 1) {
-            const foodCategory = state?.restaurantData.categories.find(
-              (category) => {
-                return category.categoryType.toLocaleLowerCase() === "food";
-              }
-            );
-            if (foodCategory) {
-              state.selectedCategory = foodCategory;
-              state.selectedCategoryType = "Food";
+        if (state?.restaurantData.categories.length > 1) {
+          const foodCategory = state?.restaurantData.categories.find(
+            (category) => {
+              return category.categoryType.toLocaleLowerCase() === "food";
             }
-            return;
+          );
+          if (foodCategory) {
+            state.selectedCategory = foodCategory;
+            state.selectedCategoryType = "Food";
           }
-          console.log(state?.restaurantData.categories[0]);
+          return;
         }
+        console.log(state?.restaurantData.categories[0]);
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {
         state.loading = false;
