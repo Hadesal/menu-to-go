@@ -29,7 +29,8 @@ const ProfilePage = () => {
         <Grid
           sx={{ paddingLeft: "0 !important", paddingTop: "0 !important" }}
           item
-          xs={4}
+          xs={12}
+          lg={4}
         >
           <Paper elevation={3} sx={{ padding: "0", borderRadius: "15px" }}>
             <Box
@@ -141,7 +142,16 @@ const ProfilePage = () => {
             </Box>
           </Paper>
         </Grid>
-        <Grid sx={{ paddingTop: "0 !important" }} item xs={8}>
+        <Grid
+          sx={{
+            marginTop: { xs: 2, lg: 0 },
+            paddingLeft: { xs: "0 !important", lg: "2rem !important" },
+            paddingTop: "0 !important",
+          }}
+          item
+          lg={8}
+          xs={12}
+        >
           <Paper
             elevation={3}
             sx={{ padding: "2rem 1rem", borderRadius: "15px" }}

@@ -8,9 +8,13 @@ import {
   Container,
   Snackbar,
   Typography,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import PhoneInput from "react-phone-input-2";
 import "./ProfilePage.css";
+import { countries } from "../../components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
@@ -26,6 +30,16 @@ interface BillingDataEditSectionProps {
   setToastVisible: Dispatch<SetStateAction<boolean>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface Country {
+  id: string;
+  name: string;
+}
+
+const sortCountriesAlphabetically = (countriesList: Country[]): Country[] => {
+  return countriesList.slice().sort((a, b) => a.name.localeCompare(b.name));
+};
+
 const BillingDataEditSection = ({
   setToastVisible,
   setIsEditing,
@@ -55,28 +69,48 @@ const BillingDataEditSection = ({
       billingData: { ...prevValue.billingData!, [name]: value },
     }));
   };
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+    const { name, value } = e.target;
+
+    setFormData((prevValue) => ({
+      ...prevValue,
+      billingData: { ...prevValue.billingData!, [name]: value },
+    }));
+  };
+
   function isUserDataType(response: any): response is UserDataType {
     return typeof response === "object" && "id" in response;
   }
   const isFormDataChanged = (
     formData: UserDataType,
     userData: UserDataType
-  ) => {
-    if (formData.email !== userData.email) return true;
+  ): boolean => {
+    // Compare email directly, ensuring trimming to avoid discrepancies
+    if (formData.email?.trim() !== userData.email?.trim()) return true;
 
     // Check if billingData exists in both formData and userData
     if (formData.billingData && userData.billingData) {
       for (const key in formData.billingData) {
-        if (
-          formData.billingData[key as keyof BillingDataType] !==
-          userData.billingData[key as keyof BillingDataType]
-        ) {
-          return true;
+        const formValue = formData.billingData[key as keyof BillingDataType];
+        const userValue = userData.billingData[key as keyof BillingDataType];
+
+        // Handle string comparison with trimming
+        if (typeof formValue === "string" && typeof userValue === "string") {
+          if (formValue.trim() !== userValue.trim()) {
+            return true;
+          }
+        } else {
+          // Fallback for direct comparison of other types
+          if (formValue !== userValue) {
+            return true;
+          }
         }
       }
     }
+
     return false;
   };
+
   const handleOnSave = () => {
     if (isFormDataChanged(formData, user!)) {
       // Updated regex to match either "+" or country codes like +20, +43, etc.
@@ -196,7 +230,6 @@ const BillingDataEditSection = ({
               marginTop: "0.5rem",
             }}
             InputPropStyle={{ borderRadius: "0.5rem" }}
-            styleInputProps={{ padding: "0.8rem" }}
             boxStyle={{ flexGrow: 1 }}
             value={formData?.billingData?.fullName}
             onChange={handleInputChange}
@@ -221,7 +254,6 @@ const BillingDataEditSection = ({
               marginTop: "0.5rem",
             }}
             InputPropStyle={{ borderRadius: "0.5rem" }}
-            styleInputProps={{ padding: "0.8rem" }}
             boxStyle={{ flexGrow: 1 }}
             value={formData?.email as string}
             readOnly={true}
@@ -236,20 +268,6 @@ const BillingDataEditSection = ({
           <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
             {getString("phonenumber")}
           </Typography>
-          {/* <InputComponent
-            id="phoneField"
-            type="Phone"
-            label=""
-            textFieldStyle={{
-              width: "100%",
-              padding: "0",
-              marginTop: "0.5rem",
-            }}
-            InputPropStyle={{ borderRadius: "0.5rem" }}
-            styleInputProps={{ padding: "0.8rem" }}
-            boxStyle={{ flexGrow: 1 }}
-            value={formData?.billingData?.phoneNumber as string}
-          /> */}
           <PhoneInput
             country=""
             enableAreaCodes={true}
@@ -297,7 +315,6 @@ const BillingDataEditSection = ({
                   marginTop: "0.5rem",
                 }}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.companyName as string}
               />
@@ -310,7 +327,7 @@ const BillingDataEditSection = ({
               <Typography sx={{ fontWeight: 500 }} variant="subtitle1">
                 {getString("country")}
               </Typography>
-              <InputComponent
+              {/* <InputComponent
                 id="countryField"
                 type="country"
                 name="country"
@@ -322,10 +339,26 @@ const BillingDataEditSection = ({
                   marginTop: "0.5rem",
                 }}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.country as string}
-              />
+              /> */}
+              <Select
+                id="countryField"
+                value={formData?.billingData?.country as string}
+                name="country"
+                onChange={handleSelectChange}
+                sx={{
+                  width: "100%",
+                  borderRadius: "0.5rem",
+                  marginTop: "0.5rem",
+                }}
+              >
+                {sortCountriesAlphabetically(countries).map((country) => (
+                  <MenuItem key={country.id} value={country.name}>
+                    {country.name}
+                  </MenuItem>
+                ))}
+              </Select>
             </Container>
             <Container
               sx={{
@@ -347,7 +380,6 @@ const BillingDataEditSection = ({
                   marginTop: "0.5rem",
                 }}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.address as string}
               />
@@ -374,7 +406,6 @@ const BillingDataEditSection = ({
                   marginTop: "0.5rem",
                 }}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.taxId as string}
               />
@@ -399,7 +430,6 @@ const BillingDataEditSection = ({
                 }}
                 onChange={handleInputChange}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.city as string}
               />
@@ -424,7 +454,6 @@ const BillingDataEditSection = ({
                   marginTop: "0.5rem",
                 }}
                 InputPropStyle={{ borderRadius: "0.5rem" }}
-                styleInputProps={{ padding: "0.8rem" }}
                 boxStyle={{ flexGrow: 1 }}
                 value={formData?.billingData?.zipCode as string}
               />
@@ -465,6 +494,7 @@ const BillingDataEditSection = ({
             variant="outlined"
             startIcon={<DoneOutlineOutlinedIcon />}
             onClick={handleOnSave}
+            disabled={!isFormDataChanged(formData, user!)}
           >
             {getString("save")}
           </Button>

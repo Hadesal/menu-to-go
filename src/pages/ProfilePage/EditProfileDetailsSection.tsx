@@ -69,12 +69,18 @@ const EditProfileDetailsSection = ({
     formData: UserDataType,
     userData: UserDataType
   ) => {
-    if (formData.billingData?.phoneNumber !== userData.billingData?.phoneNumber)
-      return true;
-
     for (const key of Object.keys(formData) as (keyof UserDataType)[]) {
-      if (formData[key] !== userData[key]) {
-        return true;
+      if (
+        typeof formData[key] === "object" &&
+        typeof userData[key] === "object"
+      ) {
+        if (JSON.stringify(formData[key]) !== JSON.stringify(userData[key])) {
+          return true;
+        }
+      } else {
+        if (formData[key] !== userData[key]) {
+          return true;
+        }
       }
     }
     return false;
@@ -189,7 +195,6 @@ const EditProfileDetailsSection = ({
           label=""
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={formData.name as string}
           onChange={handleInputChange}
@@ -210,7 +215,6 @@ const EditProfileDetailsSection = ({
           label=""
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={formData.email as string}
           disabled={true}
@@ -279,6 +283,7 @@ const EditProfileDetailsSection = ({
           variant="outlined"
           startIcon={<DoneOutlineOutlinedIcon />}
           onClick={onSave}
+          disabled={!isFormDataChanged(formData, user)}
         >
           {getString("save")}
         </Button>

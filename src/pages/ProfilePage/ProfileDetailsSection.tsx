@@ -85,7 +85,6 @@ const ProfileDetailsSection = () => {
           readOnly={true}
           textFieldStyle={{ width: "100%", padding: "0" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.name}
           disabled={true}
@@ -106,7 +105,6 @@ const ProfileDetailsSection = () => {
           readOnly={true}
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.email}
           disabled={true}
@@ -128,7 +126,6 @@ const ProfileDetailsSection = () => {
           readOnly={true}
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.billingData?.phoneNumber?.trim()}
           disabled={true}

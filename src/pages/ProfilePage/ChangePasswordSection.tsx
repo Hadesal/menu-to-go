@@ -180,7 +180,6 @@ const ChangePasswordSection = () => {
           helperText={errors.currentPassword}
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
         />
       </Container>
@@ -204,7 +203,6 @@ const ChangePasswordSection = () => {
           helperText={errors.newPassword}
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
         />
       </Container>
