@@ -2,11 +2,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { TransitionProps } from "@mui/material/transitions";
 import { useMediaQuery } from "@mui/system";
 import MenuPage from "@pages/MenuPage/MenuPage";
-import { useAppSelector } from "@redux/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { Dispatch, forwardRef, SetStateAction } from "react";
 import { Slide, Toolbar, Dialog, AppBar, IconButton } from "@mui/material";
 import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
+import { productDefaultData } from "@constants/constants";
+import { setSelectedProduct } from "@redux/slices/menuSlice";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -26,12 +28,16 @@ export default function PreviewMenu({
   openPreviewMenu,
   setOpenPreviewMenu,
 }: PreviewMenuProps) {
+  const dispatch = useAppDispatch();
+
   const handleClose = () => {
     setOpenPreviewMenu(false);
+    dispatch(setSelectedProduct(productDefaultData));
   };
   const { restaurantList, selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
+  const { selectedProduct } = useAppSelector((state) => state.menuData);
 
   const isLgAndUp = useMediaQuery("(max-width:1536px)");
 
@@ -75,7 +81,8 @@ export default function PreviewMenu({
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               boxSizing: "border-box",
-              paddingTop: "20px",
+              paddingTop:
+                selectedProduct === productDefaultData ? "20px" : "0px",
             }}
             className="hide-scrollbar"
           >

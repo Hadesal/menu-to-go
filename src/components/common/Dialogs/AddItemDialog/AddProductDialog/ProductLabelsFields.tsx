@@ -11,20 +11,20 @@ interface ProductLabelsFieldsProps {
 }
 
 const allergensOptions: Allergies[] = [
-  { label: "🍞 Gluten (G)", value: "gluten" },
-  { label: "🥚 Eggs (E)", value: "eggs" },
-  { label: "🧀 Milk (M)", value: "milk" },
-  { label: "🌰 Nuts (N)", value: "nuts" }, // Almonds, hazelnuts, walnuts, etc.
-  { label: "🥜 Peanuts (P)", value: "peanuts" },
-  { label: "🐟 Fish (F)", value: "fish" },
-  { label: "🦐 Crustaceans (C)", value: "crustaceans" }, // Shrimp, crab, lobster, etc.
-  { label: "🐌 Molluscs (M)", value: "molluscs" }, // Snails, squid, mussels, etc.
-  { label: "🌾 Sesame Seeds (S)", value: "sesame" },
-  { label: "🍯 Lupin (L)", value: "lupin" }, // A type of legume often found in flour
-  { label: "🍷 Sulphur Dioxide (SD)", value: "sulphites" }, // Used as a preservative
-  { label: "🥛 Soybeans (S)", value: "soy" },
-  { label: "🍚 Celery (C)", value: "celery" }, // Includes celeriac
-  { label: "🍂 Mustard (M)", value: "mustard" },
+  { label: "🍞 Gluten (A)", value: "gluten" },
+  { label: "🦐 Crustaceans (B)", value: "crustaceans" },
+  { label: "🥚 Eggs (C)", value: "eggs" },
+  { label: "🐟 Fish (D)", value: "fish" },
+  { label: "🥜 Peanuts (E)", value: "peanuts" },
+  { label: "🌱 Soybeans (F)", value: "soy" },
+  { label: "🥛 Milk (G)", value: "milk" },
+  { label: "🌰 Nuts (H)", value: "nuts" },
+  { label: "🍲 Celery (L)", value: "celery" },
+  { label: "🍯 Mustard (M)", value: "mustard" },
+  { label: "🌾 Sesame Seeds (N)", value: "sesame" },
+  { label: "🍷 Sulphur Dioxide (O)", value: "sulphites" },
+  { label: "🍚 Lupin (P)", value: "lupin" },
+  { label: "🐌 Molluscs (R)", value: "molluscs" },
 ];
 
 const labelsOptions: Labels[] = [

@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import { setSelectedProductsIDs } from "@slices/restaurantsSlice";
-import { ProductData } from "@dataTypes/ProductDataTypes";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 
-const useCheckBoxHandler = (items: ProductData[]) => {
+const useCheckBoxHandler = () => {
   const dispatch = useAppDispatch();
   const selectedProductIds = useAppSelector(
     (state) => state.restaurantsData?.selectedProductsIDs
   );
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const updatedCheckedItems: Record<string, boolean> =
+      selectedProductIds.reduce((acc: Record<string, boolean>, id: string) => {
+        acc[id] = true;
+        return acc;
+      }, {} as Record<string, boolean>);
+    setCheckedItems(updatedCheckedItems);
+  }, [selectedProductIds]);
 
   const handleCheckBoxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -28,11 +36,10 @@ const useCheckBoxHandler = (items: ProductData[]) => {
 
   // Optionally, reset checkedItems when items change
   const resetCheckedItems = () => {
-    const newCheckedItems = items.reduce((acc, item) => {
-      acc[item.id as string] = false;
-      return acc;
-    }, {} as Record<string, boolean>);
-    setCheckedItems(newCheckedItems);
+    setCheckedItems((prev) => {
+      if (Object.keys(prev).length === 0) return prev; 
+      return {}; 
+    });
   };
 
   return {

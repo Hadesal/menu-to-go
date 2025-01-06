@@ -52,6 +52,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ getString, dispatch }) => {
           <MenuItem
             key={option.id}
             onClick={() => {
+              
               dispatch(setActiveTab(option.id as TabType));
               setAnchorElProfile(null);
             }}

@@ -13,6 +13,7 @@ import { buttonData } from "@constants/constants";
 import { useAppDispatch } from "../../redux/reduxHooks";
 import { setActiveTab } from "../../redux/slices/mainViewSlice";
 import { TabType } from "@constants/types";
+import { setSelectedProductsIDs } from "@redux/slices/restaurantsSlice";
 
 interface SideDrawerProps {
   getString: (key: string) => string;
@@ -53,6 +54,9 @@ const SideDrawerComponent: React.FC<SideDrawerProps> = ({
                 handleLogoutClick();
               } else {
                 dispatch(setActiveTab(btn.id as TabType));
+                if (btn.id !== "restaurant") {
+                  dispatch(setSelectedProductsIDs([]));
+                }
               }
             }}
           >

@@ -51,30 +51,31 @@ const ProductListView = ({
   );
 
   const { checkedItems, handleCheckBoxChange, resetCheckedItems } =
-    useCheckBoxHandler(items);
+    useCheckBoxHandler();
 
   const { anchorEls, handleMenuClick, handleMenuClose } = useMenu(items.length);
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const [reorderedItems, setReorderedItems] = useState(items);
 
   useEffect(() => {
-    // Get the keys of checkedItems as an array
     const checkedItemKeys = Object.keys(checkedItems);
-    const isSameCategory = items.some((item) =>
-      checkedItemKeys.some((i) => i === item.id)
-    );
-    if (isSameCategory) {
-      return;
+    const isSameCategory = items
+      .filter((item) => item.id !== undefined) // Filter out undefined IDs
+      .some((item) => checkedItemKeys.includes(item.id as string));
+
+    if (!isSameCategory && Object.keys(checkedItems).length > 0) {
+      resetCheckedItems();
     }
-    //clear all selection
-    resetCheckedItems();
   }, [items, checkedItems, resetCheckedItems]);
 
   useEffect(() => {
-    if (selectedProductsIDs.length === 0) {
+    if (
+      selectedProductsIDs.length === 0 &&
+      Object.keys(checkedItems).length > 0
+    ) {
       resetCheckedItems();
     }
-  }, [resetCheckedItems, selectedProductsIDs]);
+  }, [resetCheckedItems, selectedProductsIDs, checkedItems]);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
