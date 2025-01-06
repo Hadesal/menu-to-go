@@ -19,10 +19,11 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { addRestaurant } from "@redux/thunks/restaurantThunks";
 import { updateUser } from "@redux/thunks/userThunks";
 import { fetchAllData } from "@utils/dataFetchers/DashboaredDataFetching";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "src/hooks/useLanguage";
 import { Styles } from "../LogoutDialog/confirmDialog.style";
 import { countries, currencies } from "./Data/userDetailsData";
+
 interface UserDetailsInputComponentProps {
   width?: string;
   height?: string;
@@ -34,6 +35,15 @@ interface userDetails {
   country: string;
   currency: string;
 }
+export interface Country {
+  id: string;
+  name: string;
+}
+
+const sortCountriesAlphabetically = (countriesList: Country[]): Country[] => {
+  return countriesList.slice().sort((a, b) => a.name.localeCompare(b.name));
+};
+
 const UserDetailsInputComponent = ({
   width,
   height,
@@ -58,6 +68,11 @@ const UserDetailsInputComponent = ({
 
   const [loading, setLoading] = useState(false);
 
+  const sortedCountries: Country[] = useMemo(
+    () => sortCountriesAlphabetically(countries),
+    [countries]
+  );
+
   useEffect(() => {
     setUserDetails((prevState) => {
       return {
@@ -78,7 +93,6 @@ const UserDetailsInputComponent = ({
 
     setErrors(newErrors);
 
-    // Only proceed if there are no validation errors
     if (
       !newErrors.restaurantName &&
       !newErrors.country &&
@@ -233,7 +247,7 @@ const UserDetailsInputComponent = ({
                 marginTop: "0.5rem",
               }}
             >
-              {countries.map((country) => (
+              {sortedCountries.map((country) => (
                 <MenuItem key={country.id} value={country.name}>
                   {country.name}
                 </MenuItem>
