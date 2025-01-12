@@ -13,14 +13,25 @@ interface IInfoDialog {
   isDialogOpen: boolean;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   message: string;
+  title?: string;
+  onClick?: () => void; // Optional onClick prop
+  closeOnBackdropClick?: boolean; // Optional prop to control backdrop click behavior
 }
 
 export const InfoDialog = ({
   isDialogOpen,
   setIsDialogOpen,
   message,
+  title = "Info",
+  onClick, // Optional onClick prop
+  closeOnBackdropClick = true, // Default to closing on backdrop click
 }: IInfoDialog) => {
   const dispatch = useAppDispatch();
+
+  const handleClose = () => {
+    setIsDialogOpen(false);
+    dispatch(clearProductActionErrorMessage());
+  };
 
   return (
     <Dialog
@@ -33,13 +44,11 @@ export const InfoDialog = ({
         },
       }}
       open={isDialogOpen}
-      onClose={() => {
-        setIsDialogOpen(false);
-      }}
+      onClose={closeOnBackdropClick ? handleClose : undefined} // Handle backdrop click based on prop
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Info</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
 
       <DialogContent>
         <p>{message}</p>
@@ -48,10 +57,7 @@ export const InfoDialog = ({
       <DialogActions>
         <Button
           variant="contained"
-          onClick={() => {
-            setIsDialogOpen(false);
-            dispatch(clearProductActionErrorMessage());
-          }}
+          onClick={onClick || handleClose} // Use the passed onClick or default to handleClose
           sx={{
             borderRadius: "20px",
             padding: "5px 25px 5px 25px",

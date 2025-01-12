@@ -165,12 +165,13 @@ export const fetchUserById = createAsyncThunk<
 
 // Delete user
 export const deleteUser = createAsyncThunk<
-  void,
+  string,
   string,
   { rejectValue: string }
 >("user/deleteUser", async (userId, { rejectWithValue }) => {
   try {
     await apiDeleteUser(userId);
+    return "User deleted successfully"; // Explicitly return a success message
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data?.message || "Failed to delete user"
