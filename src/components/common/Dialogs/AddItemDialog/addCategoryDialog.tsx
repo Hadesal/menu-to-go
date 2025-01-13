@@ -67,8 +67,6 @@ const AddCategoryDialog = ({
   useEffect(() => {
     if (initialData) {
       setIsDataUnchanged(isEqual(dialogData, initialData));
-    } else {
-      setIsDataUnchanged(isEqual(dialogData, categoryDefaultData));
     }
   }, [dialogData, initialData]);
   const handleOnConfirm = () => {
@@ -232,16 +230,16 @@ const AddCategoryDialog = ({
           >
             {cancelText}
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleOnConfirm}
-            sx={{
-              ...Styles.logoutButton,
-            }}
-            disabled={isDataUnchanged}
-          >
-            {confirmText}
-          </Button>
+          <Box sx={Styles.buttonWrapper(isDataUnchanged)}>
+            <Button
+              variant="contained"
+              onClick={handleOnConfirm}
+              sx={Styles.addBtn}
+              disabled={isDataUnchanged}
+            >
+              {confirmText}
+            </Button>
+          </Box>
         </Box>
       </DialogContent>
     </Dialog>

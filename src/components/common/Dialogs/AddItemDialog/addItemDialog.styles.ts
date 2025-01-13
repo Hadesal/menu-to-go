@@ -1,4 +1,38 @@
 export const Styles = {
+  buttonWrapper: (disabled: boolean) => ({
+    display: "inline-block",
+    cursor: disabled ? "not-allowed" : "pointer",
+  }),
+
+  addBtn: {
+    borderRadius: "20px",
+    padding: "5px 25px",
+    backgroundColor: "var(--primary-color)",
+    border: "1px solid transparent",
+    cursor: "pointer",
+    transition: "background-color 0.3s, border-color 0.3s, color 0.3s",
+
+    "&:hover": {
+      backgroundColor: "transparent",
+      borderColor: "var(--primary-color)",
+      boxShadow: "none",
+      color: "var(--primary-color)",
+    },
+
+    "&.Mui-disabled": {
+      borderColor: "transparent",
+      color: "white",
+      opacity: 0.6,
+    },
+
+    "&.Mui-disabled:hover": {
+      backgroundColor: "var(--primary-color)",
+      borderColor: "transparent",
+      boxShadow: "none",
+      color: "white",
+    },
+  },
+
   dialog: {
     borderRadius: "24px",
     padding: "10px 50px",
