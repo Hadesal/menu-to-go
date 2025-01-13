@@ -80,7 +80,7 @@ const QrCodePage = () => {
   });
 
   const [urlPath, setUrlPath] = useState<string>(
-    `http://192.168.1.203:5173/menu/${selectedRestaurantId}`
+    `https://menutogo.at/menu/${selectedRestaurantId}`
   );
   const [imageSrc, setImageSrc] = useState<string>(logo);
   const frameRef: MutableRefObject<HTMLDivElement | null> =

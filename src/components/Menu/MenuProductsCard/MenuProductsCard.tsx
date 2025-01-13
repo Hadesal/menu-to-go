@@ -48,6 +48,7 @@ export default function MenuProductsCard({
         pointerEvents: product.isAvailable ? "auto" : "none",
         cursor: product.isAvailable ? "pointer" : "not-allowed",
         height: "263px",
+        position:"relative"
       }}
     >
       {!product.isAvailable && (
