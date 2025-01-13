@@ -1,11 +1,22 @@
-import { Button, Container, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Button,
+  Container,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { ChromePicker } from "react-color";
 import { useTranslation } from "react-i18next";
 
+interface options {
+  type: string;
+  color: string;
+}
 interface StyleControlProps {
   optionName: string;
-  options: any;
+  options: options;
   label: string;
   choices: { value: string; label: string }[];
   updateOptions: (optionName: string, value: object) => void;
@@ -23,8 +34,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { t } = useTranslation();
   const getString = t;
+  const [pickerPosition, setPickerPosition] = useState({
+    top: 0,
+    left: 0,
+  });
 
-  const handleSelectChange = (event: any) => {
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     updateOptions(optionName, { type: event.target.value });
   };
 
@@ -34,6 +49,18 @@ const StyleControl: React.FC<StyleControlProps> = ({
 
   const toggleColorPicker = () => {
     setShowColorPicker((prev) => !prev);
+  };
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const buttonRect = event.currentTarget.getBoundingClientRect();
+    const offset = 320;
+
+    setPickerPosition({
+      top: -240,
+      left: buttonRect.left - offset,
+    });
+
+    toggleColorPicker();
   };
 
   useEffect(() => {
@@ -97,13 +124,12 @@ const StyleControl: React.FC<StyleControlProps> = ({
         ref={buttonRef}
         sx={{
           marginTop: 1,
-          // width: "200px",
           height: "fit-content",
           minWidth: "200px",
           alignSelf: { xs: "flex-start", sm: "inherit" },
           backgroundColor: options.color,
         }}
-        onClick={toggleColorPicker}
+        onClick={handleButtonClick}
       >
         {getString("chooseColorLabel")}
       </Button>
@@ -111,13 +137,11 @@ const StyleControl: React.FC<StyleControlProps> = ({
         <div
           ref={colorPickerRef}
           style={{
-            position: "fixed",
+            position: "absolute",
+            top: `${pickerPosition.top}px`,
+            left: `${pickerPosition.left}px`,
             zIndex: 2,
-            left: "calc(50% + 150px)",
-            top: "20%",
-            backgroundColor: "white",
             borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             padding: "10px",
           }}
         >
