@@ -13,14 +13,25 @@ interface IInfoDialog {
   isDialogOpen: boolean;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   message: string;
+  title?: string;
+  onClick?: () => void;
+  closeOnBackdropClick?: boolean;
 }
 
 export const InfoDialog = ({
   isDialogOpen,
   setIsDialogOpen,
   message,
+  title = "Info",
+  onClick,
+  closeOnBackdropClick = true,
 }: IInfoDialog) => {
   const dispatch = useAppDispatch();
+
+  const handleClose = () => {
+    setIsDialogOpen(false);
+    dispatch(clearProductActionErrorMessage());
+  };
 
   return (
     <Dialog
@@ -33,13 +44,11 @@ export const InfoDialog = ({
         },
       }}
       open={isDialogOpen}
-      onClose={() => {
-        setIsDialogOpen(false);
-      }}
+      onClose={closeOnBackdropClick ? handleClose : undefined}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Info</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
 
       <DialogContent>
         <p>{message}</p>
@@ -48,10 +57,7 @@ export const InfoDialog = ({
       <DialogActions>
         <Button
           variant="contained"
-          onClick={() => {
-            setIsDialogOpen(false);
-            dispatch(clearProductActionErrorMessage());
-          }}
+          onClick={onClick || handleClose}
           sx={{
             borderRadius: "20px",
             padding: "5px 25px 5px 25px",

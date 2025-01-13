@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import BillingDataTextSection from "./BillingDataTextSection";
 import ChangePasswordSection from "./ChangePasswordSection";
 import ProfileDetailsSection from "./ProfileDetailsSection";
+import { DeleteAccount } from "./DeleteAccount";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -135,9 +136,45 @@ const ProfilePage = () => {
                       : "transparent",
                   transition: "background-color 0.3s",
                 },
+                borderBottom: "1px solid #BCB8B1",
               }}
             >
               {getString("billingData")}
+            </Box>
+            <Box
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveTab("deleteAccount");
+              }}
+              sx={{
+                width: "100%",
+                padding: 2,
+                paddingBottom: 2.5,
+                paddingTop: 2.5,
+                cursor: "pointer",
+                color:
+                  activeTab === "deleteAccount"
+                    ? "var(--primary-color)"
+                    : "inherit",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  height: "50%",
+                  width: "3px",
+                  backgroundColor:
+                    activeTab === "deleteAccount"
+                      ? "var(--primary-color)"
+                      : "transparent",
+                  transition: "background-color 0.3s",
+                },
+              }}
+            >
+              {getString("deleteAccount")}
             </Box>
           </Paper>
         </Grid>
@@ -152,6 +189,7 @@ const ProfilePage = () => {
               <EditProfileDetailsSection setActiveTab={setActiveTab} />
             )} */}
             {activeTab === "billingData" && <BillingDataTextSection />}
+            {activeTab === "deleteAccount" && <DeleteAccount />}
           </Paper>
         </Grid>
       </Grid>
