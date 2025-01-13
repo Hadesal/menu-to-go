@@ -97,7 +97,6 @@ const BillingDataTextSection = () => {
           label=""
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.billingData?.fullName as string}
           readOnly={true}
@@ -118,7 +117,6 @@ const BillingDataTextSection = () => {
           label=""
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.email as string}
           readOnly={true}
@@ -139,7 +137,6 @@ const BillingDataTextSection = () => {
           label=""
           textFieldStyle={{ width: "100%", padding: "0", marginTop: "0.5rem" }}
           InputPropStyle={{ borderRadius: "0.5rem" }}
-          styleInputProps={{ padding: "0.8rem" }}
           boxStyle={{ flexGrow: 1 }}
           value={user?.billingData?.phoneNumber as string}
           readOnly={true}
@@ -169,7 +166,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.companyName as string}
               readOnly={true}
@@ -194,7 +190,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.country as string}
               readOnly={true}
@@ -219,7 +214,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.address as string}
               readOnly={true}
@@ -246,7 +240,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.taxId as string}
               readOnly={true}
@@ -271,7 +264,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.city as string}
               readOnly={true}
@@ -296,7 +288,6 @@ const BillingDataTextSection = () => {
                 marginTop: "0.5rem",
               }}
               InputPropStyle={{ borderRadius: "0.5rem" }}
-              styleInputProps={{ padding: "0.8rem" }}
               boxStyle={{ flexGrow: 1 }}
               value={user?.billingData?.zipCode as string}
               readOnly={true}
