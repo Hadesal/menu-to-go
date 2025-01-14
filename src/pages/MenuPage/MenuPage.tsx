@@ -3,7 +3,7 @@ import MenuCategories from "@components/Menu/MenuCategories/MenuCategories";
 import MenuProductsCard from "@components/Menu/MenuProductsCard/MenuProductsCard";
 import MenuProductsList from "@components/Menu/MenuProductsCard/MenuProductsList";
 import MenuSelection from "@components/Menu/MenuSelection/MenuSelection";
-import { productDefaultData } from "@constants/constants";
+import { categoryDefaultData, productDefaultData } from "@constants/constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
@@ -167,7 +167,11 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           <MenuCategories
             categories={filteredCategories}
             categoryTag={selectedCategoryType}
-            selectedCategory={(selectedCategory && selectedCategory.name) || ""}
+            selectedCategory={
+              (selectedCategory !== categoryDefaultData &&
+                selectedCategory.name) ||
+              ""
+            }
           />
         </Box>
         <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
@@ -181,7 +185,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
           }}
           variant="h6"
         >
-          {selectedCategory && selectedCategory.name}
+          {selectedCategory !== categoryDefaultData && selectedCategory.name}
         </Typography>
         {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
           <Grid
@@ -202,7 +206,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
               marginBottom: 5,
             }}
           >
-            {selectedCategory &&
+            {selectedCategory !== categoryDefaultData &&
               selectedCategory.products!.map((product, index) => (
                 <Grid
                   item

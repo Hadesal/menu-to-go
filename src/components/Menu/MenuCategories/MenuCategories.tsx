@@ -1,11 +1,11 @@
-import { Box, Typography } from "@mui/material";
-import { useEffect } from "react";
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
-import { setSelectedCategory } from "@redux/slices/menuSlice";
-import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { Styles } from "./MenuCategories.styles";
-import { adjustBrightness } from "@utils/colors";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import { Box, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { setSelectedCategory } from "@redux/slices/menuSlice";
+import { adjustBrightness } from "@utils/colors";
+import { useEffect } from "react";
+import { Styles } from "./MenuCategories.styles";
 
 interface MenuCategoriesProps {
   categories: CategoryData[];
@@ -38,7 +38,9 @@ export default function MenuCategories({
   };
 
   useEffect(() => {
-    dispatch(setSelectedCategory(categoriesData(categoryTag)[0]));
+    if (!selectedCategory) {
+      dispatch(setSelectedCategory(categoriesData(categoryTag)[0]));
+    }
   }, [categoryTag]);
 
   return (
