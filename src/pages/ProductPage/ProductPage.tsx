@@ -21,10 +21,12 @@ export default function ProductPage() {
   return (
     <Container
       sx={{
-        height: "100%",
+        minHeight: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        backgroundColor:
+          restaurantData.userUiPreferences.colors.backgroundColor,
       }}
       disableGutters={true}
       maxWidth="sm"

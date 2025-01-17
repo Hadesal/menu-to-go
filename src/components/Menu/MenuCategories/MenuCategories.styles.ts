@@ -15,7 +15,7 @@ export const Styles = {
   categoryBox: {
     display: "flex",
     minWidth: 100,
-    width: "120px",
+    maxWidth: "120px",
     // border:"1px solid black",
     flexDirection: "column",
     alignItems: "center",
