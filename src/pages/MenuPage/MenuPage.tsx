@@ -22,7 +22,7 @@ import SplashScreen from "@pages/SplashScreen/SplashScreen";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
 import Lottie from "lottie-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // Define menu selection options
@@ -51,6 +51,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
     selectedCategoryType,
     selectedProduct,
   } = useAppSelector((state) => state.menuData);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
 
   const { id } = useParams();
   useEffect(() => {
@@ -72,12 +73,21 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
   }, [dispatch, restaurantTemplateId]);
 
   useEffect(() => {
-    // Smoothly scroll to the top when the selected category changes
-    window.scrollTo({
-      top: -10,
-      left: 0,
-      behavior: "smooth", // Enables smooth scrolling
-    });
+    console.log(menuContainerRef.current);
+    if (menuContainerRef.current) {
+      // Scroll into view
+      menuContainerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start", // Align to the top of the viewport
+      });
+
+      // Adjust the scroll position slightly above
+      const offset = -1000; // Adjust the offset as needed
+      window.scrollBy({
+        top: offset,
+        behavior: "smooth",
+      });
+    }
   }, [selectedCategory]);
 
   // Show splash screen while loading
@@ -124,6 +134,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
   }
   return (
     <Container
+      ref={menuContainerRef}
       disableGutters
       sx={{
         ...Styles.container,

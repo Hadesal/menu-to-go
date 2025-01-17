@@ -1,14 +1,15 @@
+import { productDefaultData } from "@constants/constants";
 import CloseIcon from "@mui/icons-material/Close";
+import { AppBar, Dialog, IconButton, Slide, Toolbar } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import { useMediaQuery } from "@mui/system";
 import MenuPage from "@pages/MenuPage/MenuPage";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
+import { setSelectedProduct } from "@redux/slices/menuSlice";
 import { Dispatch, forwardRef, SetStateAction } from "react";
-import { Slide, Toolbar, Dialog, AppBar, IconButton } from "@mui/material";
 import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
-import { productDefaultData } from "@constants/constants";
-import { setSelectedProduct } from "@redux/slices/menuSlice";
+import "./device.css";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -61,6 +62,7 @@ export default function PreviewMenu({
         </Toolbar>
       </AppBar>
       <div
+        className="device"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -81,8 +83,6 @@ export default function PreviewMenu({
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               boxSizing: "border-box",
-              paddingTop:
-                selectedProduct === productDefaultData ? "20px" : "0px",
             }}
             className="hide-scrollbar"
           >
