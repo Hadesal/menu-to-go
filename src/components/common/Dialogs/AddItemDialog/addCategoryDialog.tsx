@@ -190,11 +190,10 @@ const AddCategoryDialog = ({
             {getString("categoryTypeTitle")}
           </FormLabel>
           <Tooltip
+            dir={currentLanguage === "ar" ? "rtl" : ""}
             arrow
-            placement="right-start"
-            title={
-              "Choose the category type to specify whether this is related to food items (e.g., pasta, sandwiches, desserts) or drink items (e.g., coffee, smoothies, cocktails)."
-            }
+            placement={currentLanguage === "ar" ? "left-start" : "right-start"}
+            title={getString("categoryTypeInfo")}
           >
             <InfoIcon
               sx={{ color: "var(--primary-color)", fontSize: "1.2rem" }}
