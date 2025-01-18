@@ -99,6 +99,7 @@
   "categoryDeleteText": "Möchten Sie die Kategorie {{categoryName}} dauerhaft löschen?",
   "nameInputLabel": "Name",
   "categoryTypeTitle": "Kategorietyp",
+  "categoryTypeInfo": "Wählen Sie den Kategorie-Typ aus, um anzugeben, ob es sich um Lebensmittel (z. B. Pasta, Sandwiches, Desserts) oder Getränke (z. B. Kaffee, Smoothies, Cocktails) handelt.",
   "categoryTypeFood": "Essen",
   "categoryTypeDrink": "Getränke",
   "categoryEmptyStateTitle": "Ihre Kategorieliste ist leer.",

@@ -99,6 +99,7 @@
   "categoryDeleteText": "هل أنت متأكد أنك تريد حذف الفئة {{categoryName}} نهائيًا؟",
   "nameInputLabel": "الاسم",
   "categoryTypeTitle": "نوع الفئة",
+  "categoryTypeInfo": "اختر نوع الفئة لتحديد ما إذا كان يتعلق بأصناف الطعام (مثل المعكرونة، السندويشات، الحلويات) أو بأصناف المشروبات (مثل القهوة، السموذي، الكوكتيلات).",
   "categoryTypeFood": "طعام",
   "categoryTypeDrink": "مشروبات",
   "categoryEmptyStateTitle": "قائمة الفئات فارغة.",

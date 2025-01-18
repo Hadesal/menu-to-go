@@ -99,6 +99,7 @@
   "categoryDeleteText": "¿Estás seguro de que deseas eliminar permanentemente la categoría {{categoryName}}?",
   "nameInputLabel": "Nombre",
   "categoryTypeTitle": "Tipo de categoría",
+  "categoryTypeInfo": "Elija el tipo de categoría para especificar si está relacionado con alimentos (por ejemplo, pasta, sándwiches, postres) o bebidas (por ejemplo, café, batidos, cócteles).",
   "categoryTypeFood": "Comida",
   "categoryTypeDrink": "Bebidas",
   "categoryEmptyStateTitle": "Tu lista de categorías está vacía.",

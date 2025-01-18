@@ -99,6 +99,7 @@
   "categoryDeleteText": "Kategori {{categoryName}}'ı kalıcı olarak silmek istediğinizden emin misiniz?",
   "nameInputLabel": "Adı",
   "categoryTypeTitle": "Kategori türü",
+  "categoryTypeInfo": "Kategori türünü seçerek bunun yiyeceklerle (örneğin, makarna, sandviç, tatlılar) mi yoksa içeceklerle (örneğin, kahve, smoothie, kokteyller) ilgili olduğunu belirtin.",
   "categoryTypeFood": "Yemek",
   "categoryTypeDrink": "İçecek",
   "categoryEmptyStateTitle": "Kategori listeniz boş.",
