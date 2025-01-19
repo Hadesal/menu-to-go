@@ -113,7 +113,7 @@ export const MenuSlice = createSlice({
             filteredCategories[0].products &&
             filteredCategories[0].products?.length > 0
           ) {
-            //state.selectedCategory = filteredCategories[0];
+            state.selectedCategory = filteredCategories[0];
             state.selectedCategoryType = filteredCategories[0].categoryType;
           }
           return;
@@ -128,6 +128,7 @@ export const MenuSlice = createSlice({
             );
           });
           if (foodCategory) {
+            state.selectedCategory = foodCategory;
             state.selectedCategoryType = "Food";
           }
           return;
