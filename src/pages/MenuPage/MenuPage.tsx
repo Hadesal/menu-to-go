@@ -22,7 +22,7 @@ import SplashScreen from "@pages/SplashScreen/SplashScreen";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
 import Lottie from "lottie-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // Define menu selection options
@@ -51,6 +51,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
     selectedCategoryType,
     selectedProduct,
   } = useAppSelector((state) => state.menuData);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
 
   const { id } = useParams();
   useEffect(() => {
@@ -70,6 +71,24 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
 
     fetchDataAndHandleLoading();
   }, [dispatch, restaurantTemplateId]);
+
+  useEffect(() => {
+    console.log(menuContainerRef.current);
+    if (menuContainerRef.current) {
+      // Scroll into view
+      menuContainerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start", // Align to the top of the viewport
+      });
+
+      // Adjust the scroll position slightly above
+      const offset = -1000; // Adjust the offset as needed
+      window.scrollBy({
+        top: offset,
+        behavior: "smooth",
+      });
+    }
+  }, [selectedCategory]);
 
   // Show splash screen while loading
   if (loading) {
@@ -115,214 +134,234 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
   }
   return (
     <Container
+      ref={menuContainerRef}
       disableGutters
       sx={{
         ...Styles.container,
-        backgroundColor:
-          restaurantData.userUiPreferences.colors.backgroundColor,
         display: "flex",
         flexDirection: "column",
-        height: "100%",
+        minHeight: "100%",
       }}
       maxWidth="sm"
     >
-      <Box sx={{ flexGrow: 1 }}>
-        {restaurantData?.userUiPreferences?.logo &&
-          restaurantData.userUiPreferences.logo.length > 0 && (
-            <>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 2,
-                  marginTop: 2,
-                }}
-              >
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor:
+            restaurantData.userUiPreferences.colors.backgroundColor,
+          justifyContent: "space-between",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Main Content */}
+        <Box>
+          {restaurantData?.userUiPreferences?.logo &&
+            restaurantData.userUiPreferences.logo.length > 0 && (
+              <>
                 <Box
                   sx={{
+                    width: "100%",
                     display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 2,
+                    marginTop: 2,
                   }}
                 >
                   <img
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      // borderRadius: "50%",
-                    }}
+                    style={{ width: "100px", height: "100px" }}
                     src={restaurantData.userUiPreferences.logo}
                     alt="Logo"
                   />
                 </Box>
-              </Box>
-              <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
-            </>
-          )}
-
-        <Box sx={Styles.box}>
-          {showMenuSelection && (
-            <MenuSelection menuSelections={menuSelections} />
-          )}
-          <MenuCategories
-            categories={filteredCategories}
-            categoryTag={selectedCategoryType}
-            selectedCategory={(selectedCategory && selectedCategory.name) || ""}
-          />
-        </Box>
-        <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
-        <Typography
-          color={restaurantData.userUiPreferences.colors.primaryColor}
-          sx={{
-            paddingLeft: "1rem",
-            paddingTop: "2rem",
-            fontWeight: 500,
-            fontFamily: restaurantData.userUiPreferences.fontType,
-          }}
-          variant="h6"
-        >
-          {selectedCategory && selectedCategory.name}
-        </Typography>
-        {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
-          <Grid
-            spacing={2}
-            container
+                <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
+              </>
+            )}
+          <Box
             sx={{
-              marginTop: "1rem",
-              width: "100%",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              paddingBottom: "1rem",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
               paddingLeft: "1rem",
               paddingRight: "1rem",
-              marginLeft: 0,
-              marginBottom: 5,
+              paddingBottom: "1rem",
             }}
           >
-            {selectedCategory &&
-              selectedCategory.products!.map((product, index) => (
+            {showMenuSelection && (
+              <MenuSelection menuSelections={menuSelections} />
+            )}
+          </Box>
+          <Box
+            sx={{
+              position: "sticky",
+              top: 0,
+              zIndex: 10,
+              paddingLeft: "1rem",
+              paddingRight: "1rem",
+              paddingTop: "0.5rem",
+              backgroundColor:
+                restaurantData.userUiPreferences.colors.backgroundColor,
+              paddingBottom: "8px",
+            }}
+          >
+            <MenuCategories
+              categories={filteredCategories}
+              categoryTag={selectedCategoryType}
+              selectedCategory={
+                (selectedCategory && selectedCategory.name) || ""
+              }
+            />
+          </Box>
+          <Divider sx={{ marginTop: 1 }} variant="fullWidth" />
+          <Typography
+            color={restaurantData.userUiPreferences.colors.primaryColor}
+            sx={{
+              paddingLeft: "1rem",
+              paddingTop: "2rem",
+              fontWeight: 500,
+              fontFamily: restaurantData.userUiPreferences.fontType,
+            }}
+            variant="h6"
+          >
+            {selectedCategory && selectedCategory.name}
+          </Typography>
+          {/* Render Products */}
+          {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                marginTop: "1rem",
+                width: "100%",
+                paddingBottom: "1rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                marginLeft: 0,
+                marginBottom: 5,
+              }}
+            >
+              {selectedCategory?.products?.map((product, index) => (
                 <Grid
                   item
                   xs={6}
                   sm={6}
                   key={index}
                   sx={{
-                    paddingLeft: index % 2 === 0 ? "0 !important" : "0px",
-                    paddingTop: index < 2 ? "0 !important" : "0px",
+                    paddingLeft:
+                      index % 2 === 0 ? "0 !important" : "8px !important",
+                    paddingRight: index % 2 !== 0 ? "0 !important" : "8px",
                   }}
                 >
                   <MenuProductsCard key={index} product={product} />
                 </Grid>
               ))}
-          </Grid>
-        ) : (
-          <Grid
-            spacing={2}
-            container
+            </Grid>
+          ) : (
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                marginTop: "1rem",
+                width: "100%",
+                paddingBottom: "1rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                marginLeft: 0,
+                marginBottom: 5,
+              }}
+            >
+              {selectedCategory?.products?.map((product, index) => (
+                <Grid
+                  sx={{ paddingLeft: "0 !important" }}
+                  item
+                  xs={12}
+                  sm={12}
+                  key={index}
+                >
+                  <MenuProductsList key={index} product={product} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Box>
+
+        {/* Footer */}
+        <Box>
+          <Box
             sx={{
-              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 1,
               width: "100%",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              paddingBottom: "1rem",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-              marginLeft: 0,
-              marginBottom: 5,
             }}
           >
-            {selectedCategory?.products!.map((product, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                key={index}
-                sx={{
-                  paddingLeft: "0 !important",
-                  // paddingTop: index < 2 ? "0 !important" : "0px",
-                }}
+            {/* Contact Links */}
+            {restaurantData.userUiPreferences.contactLinks.facebook.length >
+              0 && (
+              <IconButton
+                component="a"
+                href={`https://${restaurantData.userUiPreferences.contactLinks.facebook}`}
+                target="_blank"
               >
-                <MenuProductsList key={index} product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 1,
-          width: "100%",
-        }}
-      >
-        {restaurantData.userUiPreferences.contactLinks.facebook.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.facebook}`}
-            target="_blank"
+                <FacebookIcon
+                  sx={{
+                    color:
+                      restaurantData.userUiPreferences?.colors.primaryColor,
+                  }}
+                />
+              </IconButton>
+            )}
+            {restaurantData.userUiPreferences.contactLinks.twitter.length >
+              0 && (
+              <IconButton
+                component="a"
+                href={`https://${restaurantData.userUiPreferences.contactLinks.twitter}`}
+                target="_blank"
+              >
+                <XIcon
+                  sx={{
+                    color:
+                      restaurantData.userUiPreferences?.colors.primaryColor,
+                  }}
+                />
+              </IconButton>
+            )}
+            {restaurantData.userUiPreferences.contactLinks.instagram.length >
+              0 && (
+              <IconButton
+                component="a"
+                href={`https://${restaurantData.userUiPreferences.contactLinks.instagram}`}
+                target="_blank"
+              >
+                <InstagramIcon
+                  sx={{
+                    color:
+                      restaurantData.userUiPreferences?.colors.primaryColor,
+                  }}
+                />
+              </IconButton>
+            )}
+          </Box>
+          <Divider variant="fullWidth" />
+          {/* Footer */}
+          <Box
+            sx={{
+              textAlign: "center",
+              fontSize: "14px",
+              width: "100%",
+              padding: 1,
+              marginTop: "auto", // Ensures footer stays at the bottom
+            }}
           >
-            <FacebookIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-        {restaurantData.userUiPreferences.contactLinks.twitter.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.twitter}`}
-            target="_blank"
-          >
-            <XIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-        {restaurantData.userUiPreferences.contactLinks.instagram.length > 0 && (
-          <IconButton
-            component="a"
-            href={`https://${restaurantData.userUiPreferences.contactLinks.instagram}`}
-            target="_blank"
-          >
-            <InstagramIcon
-              sx={{
-                color: restaurantData.userUiPreferences?.colors.primaryColor,
-              }}
-            />
-          </IconButton>
-        )}
-      </Box>
-
-      <Divider variant="fullWidth" />
-
-      {/* Footer */}
-      <Box
-        sx={{
-          textAlign: "center",
-          fontSize: "14px",
-          width: "100%",
-          padding: 1,
-        }}
-      >
-        <a
-          style={{ textDecoration: "none", color: "black" }}
-          target="_blank"
-          href=""
-        >
-          Powered by MenuToGo®
-        </a>
+            <a
+              style={{ textDecoration: "none", color: "black" }}
+              target="_blank"
+              href=""
+            >
+              Powered by MenuToGo®
+            </a>
+          </Box>
+        </Box>
       </Box>
     </Container>
   );

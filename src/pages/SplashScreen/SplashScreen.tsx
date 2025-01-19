@@ -8,7 +8,7 @@ export default function SplashScreen() {
     <Stack
       justifyContent="center"
       alignItems="center"
-      sx={{ height: "100vh", backgroundColor: "#f5f5f5" }}
+      sx={{ height: "100%", backgroundColor: "#f5f5f5" }}
     >
       <Lottie
         animationData={animationData}

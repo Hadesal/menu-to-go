@@ -28,7 +28,8 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
         height: "64px",
         background: "#FCFDFD",
         position: "relative",
-        marginBottom: 5,
+        marginTop:"2rem"
+        // marginBottom: 4,
       }}
       elevation={6}
     >
