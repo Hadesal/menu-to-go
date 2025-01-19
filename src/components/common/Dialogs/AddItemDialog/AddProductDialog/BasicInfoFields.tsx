@@ -73,7 +73,8 @@ const BasicInfoFields = ({
         <InputNumber
           id="price"
           name="price"
-          value={values.price}
+          min="0"
+          value={values.price || undefined}
           onChange={(value) =>
             handleChange({ target: { name: "price", value } })
           }
