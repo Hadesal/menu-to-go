@@ -1,8 +1,10 @@
 import InputComponent from "@components/InputComponent/InputComponent";
 import { categoryDefaultData } from "@constants/constants";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import LocalBarIcon from "@mui/icons-material/LocalBar";
+import LunchDiningIcon from "@mui/icons-material/LunchDining";
+import InfoIcon from "@mui/icons-material/Info";
 import {
-  Alert,
   Box,
   Button,
   Dialog,
@@ -14,7 +16,9 @@ import {
   InputLabel,
   Radio,
   RadioGroup,
+  Tooltip,
 } from "@mui/material";
+import { isEqual } from "lodash";
 import { useEffect, useState } from "react";
 import { useLanguage } from "src/hooks/useLanguage";
 import {
@@ -23,7 +27,6 @@ import {
 } from "../helpers/addCategoryValidators";
 import { Styles } from "./addItemDialog.styles";
 import FileUploadComponent from "./fileUploadComponent";
-import { isEqual } from "lodash";
 
 interface AddCategoryDialogProps {
   isDialogOpen: boolean;
@@ -109,7 +112,7 @@ const AddCategoryDialog = ({
         sx: {
           ...Styles.dialog,
           width: "56.25rem",
-          height: isDataUnchanged ? "39.5rem" : "36.5rem",
+          height: "36.5rem",
         },
       }}
       onClose={handleOnCancel}
@@ -130,11 +133,6 @@ const AddCategoryDialog = ({
         error={imageError}
         setError={setImageError}
       />
-      {isDataUnchanged && (
-        <Alert sx={{ marginTop: 3 }} severity="error">
-          {getString("dataUnchangedMessage")}
-        </Alert>
-      )}
       <Box sx={Styles.textFieldWrapper}>
         <InputLabel sx={Styles.textFieldLabelStyle}>
           {getString("nameInputLabel")}
@@ -177,9 +175,31 @@ const AddCategoryDialog = ({
         />
       </Box>
       <FormControl sx={{ marginTop: 1 }}>
-        <FormLabel focused={false} id="category-type-radio-buttons-group-label">
-          {getString("categoryTypeTitle")}
-        </FormLabel>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <FormLabel
+            focused={false}
+            id="category-type-radio-buttons-group-label"
+          >
+            {getString("categoryTypeTitle")}
+          </FormLabel>
+          <Tooltip
+            dir={currentLanguage === "ar" ? "rtl" : ""}
+            arrow
+            placement={currentLanguage === "ar" ? "left-start" : "right-start"}
+            title={getString("categoryTypeInfo")}
+          >
+            <InfoIcon
+              sx={{ color: "var(--primary-color)", fontSize: "1.2rem" }}
+            />
+          </Tooltip>
+        </Box>
         <RadioGroup
           aria-labelledby="category-type-radio-buttons-group-label"
           name="category-type-radio-buttons-group"
@@ -195,30 +215,58 @@ const AddCategoryDialog = ({
             setShowCategoryError(false);
           }}
         >
-          <FormControlLabel
-            value={getString("food").toLocaleLowerCase()}
-            control={
-              <Radio
-                sx={{
-                  color: showCategoryError ? "#d32f2f" : "var(--primary-color)",
-                }}
-              />
-            }
-            label={getString("categoryTypeFood")}
-            sx={{ width: "fit-content", marginRight: 0 }}
-          />
-          <FormControlLabel
-            value={getString("drinks").toLocaleLowerCase()}
-            control={
-              <Radio
-                sx={{
-                  color: showCategoryError ? "#d32f2f" : "var(--primary-color)",
-                }}
-              />
-            }
-            label={getString("categoryTypeDrink")}
-            sx={{ width: "fit-content", marginRight: 0 }}
-          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <FormControlLabel
+              value={getString("food").toLocaleLowerCase()}
+              control={
+                <Radio
+                  sx={{
+                    color: showCategoryError
+                      ? "#d32f2f"
+                      : "var(--primary-color)",
+                  }}
+                />
+              }
+              label={getString("categoryTypeFood")}
+              sx={{ width: "fit-content", marginRight: 0 }}
+            />
+            <LunchDiningIcon
+              sx={{ color: "var(--primary-color)", fontSize: "1.2rem" }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <FormControlLabel
+              value={getString("drinks").toLocaleLowerCase()}
+              control={
+                <Radio
+                  sx={{
+                    color: showCategoryError
+                      ? "#d32f2f"
+                      : "var(--primary-color)",
+                  }}
+                />
+              }
+              label={getString("categoryTypeDrink")}
+              sx={{ width: "fit-content", marginRight: 0 }}
+            />
+            <LocalBarIcon
+              sx={{ color: "var(--primary-color)", fontSize: "1.2rem" }}
+            />
+          </Box>
         </RadioGroup>
       </FormControl>
       <DialogContent sx={Styles.dialogContent}>
