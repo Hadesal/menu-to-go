@@ -3,7 +3,7 @@ import MenuCategories from "@components/Menu/MenuCategories/MenuCategories";
 import MenuProductsCard from "@components/Menu/MenuProductsCard/MenuProductsCard";
 import MenuProductsList from "@components/Menu/MenuProductsCard/MenuProductsList";
 import MenuSelection from "@components/Menu/MenuSelection/MenuSelection";
-import { categoryDefaultData, productDefaultData } from "@constants/constants";
+import { productDefaultData } from "@constants/constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
@@ -175,49 +175,70 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
                     alt="Logo"
                   />
                 </Box>
-              <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
-            </>
-          )}
-
-        <Box sx={Styles.box}>
-          {showMenuSelection && (
-            <MenuSelection menuSelections={menuSelections} />
-          )}
-          <MenuCategories
-            categories={filteredCategories}
-            categoryTag={selectedCategoryType}
-            selectedCategory={
-              (selectedCategory !== categoryDefaultData &&
-                selectedCategory.name) ||
-              ""
-            }
-          />
-        </Box>
-        <Divider sx={{ marginTop: 3 }} variant="fullWidth" />
-        <Typography
-          color={restaurantData.userUiPreferences.colors.primaryColor}
-          sx={{
-            paddingLeft: "1rem",
-            paddingTop: "2rem",
-            fontWeight: 500,
-            fontFamily: restaurantData.userUiPreferences.fontType,
-          }}
-          variant="h6"
-        >
-          {selectedCategory !== categoryDefaultData && selectedCategory.name}
-        </Typography>
-        {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
-          <Grid
-            spacing={2}
-            container
+                <Divider sx={{ marginBottom: 3 }} variant="fullWidth" />
+              </>
+            )}
+          <Box
             sx={{
               paddingLeft: "1rem",
               paddingRight: "1rem",
               paddingBottom: "1rem",
             }}
           >
-            {selectedCategory !== categoryDefaultData &&
-              selectedCategory.products!.map((product, index) => (
+            {showMenuSelection && (
+              <MenuSelection menuSelections={menuSelections} />
+            )}
+          </Box>
+          <Box
+            sx={{
+              position: "sticky",
+              top: 0,
+              zIndex: 10,
+              paddingLeft: "1rem",
+              paddingRight: "1rem",
+              paddingTop: "0.5rem",
+              backgroundColor:
+                restaurantData.userUiPreferences.colors.backgroundColor,
+              paddingBottom: "8px",
+            }}
+          >
+            <MenuCategories
+              categories={filteredCategories}
+              categoryTag={selectedCategoryType}
+              selectedCategory={
+                (selectedCategory && selectedCategory.name) || ""
+              }
+            />
+          </Box>
+          <Divider sx={{ marginTop: 1 }} variant="fullWidth" />
+          <Typography
+            color={restaurantData.userUiPreferences.colors.primaryColor}
+            sx={{
+              paddingLeft: "1rem",
+              paddingTop: "2rem",
+              fontWeight: 500,
+              fontFamily: restaurantData.userUiPreferences.fontType,
+            }}
+            variant="h6"
+          >
+            {selectedCategory && selectedCategory.name}
+          </Typography>
+          {/* Render Products */}
+          {restaurantData.userUiPreferences.itemsViewType === "GRID" ? (
+            <Grid
+              spacing={2}
+              container
+              sx={{
+                marginTop: "1rem",
+                width: "100%",
+                paddingBottom: "1rem",
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+                marginLeft: 0,
+                marginBottom: 5,
+              }}
+            >
+              {selectedCategory?.products?.map((product, index) => (
                 <Grid
                   item
                   xs={6}
