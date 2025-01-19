@@ -1,11 +1,14 @@
-import { productDefaultData } from "@constants/constants";
+import { categoryDefaultData, productDefaultData } from "@constants/constants";
 import CloseIcon from "@mui/icons-material/Close";
 import { AppBar, Dialog, IconButton, Slide, Toolbar } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import { useMediaQuery } from "@mui/system";
 import MenuPage from "@pages/MenuPage/MenuPage";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { setSelectedProduct } from "@redux/slices/menuSlice";
+import {
+  setSelectedCategory,
+  setSelectedProduct,
+} from "@redux/slices/menuSlice";
 import { Dispatch, forwardRef, SetStateAction } from "react";
 import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
@@ -33,12 +36,12 @@ export default function PreviewMenu({
 
   const handleClose = () => {
     setOpenPreviewMenu(false);
+    dispatch(setSelectedCategory(categoryDefaultData));
     dispatch(setSelectedProduct(productDefaultData));
   };
   const { restaurantList, selectedRestaurant } = useAppSelector(
     (state) => state.restaurantsData
   );
-  const { selectedProduct } = useAppSelector((state) => state.menuData);
 
   const isLgAndUp = useMediaQuery("(max-width:1536px)");
 

@@ -93,24 +93,45 @@ export const MenuSlice = createSlice({
       .addCase(fetchRestaurantData.fulfilled, (state, action) => {
         state.restaurantData = action.payload.data;
         state.loading = false;
-        if (state?.restaurantData.categories.length === 1) {
-          state.selectedCategory = state?.restaurantData.categories[0];
-          state.selectedCategoryType = state.restaurantData.categories[0].categoryType;
+
+        // Filter categories to include only those with products
+        const filteredCategories = state.restaurantData.categories.filter(
+          (category) => category.products!.length > 0
+        );
+        // Get unique category types
+        const categoryType = [
+          ...new Set(
+            state.restaurantData.categories.map(
+              (category) => category.categoryType
+            )
+          ),
+        ];
+
+        if (categoryType.length === 1) {
+          if (
+            filteredCategories[0] &&
+            filteredCategories[0].products &&
+            filteredCategories[0].products?.length > 0
+          ) {
+            //state.selectedCategory = filteredCategories[0];
+            state.selectedCategoryType = filteredCategories[0].categoryType;
+          }
           return;
         }
-        if (state?.restaurantData.categories.length > 1) {
-          const foodCategory = state?.restaurantData.categories.find(
-            (category) => {
-              return category.categoryType.toLocaleLowerCase() === "food";
-            }
-          );
+
+        if (categoryType.length > 1) {
+          const foodCategory = filteredCategories.find((category) => {
+            return (
+              category.categoryType.toLocaleLowerCase() === "food" &&
+              category.products &&
+              category.products?.length > 0
+            );
+          });
           if (foodCategory) {
-            state.selectedCategory = foodCategory;
             state.selectedCategoryType = "Food";
           }
           return;
         }
-        console.log(state?.restaurantData.categories[0]);
       })
       .addCase(fetchRestaurantData.rejected, (state, action) => {
         state.loading = false;

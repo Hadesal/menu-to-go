@@ -73,7 +73,6 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
   }, [dispatch, restaurantTemplateId]);
 
   useEffect(() => {
-    console.log(menuContainerRef.current);
     if (menuContainerRef.current) {
       // Scroll into view
       menuContainerRef.current.scrollIntoView({
@@ -120,7 +119,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
         <Stack
           justifyContent="center"
           alignItems="center"
-          sx={{ height: "100vh" }}
+          sx={{ height: "100%" }}
         >
           <Lottie
             animationData={emptyData}
