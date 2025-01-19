@@ -2,7 +2,11 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import { setSelectedCategoryType } from "@redux/slices/menuSlice";
+import {
+  setSelectedCategory,
+  setSelectedCategoryType,
+} from "@redux/slices/menuSlice";
+import { categoryDefaultData } from "@constants/constants";
 
 // Define the type for the menu selection items
 interface MenuSelectionItem {
@@ -46,11 +50,10 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
         {menuSelections.map((selection) => (
           <Box
             key={selection.id}
-            onClick={() =>
-              dispatch(
-                setSelectedCategoryType(selection.Label.toUpperCase())
-              )
-            }
+            onClick={() => {
+              dispatch(setSelectedCategory(categoryDefaultData));
+              dispatch(setSelectedCategoryType(selection.Label.toUpperCase()));
+            }}
             sx={{
               display: "flex",
               justifyContent: "center",

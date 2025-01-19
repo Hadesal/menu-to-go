@@ -9,7 +9,7 @@ import { MenuState } from "@redux/slicesInterfaces";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import publicApiService from "@api/services/publicApiService";
-import { productDefaultData } from "@constants/constants";
+import { categoryDefaultData, productDefaultData } from "@constants/constants";
 
 const initialUserUiPreferences: UserUiPreferences = {
   colors: {
@@ -39,11 +39,7 @@ const initialState: MenuState = {
     tables: [],
   },
   selectedProduct: productDefaultData,
-  selectedCategory: {
-    name: "",
-    image: null,
-    categoryType: "",
-  },
+  selectedCategory: categoryDefaultData,
   selectedCategoryType: "",
   loading: false,
   error: null,

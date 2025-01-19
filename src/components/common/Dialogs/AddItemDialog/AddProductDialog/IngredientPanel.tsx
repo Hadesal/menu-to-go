@@ -64,6 +64,7 @@ const IngredientPanel = ({
                     errors?.details?.ingredients?.[index]?.image
                       ? errors.details.ingredients[index].image
                       : null;
+
                   const handleImageUpload = (
                     event: React.ChangeEvent<HTMLInputElement>
                   ) => {
@@ -119,6 +120,7 @@ const IngredientPanel = ({
                       inputElement.value = "";
                     }
                   };
+
                   return (
                     <div
                       key={index}
@@ -154,9 +156,23 @@ const IngredientPanel = ({
                                 />
                                 <IconButton
                                   onClick={handleRemoveImage}
-                                  sx={Styles.closeIconButton}
+                                  sx={{
+                                    position: "absolute",
+                                    width: "25px",
+                                    height: "25px",
+                                    top: 40,
+                                    right: 0,
+                                    backgroundColor: "#A4755D",
+                                    borderRadius: "50%",
+                                    ":hover": { backgroundColor: "#A4755D" },
+                                  }}
                                 >
-                                  <CloseIcon sx={Styles.closeIcon} />
+                                  <CloseIcon
+                                    sx={{
+                                      color: "white",
+                                      fontSize:"1rem"
+                                    }}
+                                  />
                                 </IconButton>
                               </Box>
                             ) : (

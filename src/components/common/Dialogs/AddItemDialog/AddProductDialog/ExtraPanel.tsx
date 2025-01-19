@@ -80,6 +80,7 @@ const ExtraPanel = ({
                         id={`details.extras.${index}.price`}
                         name={`details.extras.${index}.price`}
                         value={extra.price || undefined}
+                        min="0"
                         onChange={(value) =>
                           handleChange({
                             target: {
