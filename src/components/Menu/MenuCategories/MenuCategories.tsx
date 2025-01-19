@@ -65,8 +65,8 @@ export default function MenuCategories({
                   ? "20%"
                   : "0%",
             }}
-            width={75}
-            height={75}
+            width={70}
+            height={70}
           />
           <Typography
             variant="h6"

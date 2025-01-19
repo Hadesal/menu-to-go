@@ -106,6 +106,7 @@ const VariantPanel = ({
                             id={`details.variants.variantList.${index}.price`}
                             name={`details.variants.variantList.${index}.price`}
                             value={variant.price || undefined}
+                            min="0"
                             onChange={(value) =>
                               handleChange({
                                 target: {
