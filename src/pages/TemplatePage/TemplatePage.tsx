@@ -38,6 +38,9 @@ export default function TemplatePage() {
   const getString = t;
   const { restaurantList, selectedRestaurant, restaurantLoading } =
     useAppSelector((state) => state.restaurantsData);
+
+  const { loading } = useAppSelector((state) => state.menuData);
+
   const dispatch = useAppDispatch();
 
   const [toastMessageObject, setToastMessageObject] = useState<{
@@ -98,7 +101,7 @@ export default function TemplatePage() {
             color: "var(--primary-color)",
             zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
-          open={restaurantLoading}
+          open={restaurantLoading || loading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>

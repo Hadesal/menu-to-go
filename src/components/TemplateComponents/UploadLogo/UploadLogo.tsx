@@ -35,6 +35,10 @@ export default function UploadLogo() {
     selectedRestaurant?.userUiPreferences?.logo || ""
   );
 
+  useEffect(() => {
+    setSelectedImage(selectedRestaurant?.userUiPreferences?.logo || "");
+  }, [selectedRestaurant]);
+
   const dispatch = useAppDispatch();
 
   // Create a ref for the file input

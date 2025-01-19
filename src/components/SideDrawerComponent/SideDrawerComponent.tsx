@@ -13,7 +13,11 @@ import { buttonData } from "@constants/constants";
 import { useAppDispatch } from "../../redux/reduxHooks";
 import { setActiveTab } from "../../redux/slices/mainViewSlice";
 import { TabType } from "@constants/types";
-import { setSelectedProductsIDs } from "@redux/slices/restaurantsSlice";
+import {
+  setSelectedProductsIDs,
+  setSelectedRestaurant,
+} from "@redux/slices/restaurantsSlice";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 
 interface SideDrawerProps {
   getString: (key: string) => string;
@@ -56,6 +60,7 @@ const SideDrawerComponent: React.FC<SideDrawerProps> = ({
                 dispatch(setActiveTab(btn.id as TabType));
                 if (btn.id !== "restaurant") {
                   dispatch(setSelectedProductsIDs([]));
+                  dispatch(setSelectedRestaurant({} as RestaurantData));
                 }
               }
             }}
