@@ -23,6 +23,8 @@ import {
 
 import ImportDialog from "@components/common/Dialogs/ImportDialog/ImportDialog";
 import { InfoDialog } from "@components/common/Dialogs/Info Dialog/InfoDialog";
+import PreviewMenu from "@components/PreviewMenu/PreviewMenu";
+import { RestaurantData } from "@dataTypes/RestaurantObject";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import {
   addCategoryToRestaurant as addCategory,
@@ -45,8 +47,6 @@ import { itemType } from "@utils/dataTypeCheck";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Styles from "./CategorySection.styles";
-import { RestaurantData } from "@dataTypes/RestaurantObject";
-import PreviewMenu from "@components/PreviewMenu/PreviewMenu";
 
 export default function CategoryPage() {
   const {
@@ -104,23 +104,12 @@ export default function CategoryPage() {
   }, [successMessage, selectedRestaurant]);
 
   useEffect(() => {
-    if (categoryError || productError) {
-      setShowToast(true);
-    }
-  }, [categoryError, productError]);
-
-  useEffect(() => {
-    if (successMessage) {
-      setShowSuccessToast(true);
-    }
-  }, [successMessage]);
-
-  useEffect(() => {
     if (productActionErrorMessage) {
       setIsInfoDialogOpen(true);
     }
   }, [productActionErrorMessage]);
 
+  //TODO: We need a proper way of managing the toast clearing
   useEffect(() => {
     return () => {
       // Clear success and error messages on unmount
@@ -142,25 +131,29 @@ export default function CategoryPage() {
       );
     }
   };
-  const handleEditCategory = (category: itemType) => {
+  const handleEditCategory = (category: CategoryData) => {
     if (selectedRestaurant?.id && selectedCategory?.id) {
       dispatch(
         updateCategory({
           restaurantId: selectedRestaurant.id,
           categoryId: selectedCategory.id,
           updatedCategory: category as CategoryData,
+          oldCategoryImage: selectedCategory.image
+            ? (selectedCategory.image as string)
+            : "",
         })
       );
     } else {
       console.error("No restaurant or category selected");
     }
   };
-  const handleDeleteCategory = (id: string) => {
+  const handleDeleteCategory = (id: string, image?: string) => {
     if (selectedRestaurant?.id) {
       dispatch(
         deleteCategory({
           restaurantId: selectedRestaurant.id,
           categoryId: id,
+          categoryImage: image as string,
         })
       );
     } else {
@@ -205,11 +198,6 @@ export default function CategoryPage() {
     } else {
       console.error("No category selected");
     }
-  };
-
-  const handleCloseErrorToast = () => {
-    setShowToast(false);
-    setShowSuccessToast(false);
   };
 
   return (
@@ -262,19 +250,31 @@ export default function CategoryPage() {
             )}
           </Box>
         </Backdrop>
-
         {/* Error Snackbar */}
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={showToast}
           autoHideDuration={6000}
-          onClose={handleCloseErrorToast}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowToast(false);
+            dispatch(clearRestaurantError());
+          }}
         >
           <Alert
-            onClose={handleCloseErrorToast}
+            onClose={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowToast(false);
+              dispatch(clearRestaurantError());
+            }}
             severity="error"
             variant="filled"
-            sx={{ width: "100%" }}
+            sx={{
+              width: "100%",
+              marginTop: showSuccessToast ? "3.5rem" : "0",
+            }}
           >
             {categoryError || productError}
           </Alert>
@@ -285,10 +285,18 @@ export default function CategoryPage() {
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={showSuccessToast}
           autoHideDuration={6000}
-          onClose={() => setShowSuccessToast(false)}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowSuccessToast(false);
+          }}
         >
           <Alert
-            onClose={() => setShowSuccessToast(false)}
+            onClose={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowSuccessToast(false);
+            }}
             severity="success"
             variant="filled"
             sx={{ width: "100%" }}
