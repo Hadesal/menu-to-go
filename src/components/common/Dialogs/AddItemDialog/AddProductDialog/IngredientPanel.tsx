@@ -5,7 +5,7 @@ import { Button, Collapse, Form, Input } from "antd";
 import { FieldArray, useFormikContext } from "formik";
 import "./productDialog.css";
 import { IngredientData, ProductData } from "@dataTypes/ProductDataTypes";
-import React from "react";
+import React, { useState } from "react";
 import { Styles } from "../addItemDialog.styles";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@assets/material-symbols_image-outline (1).svg";
@@ -43,6 +43,9 @@ const IngredientPanel = ({
 }: IngredientPanelProps) => {
   const { setFieldError } = useFormikContext<ProductData>();
   const { getString } = useLanguage();
+  const [previewImages, setPreviewImages] = useState<{ [key: number]: string }>(
+    {}
+  );
 
   const items = [
     {
@@ -90,11 +93,13 @@ const IngredientPanel = ({
                       }
 
                       const reader = new FileReader();
+                      setFieldValue(`details.ingredients.${index}.image`, file);
                       reader.onloadend = () => {
-                        setFieldValue(
-                          `details.ingredients.${index}.image`,
-                          reader.result as string
-                        );
+                        // Set the preview image for the specific ingredient
+                        setPreviewImages((prev) => ({
+                          ...prev,
+                          [index]: reader.result as string,
+                        }));
                         setFieldError(
                           `details.ingredients.${index}.image`,
                           undefined
@@ -112,6 +117,11 @@ const IngredientPanel = ({
                       `details.ingredients.${index}.image`,
                       undefined
                     );
+                    setPreviewImages((prev) => {
+                      const newPreviewImages = { ...prev };
+                      delete newPreviewImages[index];
+                      return newPreviewImages;
+                    });
 
                     const inputElement = document.getElementById(
                       `details.ingredients.${index}.image-upload`
@@ -146,7 +156,10 @@ const IngredientPanel = ({
                             {ingredient.image ? (
                               <Box sx={Styles.uploadedImageWrapper}>
                                 <img
-                                  src={ingredient.image}
+                                  src={
+                                    previewImages[index] ||
+                                    (ingredient.image as string)
+                                  }
                                   alt="Uploaded"
                                   style={{
                                     width: 60,
@@ -170,7 +183,7 @@ const IngredientPanel = ({
                                   <CloseIcon
                                     sx={{
                                       color: "white",
-                                      fontSize:"1rem"
+                                      fontSize: "1rem",
                                     }}
                                   />
                                 </IconButton>
@@ -255,6 +268,7 @@ const IngredientPanel = ({
       ),
     },
   ];
+
   return (
     <Collapse
       style={{

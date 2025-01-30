@@ -33,7 +33,10 @@ export const addCategoriesToRestaurant = createAsyncThunk(
 export const addCategoryToRestaurant = createAsyncThunk(
   "restaurants/addCategory",
   async (
-    { restaurantId, categoryData }: { restaurantId: string; categoryData: any },
+    {
+      restaurantId,
+      categoryData,
+    }: { restaurantId: string; categoryData: CategoryData },
     { rejectWithValue }
   ) => {
     let uploadedImageUrl: string | null = null;
@@ -49,7 +52,7 @@ export const addCategoryToRestaurant = createAsyncThunk(
       // Step 2: Upload the image if available
       if (categoryData.image) {
         try {
-          uploadedImageUrl = await addImage(categoryData.image);
+          uploadedImageUrl = await addImage(categoryData.image as File);
           newCategory.image = uploadedImageUrl;
 
           // Update the category with the uploaded image URL
@@ -167,7 +170,6 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      
       await privateApiService.delete(`/categories/${categoryId}`);
       // If the category has an image, attempt to delete it
       if (categoryImage) {

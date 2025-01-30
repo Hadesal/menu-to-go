@@ -126,7 +126,7 @@ export default function CategoryPage() {
       dispatch(
         addCategory({
           restaurantId: selectedRestaurant.id,
-          categoryData: category,
+          categoryData: category as CategoryData,
         })
       );
     }
@@ -147,7 +147,7 @@ export default function CategoryPage() {
       console.error("No restaurant or category selected");
     }
   };
-  const handleDeleteCategory = (id: string, image?: string) => {
+  const handleDeleteCategory = (id: string, image?: string | string[]) => {
     if (selectedRestaurant?.id) {
       dispatch(
         deleteCategory({
@@ -187,12 +187,16 @@ export default function CategoryPage() {
     }
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = (
+    id: string,
+    productImage?: string[] | string
+  ) => {
     if (selectedCategory?.id) {
       dispatch(
         deleteProduct({
           categoryId: selectedCategory.id,
           productId: [id],
+          productImage: productImage ? (productImage as string[]) : [],
         })
       );
     } else {
@@ -256,7 +260,6 @@ export default function CategoryPage() {
           open={showToast}
           autoHideDuration={6000}
           onClose={(e) => {
-            e.preventDefault();
             e.stopPropagation();
             setShowToast(false);
             dispatch(clearRestaurantError());
@@ -264,7 +267,6 @@ export default function CategoryPage() {
         >
           <Alert
             onClose={(e) => {
-              e.preventDefault();
               e.stopPropagation();
               setShowToast(false);
               dispatch(clearRestaurantError());
@@ -286,14 +288,12 @@ export default function CategoryPage() {
           open={showSuccessToast}
           autoHideDuration={6000}
           onClose={(e) => {
-            e.preventDefault();
             e.stopPropagation();
             setShowSuccessToast(false);
           }}
         >
           <Alert
             onClose={(e) => {
-              e.preventDefault();
               e.stopPropagation();
               setShowSuccessToast(false);
             }}

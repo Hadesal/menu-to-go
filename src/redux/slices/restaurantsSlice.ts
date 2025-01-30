@@ -479,7 +479,11 @@ const restaurantSlice = createSlice({
       addProductToCategory.fulfilled,
       (
         state,
-        action: PayloadAction<{ categoryId: string; product: ProductData }>
+        action: PayloadAction<{
+          categoryId: string;
+          product: ProductData;
+          imageError?: boolean;
+        }>
       ) => {
         state.restaurantList.forEach((restaurant) => {
           const category = restaurant.categories.find(
@@ -515,6 +519,9 @@ const restaurantSlice = createSlice({
           ];
         }
         state.successMessage = "Product added successfully!";
+        state.error = action.payload.imageError
+          ? "Product image failed to upload."
+          : null;
         state.productLoading = false;
       }
     );

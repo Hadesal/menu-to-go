@@ -29,7 +29,7 @@ interface BoxComponentProps {
   items: itemsTypes;
   styles: Styles;
   editFunction: (item: any) => void;
-  deleteFunction: (id: string , image?: string) => void;
+  deleteFunction: (id: string, image?: string | string[]) => void;
   addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
@@ -152,10 +152,25 @@ const BoxComponent = ({
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {
           if (selectedCategory?.id) {
+            const selectedProducts = selectedCategory.products?.filter(
+              (product) => {
+                return selectedProductsIDs?.includes(product.id || "");
+              }
+            );
+
+            const selectedProductsImages = [
+              ...new Set(
+                selectedProducts
+                  ?.map((product) => product.image)
+                  .filter((image) => image !== null && image !== "")
+              ),
+            ];
+
             dispatch(
               deleteProduct({
                 categoryId: selectedCategory?.id,
                 productId: selectedProductsIDs,
+                productImage: selectedProductsImages as string[],
               })
             );
           }

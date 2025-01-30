@@ -4,7 +4,7 @@ export interface ProductData {
   price: number;
   details: ProductDetailsData;
   isAvailable: boolean;
-  image?: string | undefined;
+  image?: string | File | undefined;
 }
 export interface ExtrasData {
   id?: string;
@@ -15,7 +15,7 @@ export interface ExtrasData {
 export interface IngredientData {
   id?: string;
   name: string;
-  image: string | null;
+  image: string | File | null;
 }
 
 export interface VariantData {
@@ -40,13 +40,14 @@ export interface ProductDetailsData {
   detailsDescription: string | null;
   allergies: Allergies[];
   labels: Labels[];
-  dietaryOptions: DietaryOptions ;
+  dietaryOptions: DietaryOptions;
   variants: VariantsData;
   ingredients: IngredientData[];
   extras: ExtrasData[];
 }
 
 export interface VariantsData {
+  id?: string;
   name: string;
   variantList: VariantData[];
 }
