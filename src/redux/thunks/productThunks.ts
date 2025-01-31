@@ -125,7 +125,6 @@ export const addProductListToCategory = createAsyncThunk(
   }
 );
 
-// Update a product in a specific category
 export const updateProductInCategory = createAsyncThunk(
   "products/updateInCategory",
   async (
@@ -133,70 +132,83 @@ export const updateProductInCategory = createAsyncThunk(
       categoryId,
       productId,
       updatedProduct,
-    }: { categoryId: string; productId: string; updatedProduct: ProductData },
+      oldImage,
+    }: {
+      categoryId: string;
+      productId: string;
+      updatedProduct: ProductData;
+      oldImage?: string;
+    },
     { rejectWithValue }
   ) => {
-    let uploadedImageUrl: string | null = null;
-
     try {
-      // Step 1: Prepare the updated product data by clearing ingredient images
+      // Prepare the updated product data by clearing ingredient images if they are Files
       const ingredients = updatedProduct.details.ingredients.map(
         (ingredient) => ({
           ...ingredient,
-          image: typeof ingredient.image === "string" ? ingredient.image : "", // Clear image if it is a File
+          image: ingredient.image instanceof File ? "" : ingredient.image,
         })
       );
 
-      // Create the product object with cleared ingredient images
       const productWithoutImages = {
         ...updatedProduct,
-        details: {
-          ...updatedProduct.details,
-          ingredients,
-        },
-        image:
-          typeof updatedProduct.image === "string" ? updatedProduct.image : "", // Clear main product image if it's a File
+        details: { ...updatedProduct.details, ingredients },
+        image: updatedProduct.image instanceof File ? "" : updatedProduct.image,
       };
 
-      // Step 2: Send the updated product data to the backend without the images
+      // Step 1: Update product data in backend (excluding images)
       const response = await privateApiService.put(
         `/categories/${categoryId}/products/${productId}`,
         productWithoutImages
       );
-
       const updatedProductData = response.data;
 
-      // Step 3: Handle image upload for the main product image if it's a file (not already a URL)
-      if (updatedProduct.image instanceof File) {
-        try {
-          uploadedImageUrl = await addImage(updatedProduct.image as File);
-          updatedProductData.image = uploadedImageUrl; // Update main product image URL
-        } catch (imageError) {
-          console.error("Main product image upload failed:", imageError);
-        }
-      }
-
-      // Step 4: Handle image upload for each ingredient if it's a file (not already a URL)
-      for (let i = 0; i < updatedProduct.details.ingredients.length; i++) {
-        const ingredient = updatedProduct.details.ingredients[i];
-        if (ingredient.image && ingredient.image instanceof File) {
+      // Step 2: Handle image update only if new image differs from old one
+      if (oldImage !== updatedProduct.image) {
+        // Upload new image if it's a File
+        if (updatedProduct.image instanceof File) {
           try {
-            // Upload the image for the ingredient
-            uploadedImageUrl = await addImage(ingredient.image as File);
-
-            // Update the ingredient image in the updated product object
-            updatedProductData.details.ingredients[i].image = uploadedImageUrl;
+            const uploadedImageUrl = await addImage(updatedProduct.image);
+            updatedProductData.image = uploadedImageUrl;
           } catch (imageError) {
-            console.error(
-              `Ingredient image upload failed for ${ingredient.name}:`,
-              imageError
-            );
-            // Optionally, handle individual ingredient image upload errors here
+            return {
+              categoryId,
+              productId,
+              updatedProduct: updatedProductData,
+              imageError: true,
+            };
+          }
+        }
+        // Delete old image if it exists and a new one is set
+        if (oldImage) {
+          try {
+            const filename = getFilenameFromUrl(oldImage);
+            if (filename) await deleteImage(filename);
+          } catch (deleteError) {
+            console.error("Failed to delete old image:", deleteError);
           }
         }
       }
 
-      // Step 5: After uploading all images, update the product in the backend
+      // Step 3: Upload ingredient images if they are Files
+      await Promise.all(
+        updatedProduct.details.ingredients.map(async (ingredient, index) => {
+          if (ingredient.image instanceof File) {
+            try {
+              const uploadedImageUrl = await addImage(ingredient.image);
+              updatedProductData.details.ingredients[index].image =
+                uploadedImageUrl;
+            } catch (imageError) {
+              console.error(
+                `Ingredient image upload failed for ${ingredient.name}:`,
+                imageError
+              );
+            }
+          }
+        })
+      );
+
+      // Step 4: Send the final update with images if needed
       await privateApiService.put(
         `/categories/${categoryId}/products/${updatedProductData.id}`,
         updatedProductData

@@ -173,18 +173,25 @@ export default function CategoryPage() {
       console.error("No category selected");
     }
   };
+
   const handleEditProduct = (product: ProductData) => {
-    if (selectedCategory?.id && product?.id) {
-      dispatch(
-        editProduct({
-          categoryId: selectedCategory.id,
-          productId: product.id,
-          updatedProduct: product,
-        })
-      );
-    } else {
+    if (!selectedCategory?.id || !product?.id) {
       console.error("No category or product selected");
+      return;
     }
+
+    const oldProductData = selectedCategory.products?.find(
+      (updated_product: ProductData) => updated_product.id === product.id
+    );
+
+    dispatch(
+      editProduct({
+        categoryId: selectedCategory.id,
+        productId: product.id,
+        updatedProduct: product,
+        oldImage: (oldProductData?.image as string) || "", // Ensure it's always a string
+      })
+    );
   };
 
   const handleDeleteProduct = (

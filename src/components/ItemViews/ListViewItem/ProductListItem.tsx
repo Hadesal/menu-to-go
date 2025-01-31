@@ -132,7 +132,7 @@ const ListViewProductItem = ({
           <Box>
             <img
               style={styles.productImg}
-              src={item.image ? item.image : placeHolderImg}
+              src={item.image ? (item.image as string) : placeHolderImg}
               width={60}
               height={60}
             />
