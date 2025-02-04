@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { CategoryData } from "@dataTypes/CategoryDataTypes";
-import privateApiService from "@api/services/privateApiService";
 import {
   addImage,
   deleteImage,
   getFilenameFromUrl,
 } from "@api/services/imageService";
+import privateApiService from "@api/services/privateApiService";
+import { CategoryData } from "@dataTypes/CategoryDataTypes";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { deleteAllCategoryImages } from "./thunks.helpers";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 
 export const addCategoriesToRestaurant = createAsyncThunk(
   "restaurant/addCategories",
@@ -29,7 +31,6 @@ export const addCategoriesToRestaurant = createAsyncThunk(
   }
 );
 
-// Add a single category to a restaurant
 export const addCategoryToRestaurant = createAsyncThunk(
   "restaurants/addCategory",
   async (
@@ -42,35 +43,41 @@ export const addCategoryToRestaurant = createAsyncThunk(
     let uploadedImageUrl: string | null = null;
 
     try {
-      // Step 1: Add the category (excluding image upload initially)
-      const response = await privateApiService.post(
-        `/categories/${restaurantId}`,
-        { ...categoryData, image: "" }
-      );
-      const newCategory = response.data;
-
-      // Step 2: Upload the image if available
+      // Step 1: Upload the image if available
       if (categoryData.image) {
         try {
           uploadedImageUrl = await addImage(categoryData.image as File);
-          newCategory.image = uploadedImageUrl;
-
-          // Update the category with the uploaded image URL
-          await privateApiService.put(
-            `/categories/${newCategory.id}/${restaurantId}`,
-            newCategory
-          );
+          console.log("Uploaded Image URL:", uploadedImageUrl);
+          categoryData.image = uploadedImageUrl;
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
-          // Pass the category and the image error to the UI
-          return { restaurantId, category: newCategory, imageError: true };
+          categoryData.image = ""; // Set image to an empty string if upload fails
         }
       }
 
-      // Return the new category
-      return { restaurantId, category: newCategory, imageError: false };
+      // Step 2: Add the category
+      const response = await privateApiService.post(
+        `/categories/${restaurantId}`,
+        categoryData
+      );
+
+      const addedCategory = response.data;
+
+      // Step 3: Return the new category and imageError status
+      return {
+        restaurantId,
+        category: addedCategory,
+        imageError: !uploadedImageUrl,
+      };
     } catch (error) {
-      //TODO: Remove after testing
+      if (uploadedImageUrl) {
+        // Clean up the uploaded image if category creation fails
+        console.log("Cleaning up uploaded image:", uploadedImageUrl);
+        const filename = getFilenameFromUrl(uploadedImageUrl);
+        if (filename) {
+          await deleteImage(filename); // Clean up the uploaded image if category creation fails
+        }
+      }
       console.error("Category creation failed:", error);
       return rejectWithValue(error);
     }
@@ -88,70 +95,90 @@ export const editCategoryInRestaurant = createAsyncThunk(
     }: {
       restaurantId: string;
       categoryId: string;
-      updatedCategory: any;
+      updatedCategory: CategoryData;
       oldCategoryImage: string;
     },
     { rejectWithValue }
   ) => {
+    let uploadedImageUrl: string = "";
+    let imageError_flag: boolean = false;
+    let imageDeleted = false; // Track if image deletion is needed
+
     try {
-      // Step 1: Always update first
+      // Step 1: If a new image is provided and is different from the old one, upload it
+      if (updatedCategory.image instanceof File) {
+        try {
+          uploadedImageUrl = await addImage(updatedCategory.image as File);
+          console.log("Uploaded Image URL:", uploadedImageUrl);
+          updatedCategory.image = uploadedImageUrl;
+        } catch (imageError) {
+          imageError_flag = true;
+          console.error("Image upload failed:", imageError);
+          // If image upload fails, set the image to "" and proceed with the update
+          updatedCategory.image = "";
+        }
+      }
+
+      // Step 2: Update the category (whether or not the image was uploaded or removed)
       const response = await privateApiService.put(
         `/categories/${categoryId}/${restaurantId}`,
-        {
-          ...updatedCategory,
-          image: !updatedCategory.image ? "" : oldCategoryImage,
-        }
+        updatedCategory
       );
       const updatedCategoryData = response.data;
 
-      // Step 2: Handle image deletion only if the new image is empty and old image exists
-      if (!updatedCategory.image && oldCategoryImage) {
+      // Step 3: If image was uploaded successfully and the category update is successful,
+      // check if the old image should be deleted
+      if (
+        response.status === 200 &&
+        uploadedImageUrl &&
+        oldCategoryImage &&
+        uploadedImageUrl !== oldCategoryImage
+      ) {
+        console.log(
+          "Deleting old image if new image is uploaded:",
+          oldCategoryImage
+        );
         const filename = getFilenameFromUrl(oldCategoryImage);
+        if (filename) {
+          // Image deletion should happen only after both image upload and category update
+          await deleteImage(filename);
+          imageDeleted = true;
+        }
+      }
+
+      // Step 4: Handle image removal in case the new image is empty (but the category update was successful)
+      if (
+        response.status === 200 && //if update successful
+        !updatedCategory.image && // the image was removed
+        oldCategoryImage // and there is an old image
+      ) {
+        console.log(
+          "Deleting old image if new image is empty:",
+          oldCategoryImage
+        );
+        const filename = getFilenameFromUrl(oldCategoryImage);
+        if (filename) {
+          // Run the image deletion in the background only after the category update
+          await deleteImage(filename);
+        }
+      }
+
+      // Step 5: Return the updated category
+      return {
+        restaurantId,
+        categoryId,
+        updatedCategory: updatedCategoryData,
+        imageError: imageError_flag, // Indicate if image upload failed
+      };
+    } catch (error) {
+      // Clean up the uploaded image if the category update fails after upload
+      if (uploadedImageUrl) {
+        const filename = getFilenameFromUrl(uploadedImageUrl);
         if (filename) {
           await deleteImage(filename);
         }
       }
 
-      // Step 3: If a new image is provided, upload it
-      if (updatedCategory.image && updatedCategory.image !== oldCategoryImage) {
-        try {
-          const uploadedImageUrl = await addImage(
-            updatedCategory.image as File
-          );
-          updatedCategoryData.image = uploadedImageUrl;
-
-          // Step 4: Delete old image if it existed
-          if (oldCategoryImage) {
-            const filename = getFilenameFromUrl(oldCategoryImage);
-            if (filename) {
-              await deleteImage(filename);
-            }
-          }
-
-          // Step 5: Update category with the new image URL
-          await privateApiService.put(
-            `/categories/${categoryId}/${restaurantId}`,
-            updatedCategoryData
-          );
-        } catch (imageError) {
-          console.error("Image operation failed:", imageError);
-          return {
-            restaurantId,
-            categoryId,
-            updatedCategory: response.data,
-            imageError: true,
-          };
-        }
-      }
-
-      // Step 6: Return the updated category
-      return {
-        restaurantId,
-        categoryId,
-        updatedCategory: response.data,
-        imageError: false,
-      };
-    } catch (error) {
       console.error("Category update failed:", error);
       return rejectWithValue("Category update failed. Please try again.");
     }
@@ -165,21 +192,27 @@ export const removeCategoryFromRestaurant = createAsyncThunk(
     {
       restaurantId,
       categoryId,
-      categoryImage,
-    }: { restaurantId: string; categoryId: string; categoryImage: string },
+      categoryData,
+    }: {
+      restaurantId: string;
+      categoryId: string;
+      categoryData: CategoryData;
+    },
     { rejectWithValue }
   ) => {
     try {
-      await privateApiService.delete(`/categories/${categoryId}`);
-      // If the category has an image, attempt to delete it
-      if (categoryImage) {
-        //TODO: Remove after testing
-        console.log(categoryImage);
-        const filename = getFilenameFromUrl(categoryImage); // Extract the filename from the URL
-        if (filename) {
-          await deleteImage(filename); // Delete the image using the filename
-        }
+      const response = await privateApiService.delete(
+        `/categories/${categoryId}`
+      );
+
+      // Only proceed with image deletion if the category was deleted successfully
+      if (response.status === 204) {
+        // Start image deletion in the background (non-blocking)
+        deleteAllCategoryImages(categoryData).catch((err) =>
+          console.error("Failed to delete category images:", err)
+        );
       }
+
       return { restaurantId, categoryId };
     } catch (error) {
       return rejectWithValue(error);

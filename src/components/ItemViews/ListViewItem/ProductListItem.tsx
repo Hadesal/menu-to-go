@@ -25,6 +25,7 @@ import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.pn
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
 import Styles from "../../../DataTypes/StylesTypes";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
+import { useState } from "react";
 interface ProductListItemProps {
   item: ProductData;
   index: number;
@@ -64,6 +65,9 @@ const ListViewProductItem = ({
     transition,
   };
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const menuItems = () => [
     {

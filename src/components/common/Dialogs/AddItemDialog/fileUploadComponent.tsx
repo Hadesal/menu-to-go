@@ -21,7 +21,7 @@ const VisuallyHiddenInput = styled("input")({
 
 interface FileUploadComponentProps {
   image: string | null;
-  onImageChange: (image: File  | null) => void;
+  onImageChange: (image: File | string) => void;
   error: string | null;
   setError: (error: string | null) => void;
   width?: number;
@@ -73,7 +73,7 @@ const FileUploadComponent = ({
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    onImageChange(null);
+    onImageChange("");
     setPreviewImage("");
     setError(null);
 

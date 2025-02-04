@@ -40,7 +40,7 @@ const AddProductDialog = ({
       open={isDialogOpen}
       onCancel={() => setDialogIsOpen(false)}
       destroyOnClose={true}
-      zIndex={10000000000000000}
+      zIndex={3000} // or token.zIndexPopupBase + 50
       footer={null}
       style={{ top: 50 }}
       styles={{

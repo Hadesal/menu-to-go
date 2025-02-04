@@ -48,7 +48,7 @@ export default function MenuProductsCard({
         pointerEvents: product.isAvailable ? "auto" : "none",
         cursor: product.isAvailable ? "pointer" : "not-allowed",
         height: "263px",
-        position:"relative"
+        position: "relative",
       }}
     >
       {!product.isAvailable && (
@@ -100,7 +100,7 @@ export default function MenuProductsCard({
             component="img"
             width="100%"
             height="100%"
-            image={product.image ? product.image : PlaceHolder}
+            image={product.image ? (product.image as string) : PlaceHolder}
             alt={product.name}
           />
           {product.details.dietaryOptions &&

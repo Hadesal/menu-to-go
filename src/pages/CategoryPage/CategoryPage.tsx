@@ -147,13 +147,16 @@ export default function CategoryPage() {
       console.error("No restaurant or category selected");
     }
   };
-  const handleDeleteCategory = (id: string, image?: string | string[]) => {
+  const handleDeleteCategory = (
+    id: string,
+    itemData?: CategoryData
+  ) => {
     if (selectedRestaurant?.id) {
       dispatch(
         deleteCategory({
           restaurantId: selectedRestaurant.id,
           categoryId: id,
-          categoryImage: image as string,
+          categoryData: itemData as CategoryData,
         })
       );
     } else {
@@ -189,14 +192,15 @@ export default function CategoryPage() {
         categoryId: selectedCategory.id,
         productId: product.id,
         updatedProduct: product,
-        oldImage: (oldProductData?.image as string) || "", // Ensure it's always a string
+        oldProduct: oldProductData,
       })
     );
   };
 
   const handleDeleteProduct = (
     id: string,
-    productImage?: string[] | string
+    productImage?: string[] | string,
+    ingredientImages?: string[]
   ) => {
     if (selectedCategory?.id) {
       dispatch(
@@ -204,6 +208,9 @@ export default function CategoryPage() {
           categoryId: selectedCategory.id,
           productId: [id],
           productImage: productImage ? (productImage as string[]) : [],
+          ingredientImages: ingredientImages
+            ? (ingredientImages as string[])
+            : [],
         })
       );
     } else {
@@ -295,7 +302,6 @@ export default function CategoryPage() {
           open={showSuccessToast}
           autoHideDuration={6000}
           onClose={(e) => {
-            e.stopPropagation();
             setShowSuccessToast(false);
           }}
         >

@@ -20,7 +20,7 @@ import { reorderCategoriesForRestaurant } from "@redux/thunks/categoryThunks";
 interface CategoryListViewProps {
   items: CategoryData[];
   editFunction: (item: CategoryData) => void;
-  deleteFunction: (itemId: string, image: string) => void;
+  deleteFunction: (itemId: string, itemData: CategoryData) => void;
   styles: Styles;
 }
 
@@ -131,7 +131,7 @@ const CategoryListView = ({
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
               if (currentItem.id) {
-                deleteFunction(currentItem.id, currentItem.image);
+                deleteFunction(currentItem.id, currentItem as CategoryData);
               }
               handleDeleteDialogClose();
             }}
