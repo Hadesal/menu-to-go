@@ -27,10 +27,22 @@ const uploadIngredientImages = async (
 ): Promise<void> => {
   for (let i = 0; i < productData.details.ingredients.length; i++) {
     const ingredient = productData.details.ingredients[i];
-    if (ingredient.image && typeof ingredient.image !== "string") {
+
+    if (ingredient.image) {
       try {
-        const uploadedImageUrl = await addImage(ingredient.image as File);
-        newProduct.details.ingredients[i].image = uploadedImageUrl;
+        if (typeof ingredient.image !== "string") {
+          // If image is already a File, upload it directly
+          const uploadedImageUrl = await addImage(ingredient.image as File);
+          newProduct.details.ingredients[i].image = uploadedImageUrl;
+        } else if (ingredient.image.trim() !== "") {
+          // If image is a string (URL) and not empty, retrieve and upload
+          const filename = getFilenameFromUrl(ingredient.image);
+          if (filename) {
+            const imageFile = await getImageFile(filename);
+            const uploadedImageUrl = await addImage(imageFile);
+            newProduct.details.ingredients[i].image = uploadedImageUrl;
+          }
+        }
       } catch (imageError) {
         console.error(
           `Ingredient image upload failed for ${ingredient.name}:`,
