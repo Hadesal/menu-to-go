@@ -64,23 +64,22 @@ const handleImageUpload = async (
       console.error("Main product image upload failed:", imageError);
       throw imageError;
     }
+  } else if (
+    typeof productData.image === "string" &&
+    productData.image !== ""
+  ) {
+    try {
+      const filename = getFilenameFromUrl(productData.image as string);
+      if (filename) {
+        const imageFile = await getImageFile(filename);
+        const uploadedImageUrl = await addImage(imageFile as File);
+        newProduct.image = uploadedImageUrl;
+      }
+    } catch (imageError) {
+      console.error("Main product image upload failed:", imageError);
+      throw imageError;
+    }
   }
-  // else if (
-  //     typeof productData.image === "string" &&
-  //     productData.image !== ""
-  //   ) {
-  //     try {
-  //       const filename = getFilenameFromUrl(productData.image as string);
-  //       if (filename) {
-  //         const imageFile = await getImageFile(filename);
-  //         const uploadedImageUrl = await addImage(imageFile);
-  //         newProduct.image = uploadedImageUrl;
-  //       }
-  //     } catch (imageError) {
-  //       console.error("Main product image upload failed:", imageError);
-  //       throw imageError;
-  //     }
-  //   }
 };
 
 async function deleteAllCategoryImages(categoryData: CategoryData) {

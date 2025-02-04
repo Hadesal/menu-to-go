@@ -47,7 +47,7 @@ export async function deleteImage(filename: string): Promise<void> {
     console.error("Network error:", error);
   }
 }
-export async function getImageFile(filename: string) {
+export async function getImageFile(filename: string): Promise<File> {
   try {
     const response = await fetch(
       `https://menutogo.at/get_image.php?file=${encodeURIComponent(filename)}`,
@@ -61,14 +61,16 @@ export async function getImageFile(filename: string) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    // Convert response to a Blob (image file)
+    // Convert response to a Blob
     const blob = await response.blob();
 
-    // Create an object URL for the blob (so it can be displayed in an <img> tag)
-    const imageUrl = URL.createObjectURL(blob);
-    return imageUrl; // Return the image URL
+    // Convert Blob to File
+    const file = new File([blob], filename, { type: blob.type });
+
+    return file;
   } catch (error) {
     console.error("Network error:", error);
+    throw error; // Ensure the caller knows the request failed
   }
 }
 
