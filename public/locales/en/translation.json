@@ -147,6 +147,7 @@
   "categoryShapeCircle": "Circle",
   "categoryShapeRounded": "Rounded",
   "categoryShapeSquare": "Square",
+  "categoryShapeText": "Text",
   "contactLinks": "Contact Links",
   "viewType": "View Type",
   "viewTypeGrid": "Grid",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "A category with the same name already exists",
   "food": "Food",
   "drinks": "Drinks",
-  "deletionCofirmMessage": "Are you sure you want to delete? You can't undo this action.",
+  "deletionConfirmMessage": "Are you sure you want to delete? You can't undo this action.",
   "copy": "Copy",
   "move": "Move",
   "dragMessage": "Drag and drop an %filetype% here, or click to select",
@@ -241,5 +242,15 @@
   "nameMaxLength": "Name must be less than 50 characters long.",
   "nameInvalidFormat": "Name can only contain letters, spaces, hyphens, and apostrophes.",
   "registrationError": "An error occurred during registration. Please try again.",
-  "unknownError": "An unknown error occurred."
+  "unknownError": "An unknown error occurred.",
+  "isAvailable": "Available",
+  "isAvailableInfo": "Toggle to show or hide this item in the menu.",
+  "isSoldOut": "Sold Out",
+  "isSoldOutInfo": "You can mark the item as Sold Out if it's out of stock",
+  "allergensLabel": "Allergens",
+  "allergensPlaceholder": "Select allergens for this product",
+  "dietaryOptionsLabel": "Dietary Options",
+  "dietaryOptionsPlaceholder": "Select a dietary option",
+  "labelsLabel": "Labels",
+  "labelsPlaceholder": "Select labels for this product"
 }

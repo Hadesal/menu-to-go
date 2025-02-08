@@ -189,7 +189,10 @@ const AddRestaurantDialog = ({
           height: "17.5rem",
         },
       }}
-      onClose={handleCancel}
+      onClose={(event, reason) => {
+        if (reason && reason === "backdropClick") return;
+        handleCancel();
+      }}
       open={isOpen}
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>

@@ -1,3 +1,4 @@
+
 export const Styles = {
   categoriesContainer: {
     marginTop: "1rem",
@@ -11,6 +12,7 @@ export const Styles = {
       // For WebKit (Chrome, Safari)
       display: "none",
     },
+    zIndex: 20,
   },
   categoryBox: {
     display: "flex",

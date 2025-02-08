@@ -147,6 +147,7 @@
   "categoryShapeCircle": "Kreis",
   "categoryShapeRounded": "Abgerundet",
   "categoryShapeSquare": "Quadrat",
+  "categoryShapeText": "Text",
   "contactLinks": "Kontaktlinks",
   "viewType": "Ansichtstyp",
   "viewTypeGrid": "Raster",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "Eine Kategorie mit demselben Namen existiert bereits",
   "food": "Essen",
   "drinks": "Getränke",
-  "deletionCofirmMessage": "Sind Sie sicher, dass Sie löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "deletionConfirmMessage": "Sind Sie sicher, dass Sie löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
   "copy": "Kopieren",
   "move": "Verschieben",
   "dragMessage": "Ziehen Sie eine %filetype% hierher oder klicken Sie, um auszuwählen",
@@ -241,5 +242,15 @@
   "nameMaxLength": "Der Name darf höchstens 50 Zeichen lang sein.",
   "nameInvalidFormat": "Der Name darf nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe enthalten.",
   "registrationError": "Ein Fehler ist bei der Registrierung aufgetreten. Bitte versuche es erneut.",
-  "unknownError": "Ein unbekannter Fehler ist aufgetreten."
+  "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
+  "isAvailable": "Verfügbar",
+  "isAvailableInfo": "Umschalten, um dieses Element im Menü anzuzeigen oder auszublenden.",
+  "isSoldOut": "Ausverkauft",
+  "isSoldOutInfo": "Sie können den Artikel als Ausverkauft markieren, wenn er nicht auf Lager ist.",
+  "allergensLabel": "Allergene",
+  "allergensPlaceholder": "Wählen Sie Allergene für dieses Produkt aus",
+  "dietaryOptionsLabel": "Ernährungsoptionen",
+  "dietaryOptionsPlaceholder": "Wählen Sie eine Ernährungsoption aus",
+  "labelsLabel": "Etiketten",
+  "labelsPlaceholder": "Wählen Sie Etiketten für dieses Produkt aus"
 }

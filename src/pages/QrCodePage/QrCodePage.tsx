@@ -145,7 +145,7 @@ const QrCodePage = () => {
     const selectedRestaurant = restaurantList.find(
       (restaurant) => restaurant.id === selectedId
     );
-    setUrlPath(`http://192.168.1.203:5173/menu/${selectedRestaurant?.id}`);
+    setUrlPath(`http:/menutogo.at/menu/${selectedRestaurant?.id}`);
   };
   const downloadImage = async () => {
     if (!frameRef.current) {

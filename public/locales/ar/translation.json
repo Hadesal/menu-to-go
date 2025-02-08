@@ -147,6 +147,7 @@
   "categoryShapeCircle": "دائرة",
   "categoryShapeRounded": "مستدير",
   "categoryShapeSquare": "مربع",
+  "categoryShapeText": "نص",
   "contactLinks": "روابط الاتصال",
   "viewType": "نوع العرض",
   "viewTypeGrid": "شبكة",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "هناك فئة بنفس الاسم موجودة بالفعل",
   "food": "طعام",
   "drinks": "مشروبات",
-  "deletionCofirmMessage": "هل أنت متأكد أنك تريد الحذف؟ لا يمكن التراجع عن هذا الإجراء.",
+  "deletionConfirmMessage": "هل أنت متأكد أنك تريد الحذف؟ لا يمكن التراجع عن هذا الإجراء.",
   "copy": "نسخ",
   "move": "نقل",
   "dragMessage": "اسحب وأفلت %filetype% هنا، أو انقر لتحديد",
@@ -241,5 +242,15 @@
   "nameMaxLength": "يجب أن يحتوي الاسم على أقل من 50 حرفًا.",
   "nameInvalidFormat": "الاسم يمكن أن يحتوي فقط على الأحرف، الفراغات، الشرطات، والأبستروفات.",
   "registrationError": "حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.",
-  "unknownError": "حدث خطأ غير معروف."
+  "unknownError": "حدث خطأ غير معروف.",
+  "isAvailable": "متاح",
+  "isAvailableInfo": "قم بالتبديل لإظهار هذا العنصر في القائمة أو إخفائه.",
+  "isSoldOut": "نفد المخزون",
+  "isSoldOutInfo": "يمكنك وضع علامة 'نفد المخزون' على العنصر إذا لم يكن متوفرًا.",
+  "allergensLabel": "المواد المسببة للحساسية",
+  "allergensPlaceholder": "حدد المواد المسببة للحساسية لهذا المنتج",
+  "dietaryOptionsLabel": "الخيارات الغذائية",
+  "dietaryOptionsPlaceholder": "حدد خيارًا غذائيًا",
+  "labelsLabel": "التصنيفات",
+  "labelsPlaceholder": "حدد التصنيفات لهذا المنتج"
 }

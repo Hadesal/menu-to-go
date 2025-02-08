@@ -57,6 +57,7 @@ const ProductForm = ({
       extras: [],
     },
     isAvailable: true,
+    isSoldOut: false,
     image: "",
   };
 
@@ -139,6 +140,7 @@ const ProductForm = ({
             setFieldValue={setFieldValue}
             errors={errors}
             touched={touched}
+            isEditing={!!initialData}
           />
           <Form.Item style={{ marginTop: "1rem" }}>
             <Space style={{ display: "flex", justifyContent: "flex-end" }}>

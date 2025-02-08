@@ -70,6 +70,7 @@ export default function ProductDetails({
       >
         <img
           src={productImg ? productImg : PlaceHolder}
+          onError={(e) => (e.currentTarget.src = PlaceHolder)}
           alt="Product Image"
           style={Styles.productImage}
           width={"100%"}

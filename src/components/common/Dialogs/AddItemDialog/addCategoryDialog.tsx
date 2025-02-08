@@ -115,15 +115,13 @@ const AddCategoryDialog = ({
           height: "36.5rem",
         },
       }}
-      onClose={handleOnCancel}
+      onClose={(event, reason) => {
+        if (reason && reason === "backdropClick") return;
+        handleOnCancel();
+      }}
       open={isOpen}
     >
-      <DialogTitle
-        //dir={currentLanguage === "ar" ? "rtl" : ""}
-        sx={Styles.title}
-      >
-        {title}
-      </DialogTitle>
+      <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
         image={dialogData.image}
         onImageChange={(image) => {

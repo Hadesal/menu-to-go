@@ -37,6 +37,7 @@ const AddProductDialog = ({
           {dialogTitle}
         </p>
       }
+      maskClosable={false}
       open={isDialogOpen}
       onCancel={() => setDialogIsOpen(false)}
       destroyOnClose={true}

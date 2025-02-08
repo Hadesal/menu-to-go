@@ -4,6 +4,7 @@ export interface ProductData {
   price: number;
   details: ProductDetailsData;
   isAvailable: boolean;
+  isSoldOut: boolean;
   image?: string | undefined;
 }
 export interface ExtrasData {

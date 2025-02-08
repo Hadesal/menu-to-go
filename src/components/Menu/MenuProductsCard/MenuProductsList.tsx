@@ -5,6 +5,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  Chip,
 } from "@mui/material";
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
@@ -45,9 +46,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
   return (
     <Card
       onClick={() => {
-        if (product.isAvailable) {
-          dispatch(setSelectedProduct(product));
-        }
+        dispatch(setSelectedProduct(product));
       }}
       sx={{
         height:
@@ -63,43 +62,22 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
       }}
       elevation={2}
     >
-      {!product.isAvailable && (
-        <Box
+      {/* Sold Out Chip */}
+      {product.isSoldOut && (
+        <Chip
+          label="Sold Out"
+          variant="filled"
           sx={{
             position: "absolute",
-            top: "18px",
-            right: "-20px",
-            backgroundColor: "red",
-            color: "white",
-            fontSize: "12px",
+            top: 22,
+            left: 22,
             fontWeight: "bold",
-            padding: "5px 15px",
-            borderRadius: "5px",
-            transform: "rotate(45deg)", // Gives the banner effect
-            zIndex: 10, // Ensure banner stays above everything
-          }}
-        >
-          Out of Stock
-        </Box>
-      )}
-
-      {/* Overlay for dimming the background */}
-      {!product.isAvailable && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background:
-              "linear-gradient(rgba(255, 255, 255, 0.051), rgba(255, 255, 255, 0.051))", // Optional gradient
-            zIndex: 5, // Below the banner
-            borderRadius: "15px", // Matches Card's border radius
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            zIndex: 10,
           }}
         />
       )}
-
       <CardActionArea
         sx={{
           display: "flex",
@@ -109,7 +87,8 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
           justifyContent: "start",
           position: "relative",
           zIndex: 1,
-          opacity: product.isAvailable ? 1 : 0.5,
+          filter: product.isSoldOut ? "grayscale(100%)" : "none",
+          opacity: product.isSoldOut ? 0.8 : 1,
         }}
       >
         <Box
@@ -123,6 +102,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
           <CardMedia
             component="img"
             image={product.image || PlaceHolder}
+            onError={(e) => ((e.target as HTMLImageElement).src = PlaceHolder)}
             alt={product.name}
             sx={{
               width: "100%",
@@ -133,32 +113,35 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
             }}
           />
 
-          {product.details.dietaryOptions && product.details.dietaryOptions.value.length > 0 && (
-            <Box
-              sx={{
-                position: "absolute",
-                right: 5,
-                bottom: 5,
-                backgroundColor: "white",
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <img
-                src={getDietaryOptionLogo(product.details.dietaryOptions.label)}
-                alt={product.details.dietaryOptions.value}
-                style={{
-                  width: "40px",
-                  height: "40px",
+          {product.details.dietaryOptions &&
+            product.details.dietaryOptions.value.length > 0 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  right: 5,
+                  bottom: 5,
+                  backgroundColor: "white",
+                  width: 40,
+                  height: 40,
                   borderRadius: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              />
-            </Box>
-          )}
+              >
+                <img
+                  src={getDietaryOptionLogo(
+                    product.details.dietaryOptions.label
+                  )}
+                  alt={product.details.dietaryOptions.value}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                  }}
+                />
+              </Box>
+            )}
         </Box>
 
         <CardContent

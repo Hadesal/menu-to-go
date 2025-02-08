@@ -1,18 +1,19 @@
+import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
+import { ProductData } from "@dataTypes/ProductDataTypes";
 import {
+  Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Typography,
-  Box,
 } from "@mui/material";
-import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
-import { setSelectedProduct } from "@redux/slices/menuSlice";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
-import vegetarianLogo from "../../../assets/veggie.png";
+import { setSelectedProduct } from "@redux/slices/menuSlice";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
-import { ProductData } from "@dataTypes/ProductDataTypes";
+import vegetarianLogo from "../../../assets/veggie.png";
 
 export default function MenuProductsCard({
   product,
@@ -38,59 +39,38 @@ export default function MenuProductsCard({
   return (
     <Card
       onClick={() => {
-        if (product.isAvailable) {
+        if (!product.isSoldOut) {
           dispatch(setSelectedProduct(product));
         }
       }}
       sx={{
         borderRadius: "5px",
         padding: 0,
-        pointerEvents: product.isAvailable ? "auto" : "none",
-        cursor: product.isAvailable ? "pointer" : "not-allowed",
         height: "263px",
-        position:"relative"
+        position: "relative",
       }}
     >
-      {!product.isAvailable && (
-        <Box
+      {/* Sold Out Chip */}
+      {product.isSoldOut && (
+        <Chip
+          label="Sold Out"
+          variant="filled"
           sx={{
             position: "absolute",
-            top: "18px",
-            right: "-20px",
-            backgroundColor: "red",
-            color: "white",
-            fontSize: "12px",
+            top: 8,
+            left: 8,
             fontWeight: "bold",
-            padding: "5px 15px",
-            borderRadius: "5px",
-            transform: "rotate(45deg)", // Gives the banner effect
-            zIndex: 10, // Ensure banner stays above everything
-          }}
-        >
-          Out of Stock
-        </Box>
-      )}
-
-      {/* Overlay for dimming the background */}
-      {!product.isAvailable && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background:
-              "linear-gradient(rgba(255, 255, 255, 0.051), rgba(255, 255, 255, 0.051))", // Optional gradient
-            zIndex: 5, // Below the banner
-            borderRadius: "15px", // Matches Card's border radius
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            zIndex: 10,
           }}
         />
       )}
       <CardActionArea
         sx={{
-          opacity: product.isAvailable ? 1 : 0.5,
           height: "100%",
+          filter: product.isSoldOut ? "grayscale(100%)" : "none",
+          opacity: product.isSoldOut ? 0.8 : 1,
         }}
       >
         <Box
@@ -101,6 +81,7 @@ export default function MenuProductsCard({
             width="100%"
             height="100%"
             image={product.image ? product.image : PlaceHolder}
+            onError={(e) => ((e.target as HTMLImageElement).src = PlaceHolder)}
             alt={product.name}
           />
           {product.details.dietaryOptions &&

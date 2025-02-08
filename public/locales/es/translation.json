@@ -147,6 +147,7 @@
   "categoryShapeCircle": "Círculo",
   "categoryShapeRounded": "Redondeada",
   "categoryShapeSquare": "Cuadrada",
+  "categoryShapeText": "Texto",
   "contactLinks": "Enlaces de contacto",
   "viewType": "Tipo de vista",
   "viewTypeGrid": "Cuadrícula",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "Ya existe una categoría con el mismo nombre",
   "food": "Comida",
   "drinks": "Bebidas",
-  "deletionCofirmMessage": "¿Estás seguro de que quieres eliminar? No podrás deshacer esta acción.",
+  "deletionConfirmMessage": "¿Estás seguro de que quieres eliminar? No podrás deshacer esta acción.",
   "copy": "Copiar",
   "move": "Mover",
   "dragMessage": "Arrastra y suelta un %filetype% aquí, o haz clic para seleccionar",
@@ -241,5 +242,15 @@
   "nameMaxLength": "El nombre no debe tener más de 50 caracteres.",
   "nameInvalidFormat": "El nombre solo puede contener letras, espacios, guiones y apóstrofes.",
   "registrationError": "Ocurrió un error durante el registro. Por favor, inténtalo de nuevo.",
-  "unknownError": "Ocurrió un error desconocido."
+  "unknownError": "Ocurrió un error desconocido.",
+  "isAvailable": "Disponible",
+  "isAvailableInfo": "Alternar para mostrar u ocultar este artículo en el menú.",
+  "isSoldOut": "Agotado",
+  "isSoldOutInfo": "Puedes marcar el artículo como Agotado si está fuera de stock.",
+  "allergensLabel": "Alérgenos",
+  "allergensPlaceholder": "Selecciona los alérgenos para este producto",
+  "dietaryOptionsLabel": "Opciones dietéticas",
+  "dietaryOptionsPlaceholder": "Selecciona una opción dietética",
+  "labelsLabel": "Etiquetas",
+  "labelsPlaceholder": "Selecciona etiquetas para este producto"
 }

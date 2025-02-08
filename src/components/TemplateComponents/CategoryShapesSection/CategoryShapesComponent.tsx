@@ -115,6 +115,17 @@ const CategoryShapesComponent = () => {
                   }
                   label={getString("categoryShapeSquare")}
                 />
+                <FormControlLabel
+                  value="text"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "var(--primary-color)",
+                      }}
+                    />
+                  }
+                  label={getString("categoryShapeText")}
+                />
               </RadioGroup>
             </FormControl>
           </CardContent>

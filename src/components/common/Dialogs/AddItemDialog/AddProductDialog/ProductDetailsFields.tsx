@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Input } from "antd";
-import VariantPanel from "./VariantPanel";
-import IngredientPanel from "./IngredientPanel";
-import ExtraPanel from "./ExtraPanel";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Form, Input, Switch, Tooltip } from "antd";
 import { useLanguage } from "src/hooks/useLanguage";
+import ExtraPanel from "./ExtraPanel";
+import IngredientPanel from "./IngredientPanel";
 import ProductLabelsFields from "./ProductLabelsFields";
+import VariantPanel from "./VariantPanel";
 
 interface ProductDetailsFieldsProps {
   values: any;
@@ -12,6 +13,7 @@ interface ProductDetailsFieldsProps {
   setFieldValue: (field: string, value: any) => void;
   errors: any;
   touched: any;
+  isEditing: boolean;
 }
 
 const ProductDetailsFields = ({
@@ -20,8 +22,14 @@ const ProductDetailsFields = ({
   setFieldValue,
   errors,
   touched,
+  isEditing,
 }: ProductDetailsFieldsProps) => {
-  const { getString } = useLanguage();
+  const { getString, currentLanguage } = useLanguage();
+
+  const handleSwitchChange = (name: string) => (checked: boolean) => {
+    // Use setFieldValue or handleChange to update the state
+    setFieldValue(name, checked);
+  };
 
   return (
     <>
@@ -46,11 +54,71 @@ const ProductDetailsFields = ({
           }}
         />
       </Form.Item>
+      <Form.Item
+        label={
+          <span>
+            {getString("isAvailable")}
+            <Tooltip
+              placement={currentLanguage === "ar" ? "left" : "right"}
+              title={getString("isAvailableInfo")}
+            >
+              <InfoCircleOutlined
+                style={{
+                  color: "var(--primary-color)",
+                  marginLeft: currentLanguage === "ar" ? 0 : 5,
+                  marginRight: currentLanguage === "ar" ? 5 : 0,
+                }}
+              />
+            </Tooltip>
+          </span>
+        }
+        colon={false}
+        layout="horizontal"
+        style={{
+          padding: "0.5rem",
+        }}
+      >
+        <Switch
+          style={{ float: currentLanguage === "ar" ? "left" : "right" }}
+          checked={values.isAvailable}
+          onChange={handleSwitchChange("isAvailable")}
+        />
+      </Form.Item>
 
-      <ProductLabelsFields
-        values={values}
-        setFieldValue={setFieldValue}
-      />
+      {isEditing && (
+        <Form.Item
+          label={
+            <span>
+              {getString("isSoldOut")}
+              <Tooltip
+                placement={currentLanguage === "ar" ? "left" : "right"}
+                title={getString("isSoldOutInfo")}
+              >
+                <InfoCircleOutlined
+                  style={{
+                    color: "var(--primary-color)",
+                    marginLeft: currentLanguage === "ar" ? 0 : 5,
+                    marginRight: currentLanguage === "ar" ? 5 : 0,
+                  }}
+                />
+              </Tooltip>
+            </span>
+          }
+          colon={false}
+          layout="horizontal"
+          style={{
+            padding: "0.5rem",
+          }}
+        >
+          <Switch
+            style={{ float: currentLanguage === "ar" ? "left" : "right" }}
+            checked={values.isSoldOut}
+            onChange={handleSwitchChange("isSoldOut")}
+          />
+        </Form.Item>
+      )}
+
+      <ProductLabelsFields values={values} setFieldValue={setFieldValue} />
 
       <VariantPanel
         values={values}

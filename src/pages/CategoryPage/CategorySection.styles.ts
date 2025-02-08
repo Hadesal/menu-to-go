@@ -1,4 +1,3 @@
-
 const Styles = {
   stack: { width: "95%", margin: "0 auto" },
   typography: { width: "80%" },
@@ -101,7 +100,7 @@ const Styles = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 2,
+    gap: { xs: 0, sm: 2 },
   },
   productListItemBox: {
     color: "primary",

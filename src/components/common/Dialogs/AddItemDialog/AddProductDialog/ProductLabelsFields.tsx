@@ -4,6 +4,8 @@ import { Form, Select } from "antd";
 import vegetarianLogo from "../../../../../assets/veggie.png";
 import halalLogo from "../../../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../../../assets/vegan.png";
+import { get } from "lodash";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface ProductLabelsFieldsProps {
   values: any;
@@ -51,6 +53,8 @@ const ProductLabelsFields = ({
   values,
   setFieldValue,
 }: ProductLabelsFieldsProps) => {
+  const { getString } = useLanguage();
+
   const handleAllergyChange = (selectedValues: string[]) => {
     const selectedAllergens = allergensOptions.filter((option) =>
       selectedValues.includes(option.value)
@@ -77,14 +81,14 @@ const ProductLabelsFields = ({
   return (
     <div className="productLabelsFields">
       <Form.Item
-        label="Allergens"
+        label={getString("allergensLabel")}
         layout="vertical"
         style={{
           padding: "0.5rem",
         }}
       >
         <Select
-          placeholder="Select allergens for this product"
+          placeholder={getString("allergensPlaceholder")}
           mode="multiple"
           options={allergensOptions}
           value={values.details.allergies?.map((item: Allergies) => item.value)} // map to values array
@@ -92,14 +96,14 @@ const ProductLabelsFields = ({
         />
       </Form.Item>
       <Form.Item
-        label="Labels"
+        label={getString("labelsLabel")}
         layout="vertical"
         style={{
           padding: "0.5rem",
         }}
       >
         <Select
-          placeholder="Select labels for this product"
+          placeholder={getString("labelsPlaceholder")}
           mode="multiple"
           options={labelsOptions}
           value={values.details.labels?.map((item: Labels) => item.value)} // map to values array
@@ -108,13 +112,13 @@ const ProductLabelsFields = ({
       </Form.Item>
 
       <Form.Item
-        label="Dietary Option"
+        label={getString("dietaryOptionsLabel")}
         layout="vertical"
         style={{ padding: "0.5rem" }}
       >
         <Select
           allowClear
-          placeholder="Select a dietary option"
+          placeholder={getString("dietaryOptionsPlaceholder")}
           options={dietaryOptions.map((option) => {
             // Determine the image source based on the label
             let imageSrc;
@@ -129,7 +133,7 @@ const ProductLabelsFields = ({
                 imageSrc = vegetarianLogo;
                 break;
               default:
-                imageSrc = ""; // Provide a default image or leave it empty
+                imageSrc = "";
             }
 
             return {

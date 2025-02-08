@@ -102,6 +102,7 @@ export const productDefaultData: ProductData = {
     dietaryOptions: { label: "", value: "" },
   },
   isAvailable: true,
+  isSoldOut: false,
   image: undefined,
 };
 

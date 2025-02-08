@@ -17,6 +17,7 @@ import {
   Paper,
   Tooltip,
   Typography,
+  Chip,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateProductInCategory as editProduct } from "@redux/thunks/productThunks";
@@ -98,6 +99,9 @@ const ListViewProductItem = ({
       sx={{
         ...styles.paperListView,
         background: checked ? "#FFF9F4" : "inherit",
+        opacity: item.isSoldOut || !item.isAvailable ? 0.8 : 1,
+        filter:
+          item.isSoldOut || !item.isAvailable ? "grayscale(100%)" : "none", // Apply grayscale if sold out and unavailable
       }}
       {...attributes}
       style={style}
@@ -155,6 +159,14 @@ const ListViewProductItem = ({
               </Tooltip>
             }
           />
+          {item.isSoldOut && (
+            <Chip
+              sx={{ display: { xs: "none", sm: "inherit" } }}
+              color="error"
+              label={getString("isSoldOut")}
+              variant="outlined"
+            />
+          )}
         </Box>
         <Box
           sx={{
@@ -200,9 +212,15 @@ const ListViewProductItem = ({
                 }}
               >
                 {item.isAvailable ? (
-                  <VisibilityIcon fontSize="medium" />
+                  <VisibilityIcon
+                    sx={{ display: { xs: "none", sm: "block" } }}
+                    fontSize="medium"
+                  />
                 ) : (
-                  <VisibilityOffIcon fontSize="medium" />
+                  <VisibilityOffIcon
+                    sx={{ display: { xs: "none", sm: "block" } }}
+                    fontSize="medium"
+                  />
                 )}
               </IconButton>
             </Tooltip>

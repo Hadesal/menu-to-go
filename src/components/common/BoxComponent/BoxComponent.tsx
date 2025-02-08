@@ -173,7 +173,7 @@ const BoxComponent = ({
         secondaryActionText={getString("cancel")}
         primaryActionText={getString("delete")}
         title={getString("deleteConfirmText")}
-        subTitle={getString("deletionCofirmMessage")}
+        subTitle={getString("deletionConfirmMessage")}
       />
       <AddRestaurantDialog
         title={getString("addRestaurantText")}

@@ -98,9 +98,19 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
     return <ProductPage />;
   }
 
-  // Filter categories to include only those with products
-  const filteredCategories = restaurantData.categories.filter(
-    (category) => category.products!.length > 0
+  // Filter categories to include only those with at least one available product
+  const filteredCategories = restaurantData.categories.filter((category) => {
+    // Filter available products
+    const availableProducts = category.products?.filter(
+      (product) => product.isAvailable
+    );
+    // Check if availableProducts is defined and has at least one product
+    return availableProducts && availableProducts.length > 0;
+  });
+
+  // Filter products within the selected category that are available
+  const filteredProducts = selectedCategory?.products?.filter(
+    (product) => product.isAvailable
   );
 
   // Determine if menu selection should be shown
@@ -192,7 +202,7 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
             sx={{
               position: "sticky",
               top: 0,
-              zIndex: 10,
+              zIndex: 20,
               paddingLeft: "1rem",
               paddingRight: "1rem",
               paddingTop: "0.5rem",
@@ -217,6 +227,8 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
               paddingTop: "2rem",
               fontWeight: 500,
               fontFamily: restaurantData.userUiPreferences.fontType,
+              width: "95%",
+              wordBreak: "break-word",
             }}
             variant="h6"
           >
@@ -237,21 +249,22 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
                 marginBottom: 5,
               }}
             >
-              {selectedCategory?.products?.map((product, index) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={6}
-                  key={index}
-                  sx={{
-                    paddingLeft:
-                      index % 2 === 0 ? "0 !important" : "8px !important",
-                    paddingRight: index % 2 !== 0 ? "0 !important" : "8px",
-                  }}
-                >
-                  <MenuProductsCard key={index} product={product} />
-                </Grid>
-              ))}
+              {filteredProducts &&
+                filteredProducts.map((product, index) => (
+                  <Grid
+                    item
+                    xs={6}
+                    sm={6}
+                    key={index}
+                    sx={{
+                      paddingLeft:
+                        index % 2 === 0 ? "0 !important" : "8px !important",
+                      paddingRight: index % 2 !== 0 ? "0 !important" : "8px",
+                    }}
+                  >
+                    <MenuProductsCard key={index} product={product} />
+                  </Grid>
+                ))}
             </Grid>
           ) : (
             <Grid
@@ -267,17 +280,18 @@ export default function MenuPage({ restaurantTemplateId }: MenuPageProps) {
                 marginBottom: 5,
               }}
             >
-              {selectedCategory?.products?.map((product, index) => (
-                <Grid
-                  sx={{ paddingLeft: "0 !important" }}
-                  item
-                  xs={12}
-                  sm={12}
-                  key={index}
-                >
-                  <MenuProductsList key={index} product={product} />
-                </Grid>
-              ))}
+              {filteredProducts &&
+                filteredProducts.map((product, index) => (
+                  <Grid
+                    sx={{ paddingLeft: "0 !important" }}
+                    item
+                    xs={12}
+                    sm={12}
+                    key={index}
+                  >
+                    <MenuProductsList key={index} product={product} />
+                  </Grid>
+                ))}
             </Grid>
           )}
         </Box>

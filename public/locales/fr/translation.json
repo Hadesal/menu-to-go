@@ -147,6 +147,7 @@
   "categoryShapeCircle": "Cercle",
   "categoryShapeRounded": "Arrondi",
   "categoryShapeSquare": "Carré",
+  "categoryShapeText": "Texte",
   "contactLinks": "Liens de contact",
   "viewType": "Type de vue",
   "viewTypeGrid": "Grille",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "Une catégorie portant le même nom existe déjà",
   "food": "Nourriture",
   "drinks": "Boissons",
-  "deletionCofirmMessage": "Êtes-vous sûr de vouloir supprimer ? Cette action est irréversible.",
+  "deletionConfirmMessage": "Êtes-vous sûr de vouloir supprimer ? Cette action est irréversible.",
   "copy": "Copier",
   "move": "Déplacer",
   "dragMessage": "Glissez et déposez un %filetype% ici, ou cliquez pour sélectionner",
@@ -241,5 +242,15 @@
   "nameMaxLength": "Le nom ne doit pas dépasser 50 caractères.",
   "nameInvalidFormat": "Le nom ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.",
   "registrationError": "Une erreur est survenue lors de l'inscription. Veuillez réessayer.",
-  "unknownError": "Une erreur inconnue est survenue."
+  "unknownError": "Une erreur inconnue est survenue.",
+  "isAvailable": "Disponible",
+  "isAvailableInfo": "Basculez pour afficher ou masquer cet article dans le menu.",
+  "isSoldOut": "Épuisé",
+  "isSoldOutInfo": "Vous pouvez marquer l'article comme Épuisé s'il est en rupture de stock.",
+  "allergensLabel": "Allergènes",
+  "allergensPlaceholder": "Sélectionnez les allergènes pour ce produit",
+  "dietaryOptionsLabel": "Options alimentaires",
+  "dietaryOptionsPlaceholder": "Sélectionnez une option alimentaire",
+  "labelsLabel": "Étiquettes",
+  "labelsPlaceholder": "Sélectionnez des étiquettes pour ce produit"
 }

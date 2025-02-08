@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedCategory } from "@redux/slices/menuSlice";
 import { adjustBrightness } from "@utils/colors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Styles } from "./MenuCategories.styles";
 
 interface MenuCategoriesProps {
@@ -20,81 +20,106 @@ export default function MenuCategories({
 }: MenuCategoriesProps) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
+  const { categoryShape, colors, fontType } = restaurantData.userUiPreferences;
 
-  const categoriesData = (categoryTag: string) => {
-    let categoriesDataArray = [];
+  // Filter categories based on categoryTag
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.categoryType.toLowerCase() === categoryTag.toLowerCase()
+  );
 
-    if (categoryTag.toLocaleLowerCase() === "food") {
-      categoriesDataArray = categories.filter((category) => {
-        return category.categoryType.toLowerCase() === "food";
-      });
-    } else {
-      categoriesDataArray = categories.filter((category) => {
-        return category.categoryType.toLowerCase() === "drinks";
-      });
-    }
-
-    return categoriesDataArray;
-  };
-
+  // Select first category if none is selected
   useEffect(() => {
-    if (!selectedCategory) {
-      dispatch(setSelectedCategory(categoriesData(categoryTag)[0]));
+    if (!selectedCategory && filteredCategories.length > 0) {
+      dispatch(setSelectedCategory(filteredCategories[0]));
     }
   }, [categoryTag]);
 
+  const handleCategorySelect = (category: CategoryData) => {
+    dispatch(setSelectedCategory(category));
+  };
+
   return (
     <Box sx={Styles.categoriesContainer}>
-      {categoriesData(categoryTag).map((category, index) => (
-        <Box
-          onClick={() => {
-            dispatch(setSelectedCategory(category));
-          }}
-          key={index}
-          sx={Styles.categoryBox}
-        >
-          <img
-            src={category.image ? category.image : PlaceHolder}
-            alt="Product Image"
-            style={{
-              ...Styles.categoryImage,
-              borderRadius:
-                restaurantData.userUiPreferences.categoryShape === "circle"
-                  ? "50%"
-                  : restaurantData.userUiPreferences.categoryShape === "rounded"
-                  ? "20%"
-                  : "0%",
-            }}
-            width={70}
-            height={70}
-          />
-          <Typography
-            variant="h6"
-            sx={{
-              ...Styles.categoryLabel,
-              color:
-                category.name === selectedCategory
-                  ? restaurantData.userUiPreferences?.colors.primaryColor
-                  : adjustBrightness(
-                      restaurantData.userUiPreferences.colors.primaryColor,
-                      50
-                    ),
-              fontFamily: restaurantData.userUiPreferences.fontType,
-            }}
+      {filteredCategories.map((category, index) => {
+        const isSelected = category.name === selectedCategory;
+        const categoryColor = isSelected
+          ? colors.primaryColor
+          : adjustBrightness(colors.primaryColor, 50);
+
+        return (
+          <Box
+            key={index}
+            onClick={() => handleCategorySelect(category)}
+            sx={
+              categoryShape === "text"
+                ? {
+                    background: isSelected ? colors.secondaryColor : "white",
+                    border: `1px solid ${colors.secondaryColor}`,
+                    padding: "0.5rem 1rem",
+                    borderRadius: 2,
+                    maxWidth: "200px",
+                  }
+                : Styles.categoryBox
+            }
           >
-            {category.name}
-          </Typography>
-          {category.name === selectedCategory && (
-            <Box
-              sx={{
-                ...Styles.selectedCategoryIndicator,
-                background:
-                  restaurantData.userUiPreferences?.colors.secondaryColor,
-              }}
-            />
-          )}
-        </Box>
-      ))}
+            {categoryShape === "text" ? (
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: "0.875rem",
+                  lineHeight: "1.25rem",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  fontWeight: 500,
+                  color: isSelected ? "white" : colors.secondaryColor,
+                  fontFamily: fontType,
+                }}
+              >
+                {category.name}
+              </Typography>
+            ) : (
+              <>
+                <img
+                  src={category.image || PlaceHolder}
+                  alt="Product Image"
+                  onError={(e) => (e.currentTarget.src = PlaceHolder)}
+                  style={{
+                    borderRadius:
+                      categoryShape === "circle"
+                        ? "50%"
+                        : categoryShape === "rounded"
+                        ? "20%"
+                        : "0%",
+                    width: 70,
+                    height: 70,
+                  }}
+                />
+
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ...Styles.categoryLabel,
+                    color: categoryColor,
+                    fontFamily: fontType,
+                  }}
+                >
+                  {category.name}
+                </Typography>
+                {isSelected && (
+                  <Box
+                    sx={{
+                      ...Styles.selectedCategoryIndicator,
+                      background: colors.secondaryColor,
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </Box>
+        );
+      })}
     </Box>
   );
 }
