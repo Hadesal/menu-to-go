@@ -587,8 +587,13 @@ const restaurantSlice = createSlice({
             const selectedCategory = state.selectedRestaurant.categories.find(
               (cat) => cat.id === categoryId
             );
+            console.log(categoryId);
             if (selectedCategory && selectedCategory.products) {
               selectedCategory.products = reorderedProducts;
+            }
+
+            if (state.selectedCategory && state.selectedCategory.products) {
+              state.selectedCategory.products = reorderedProducts;
             }
           }
         });
