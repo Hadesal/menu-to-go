@@ -70,6 +70,7 @@ You are an expert data parser. Given the following menu text, convert it into a 
             }
           },
           "isAvailable": "boolean",
+          "isSoldOut": "boolean",
           "image": "string | null",
           "uniqueProductOrderingName": "string"
         }
