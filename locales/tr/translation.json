@@ -147,6 +147,7 @@
   "categoryShapeCircle": "Daire",
   "categoryShapeRounded": "Yuvarlak",
   "categoryShapeSquare": "Kare",
+  "categoryShapeText": "Metin",
   "contactLinks": "İletişim Bağlantıları",
   "viewType": "Görünüm Türü",
   "viewTypeGrid": "Izgara",
@@ -189,7 +190,7 @@
   "categoryWithSameNameMessage": "Aynı adı taşıyan bir kategori zaten mevcut",
   "food": "Yemek",
   "drinks": "İçecekler",
-  "deletionCofirmMessage": "Silmek istediğinizden emin misiniz? Bu işlemi geri alamazsınız.",
+  "deletionConfirmMessage": "Silmek istediğinizden emin misiniz? Bu işlemi geri alamazsınız.",
   "copy": "Kopyala",
   "move": "Taşı",
   "dragMessage": "Bir %filetype% buraya sürükleyip bırakın veya seçmek için tıklayın",
@@ -241,5 +242,15 @@
   "nameMaxLength": "Adınız en fazla 50 karakter uzunluğunda olmalıdır.",
   "nameInvalidFormat": "Adınız sadece harfler, boşluklar, tireler ve apostroflar içerebilir.",
   "registrationError": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
-  "unknownError": "Bilinmeyen bir hata oluştu."
+  "unknownError": "Bilinmeyen bir hata oluştu.",
+  "isAvailable": "Mevcut",
+  "isAvailableInfo": "Bu ürünü menüde göstermek veya gizlemek için değiştirin.",
+  "isSoldOut": "Tükendi",
+  "isSoldOutInfo": "Ürün stokta yoksa Tükendi olarak işaretleyebilirsiniz.",
+  "allergensLabel": "Alerjenler",
+  "allergensPlaceholder": "Bu ürün için alerjenleri seçin",
+  "dietaryOptionsLabel": "Beslenme Seçenekleri",
+  "dietaryOptionsPlaceholder": "Bir beslenme seçeneği seçin",
+  "labelsLabel": "Etiketler",
+  "labelsPlaceholder": "Bu ürün için etiketleri seçin"
 }
