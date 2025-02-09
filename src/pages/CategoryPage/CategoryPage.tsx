@@ -300,7 +300,7 @@ export default function CategoryPage() {
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={showSuccessToast}
           autoHideDuration={6000}
-          onClose={(e) => {
+          onClose={() => {
             setShowSuccessToast(false);
           }}
         >

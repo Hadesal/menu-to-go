@@ -139,7 +139,6 @@ export const editCategoryInRestaurant = createAsyncThunk(
         if (filename) {
           // Image deletion should happen only after both image upload and category update
           await deleteImage(filename);
-          imageDeleted = true;
         }
       }
 
