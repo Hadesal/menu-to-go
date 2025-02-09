@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedCategory } from "@redux/slices/menuSlice";
 import { adjustBrightness } from "@utils/colors";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Styles } from "./MenuCategories.styles";
 
 interface MenuCategoriesProps {
