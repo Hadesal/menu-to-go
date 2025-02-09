@@ -2,7 +2,7 @@ import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
 import { productDefaultData } from "@constants/constants";
 import { DietaryOptions, Labels } from "@dataTypes/ProductDataTypes";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Chip, IconButton, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
@@ -17,6 +17,7 @@ interface productDetailsProps {
   productPrice: number;
   productLabels: Labels[];
   productDietaryOption: DietaryOptions;
+  isSoldOut: boolean;
 }
 
 export default function ProductDetails({
@@ -26,6 +27,7 @@ export default function ProductDetails({
   productPrice,
   productLabels,
   productDietaryOption,
+  isSoldOut,
 }: productDetailsProps) {
   const { restaurantData } = useAppSelector((state) => state.menuData);
   const dispatch = useAppDispatch();
@@ -68,6 +70,22 @@ export default function ProductDetails({
           width: "100%",
         }}
       >
+        {/* Sold Out Chip */}
+        {isSoldOut && (
+          <Chip
+            label="Sold Out"
+            variant="filled"
+            sx={{
+              position: "absolute",
+              top: 360,
+              right: 15,
+              fontWeight: "bold",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              color: "white",
+              zIndex: 10,
+            }}
+          />
+        )}
         <img
           src={productImg ? productImg : PlaceHolder}
           onError={(e) => (e.currentTarget.src = PlaceHolder)}

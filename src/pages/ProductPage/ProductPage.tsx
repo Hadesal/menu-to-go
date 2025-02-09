@@ -48,6 +48,7 @@ export default function ProductPage() {
               productPrice={selectedProduct.price}
               productLabels={selectedProduct.details.labels}
               productDietaryOption={selectedProduct.details.dietaryOptions}
+              isSoldOut={selectedProduct.isSoldOut}
             />
             {selectedProduct.details &&
               selectedProduct.details.allergies &&

@@ -82,7 +82,7 @@ export default function MenuCategories({
             ) : (
               <>
                 <img
-                  src={category.image || PlaceHolder}
+                  src={category.image as string || PlaceHolder}
                   alt="Product Image"
                   onError={(e) => (e.currentTarget.src = PlaceHolder)}
                   style={{
@@ -94,6 +94,7 @@ export default function MenuCategories({
                         : "0%",
                     width: 70,
                     height: 70,
+                    padding: 1,
                   }}
                 />
 

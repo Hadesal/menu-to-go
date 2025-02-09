@@ -18,7 +18,6 @@ export const Styles = {
     display: "flex",
     minWidth: 100,
     maxWidth: "120px",
-    // border:"1px solid black",
     flexDirection: "column",
     alignItems: "center",
     boxSizing: "border-box",

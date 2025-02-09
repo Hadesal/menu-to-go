@@ -39,9 +39,7 @@ export default function MenuProductsCard({
   return (
     <Card
       onClick={() => {
-        if (!product.isSoldOut) {
-          dispatch(setSelectedProduct(product));
-        }
+        dispatch(setSelectedProduct(product));
       }}
       sx={{
         borderRadius: "5px",
