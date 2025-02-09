@@ -57,7 +57,6 @@ const AddCategoryDialog = ({
   const [showNameError, setShowNameError] = useState<boolean>(false);
   const [showCategoryError, setShowCategoryError] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string | null>(null);
-  const [isDataUnchanged, setIsDataUnchanged] = useState<boolean>(false);
   const { getString, currentLanguage } = useLanguage();
   const [isNameDuplicate, setIsNameDuplicate] = useState<boolean>(false);
   const MAXCHARSLENGTH = 35;
@@ -67,11 +66,6 @@ const AddCategoryDialog = ({
     }
   }, [isOpen, initialData]);
 
-  useEffect(() => {
-    if (initialData) {
-      setIsDataUnchanged(isEqual(dialogData, initialData));
-    }
-  }, [dialogData, initialData]);
   const handleOnConfirm = () => {
     handleCategoryConfirm(
       dialogData,
@@ -97,7 +91,6 @@ const AddCategoryDialog = ({
         setImageError,
         setShowNameError,
         setShowCategoryError,
-        setIsDataUnchanged,
         setIsNameDuplicate,
       },
       initialData
@@ -123,10 +116,9 @@ const AddCategoryDialog = ({
     >
       <DialogTitle sx={Styles.title}>{title}</DialogTitle>
       <FileUploadComponent
-        image={dialogData.image}
+        image={dialogData.image as string}
         onImageChange={(image) => {
           setDialogData({ ...dialogData, image });
-          setIsDataUnchanged(initialData ? image === initialData.image : false);
         }}
         error={imageError}
         setError={setImageError}
@@ -150,9 +142,6 @@ const AddCategoryDialog = ({
             });
             setShowNameError(e.target.value.trim().length === 0);
             setIsNameDuplicate(false);
-            setIsDataUnchanged(
-              initialData ? e.target.value === initialData.name : false
-            );
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -207,9 +196,6 @@ const AddCategoryDialog = ({
               ...dialogData,
               categoryType: e.target.value,
             });
-            setIsDataUnchanged(
-              initialData ? e.target.value === initialData.categoryType : false
-            );
             setShowCategoryError(false);
           }}
         >
@@ -276,12 +262,15 @@ const AddCategoryDialog = ({
           >
             {cancelText}
           </Button>
-          <Box sx={Styles.buttonWrapper(isDataUnchanged)}>
+          <Box sx={Styles.buttonWrapper(isEqual(dialogData, initialData))}>
             <Button
               variant="contained"
               onClick={handleOnConfirm}
               sx={Styles.addBtn}
-              disabled={isDataUnchanged}
+              disabled={
+                isEqual(categoryDefaultData, dialogData) ||
+                isEqual(dialogData, initialData)
+              }
             >
               {confirmText}
             </Button>

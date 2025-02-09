@@ -1,6 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import privateApiService from "@api/services/privateApiService";
+import {
+  addImage,
+  deleteImage,
+  getFilenameFromUrl,
+} from "@api/services/imageService";
+import {
+  handleImageUpload,
+  removeFileReferences,
+  updateProductWithNewImageUrls,
+  uploadIngredientImages,
+} from "./thunks.helpers";
 
 // Fetch all products by category ID
 export const fetchProductsByCategory = createAsyncThunk(
@@ -17,7 +28,6 @@ export const fetchProductsByCategory = createAsyncThunk(
   }
 );
 
-// Add a product to a specific category
 export const addProductToCategory = createAsyncThunk(
   "products/addToCategory",
   async (
@@ -28,11 +38,31 @@ export const addProductToCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      let imageError = false;
+      const newProduct = { ...productData };
+
+      try {
+        await handleImageUpload(productData, newProduct);
+      } catch (error) {
+        newProduct.image = "";
+        imageError = true;
+      }
+
+      try {
+        await uploadIngredientImages(productData, newProduct);
+      } catch (error) {
+        newProduct.details.ingredients.forEach((ingredient) => {
+          ingredient.image = "";
+        });
+        imageError = true;
+      }
+
       const response = await privateApiService.post(
         `/categories/${categoryId}/products`,
-        productData
+        newProduct
       );
-      return { categoryId, product: response.data };
+
+      return { categoryId, product: response.data, imageError };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -63,7 +93,6 @@ export const addProductListToCategory = createAsyncThunk(
   }
 );
 
-// Update a product in a specific category
 export const updateProductInCategory = createAsyncThunk(
   "products/updateInCategory",
   async (
@@ -71,33 +100,181 @@ export const updateProductInCategory = createAsyncThunk(
       categoryId,
       productId,
       updatedProduct,
-    }: { categoryId: string; productId: string; updatedProduct: ProductData },
+      oldProduct,
+    }: {
+      categoryId: string;
+      productId: string;
+      updatedProduct: ProductData;
+      oldProduct?: ProductData;
+    },
     { rejectWithValue }
   ) => {
     try {
+      //TODO: Remove after testing
+      const addedImagesLog: string[] = [];
+      const removedImagesLog: string[] = [];
+
+      // Remove File references from ingredients and product image
+      const productWithoutImages = removeFileReferences(updatedProduct);
+
+      // Step 1: Update product data (without images)
       const response = await privateApiService.put(
         `/categories/${categoryId}/products/${productId}`,
-        updatedProduct
+        productWithoutImages
       );
-      return { categoryId, productId, updatedProduct: response.data };
+      const updatedProductData = response.data;
+
+      const imageOperations: Promise<string | void>[] = [];
+
+      // Step 2: Handle product image changes
+      if (oldProduct?.image !== updatedProduct.image) {
+        if (updatedProduct.image instanceof File) {
+          imageOperations.push(
+            addImage(updatedProduct.image).then((uploadedImageUrl) => {
+              updatedProductData.image = uploadedImageUrl;
+              addedImagesLog.push(uploadedImageUrl); // Log added image
+            })
+          );
+        }
+        if (oldProduct?.image) {
+          const filename = getFilenameFromUrl(oldProduct.image as string);
+          if (filename) {
+            imageOperations.push(deleteImage(filename));
+            removedImagesLog.push(oldProduct.image as string);
+          }
+        }
+      }
+
+      // Step 3: Handle ingredient image changes
+      updatedProduct.details.ingredients.forEach((ingredient, index) => {
+        const oldIngredient = oldProduct?.details.ingredients.find(
+          (oldIng) => oldIng.id === ingredient.id
+        );
+        const oldIngredientImage = oldIngredient?.image;
+
+        // If the ingredient is new or its image changed, upload new image
+        if (!oldIngredient || oldIngredientImage !== ingredient.image) {
+          if (ingredient.image instanceof File) {
+            imageOperations.push(
+              addImage(ingredient.image).then((uploadedImageUrl) => {
+                updatedProductData.details.ingredients[index].image =
+                  uploadedImageUrl;
+                addedImagesLog.push(uploadedImageUrl); // Log added image
+              })
+            );
+          }
+        }
+
+        // If the old ingredient had an image but is now removed or changed, delete it
+        if (oldIngredientImage && oldIngredientImage !== ingredient.image) {
+          const filename = getFilenameFromUrl(oldIngredientImage as string);
+          if (filename) {
+            imageOperations.push(deleteImage(filename));
+            removedImagesLog.push(oldIngredientImage as string); // Log removed image
+          }
+        }
+      });
+
+      // Step 4: Delete images of removed ingredients
+      if (oldProduct) {
+        oldProduct.details.ingredients.forEach((oldIngredient) => {
+          const stillExists = updatedProduct.details.ingredients.some(
+            (ing) => ing.id === oldIngredient.id
+          );
+          if (!stillExists && oldIngredient.image) {
+            const filename = getFilenameFromUrl(oldIngredient.image as string);
+            if (filename) {
+              imageOperations.push(deleteImage(filename));
+              removedImagesLog.push(oldIngredient.image as string); // Log removed image
+            }
+          }
+        });
+      }
+
+      // Wait for all image operations to complete
+      await Promise.allSettled(imageOperations);
+
+      // Step 5: Final update (if image was modified)
+      if (imageOperations.length > 0) {
+        await privateApiService.put(
+          `/categories/${categoryId}/products/${updatedProductData.id}`,
+          updatedProductData
+        );
+      }
+
+      //TODO: Remove after testing
+
+      // Log added and removed images
+      console.log("Added Images:", addedImagesLog);
+      console.log("Removed Images:", removedImagesLog);
+
+      return {
+        categoryId,
+        productId,
+        updatedProduct: updatedProductData,
+        imageError: false,
+        logs: {
+          addedImages: addedImagesLog,
+          removedImages: removedImagesLog,
+        },
+      };
     } catch (error) {
       return rejectWithValue(error);
     }
   }
 );
 
-// Remove a product from a specific category
 export const removeProductFromCategory = createAsyncThunk(
   "products/removeFromCategory",
   async (
-    { categoryId, productId }: { categoryId: string; productId: string[] },
+    {
+      categoryId,
+      productId,
+      productImage,
+      ingredientImages,
+    }: {
+      categoryId: string;
+      productId: string[];
+      productImage: string[];
+      ingredientImages: string[];
+    },
     { rejectWithValue }
   ) => {
     try {
-      await privateApiService.delete(
-        `/categories/${categoryId}/products`, // Endpoint
-        { data: productId }
-      );
+      // Step 1: Delete product from category
+      await privateApiService.delete(`/categories/${categoryId}/products`, {
+        data: productId,
+      });
+
+      // Step 2: Only start deleting images if the API request was successful
+      if (productImage?.length) {
+        console.log("Starting background image deletion:", productImage);
+
+        const deletePromises = productImage
+          .map(getFilenameFromUrl)
+          .filter((filename): filename is string => Boolean(filename))
+          .map(deleteImage);
+
+        // Run in background (no await, so function does not wait)
+        Promise.all(deletePromises).catch((error) =>
+          console.error("Image deletion failed:", error)
+        );
+      }
+      if (ingredientImages?.length) {
+        console.log("Starting background image deletion:", ingredientImages);
+
+        const deletePromises = ingredientImages
+          .map(getFilenameFromUrl)
+          .filter((filename): filename is string => Boolean(filename))
+          .map(deleteImage);
+
+        // Run in background (no await, so function does not wait)
+        Promise.all(deletePromises).catch((error) =>
+          console.error("Image deletion failed:", error)
+        );
+      }
+
+      // Step 3: Return immediately without waiting for image deletion
       return { categoryId, productId };
     } catch (error) {
       return rejectWithValue(error);

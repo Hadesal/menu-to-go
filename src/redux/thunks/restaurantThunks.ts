@@ -2,6 +2,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RestaurantData } from "@dataTypes/RestaurantObject";
 import privateApiService from "@api/services/privateApiService";
+import { deleteAllCategoryImages } from "./thunks.helpers";
 
 // Fetch all restaurants by user ID
 export const fetchAllRestaurants = createAsyncThunk(
@@ -77,11 +78,31 @@ export const editRestaurant = createAsyncThunk(
 // Delete a restaurant
 export const removeRestaurant = createAsyncThunk(
   "restaurants/removeRestaurant",
-  async (restaurantId: string, { rejectWithValue }) => {
+  async (
+    {
+      restaurantId,
+      restaurantData,
+    }: { restaurantId: string; restaurantData: RestaurantData },
+    { rejectWithValue }
+  ) => {
     try {
+      // Delete the restaurant first
       const response = await privateApiService.delete(
         `/restaurants/${restaurantId}`
       );
+
+      // After restaurant is deleted successfully, delete category images in the background
+      if (response.status === 200) {
+        // Ensure the restaurant was successfully deleted
+        restaurantData.categories.forEach((category) => {
+          // Fire off the image deletion asynchronously without awaiting it
+          deleteAllCategoryImages(category).catch((error) => {
+            console.error("Error deleting category images:", error);
+          });
+        });
+      }
+
+      // Return the response immediately after deleting the restaurant
       return { response: response.data, restaurantId };
     } catch (error) {
       return rejectWithValue(error);

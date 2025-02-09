@@ -8,7 +8,7 @@ import { reorderProductsForRestaurant } from "@redux/thunks/productThunks";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useMenu from "src/hooks/useMenu";
-import { ProductData } from "../../DataTypes/ProductDataTypes";
+import { IngredientData, ProductData } from "../../DataTypes/ProductDataTypes";
 import Styles from "../../DataTypes/StylesTypes";
 import useCheckBoxHandler from "../../hooks/useCheckBoxHandler";
 import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
@@ -17,7 +17,11 @@ import ListViewProductItem from "./ListViewItem/ProductListItem";
 interface ProductListViewProps {
   items: ProductData[];
   editFunction: (item: ProductData) => void;
-  deleteFunction: (id: string) => void;
+  deleteFunction: (
+    id: string,
+    image?: string[],
+    ingredientImages?: string[]
+  ) => void;
   duplicateFunction: (item: ProductData) => void;
   styles: Styles;
 }
@@ -167,8 +171,23 @@ const ProductListView = ({
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}
             onPrimaryActionClick={() => {
-              if (currentItem.id) {
-                deleteFunction(currentItem.id);
+              if (
+                currentItem?.id &&
+                "image" in currentItem &&
+                "details" in currentItem
+              ) {
+                const ingredientImages = currentItem.details.ingredients
+                  .map((ingredient: IngredientData) => ingredient.image)
+                  .filter(
+                    (image): image is string | File =>
+                      image !== null && image !== ""
+                  );
+
+                deleteFunction(
+                  currentItem.id,
+                  [currentItem.image as string],
+                  ingredientImages as string[]
+                );
               }
               handleDeleteDialogClose();
             }}
@@ -181,7 +200,7 @@ const ProductListView = ({
             primaryActionText={getString("delete")}
             title={getString("deleteConfirmText")}
             subTitle={getString("productDeleteText", {
-              productName: currentItem.name,
+              productName: currentItem?.name,
             })}
           />
         </>

@@ -80,7 +80,7 @@ export default function MenuProductsCard({
             component="img"
             width="100%"
             height="100%"
-            image={product.image ? product.image : PlaceHolder}
+            image={product.image ? (product.image as string) : PlaceHolder}
             onError={(e) => ((e.target as HTMLImageElement).src = PlaceHolder)}
             alt={product.name}
           />

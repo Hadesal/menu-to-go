@@ -1,4 +1,3 @@
-
 export const Styles = {
   IngredientItemContainer: {
     display: "flex",
@@ -6,7 +5,7 @@ export const Styles = {
     justifyContent: "center",
     flexDirection: "column",
     gap: "0.5rem",
-    width:"70px"
+    maxWidth: "80px",
   },
   IngredientItemName: {
     fontSize: "12px",

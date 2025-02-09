@@ -225,7 +225,6 @@ const restaurantSlice = createSlice({
         action: PayloadAction<{ data: RestaurantData[]; message: string }>
       ) => {
         state.restaurantList = action.payload.data;
-        state.successMessage = action.payload.message;
         state.restaurantLoading = false;
         if (state.restaurantList.length > 0) {
           state.selectedRestaurant = state.restaurantList[0];
@@ -297,7 +296,11 @@ const restaurantSlice = createSlice({
       addCategoryToRestaurant.fulfilled,
       (
         state,
-        action: PayloadAction<{ restaurantId: string; category: CategoryData }>
+        action: PayloadAction<{
+          restaurantId: string;
+          category: CategoryData;
+          imageError?: boolean;
+        }>
       ) => {
         const restaurant = state.restaurantList.find(
           (r) => r.id === action.payload.restaurantId
@@ -323,6 +326,10 @@ const restaurantSlice = createSlice({
         if (state.selectedProductsIDs.length > 0) {
           state.selectedProductsIDs = [];
         }
+        console.log(action.payload);
+        state.error = action.payload.imageError
+          ? "Category image failed to upload."
+          : null;
         state.successMessage = "Category added successfully!";
         state.categoryLoading = false;
         state.selectedCategory = action.payload.category;
@@ -376,6 +383,7 @@ const restaurantSlice = createSlice({
           restaurantId: string;
           categoryId: string;
           updatedCategory: CategoryData;
+          imageError: boolean;
         }>
       ) => {
         const restaurant = state.restaurantList.find(
@@ -406,6 +414,9 @@ const restaurantSlice = createSlice({
 
         state.selectedCategory = action.payload.updatedCategory;
         state.successMessage = "Category updated successfully!";
+        state.error = action.payload.imageError
+          ? "Category image failed to update."
+          : null;
         state.categoryLoading = false;
       }
     );
@@ -468,7 +479,11 @@ const restaurantSlice = createSlice({
       addProductToCategory.fulfilled,
       (
         state,
-        action: PayloadAction<{ categoryId: string; product: ProductData }>
+        action: PayloadAction<{
+          categoryId: string;
+          product: ProductData;
+          imageError?: boolean;
+        }>
       ) => {
         state.restaurantList.forEach((restaurant) => {
           const category = restaurant.categories.find(
@@ -504,6 +519,9 @@ const restaurantSlice = createSlice({
           ];
         }
         state.successMessage = "Product added successfully!";
+        state.error = action.payload.imageError
+          ? "Product image failed to upload."
+          : null;
         state.productLoading = false;
       }
     );
@@ -833,6 +851,7 @@ const restaurantSlice = createSlice({
       state.error =
         (action.payload.errors && action.payload.errors.name) ||
         action.payload.message ||
+        (typeof action.payload === "string" && action.payload) || // Return action.payload if it's a string
         "Something went wrong!";
     });
   },

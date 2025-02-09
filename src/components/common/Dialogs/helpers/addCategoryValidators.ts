@@ -81,7 +81,6 @@ export function handleCategoryCancel(
     setIsNameDuplicate,
     setShowCategoryError,
     setImageError,
-    setIsDataUnchanged,
   }: ErrorFlags,
   initialData?: CategoryData
 ) {
@@ -94,7 +93,6 @@ export function handleCategoryCancel(
   setIsNameDuplicate?.(false);
   setShowCategoryError?.(false);
   setImageError?.(null);
-  setIsDataUnchanged?.(false);
 
   // Close the dialog
   onCancel();

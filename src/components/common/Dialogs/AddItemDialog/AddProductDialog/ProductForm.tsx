@@ -71,7 +71,7 @@ const ProductForm = ({
     }
 
     // Proceed with the update
-    const clonedValues = JSON.parse(JSON.stringify(values));
+    const clonedValues = values;
     delete clonedValues.id;
     if (clonedValues.details) {
       delete clonedValues.details.id;

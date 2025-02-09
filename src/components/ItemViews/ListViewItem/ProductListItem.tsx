@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { Skeleton } from "@mui/material";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -26,6 +27,7 @@ import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.pn
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
 import Styles from "../../../DataTypes/StylesTypes";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
+import { useState } from "react";
 interface ProductListItemProps {
   item: ProductData;
   index: number;
@@ -65,6 +67,9 @@ const ListViewProductItem = ({
     transition,
   };
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
   const menuItems = () => [
     {
@@ -134,12 +139,41 @@ const ListViewProductItem = ({
             <DragIndicatorIcon fontSize="medium" />
           </IconButton>
           <Box>
-            <img
-              style={styles.productImg}
-              src={item.image ? item.image : placeHolderImg}
-              width={60}
-              height={60}
-            />
+            <div style={{ width: 60, height: 60, position: "relative" }}>
+              {/* Show skeleton only while retrieving the image */}
+              {loading && !error && (
+                <Skeleton
+                  variant="rounded"
+                  width={60}
+                  height={60}
+                  animation="pulse"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+
+              <img
+                src={
+                  item.image !== "" ? (item.image as string) : placeHolderImg
+                }
+                width={60}
+                height={60}
+                style={{
+                  borderRadius: "8px",
+                  objectFit: "cover",
+                  display: loading ? "none" : "block",
+                }}
+                onLoad={() => setLoading(false)}
+                onError={() => {
+                  setError(true);
+                  setLoading(false);
+                }}
+              />
+            </div>
           </Box>
           <ListItemText
             primary={

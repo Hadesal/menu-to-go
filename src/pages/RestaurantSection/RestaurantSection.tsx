@@ -86,9 +86,12 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
     });
   };
 
-  const handleDeleteRestaurant = (restaurantid: string) => {
+  const handleDeleteRestaurant = (
+    restaurantId: string,
+    restaurantData: RestaurantData
+  ) => {
     if (restaurantList.length > 1) {
-      dispatch(removeRestaurant(restaurantid));
+      dispatch(removeRestaurant({ restaurantId, restaurantData }));
     } else if (restaurantList.length < 2) {
       setErrorMessage(getString("errorDeleteRestaurant"));
       setShowToast(true);
@@ -125,9 +128,7 @@ const RestaurantSection = ({ label }: RestaurantSectionProps): JSX.Element => {
         onClose={() => setShowSuccessToast(false)}
       />
 
-      <Typography variant="h5">
-        {label}
-      </Typography>
+      <Typography variant="h5">{label}</Typography>
       <Divider />
       <BoxComponent
         CardIcon={RestaurantIcon}

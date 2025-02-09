@@ -29,7 +29,10 @@ interface BoxComponentProps {
   items: itemsTypes;
   styles: Styles;
   editFunction: (item: any) => void;
-  deleteFunction: (id: string) => void;
+  deleteFunction: (
+    id: string,
+    itemData?: any
+  ) => void;
   addFunction: (item: any) => void;
   emptyStateTitle?: string;
   emptyStateMessage?: string;
@@ -84,6 +87,27 @@ const BoxComponent = ({
   ) => {
     const searchText = event.target.value.toLowerCase();
     debouncedSearch(items, searchText, setFilteredItems);
+  };
+
+  const getProductImages = (selectedProducts: ProductData[] | undefined) => {
+    return [
+      ...new Set(
+        selectedProducts
+          ?.map((product) => product.image)
+          .filter((image) => image !== null && image !== "")
+      ),
+    ];
+  };
+  const getIngredientImages = (selectedProducts: ProductData[] | undefined) => {
+    const ingredientImages = selectedProducts
+      ?.flatMap((product) =>
+        product.details.ingredients
+          .map((ingredient) => ingredient.image)
+          .filter((image) => image !== null && image !== "")
+      )
+      .filter((image): image is string => image !== null && image !== "");
+
+    return [...new Set(ingredientImages)];
   };
 
   useEffect(() => {
@@ -152,10 +176,18 @@ const BoxComponent = ({
         isOpen={isDeleteDialogOpen}
         onPrimaryActionClick={() => {
           if (selectedCategory?.id) {
+            const selectedProducts = selectedCategory.products?.filter(
+              (product) => {
+                return selectedProductsIDs?.includes(product.id || "");
+              }
+            );
+
             dispatch(
               deleteProduct({
                 categoryId: selectedCategory?.id,
                 productId: selectedProductsIDs,
+                productImage: getProductImages(selectedProducts) as string[],
+                ingredientImages: getIngredientImages(selectedProducts),
               })
             );
           }

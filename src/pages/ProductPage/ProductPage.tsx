@@ -44,7 +44,7 @@ export default function ProductPage() {
               productDescription={
                 selectedProduct.details.detailsDescription as string
               }
-              productImg={selectedProduct.image}
+              productImg={selectedProduct.image as string}
               productPrice={selectedProduct.price}
               productLabels={selectedProduct.details.labels}
               productDietaryOption={selectedProduct.details.dietaryOptions}

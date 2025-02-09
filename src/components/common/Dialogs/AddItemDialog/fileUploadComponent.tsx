@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, IconButton, Typography, styled } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@assets/material-symbols_image-outline (1).svg";
 import { Styles } from "./addItemDialog.styles";
 
 const MAX_FILE_SIZE_MB = 2;
-const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"]; 
+const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/svg+xml"];
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -21,14 +21,13 @@ const VisuallyHiddenInput = styled("input")({
 
 interface FileUploadComponentProps {
   image: string | null;
-  onImageChange: (image: string | null) => void;
+  onImageChange: (image: File | string) => void;
   error: string | null;
   setError: (error: string | null) => void;
   width?: number;
   height?: number;
   imgWidth?: number;
   imgHeight?: number;
-
 }
 
 const FileUploadComponent = ({
@@ -39,11 +38,14 @@ const FileUploadComponent = ({
   width = 150,
   height = 150,
   imgWidth = 40,
-  imgHeight = 40
+  imgHeight = 40,
 }: FileUploadComponentProps) => {
+  const [previewImage, setPreviewImage] = useState("");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const fileType = file.type;
@@ -58,10 +60,10 @@ const FileUploadComponent = ({
         setError(`File size exceeds ${MAX_FILE_SIZE_MB} MB.`);
         return;
       }
-
+      onImageChange(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        onImageChange(reader.result as string);
+        setPreviewImage(reader.result as string);
         setError(null);
       };
       reader.readAsDataURL(file);
@@ -71,7 +73,8 @@ const FileUploadComponent = ({
   const handleRemoveImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    onImageChange(null);
+    onImageChange("");
+    setPreviewImage("");
     setError(null);
 
     if (inputRef.current) {
@@ -85,7 +88,7 @@ const FileUploadComponent = ({
         {image ? (
           <Box sx={Styles.uploadedImageWrapper}>
             <img
-              src={image}
+              src={previewImage || image}
               alt="Uploaded"
               style={{
                 width,
@@ -99,7 +102,9 @@ const FileUploadComponent = ({
           </Box>
         ) : (
           <Box sx={Styles.imageWrapper}>
-            <Box sx={{ ...Styles.imageContainer, width: width, height: height }}>
+            <Box
+              sx={{ ...Styles.imageContainer, width: width, height: height }}
+            >
               <img
                 src={UploadIcon}
                 alt="Upload Icon"

@@ -32,7 +32,8 @@ const BasicInfoFields = ({
       >
         <FileUploadComponent
           image={values.image}
-          onImageChange={(image: string | null) => {
+          onImageChange={(image: string | File | null) => {
+            console.log(image);
             setFieldValue("image", image);
           }}
           error={imageError}
