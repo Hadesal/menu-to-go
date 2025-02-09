@@ -146,10 +146,7 @@ export default function CategoryPage() {
       console.error("No restaurant or category selected");
     }
   };
-  const handleDeleteCategory = (
-    id: string,
-    itemData?: CategoryData
-  ) => {
+  const handleDeleteCategory = (id: string, itemData?: CategoryData) => {
     if (selectedRestaurant?.id) {
       dispatch(
         deleteCategory({

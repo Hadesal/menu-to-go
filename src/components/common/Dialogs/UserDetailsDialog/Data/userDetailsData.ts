@@ -1027,7 +1027,7 @@ export const currencies = [
     { "currency": "CLP", "symbol": "$" },
     { "currency": "COP", "symbol": "$" },
     { "currency": "KES", "symbol": "Sh" },
-    { "currency": "EGP", "symbol": "ج.م" },
+    { "currency": "EGP", "symbol": "EGP" },
     { "currency": "PHP", "symbol": "₱" },
     { "currency": "KRW", "symbol": "₩" },
     { "currency": "IDR", "symbol": "Rp" },

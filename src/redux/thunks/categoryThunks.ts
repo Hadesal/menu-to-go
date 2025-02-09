@@ -39,15 +39,17 @@ export const addCategoryToRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     let uploadedImageUrl: string | null = null;
+    let imageError_flag: boolean = false;
 
     try {
       // Step 1: Upload the image if available
-      if (categoryData.image) {
+      if (categoryData.image instanceof File) {
         try {
           uploadedImageUrl = await addImage(categoryData.image as File);
           console.log("Uploaded Image URL:", uploadedImageUrl);
           categoryData.image = uploadedImageUrl;
         } catch (imageError) {
+          imageError_flag = true;
           console.error("Image upload failed:", imageError);
           categoryData.image = ""; // Set image to an empty string if upload fails
         }
@@ -65,7 +67,7 @@ export const addCategoryToRestaurant = createAsyncThunk(
       return {
         restaurantId,
         category: addedCategory,
-        imageError: !uploadedImageUrl,
+        imageError: imageError_flag,
       };
     } catch (error) {
       if (uploadedImageUrl) {

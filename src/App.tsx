@@ -1,20 +1,20 @@
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
 import { ThemeProvider } from "@mui/material";
 import LandingPage from "@pages/LandingPage/LandingPage";
 import LoginPage from "@pages/LoginPage/LoginPage";
-import MenuPage from "@pages/MenuPage/MenuPage";
+import MenuComponent from "@pages/MenuPage/MenuComponant";
 import RegisterPage from "@pages/RegisterPage/RegisterPage";
 import UserDashboardPage from "@pages/UserDashboardPage/UserDashboardPage";
 import PrivateRoute from "@routes/PrivateRoute";
 import PublicRoute from "@routes/PublicRoute";
 import { ConfigProvider } from "antd";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import "./App.css"; // Include Ant Design styles
-import { antdTheme, muiTheme } from "./theme/theme";
-import { useLanguage } from "./hooks/useLanguage";
-import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
+import rtlPlugin from "stylis-plugin-rtl";
+import "./App.css"; // Include Ant Design styles
+import { useLanguage } from "./hooks/useLanguage";
+import { antdTheme, muiTheme } from "./theme/theme";
 
 const App = () => {
   const { currentLanguage } = useLanguage();
@@ -77,7 +77,7 @@ const App = () => {
                 path="/menu/:id"
                 element={
                   <PublicRoute>
-                    <MenuPage />
+                    <MenuComponent />
                   </PublicRoute>
                 }
               />

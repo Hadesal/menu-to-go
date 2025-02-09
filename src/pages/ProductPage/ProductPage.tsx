@@ -8,7 +8,10 @@ import { useAppSelector } from "../../redux/reduxHooks";
 import Section from "./Section";
 import { useEffect } from "react";
 
-export default function ProductPage() {
+interface ProductPageProps {
+  isDesktop?: boolean;
+}
+export default function ProductPage({ isDesktop }: ProductPageProps) {
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
   );
@@ -27,9 +30,10 @@ export default function ProductPage() {
         justifyContent: "space-between",
         backgroundColor:
           restaurantData.userUiPreferences.colors.backgroundColor,
+        ...(isDesktop && { overflowY: "scroll" }), // Only add when greater than sm
       }}
       disableGutters={true}
-      maxWidth="sm"
+      maxWidth={isDesktop ? "xs" : "md"}
     >
       <Box
         sx={{
