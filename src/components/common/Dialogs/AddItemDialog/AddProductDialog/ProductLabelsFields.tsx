@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Allergies, DietaryOptions, Labels } from "@dataTypes/ProductDataTypes";
 import { Form, Select } from "antd";
-import vegetarianLogo from "../../../../../assets/veggie.png";
+import { useLanguage } from "src/hooks/useLanguage";
 import halalLogo from "../../../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../../../assets/vegan.png";
-import { get } from "lodash";
-import { useLanguage } from "src/hooks/useLanguage";
+import vegetarianLogo from "../../../../../assets/veggie.png";
 
 interface ProductLabelsFieldsProps {
   values: any;

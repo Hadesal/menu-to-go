@@ -7,7 +7,6 @@ import {
 import privateApiService from "@api/services/privateApiService";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import { ProductData } from "@dataTypes/ProductDataTypes";
-import axios from "axios";
 
 const removeFileReferences = (product: ProductData): ProductData => {
   const ingredients = product.details.ingredients.map((ingredient) => ({
@@ -149,9 +148,8 @@ async function deleteAllCategoryImages(categoryData: CategoryData) {
 }
 
 export {
-  handleImageUpload,
+  deleteAllCategoryImages, handleImageUpload,
   removeFileReferences,
   updateProductWithNewImageUrls,
-  uploadIngredientImages,
-  deleteAllCategoryImages,
+  uploadIngredientImages
 };

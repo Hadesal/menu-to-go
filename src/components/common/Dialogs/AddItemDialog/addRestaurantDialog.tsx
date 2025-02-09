@@ -189,7 +189,7 @@ const AddRestaurantDialog = ({
           height: "17.5rem",
         },
       }}
-      onClose={(event, reason) => {
+      onClose={(_, reason) => {
         if (reason && reason === "backdropClick") return;
         handleCancel();
       }}

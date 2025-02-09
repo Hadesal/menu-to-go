@@ -9,7 +9,6 @@ import {
 import {
   handleImageUpload,
   removeFileReferences,
-  updateProductWithNewImageUrls,
   uploadIngredientImages,
 } from "./thunks.helpers";
 

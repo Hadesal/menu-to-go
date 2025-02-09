@@ -14,7 +14,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
   return (
     <Box sx={Styles.IngredientItemContainer}>
       <img
-        src={ingredient.image ? ingredient.image : PlaceHolder}
+        src={ingredient.image ? ingredient.image as string : PlaceHolder}
         alt={ingredient.name}
         style={{ borderRadius: "8px", backgroundSize: "contain" }}
         width={70}

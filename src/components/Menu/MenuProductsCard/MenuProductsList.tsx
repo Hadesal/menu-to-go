@@ -101,7 +101,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
         >
           <CardMedia
             component="img"
-            image={product.image || PlaceHolder}
+            image={(product.image as string) || PlaceHolder}
             onError={(e) => ((e.target as HTMLImageElement).src = PlaceHolder)}
             alt={product.name}
             sx={{

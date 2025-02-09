@@ -108,7 +108,7 @@ const AddCategoryDialog = ({
           height: "36.5rem",
         },
       }}
-      onClose={(event, reason) => {
+      onClose={(_,reason) => {
         if (reason && reason === "backdropClick") return;
         handleOnCancel();
       }}

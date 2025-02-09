@@ -128,6 +128,9 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                   isAvailable:
                     productRow["Is Available"].toString().toLowerCase() ===
                     "true",
+                  isSoldOut:
+                    productRow["Is Sold Out"].toString().toLowerCase() ===
+                    "false",
                   image: productRow["Image"] || null,
                 };
 
@@ -169,6 +172,7 @@ export const exportSampleExcel = () => {
           name: "Coffee",
           price: 2.5,
           isAvailable: true,
+          isSoldOut: false,
           image: "coffee.png",
           details: {
             detailsDescription:
@@ -206,6 +210,7 @@ export const exportSampleExcel = () => {
           name: "Chocolate Cake",
           price: 5.0,
           isAvailable: true,
+          isSoldOut: false,
           image: "chocolate_cake.png",
           details: {
             detailsDescription: "Delicious chocolate layered cake.",
@@ -295,7 +300,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     categoriesData.push({
       Name: category.name,
       "Category Type": category.categoryType,
-      Image: category.image,
+      Image: category.image as string,
       "Category Order": category.categoryOrder ?? "",
     });
 
@@ -307,7 +312,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
         Category: category.name,
         Price: product.price,
         "Is Available": product.isAvailable,
-        Image: product.image ?? null,
+        Image: (product.image as string) ?? null,
         "Unique Product Ordering Name": product.id ?? "",
       });
       console.log(product.details);
@@ -333,7 +338,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
           "Product Name": product.name,
           "Ingredient Name": ingredient.name,
           Price: 0, // Assuming price is not part of IngredientData, set to 0 or handle accordingly
-          Image: ingredient.image,
+          Image: ingredient.image as string,
         });
       });
 

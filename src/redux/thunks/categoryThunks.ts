@@ -100,7 +100,6 @@ export const editCategoryInRestaurant = createAsyncThunk(
   ) => {
     let uploadedImageUrl: string = "";
     let imageError_flag: boolean = false;
-    let imageDeleted = false; // Track if image deletion is needed
 
     try {
       // Step 1: If a new image is provided and is different from the old one, upload it

@@ -1,6 +1,5 @@
 // src/theme.ts
 import { createTheme } from "@mui/material/styles";
-import zIndex from "@mui/material/styles/zIndex";
 
 // MUI Theme
 const muiTheme = createTheme({
