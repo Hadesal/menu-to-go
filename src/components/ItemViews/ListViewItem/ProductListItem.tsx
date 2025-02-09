@@ -6,28 +6,28 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Skeleton } from "@mui/material";
-
+import { currencies } from "../../common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
   Box,
   Checkbox,
+  Chip,
   IconButton,
   ListItem,
   ListItemText,
   Paper,
   Tooltip,
   Typography,
-  Chip,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { updateProductInCategory as editProduct } from "@redux/thunks/productThunks";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import placeHolderImg from "../../../assets/catering-item-placeholder-704x520.png";
 import { ProductData } from "../../../DataTypes/ProductDataTypes";
 import Styles from "../../../DataTypes/StylesTypes";
 import DropDownMenuComponent from "../../common/DropDownMenu/DropDownMenuComponent";
-import { useState } from "react";
 interface ProductListItemProps {
   item: ProductData;
   index: number;
@@ -71,6 +71,7 @@ const ListViewProductItem = ({
   const [error, setError] = useState(false);
 
   const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
+  const { user } = useAppSelector((state) => state.userData);
   const menuItems = () => [
     {
       text: getString("duplicate"),
@@ -96,6 +97,10 @@ const ListViewProductItem = ({
       onClick: () => handleDeleteClick(item),
     },
   ];
+
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === user.currency
+  );
 
   return (
     <Paper
@@ -217,7 +222,7 @@ const ListViewProductItem = ({
             }}
             component="span"
           >
-            {item.price}$
+            {item.price} {currencyObject?.symbol}
           </Typography>
           <Box sx={styles.iconsBox}>
             <Tooltip

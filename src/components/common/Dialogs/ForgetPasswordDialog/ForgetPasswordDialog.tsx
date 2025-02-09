@@ -31,7 +31,9 @@ const ForgetPasswordDialog = ({
   const onClose = () => {
     setIsOpen(false);
   };
-  const [severity, setSeverity] = useState<any>("");
+  const [severity, setSeverity] = useState<"success" | "warning" | "error">(
+    "success"
+  );
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
 

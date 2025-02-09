@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import RestaurantIcon from "@assets/restaurant-icon.jpg";
 import BoxComponent from "@components/common/BoxComponent/BoxComponent";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";

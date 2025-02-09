@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   addImage,
   deleteImage,
@@ -8,7 +7,6 @@ import privateApiService from "@api/services/privateApiService";
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { deleteAllCategoryImages } from "./thunks.helpers";
-import { ProductData } from "@dataTypes/ProductDataTypes";
 
 export const addCategoriesToRestaurant = createAsyncThunk(
   "restaurant/addCategories",

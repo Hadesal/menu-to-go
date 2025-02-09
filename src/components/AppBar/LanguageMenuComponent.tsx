@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { langs } from "@constants/constants";
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import React from "react";
