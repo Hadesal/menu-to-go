@@ -10,7 +10,7 @@ import {
 import { parseImageMenu } from "@utils/aiMenuImageExtractor";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { addCategoriesToRestaurant } from "@redux/thunks/categoryThunks";
-import { setImportingLoading } from "@redux/slices/restaurantsSlice";
+import { setError, setImportingLoading } from "@redux/slices/restaurantsSlice";
 import { useLanguage } from "src/hooks/useLanguage";
 
 interface ImportDialogProps {
@@ -24,6 +24,7 @@ interface ImportOption {
   description: string;
   accept: string;
   onFileSelect: (file: File) => Promise<void>;
+  disabled?: boolean;
 }
 
 const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
@@ -57,6 +58,8 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
               );
             }
           } catch (error) {
+            dispatch(setImportingLoading(false));
+            dispatch(setError(`Error importing categories from ${file.name}`));
             console.error("Error parsing JSON file:", error);
             dispatch(setImportingLoading(false));
           }
@@ -74,7 +77,12 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
         dispatch(setImportingLoading(true));
         try {
           const parsedCategories = await parseExcelFile(file);
+          if (!parsedCategories || parsedCategories.length === 0) {
+            throw new Error(`There are no categories in ${file.name}`);
+          }
+
           if (restaurantId !== undefined) {
+            console.log(parsedCategories);
             dispatch(
               addCategoriesToRestaurant({
                 restaurantId,
@@ -84,24 +92,11 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
           }
         } catch (error) {
           dispatch(setImportingLoading(false));
+          dispatch(
+            setError(`Error importing categories from Excel ${file.name}`)
+          );
           console.error("Error parsing Excel file:", error);
         }
-      },
-    },
-    {
-      title: getString("importDialogExportAsExcelLabel"),
-      description: getString("importDialogExportAsExcelDescription"),
-      accept: "",
-      onFileSelect: async () => {
-        categoriesToExcelExporter(categories);
-      },
-    },
-    {
-      title: getString("importDialogExportSampleExcelFile"),
-      description: getString("importDialogExportSampleExcelFileDescription"),
-      accept: "",
-      onFileSelect: async () => {
-        exportSampleExcel();
       },
     },
     {
@@ -124,9 +119,27 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
           }
         } catch (error) {
           dispatch(setImportingLoading(false));
+          dispatch(setError(`Error importing categories from ${file.name}`));
           console.error("Error parsing image:", error);
         }
       },
+    },
+    {
+      title: getString("importDialogExportSampleExcelFile"),
+      description: getString("importDialogExportSampleExcelFileDescription"),
+      accept: "",
+      onFileSelect: async () => {
+        exportSampleExcel();
+      },
+    },
+    {
+      title: getString("importDialogExportAsExcelLabel"),
+      description: getString("importDialogExportAsExcelDescription"),
+      accept: "",
+      onFileSelect: async () => {
+        categoriesToExcelExporter(categories);
+      },
+      disabled: categories.length === 0,
     },
   ];
 
@@ -171,9 +184,14 @@ const ImportDialog = ({ handleClose, isOpen, title }: ImportDialogProps) => {
               dir={currentLanguage === "ar" ? "rtl" : ""}
             >
               <Card
-                onClick={() => handleCardClick(option)}
+                onClick={() => {
+                  if (!option.disabled) {
+                    handleCardClick(option);
+                  }
+                }}
                 sx={{
-                  cursor: "pointer",
+                  opacity: option.disabled ? 0.5 : 1,
+                  cursor: option.disabled ? "not-allowed" : "pointer",
                   borderRadius: 4,
                   border: "1px dotted var(--primary-color)",
                   transition: "background-color 0.3s ease, transform 0.2s ease",

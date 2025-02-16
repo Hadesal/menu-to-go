@@ -416,6 +416,7 @@ export default function CategoryPage() {
             >
               <MenuItem
                 onClick={() => {
+                  handleClose(); // Close the menu
                   setOpenImportDialog(true);
                 }}
               >
@@ -423,6 +424,7 @@ export default function CategoryPage() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
+                  handleClose(); // Close the menu
                   setOpenPreviewMenu(true);
                 }}
               >

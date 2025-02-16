@@ -81,6 +81,9 @@ const restaurantSlice = createSlice({
       state.successMessage = null;
       state.error = null;
     },
+    setError(state, action: PayloadAction<string>) {
+      state.error = action.payload;
+    },
     updateRestaurantUserUiPreferences: (
       state,
       action: PayloadAction<UserUiPreferences>
@@ -869,6 +872,7 @@ export const {
   setSelectedProductsIDs,
   clearProductActionErrorMessage,
   setImportingLoading,
+  setError,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

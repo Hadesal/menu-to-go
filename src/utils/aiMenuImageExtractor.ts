@@ -128,7 +128,7 @@ Begin outputting the JSON now:
     }
   } catch (error) {
     console.error("Failed to parse image menu:", error);
-    return [];
+    throw error;
   }
 };
 
@@ -154,7 +154,7 @@ const extractTextFromImage = async (file: File): Promise<string> => {
     return data.text || "";
   } catch (error) {
     console.error("Error extracting text with EasyOCR:", error);
-    return "";
+    throw new Error(`Error extracting text with EasyOCR ${error}`);
   }
 };
 

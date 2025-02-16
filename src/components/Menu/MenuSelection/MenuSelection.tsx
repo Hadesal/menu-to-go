@@ -51,7 +51,12 @@ const MenuSelection: React.FC<MenuSelectionProps> = ({ menuSelections }) => {
           <Box
             key={selection.id}
             onClick={() => {
-              dispatch(setSelectedCategory(categoryDefaultData));
+              if (
+                selection.Label.toUpperCase() !==
+                selectedCategoryType.toUpperCase()
+              ) {
+                dispatch(setSelectedCategory(categoryDefaultData));
+              }
               dispatch(setSelectedCategoryType(selection.Label.toUpperCase()));
             }}
             sx={{

@@ -111,7 +111,10 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                     ? productDetailsRow["Labels"] || []
                     : [],
                   dietaryOptions: productDetailsRow
-                    ? productDetailsRow["Dietary Options"] || []
+                    ? productDetailsRow["Dietary Options"] || {
+                        value: "",
+                        label: "",
+                      }
                     : [],
                   detailsDescription: productDetailsRow
                     ? productDetailsRow["Details Description"]
@@ -130,7 +133,7 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                     "true",
                   isSoldOut:
                     productRow["Is Sold Out"].toString().toLowerCase() ===
-                    "false",
+                    "true",
                   image: productRow["Image"] || null,
                 };
 
@@ -173,7 +176,7 @@ export const exportSampleExcel = () => {
           price: 2.5,
           isAvailable: true,
           isSoldOut: false,
-          image: "coffee.png",
+          image: "",
           details: {
             detailsDescription:
               "A hot beverage made from roasted coffee beans.",
@@ -211,7 +214,7 @@ export const exportSampleExcel = () => {
           price: 5.0,
           isAvailable: true,
           isSoldOut: false,
-          image: "chocolate_cake.png",
+          image: "",
           details: {
             detailsDescription: "Delicious chocolate layered cake.",
             allergies: [],
@@ -255,6 +258,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     Category: string;
     Price: number;
     "Is Available": boolean;
+    "Is Sold Out": boolean;
     Image: string | null;
     "Unique Product Ordering Name": string;
   }
@@ -264,7 +268,10 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     "Details Description": string | null;
     Allergies: string;
     Labels: string;
-    "Dietary Options": string;
+    "Dietary Options": {
+      value: string;
+      label: string;
+    };
   }
 
   interface IngredientsSheetRow {
@@ -306,12 +313,14 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
 
     // Populate Products and related sheets
     category.products?.forEach((product) => {
+      console.log(product.isSoldOut);
       // Products Sheet
       productsData.push({
         Name: product.name,
         Category: category.name,
         Price: product.price,
         "Is Available": product.isAvailable,
+        "Is Sold Out": product.isSoldOut,
         Image: (product.image as string) ?? null,
         "Unique Product Ordering Name": product.id ?? "",
       });
@@ -323,7 +332,11 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
       const labels =
         product.details.labels?.map((l) => l?.value || "").join(", ") || "";
 
-      const dietaryOptions = product.details.dietaryOptions?.value || "";
+      const dietaryOptions = {
+        value: product.details.dietaryOptions?.value || "",
+        label: product.details.dietaryOptions?.label || "",
+      };
+
       productDetailsData.push({
         "Product Name": product.name,
         "Details Description": product.details.detailsDescription,
