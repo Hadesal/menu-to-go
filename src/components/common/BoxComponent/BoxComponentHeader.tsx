@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useAppSelector } from "@redux/reduxHooks";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -48,6 +49,9 @@ const HeaderComponent = ({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const { selectedRestaurant } = useAppSelector(
+    (state) => state.restaurantsData
+  );
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -108,6 +112,7 @@ const HeaderComponent = ({
                 variant="outlined"
                 color="primary"
                 onClick={onCopyClick}
+                disabled={selectedRestaurant.categories.length < 2}
               >
                 {getString("copy")}
               </Button>
@@ -120,6 +125,7 @@ const HeaderComponent = ({
                 variant="outlined"
                 color="primary"
                 onClick={onMoveClick}
+                disabled={selectedRestaurant.categories.length < 2}
               >
                 {getString("move")}
               </Button>
