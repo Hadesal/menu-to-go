@@ -108,7 +108,7 @@ const AddCategoryDialog = ({
           height: "36.5rem",
         },
       }}
-      onClose={(_,reason) => {
+      onClose={(_, reason) => {
         if (reason && reason === "backdropClick") return;
         handleOnCancel();
       }}
@@ -208,7 +208,7 @@ const AddCategoryDialog = ({
             }}
           >
             <FormControlLabel
-              value={getString("food").toLocaleLowerCase()}
+              value={"food"}
               control={
                 <Radio
                   sx={{
@@ -234,7 +234,7 @@ const AddCategoryDialog = ({
             }}
           >
             <FormControlLabel
-              value={getString("drinks").toLocaleLowerCase()}
+              value={"drinks"}
               control={
                 <Radio
                   sx={{
