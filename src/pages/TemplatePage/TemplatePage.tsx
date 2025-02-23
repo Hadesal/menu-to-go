@@ -44,7 +44,9 @@ export default function TemplatePage() {
 
   const dispatch = useAppDispatch();
 
-  const { selectedCategory } = useAppSelector((state) => state.menuData);
+  const { selectedCategory, restaurantData } = useAppSelector(
+    (state) => state.menuData
+  );
 
   const [toastMessageObject, setToastMessageObject] = useState<{
     success: boolean;
@@ -235,7 +237,8 @@ export default function TemplatePage() {
                   width: "8px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "primary.main",
+                  backgroundColor:
+                    restaurantData.userUiPreferences.colors.secondaryColor,
                   borderRadius: "10px",
                 },
                 "&::-webkit-scrollbar-track": {
