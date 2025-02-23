@@ -38,7 +38,7 @@ export interface DietaryOptions {
 }
 export interface ProductDetailsData {
   id?: string;
-  detailsDescription: string | null;
+  detailsDescription: string;
   allergies: Allergies[];
   labels: Labels[];
   dietaryOptions: DietaryOptions;

@@ -74,7 +74,7 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                   (ingredientRow: any) => ({
                     name: ingredientRow["Ingredient Name"],
                     price: parseFloat(ingredientRow["Price"]),
-                    image: ingredientRow["Image"] || null,
+                    image: ingredientRow["Image"] || "",
                   })
                 );
 
@@ -134,7 +134,7 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
                   isSoldOut:
                     productRow["Is Sold Out"].toString().toLowerCase() ===
                     "true",
-                  image: productRow["Image"] || null,
+                  image: productRow["Image"] || "",
                 };
 
                 return product;
@@ -143,14 +143,13 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
 
             const category: CategoryData = {
               name: categoryName,
-              image: categoryRow["Image"] || null,
-              categoryType: categoryRow["Category Type"],
+              image: categoryRow["Image"] || "",
+              categoryType: categoryRow["Category Type"].toLowerCase(),
               products,
             };
             return category;
           }
         );
-        console.log(categories);
 
         resolve(categories);
       } catch (error) {
@@ -168,7 +167,7 @@ export const exportSampleExcel = () => {
   const sampleCategories: CategoryData[] = [
     {
       name: "Beverages",
-      categoryType: "Drink",
+      categoryType: "Drinks",
       image: "beverages.png",
       products: [
         {
@@ -192,8 +191,8 @@ export const exportSampleExcel = () => {
               ],
             },
             ingredients: [
-              { name: "Water", image: null },
-              { name: "Coffee Beans", image: null },
+              { name: "Water", image: "" },
+              { name: "Coffee Beans", image: "" },
             ],
             extras: [
               { name: "Milk", price: 0.5 },
@@ -225,8 +224,8 @@ export const exportSampleExcel = () => {
               variantList: [],
             },
             ingredients: [
-              { name: "Chocolate", image: null },
-              { name: "Flour", image: null },
+              { name: "Chocolate", image: "" },
+              { name: "Flour", image: "" },
             ],
             extras: [],
           },
@@ -249,7 +248,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
   interface CategoriesSheetRow {
     Name: string;
     "Category Type": string;
-    Image: string | null;
+    Image: string;
     "Category Order": number | string;
   }
 
@@ -259,13 +258,13 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     Price: number;
     "Is Available": boolean;
     "Is Sold Out": boolean;
-    Image: string | null;
+    Image: string;
     "Unique Product Ordering Name": string;
   }
 
   interface ProductDetailsSheetRow {
     "Product Name": string;
-    "Details Description": string | null;
+    "Details Description": string;
     Allergies: string;
     Labels: string;
     "Dietary Options": {
@@ -278,7 +277,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     "Product Name": string;
     "Ingredient Name": string;
     Price: number;
-    Image: string | null;
+    Image: string;
   }
 
   interface ExtrasSheetRow {
@@ -321,7 +320,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
         Price: product.price,
         "Is Available": product.isAvailable,
         "Is Sold Out": product.isSoldOut,
-        Image: (product.image as string) ?? null,
+        Image: (product.image as string) || "",
         "Unique Product Ordering Name": product.id ?? "",
       });
       console.log(product.details);

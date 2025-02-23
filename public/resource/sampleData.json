@@ -3,7 +3,7 @@
     {
       "name": "Beverages",
       "image": null,
-      "categoryType": "drink",
+      "categoryType": "drinks",
       "products": [
         {
           "name": "Cappuccino",
