@@ -80,7 +80,8 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
           alignItems: "flex-start",
           justifyContent: "flex-start",
           padding: 0,
-          width: "50%",
+          marginTop: { xs: 1, sm: "inherit", lg: "inherit" },
+          width: { xs: "inherit", sm: "50%", lg: "50%" },
         }}
       >
         <Box
@@ -92,7 +93,6 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
           }}
         >
           <Box
-            //key={index}
             sx={{
               background:
                 (userUiPreferences && userUiPreferences.colors[type]) ||
@@ -100,14 +100,13 @@ const ColorSelectionSection = ({ type }: { type: keyof Colors }) => {
               minWidth: 0,
               width: { xs: "2rem", sm: "2.5rem" },
               height: { xs: "2rem", sm: "2.5rem" },
-              cursor: "pointer",
               borderRadius: "8px",
+              border: "1px solid #797979",
             }}
           ></Box>
           <Typography
             sx={{
               border: "1px solid #797979",
-              //height: { xs: "2rem", sm: "2.5rem" },
               boxSizing: "border-box",
               borderRadius: "10px",
               padding: 1,

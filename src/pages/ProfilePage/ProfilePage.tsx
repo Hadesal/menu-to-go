@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import BillingDataTextSection from "./BillingDataTextSection";
 import ChangePasswordSection from "./ChangePasswordSection";
-import ProfileDetailsSection from "./ProfileDetailsSection";
 import { DeleteAccount } from "./DeleteAccount";
+import ProfileDetailsSection from "./ProfileDetailsSection";
+import RestaurantSettingsSection from "./RestaurantSettingsSection";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -72,7 +73,43 @@ const ProfilePage = () => {
             </Box>
             <Box
               role="button"
-              tabIndex={0}
+              tabIndex={1}
+              onClick={() => {
+                setActiveTab("restaurantSettings");
+              }}
+              sx={{
+                width: "100%",
+                padding: 2,
+                paddingBottom: 2.5,
+                paddingTop: 2.5,
+                cursor: "pointer",
+                color:
+                  activeTab === "restaurantSettings"
+                    ? "var(--primary-color)"
+                    : "inherit",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: "50%", // Start halfway down
+                  transform: "translateY(-50%)", // Center the line vertically
+                  height: "50%", // Adjust the height of the line
+                  width: "3px",
+                  backgroundColor:
+                    activeTab === "restaurantSettings"
+                      ? "var(--primary-color)"
+                      : "transparent",
+                  transition: "background-color 0.3s",
+                },
+                borderBottom: "1px solid #BCB8B1",
+              }}
+            >
+              {getString("restaurantSettingsButton")}
+            </Box>
+            <Box
+              role="button"
+              tabIndex={2}
               onClick={() => {
                 setActiveTab("changePassword");
               }}
@@ -108,7 +145,7 @@ const ProfilePage = () => {
             </Box>
             <Box
               role="button"
-              tabIndex={0}
+              tabIndex={3}
               onClick={() => {
                 setActiveTab("billingData");
               }}
@@ -144,7 +181,7 @@ const ProfilePage = () => {
             </Box>
             <Box
               role="button"
-              tabIndex={0}
+              tabIndex={4}
               onClick={() => {
                 setActiveTab("deleteAccount");
               }}
@@ -199,6 +236,7 @@ const ProfilePage = () => {
               <EditProfileDetailsSection setActiveTab={setActiveTab} />
             )} */}
             {activeTab === "billingData" && <BillingDataTextSection />}
+            {activeTab === "restaurantSettings" && <RestaurantSettingsSection />}
             {activeTab === "deleteAccount" && <DeleteAccount />}
           </Paper>
         </Grid>

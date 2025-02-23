@@ -5,6 +5,7 @@ import {
   addRestaurant,
   editRestaurant,
   removeRestaurant,
+  updateRestaurantsCurrency,
 } from "../thunks/restaurantThunks";
 import {
   addCategoriesToRestaurant,
@@ -111,6 +112,11 @@ const restaurantSlice = createSlice({
       state.error = null;
     });
     builder.addCase(editRestaurant.pending, (state) => {
+      state.restaurantLoading = true;
+      state.successMessage = null;
+      state.error = null;
+    });
+    builder.addCase(updateRestaurantsCurrency.pending, (state) => {
       state.restaurantLoading = true;
       state.successMessage = null;
       state.error = null;
@@ -270,6 +276,38 @@ const restaurantSlice = createSlice({
         }
         state.successMessage = action.payload.message;
         state.restaurantLoading = false;
+      }
+    );
+    builder.addCase(
+      updateRestaurantsCurrency.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          data: { updatedRestaurantIds: string[]; newCurrency: string };
+          message: string;
+        }>
+      ) => {
+        const { data, message } = action.payload;
+        state.restaurantList = state.restaurantList.map((r) => {
+          if (data.updatedRestaurantIds.includes(r.id as string)) {
+            r.currency = data.newCurrency;
+          }
+          return r;
+        });
+
+        if (
+          state.selectedRestaurant &&
+          state.selectedRestaurant?.id &&
+          action.payload.data.updatedRestaurantIds.includes(
+            state.selectedRestaurant.id
+          )
+        ) {
+          {
+            state.selectedRestaurant.currency = data.newCurrency;
+          }
+          state.successMessage = message;
+          state.restaurantLoading = false;
+        }
       }
     );
     builder.addCase(

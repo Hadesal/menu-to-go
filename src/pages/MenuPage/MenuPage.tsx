@@ -24,6 +24,7 @@ import { fetchMenuData } from "@utils/dataFetchers/MenuDataFetching";
 import Lottie from "lottie-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLanguage } from "src/hooks/useLanguage";
 
 // Define menu selection options
 const menuSelections = [
@@ -40,16 +41,19 @@ const menuSelections = [
 interface MenuPageProps {
   restaurantTemplateId?: string;
   isDesktop?: boolean;
+  isTemplatePage?: boolean;
   loaded?: boolean;
 }
 
 export default function MenuPage({
   restaurantTemplateId,
   isDesktop,
+  isTemplatePage,
   loaded,
 }: MenuPageProps) {
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
+  const { currentLanguage } = useLanguage();
 
   const {
     restaurantData,
@@ -83,18 +87,13 @@ export default function MenuPage({
   }, [dispatch, restaurantTemplateId]);
 
   useEffect(() => {
-    if (menuContainerRef.current) {
-      // Scroll into view
+    if ((isDesktop || isTemplatePage) && menuContainerRef.current) {
+      console.log("Scrolling to top");
+      menuContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (menuContainerRef.current) {
       menuContainerRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "start", // Align to the top of the viewport
-      });
-
-      // Adjust the scroll position slightly above
-      const offset = -1000; // Adjust the offset as needed
-      window.scrollBy({
-        top: offset,
-        behavior: "smooth",
+        block: "start",
       });
     }
   }, [selectedCategory]);
@@ -127,6 +126,7 @@ export default function MenuPage({
 
   return (
     <Container
+      dir="ltr"
       ref={menuContainerRef}
       disableGutters
       sx={{
@@ -240,7 +240,8 @@ export default function MenuPage({
                 <Typography
                   color={restaurantData.userUiPreferences.colors.primaryColor}
                   sx={{
-                    paddingLeft: "1rem",
+                    paddingLeft: currentLanguage === "ar" ? "0rem" : "1rem",
+                    paddingRight: currentLanguage === "ar" ? "1rem" : "0rem",
                     paddingTop: "2rem",
                     fontWeight: 500,
                     fontFamily: restaurantData.userUiPreferences.fontType,
@@ -274,12 +275,22 @@ export default function MenuPage({
                           sm={6}
                           key={index}
                           sx={{
-                            paddingLeft:
-                              index % 2 === 0
-                                ? "0 !important"
-                                : "8px !important",
-                            paddingRight:
-                              index % 2 !== 0 ? "0 !important" : "8px",
+                            ...(currentLanguage !== "ar" && {
+                              paddingLeft:
+                                index % 2 === 0
+                                  ? "0 !important"
+                                  : "8px !important",
+                              paddingRight:
+                                index % 2 !== 0 ? "0 !important" : "8px",
+                            }),
+                            ...(currentLanguage === "ar" && {
+                              paddingLeft:
+                                index % 2 === 0
+                                  ? "8px !important"
+                                  : "0 !important",
+                              paddingRight:
+                                index % 2 !== 0 ? "8px" : "0 !important",
+                            }),
                           }}
                         >
                           <MenuProductsCard key={index} product={product} />

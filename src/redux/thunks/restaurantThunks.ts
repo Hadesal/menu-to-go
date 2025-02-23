@@ -109,3 +109,22 @@ export const removeRestaurant = createAsyncThunk(
     }
   }
 );
+
+// Update restaurants' currency
+export const updateRestaurantsCurrency = createAsyncThunk(
+  "restaurants/updateRestaurantsCurrency",
+  async (
+    { userId, currency }: { userId: string; currency: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await privateApiService.put(
+        `/restaurants/${userId}/currency`, // Correct endpoint
+         currency  // Pass currency in the request body
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

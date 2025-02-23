@@ -85,6 +85,7 @@ export const restaurantDefaultData: Omit<RestaurantData, "userUiPreferences"> =
     name: "",
     categories: [],
     tables: [],
+    currency:""
   };
 export const productDefaultData: ProductData = {
   name: "",

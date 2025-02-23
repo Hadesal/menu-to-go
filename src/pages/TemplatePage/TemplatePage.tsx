@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from "@redux/reduxHooks.ts";
 import { editRestaurant } from "@redux/thunks/restaurantThunks.ts";
 import { setSelectedRestaurant } from "@slices/restaurantsSlice";
 import { setSelectedProduct } from "@slices/menuSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { productDefaultData } from "@constants/constants";
 
@@ -40,8 +40,11 @@ export default function TemplatePage() {
     useAppSelector((state) => state.restaurantsData);
 
   const { loading } = useAppSelector((state) => state.menuData);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
+
+  const { selectedCategory } = useAppSelector((state) => state.menuData);
 
   const [toastMessageObject, setToastMessageObject] = useState<{
     success: boolean;
@@ -65,6 +68,12 @@ export default function TemplatePage() {
   useEffect(() => {
     dispatch(setSelectedRestaurant(restaurantList[0] as RestaurantData));
   }, []);
+
+  useEffect(() => {
+    if (menuContainerRef.current) {
+      menuContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedCategory]);
 
   const handleSaveChanges = async () => {
     if (selectedRestaurant && selectedRestaurant.id) {
@@ -203,30 +212,46 @@ export default function TemplatePage() {
           <Paper
             elevation={6}
             sx={{
+              position: "sticky",
+              top: "5rem", // Adjust as needed
               marginTop: { xs: "1rem", md: "3rem" },
               padding: 0,
-              borderRadius: "2rem",
+              height: "90vh",
+              overflowX: "hidden", // Add this line
               width: { lg: "29vw", xl: "28vw" },
             }}
           >
             <Card
-              title={"Embedded Content"}
-              id="menuLiveViewContainerid"
+              ref={menuContainerRef}
+              title={"Menu area"}
+              id="menuLiveViewContainer"
               sx={{
-                height: "100%",
                 padding: 0,
                 margin: 0,
-                borderRadius: "2rem",
+                height: "90vh",
+                overflow: "scroll",
+                overflowX: "hidden", // Add this line
+                "&::-webkit-scrollbar": {
+                  width: "8px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "primary.main",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "transparent",
+                },
               }}
             >
               <CardContent
+                dir="ltr"
                 sx={{
-                  ":last-child": { padding: 0 },
+                  position: "relative",
                   height: "100%",
+                  ":last-child": { padding: 0 },
                   width: "100%",
                   padding: 0,
                   margin: 0,
-                  borderRadius: "2rem",
                 }}
               >
                 <MenuPage
@@ -234,6 +259,7 @@ export default function TemplatePage() {
                     (selectedRestaurant && selectedRestaurant.id) ||
                     restaurantList[0].id
                   }
+                  isTemplatePage={true}
                 />
               </CardContent>
             </Card>

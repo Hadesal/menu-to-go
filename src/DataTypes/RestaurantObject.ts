@@ -6,6 +6,7 @@ export interface RestaurantData {
   categories: CategoryData[];
   tables: TableData[];
   userUiPreferences: UserUiPreferences;
+  currency: string;
 }
 
 export interface addRestaurantData {

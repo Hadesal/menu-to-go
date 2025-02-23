@@ -12,6 +12,7 @@ import { itemType } from "@utils/dataTypeCheck";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Styles } from "./addItemDialog.styles";
 import { useLanguage } from "src/hooks/useLanguage";
+import { useAppSelector } from "@redux/reduxHooks";
 
 interface AddAddRestaurantDialogProps {
   isOpen: boolean;
@@ -43,13 +44,14 @@ const AddRestaurantDialog = ({
   data,
 }: AddAddRestaurantDialogProps) => {
   const { getString, currentLanguage } = useLanguage();
-
+  const { user } = useAppSelector((state) => state.userData);
   const [dialogData, setDialogData] = useState<
     Omit<RestaurantData, "userUiPreferences">
   >({
     name: "",
     categories: [],
     tables: [],
+    currency: "",
   });
 
   const [errorFlags, setErrorFlags] = useState<ErrorFlags>({
@@ -74,6 +76,7 @@ const AddRestaurantDialog = ({
         name: "",
         categories: [],
         tables: [],
+        currency: "",
       });
       setErrorFlags({
         showNameError: false,
@@ -143,7 +146,7 @@ const AddRestaurantDialog = ({
     }
 
     // Proceed with confirmation
-    onConfirmClick(dialogData);
+    onConfirmClick({ ...dialogData, currency: user.currency || "" });
     handleCancel();
   };
 
@@ -157,12 +160,14 @@ const AddRestaurantDialog = ({
         name: "",
         categories: [],
         tables: [],
+        currency: "",
       });
     } else {
       setDialogData({
         name: initialData.name,
         categories: initialData.categories,
         tables: initialData.tables,
+        currency: initialData.currency,
       });
     }
 

@@ -70,8 +70,7 @@ const ListViewProductItem = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const { selectedCategory } = useAppSelector((state) => state.restaurantsData);
-  const { user } = useAppSelector((state) => state.userData);
+  const { selectedCategory , selectedRestaurant } = useAppSelector((state) => state.restaurantsData);
   const menuItems = () => [
     {
       text: getString("duplicate"),
@@ -99,7 +98,7 @@ const ListViewProductItem = ({
   ];
 
   const currencyObject = currencies.find(
-    (curr) => curr.currency === user.currency
+    (curr) => curr.currency === selectedRestaurant?.currency
   );
 
   return (

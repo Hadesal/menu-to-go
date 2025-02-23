@@ -14,6 +14,7 @@ import { setSelectedProduct } from "@redux/slices/menuSlice";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
 import vegetarianLogo from "../../../assets/veggie.png";
+import { currencies } from "../../common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 export default function MenuProductsCard({
   product,
@@ -22,7 +23,9 @@ export default function MenuProductsCard({
 }) {
   const dispatch = useAppDispatch();
   const { restaurantData } = useAppSelector((state) => state.menuData);
-
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === restaurantData?.currency
+  );
   // Function to determine the dietary option logo
   const getDietaryOptionLogo = (dietaryOption: string) => {
     switch (dietaryOption) {
@@ -200,7 +203,7 @@ export default function MenuProductsCard({
             component="div"
             color={restaurantData.userUiPreferences.colors.secondaryColor}
           >
-            {product.price}$
+            {product.price}{currencyObject?.symbol}
           </Typography>
         </CardContent>
       </CardActionArea>

@@ -55,7 +55,7 @@ const ColorsSection = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", lg: "row" },
+                  flexDirection: { xs: "column", sm: "row", lg: "row" },
                   width: "100%",
                   justifyContent: "center",
                   gap: { xs: 1, md: 0 },
@@ -70,7 +70,7 @@ const ColorsSection = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", lg: "row" },
+                  flexDirection: { xs: "column", sm: "row", lg: "row" },
                   width: "100%",
                   justifyContent: "center",
                   gap: { xs: 1, md: 0 },
@@ -85,7 +85,7 @@ const ColorsSection = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", lg: "row" },
+                  flexDirection: { xs: "column", sm: "row", lg: "row" },
                   width: "100%",
                   justifyContent: "center",
                   gap: { xs: 1, md: 0 },

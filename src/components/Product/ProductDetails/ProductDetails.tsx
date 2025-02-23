@@ -9,6 +9,7 @@ import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
 import vegetarianLogo from "../../../assets/veggie.png";
 import { Styles } from "./ProductDetails.styles";
+import { useLanguage } from "src/hooks/useLanguage";
 
 interface productDetailsProps {
   productImg?: string;
@@ -31,6 +32,7 @@ export default function ProductDetails({
 }: productDetailsProps) {
   const { restaurantData } = useAppSelector((state) => state.menuData);
   const dispatch = useAppDispatch();
+  const { currentLanguage } = useLanguage();
 
   // Function to determine the dietary option logo
   const getDietaryOptionLogo = (dietaryOption: string) => {
@@ -52,8 +54,13 @@ export default function ProductDetails({
         onClick={() => dispatch(setSelectedProduct(productDefaultData))}
         sx={{
           position: "absolute",
+          ...(currentLanguage === "ar" && {
+            right: 12,
+          }),
+          ...(currentLanguage !== "ar" && {
+            left: 12,
+          }),
           top: 16,
-          left: 12,
           zIndex: 2,
           backgroundColor: "white",
         }}

@@ -37,6 +37,7 @@ const initialState: MenuState = {
     userUiPreferences: initialUserUiPreferences,
     categories: [],
     tables: [],
+    currency: "",
   },
   selectedProduct: productDefaultData,
   selectedCategory: categoryDefaultData,

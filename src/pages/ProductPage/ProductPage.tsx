@@ -6,23 +6,30 @@ import IngredientList from "@components/Product/ProductIngredients/IngredientLis
 import VariantList from "@components/Product/ProductVariants/ProductVariants";
 import { useAppSelector } from "../../redux/reduxHooks";
 import Section from "./Section";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface ProductPageProps {
   isDesktop?: boolean;
 }
 export default function ProductPage({ isDesktop }: ProductPageProps) {
+  const productPageContainerRef = useRef<HTMLDivElement>(null);
   const { selectedProduct, restaurantData } = useAppSelector(
     (state) => state.menuData
   );
 
   useEffect(() => {
-    // Scroll to the top when the component mounts
-    window.scrollTo(-10, -10);
+    if (productPageContainerRef.current) {
+      // Scroll into view
+      productPageContainerRef.current.scrollIntoView({
+        behavior: "instant",
+        block: "start",
+      });
+    }
   }, []);
 
   return (
     <Container
+      ref={productPageContainerRef}
       sx={{
         minHeight: "100%",
         display: "flex",

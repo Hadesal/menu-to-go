@@ -15,6 +15,8 @@ import vegetarianLogo from "../../../assets/veggie.png";
 import halalLogo from "../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../assets/vegan.png";
 import { ProductData } from "@dataTypes/ProductDataTypes";
+import { useLanguage } from "src/hooks/useLanguage";
+import { currencies } from "../../common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 interface MenuProductsListProps {
   product: ProductData;
@@ -28,7 +30,11 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
     restaurantData.userUiPreferences.colors.primaryColor,
     0.8 // Adjust the opacity here (0 is fully transparent, 1 is fully opaque)
   );
+  const { currentLanguage } = useLanguage();
 
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === restaurantData?.currency
+  );
   // Function to determine the dietary option logo
   const getDietaryOptionLogo = (dietaryOption: string) => {
     switch (dietaryOption) {
@@ -151,7 +157,10 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
             position: "relative",
             boxSizing: "border-box",
             height: "100%",
-            padding: "0px 0px 15px 10px",
+            padding:
+              currentLanguage === "ar"
+                ? "0px 10px 15px 0px"
+                : "0px 0px 15px 10px",
             justifyContent: "space-between",
             width: "60%",
           }}
@@ -249,7 +258,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
               color: restaurantData.userUiPreferences.colors.secondaryColor,
             }}
           >
-            {product.price}€
+            {product.price}{currencyObject?.symbol}
           </Typography>
         </CardContent>
       </CardActionArea>

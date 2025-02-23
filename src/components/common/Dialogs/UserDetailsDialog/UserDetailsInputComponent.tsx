@@ -104,6 +104,7 @@ const UserDetailsInputComponent = ({
           name: userDetails?.restaurantName,
           tables: [],
           categories: [],
+          currency: userDetails.currency,
         })
       );
       await dispatch(
