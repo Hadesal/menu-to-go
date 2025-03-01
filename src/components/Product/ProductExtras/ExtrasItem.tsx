@@ -3,6 +3,7 @@ import { Styles } from "./Extras.styles";
 import { useAppSelector } from "@redux/reduxHooks";
 import PlusIcon from "./PlusIcon";
 import { ExtrasData } from "@dataTypes/ProductDataTypes";
+import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 interface ExtrasItemProps {
   extras: ExtrasData;
@@ -10,7 +11,9 @@ interface ExtrasItemProps {
 
 export default function ExtrasItem({ extras }: ExtrasItemProps) {
   const { restaurantData } = useAppSelector((state) => state.menuData);
-
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === restaurantData?.currency
+  );
   return (
     <Paper elevation={2} sx={Styles.ExtrasItemWrapper}>
       <PlusIcon
@@ -35,7 +38,8 @@ export default function ExtrasItem({ extras }: ExtrasItemProps) {
           fontFamily: restaurantData.userUiPreferences.fontType,
         }}
       >
-        {extras.price}$
+        {extras.price}
+        {currencyObject?.symbol}
       </Typography>
     </Paper>
   );

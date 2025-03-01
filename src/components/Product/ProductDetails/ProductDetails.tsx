@@ -10,6 +10,7 @@ import veganLogo from "../../../assets/vegan.png";
 import vegetarianLogo from "../../../assets/veggie.png";
 import { Styles } from "./ProductDetails.styles";
 import { useLanguage } from "src/hooks/useLanguage";
+import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 interface productDetailsProps {
   productImg?: string;
@@ -47,7 +48,9 @@ export default function ProductDetails({
         return "";
     }
   };
-
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === restaurantData?.currency
+  );
   return (
     <Box sx={{ position: "relative" }}>
       <IconButton
@@ -207,7 +210,8 @@ export default function ProductDetails({
             color={restaurantData.userUiPreferences.colors.secondaryColor}
             variant="h5"
           >
-            {productPrice}$
+            {productPrice}
+            {currencyObject?.symbol}
           </Typography>
         </Box>
 
