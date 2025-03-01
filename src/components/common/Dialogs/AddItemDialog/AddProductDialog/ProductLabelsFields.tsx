@@ -32,20 +32,12 @@ const labelsOptions: Labels[] = [
   { label: "🆕 New", value: "New" },
 ];
 
-const dietaryOptions: DietaryOptions[] = [
-  {
-    label: "Halal",
+const dietaryOptions = {
+  Halal: {
+    logo: "Halal",
     value: "halal",
   },
-  {
-    label: "Vegan",
-    value: "vegan",
-  },
-  {
-    label: "Vegetarian",
-    value: "vegetarian",
-  },
-];
+};
 
 const ProductLabelsFields = ({
   values,
