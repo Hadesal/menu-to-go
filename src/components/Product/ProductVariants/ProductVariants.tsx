@@ -3,6 +3,7 @@ import { Styles } from "./ProductVariants.styles";
 import { useAppSelector } from "../../../redux/reduxHooks";
 import BulletIcon from "./BulletIcon";
 import { VariantData } from "@dataTypes/ProductDataTypes";
+import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 
 interface VariantListProps {
   variants: VariantData[];
@@ -10,7 +11,9 @@ interface VariantListProps {
 
 export default function VariantList({ variants }: VariantListProps) {
   const { restaurantData } = useAppSelector((state) => state.menuData);
-
+  const currencyObject = currencies.find(
+    (curr) => curr.currency === restaurantData?.currency
+  );
   return (
     <Box>
       <Paper sx={Styles.VariantsListWrapper} elevation={3}>
@@ -50,7 +53,8 @@ export default function VariantList({ variants }: VariantListProps) {
                   fontFamily: restaurantData.userUiPreferences.fontType,
                 }}
               >
-                {variant.price}$
+                {variant.price}
+                {currencyObject?.symbol}
               </Typography>
             </Box>
           ))}
