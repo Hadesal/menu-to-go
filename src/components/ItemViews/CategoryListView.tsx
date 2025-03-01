@@ -12,7 +12,14 @@ import useMenu from "src/hooks/useMenu";
 import { useItemDialogHandlers } from "../../hooks/useItemDialogHandlers";
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
 import CategoryListItemItem from "./ListViewItem/CategoryListItem";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { reorderCategoriesForRestaurant } from "@redux/thunks/categoryThunks";
@@ -57,6 +64,16 @@ const CategoryListView = ({
     dispatch(setSelectedCategory(item));
   };
 
+  // Use sensors for both mouse and touch support
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150, // Optional: Adds a slight delay to prevent accidental drags
+        tolerance: 5, // Prevents tiny drags from triggering
+      },
+    })
+  );
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (over && active.id !== over.id) {
@@ -92,7 +109,7 @@ const CategoryListView = ({
           paddingBottom: 0,
         }}
       >
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
           <SortableContext
             items={reorderedItems.map((item) => item.id || "")} // Provide a fallback value
           >
