@@ -100,7 +100,7 @@ export const productDefaultData: ProductData = {
     },
     allergies: [],
     labels: [],
-    dietaryOptions: { label: "", value: "" },
+    dietaryOptionLabel: "",
   },
   isAvailable: true,
   isSoldOut: false,

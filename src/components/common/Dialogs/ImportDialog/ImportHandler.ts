@@ -105,17 +105,24 @@ export const parseExcelFile = (file: File): Promise<CategoryData[]> => {
 
                 const productDetails: ProductDetailsData = {
                   allergies: productDetailsRow
-                    ? productDetailsRow["Allergies"] || []
+                    ? typeof productDetailsRow["Allergies"] === "string"
+                      ? productDetailsRow["Allergies"]
+                          .split(",")
+                          .map((item: string) => item.trim()) // Split and trim each item
+                          .filter((item: string) => item !== "") // Remove empty strings
+                      : productDetailsRow["Allergies"] || []
                     : [],
                   labels: productDetailsRow
-                    ? productDetailsRow["Labels"] || []
+                    ? typeof productDetailsRow["Labels"] === "string"
+                      ? productDetailsRow["Labels"]
+                          .split(",")
+                          .map((item: string) => item.trim()) // Split and trim each item
+                          .filter((item: string) => item !== "") // Remove empty strings
+                      : productDetailsRow["Labels"] || []
                     : [],
-                  dietaryOptions: productDetailsRow
-                    ? productDetailsRow["Dietary Options"] || {
-                        value: "",
-                        label: "",
-                      }
-                    : [],
+                  dietaryOptionLabel: productDetailsRow
+                    ? productDetailsRow["Dietary Options"] || ""
+                    : "",
                   detailsDescription: productDetailsRow
                     ? productDetailsRow["Details Description"]
                     : "",
@@ -181,7 +188,7 @@ export const exportSampleExcel = () => {
               "A hot beverage made from roasted coffee beans.",
             allergies: [],
             labels: [],
-            dietaryOptions: { label: "Vegan", value: "vegan" },
+            dietaryOptionLabel: "vegan",
             variants: {
               name: "Size",
               variantList: [
@@ -218,7 +225,7 @@ export const exportSampleExcel = () => {
             detailsDescription: "Delicious chocolate layered cake.",
             allergies: [],
             labels: [],
-            dietaryOptions: { label: "Vegetarian", value: "vegetarian" },
+            dietaryOptionLabel: "vegetarian",
             variants: {
               name: "",
               variantList: [],
@@ -267,10 +274,7 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
     "Details Description": string;
     Allergies: string;
     Labels: string;
-    "Dietary Options": {
-      value: string;
-      label: string;
-    };
+    "Dietary Options": string;
   }
 
   interface IngredientsSheetRow {
@@ -323,18 +327,12 @@ export const categoriesToExcelExporter = (categories: CategoryData[]): void => {
         Image: (product.image as string) || "",
         "Unique Product Ordering Name": product.id ?? "",
       });
-      console.log(product.details);
-      // Product Details Sheet
       const allergies =
-        product.details.allergies?.map((a) => a?.value || "").join(", ") || "";
-
+        product.details.allergies?.map((a) => a || "").join(", ") ?? "";
       const labels =
-        product.details.labels?.map((l) => l?.value || "").join(", ") || "";
+        product.details.labels?.map((l) => l || "").join(", ") ?? "";
 
-      const dietaryOptions = {
-        value: product.details.dietaryOptions?.value || "",
-        label: product.details.dietaryOptions?.label || "",
-      };
+      const dietaryOptions = product.details.dietaryOptionLabel || "";
 
       productDetailsData.push({
         "Product Name": product.name,

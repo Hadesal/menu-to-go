@@ -48,7 +48,7 @@ const ProductForm = ({
       detailsDescription: "",
       allergies: [],
       labels: [],
-      dietaryOptions: { value: "", label: "" },
+      dietaryOptionLabel: "",
       variants: {
         name: "",
         variantList: [],

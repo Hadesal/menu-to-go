@@ -17,6 +17,7 @@ import veganLogo from "../../../assets/vegan.png";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import { useLanguage } from "src/hooks/useLanguage";
 import { currencies } from "../../common/Dialogs/UserDetailsDialog/Data/userDetailsData";
+import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
 
 interface MenuProductsListProps {
   product: ProductData;
@@ -37,16 +38,8 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
   );
   // Function to determine the dietary option logo
   const getDietaryOptionLogo = (dietaryOption: string) => {
-    switch (dietaryOption) {
-      case "Halal":
-        return halalLogo;
-      case "Vegetarian":
-        return vegetarianLogo;
-      case "Vegan":
-        return veganLogo;
-      default:
-        return "";
-    }
+    return dietaryOptionsMap[dietaryOption as keyof typeof dietaryOptionsMap]
+      ?.image;
   };
 
   return (
@@ -119,8 +112,8 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
             }}
           />
 
-          {product.details.dietaryOptions &&
-            product.details.dietaryOptions.value.length > 0 && (
+          {product.details.dietaryOptionLabel &&
+            product.details.dietaryOptionLabel.length > 0 && (
               <Box
                 sx={{
                   position: "absolute",
@@ -136,10 +129,8 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
                 }}
               >
                 <img
-                  src={getDietaryOptionLogo(
-                    product.details.dietaryOptions.label
-                  )}
-                  alt={product.details.dietaryOptions.value}
+                  src={getDietaryOptionLogo(product.details.dietaryOptionLabel)}
+                  alt={product.details.dietaryOptionLabel}
                   style={{
                     width: "40px",
                     height: "40px",
@@ -177,7 +168,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
               >
                 {product.details.labels.map((label, index) => {
                   let bgColor, textColor;
-                  switch (label.value) {
+                  switch (label) {
                     case "Bestseller":
                       bgColor = "#C69328"; // Darker gold for bestseller
                       textColor = "white"; // White text for contrast
@@ -208,7 +199,7 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {label.label}
+                      {labelsOptions[label as keyof typeof labelsOptions]}
                     </Typography>
                   );
                 })}
@@ -258,7 +249,8 @@ export default function MenuProductsList({ product }: MenuProductsListProps) {
               color: restaurantData.userUiPreferences.colors.secondaryColor,
             }}
           >
-            {product.price}{currencyObject?.symbol}
+            {product.price}
+            {currencyObject?.symbol}
           </Typography>
         </CardContent>
       </CardActionArea>

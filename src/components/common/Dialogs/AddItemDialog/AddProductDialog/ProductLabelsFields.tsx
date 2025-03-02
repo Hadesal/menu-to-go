@@ -1,14 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Allergies, DietaryOptions, Labels } from "@dataTypes/ProductDataTypes";
 import { Form, Select } from "antd";
 import { useLanguage } from "src/hooks/useLanguage";
 import halalLogo from "../../../../../assets/Halal_logo.svg.png";
 import veganLogo from "../../../../../assets/vegan.png";
 import vegetarianLogo from "../../../../../assets/veggie.png";
+import { dietaryOptionsMap } from "@constants/productLabels";
 
 interface ProductLabelsFieldsProps {
   values: any;
   setFieldValue: (field: string, value: any) => void;
+}
+
+export interface Allergies {
+  label: string;
+  value: string;
+}
+export interface Labels {
+  label: string;
+  value: string;
+}
+export interface DietaryOptions {
+  label: string;
+  value: string;
 }
 
 const allergensOptions: Allergies[] = [
@@ -58,22 +71,27 @@ const ProductLabelsFields = ({
     const selectedAllergens = allergensOptions.filter((option) =>
       selectedValues.includes(option.value)
     );
-    setFieldValue("details.allergies", selectedAllergens);
+
+    const selectedAllergenValues = selectedAllergens.map(
+      (allergen) => allergen.value
+    );
+    setFieldValue("details.allergies", selectedAllergenValues);
   };
 
   const handleLabelChange = (selectedValues: string[]) => {
     const selectedLabels = labelsOptions.filter((option) =>
       selectedValues.includes(option.value)
     );
-    setFieldValue("details.labels", selectedLabels);
+    const selectedLabelsValues = selectedLabels.map((label) => label.value);
+    setFieldValue("details.labels", selectedLabelsValues);
   };
 
   const handleDietaryChange = (selectedValue: string) => {
     setFieldValue(
-      "details.dietaryOptions",
+      "details.dietaryOptionLabel",
       selectedValue
-        ? dietaryOptions.find((option) => option.value === selectedValue)
-        : { value: "", label: "" }
+        ? dietaryOptions.find((option) => option.value === selectedValue)?.value
+        : ""
     );
   };
 
@@ -90,7 +108,7 @@ const ProductLabelsFields = ({
           placeholder={getString("allergensPlaceholder")}
           mode="multiple"
           options={allergensOptions}
-          value={values.details.allergies?.map((item: Allergies) => item.value)} // map to values array
+          value={values.details.allergies?.map((item: string[]) => item)}
           onChange={handleAllergyChange}
         />
       </Form.Item>
@@ -105,7 +123,7 @@ const ProductLabelsFields = ({
           placeholder={getString("labelsPlaceholder")}
           mode="multiple"
           options={labelsOptions}
-          value={values.details.labels?.map((item: Labels) => item.value)} // map to values array
+          value={values.details.labels?.map((label: string[]) => label)}
           onChange={handleLabelChange}
         />
       </Form.Item>
@@ -119,21 +137,9 @@ const ProductLabelsFields = ({
           allowClear
           placeholder={getString("dietaryOptionsPlaceholder")}
           options={dietaryOptions.map((option) => {
-            // Determine the image source based on the label
-            let imageSrc;
-            switch (option.label) {
-              case "Halal":
-                imageSrc = halalLogo;
-                break;
-              case "Vegan":
-                imageSrc = veganLogo;
-                break;
-              case "Vegetarian":
-                imageSrc = vegetarianLogo;
-                break;
-              default:
-                imageSrc = "";
-            }
+            const imageSrc =
+              dietaryOptionsMap[option.value as keyof typeof dietaryOptionsMap]
+                ?.image;
 
             return {
               label: (
@@ -150,8 +156,8 @@ const ProductLabelsFields = ({
             };
           })}
           value={
-            values.details.dietaryOptions?.value
-              ? values.details.dietaryOptions?.value
+            values.details.dietaryOptionLabel
+              ? values.details.dietaryOptionLabel
               : null
           }
           onChange={handleDietaryChange}
