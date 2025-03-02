@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getUserToken } from "@utils/auth-handlers";
 
-const API_BASE_URL = "http://localhost:8080/api/";
+const API_BASE_URL = "https://api.menutogo.at/api/";
 
 const privateApiService = axios.create({
   baseURL: API_BASE_URL,
