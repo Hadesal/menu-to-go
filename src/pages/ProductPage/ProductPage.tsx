@@ -7,6 +7,7 @@ import VariantList from "@components/Product/ProductVariants/ProductVariants";
 import { useAppSelector } from "../../redux/reduxHooks";
 import Section from "./Section";
 import { useEffect, useRef } from "react";
+import { allergensOptionsMap } from "@constants/productLabels";
 
 interface ProductPageProps {
   isDesktop?: boolean;
@@ -58,7 +59,7 @@ export default function ProductPage({ isDesktop }: ProductPageProps) {
               productImg={selectedProduct.image as string}
               productPrice={selectedProduct.price}
               productLabels={selectedProduct.details.labels}
-              productDietaryOption={selectedProduct.details.dietaryOptions}
+              productDietaryOption={selectedProduct.details.dietaryOptionLabel}
               isSoldOut={selectedProduct.isSoldOut}
             />
             {selectedProduct.details &&
@@ -67,8 +68,18 @@ export default function ProductPage({ isDesktop }: ProductPageProps) {
                 <Section name="Allergies">
                   <div>
                     {selectedProduct.details.allergies.map((allergy, index) => (
-                      <span key={allergy.value}>
-                        {allergy.label}
+                      <span
+                        key={
+                          allergensOptionsMap[
+                            allergy as keyof typeof allergensOptionsMap
+                          ]
+                        }
+                      >
+                        {
+                          allergensOptionsMap[
+                            allergy as keyof typeof allergensOptionsMap
+                          ]
+                        }
                         {index < selectedProduct.details.allergies.length - 1 &&
                           " |"}
                       </span>

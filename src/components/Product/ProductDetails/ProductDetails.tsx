@@ -11,14 +11,15 @@ import vegetarianLogo from "../../../assets/veggie.png";
 import { Styles } from "./ProductDetails.styles";
 import { useLanguage } from "src/hooks/useLanguage";
 import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
+import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
 
 interface productDetailsProps {
   productImg?: string;
   productName: string;
   productDescription: string;
   productPrice: number;
-  productLabels: Labels[];
-  productDietaryOption: DietaryOptions;
+  productLabels: string[];
+  productDietaryOption: string;
   isSoldOut: boolean;
 }
 
@@ -37,16 +38,8 @@ export default function ProductDetails({
 
   // Function to determine the dietary option logo
   const getDietaryOptionLogo = (dietaryOption: string) => {
-    switch (dietaryOption) {
-      case "Halal":
-        return halalLogo;
-      case "Vegetarian":
-        return vegetarianLogo;
-      case "Vegan":
-        return veganLogo;
-      default:
-        return "";
-    }
+    return dietaryOptionsMap[dietaryOption as keyof typeof dietaryOptionsMap]
+      ?.image;
   };
   const currencyObject = currencies.find(
     (curr) => curr.currency === restaurantData?.currency
@@ -105,7 +98,7 @@ export default function ProductDetails({
           height={400}
         />
 
-        {productDietaryOption && productDietaryOption.value.length > 0 && (
+        {productDietaryOption && productDietaryOption.length > 0 && (
           <Box
             sx={{
               position: "absolute",
@@ -121,8 +114,8 @@ export default function ProductDetails({
             }}
           >
             <img
-              src={getDietaryOptionLogo(productDietaryOption.label)}
-              alt={productDietaryOption.value}
+              src={getDietaryOptionLogo(productDietaryOption)}
+              alt={productDietaryOption}
               style={{
                 width: "60px",
                 height: "60px",
@@ -144,7 +137,7 @@ export default function ProductDetails({
           >
             {productLabels.map((label, index) => {
               let bgColor, textColor;
-              switch (label.value) {
+              switch (label) {
                 case "Bestseller":
                   bgColor = "#C69328";
                   textColor = "white";
@@ -175,7 +168,7 @@ export default function ProductDetails({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {label.label}
+                  {labelsOptions[label as keyof typeof labelsOptions]}
                 </Typography>
               );
             })}
