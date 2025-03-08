@@ -3,14 +3,14 @@ import { ProductData } from "@dataTypes/ProductDataTypes";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey:
-    "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",
+  apiKey: import.meta.env.OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
-const validateCategoryData = (data: { categories: CategoryData[] }) => {
+const validateCategoryData = (data: {
+  categories: CategoryData[];
+}): boolean => {
   if (!data || !Array.isArray(data.categories)) return false;
-
   return data.categories.every((category: CategoryData) => {
     if (
       typeof category.name !== "string" ||
@@ -20,7 +20,6 @@ const validateCategoryData = (data: { categories: CategoryData[] }) => {
     ) {
       return false;
     }
-
     return category.products.every((product: ProductData) => {
       if (
         typeof product.name !== "string" ||
@@ -30,7 +29,6 @@ const validateCategoryData = (data: { categories: CategoryData[] }) => {
       ) {
         return false;
       }
-
       return true;
     });
   });
@@ -38,12 +36,22 @@ const validateCategoryData = (data: { categories: CategoryData[] }) => {
 
 export const parseImageMenu = async (file: File): Promise<CategoryData[]> => {
   try {
-    const extractedText = await extractTextFromImage(file);
-    console.log("Extracted Text:", extractedText);
+    const base64Image = await fileToBase64(file);
+    const dataUri = `data:image/jpeg;base64,${base64Image}`;
 
-    const prompt = `
-You are an expert data parser. Given the following menu text, convert it into a structured JSON format that adheres to this schema:
-
+    const messages = [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "What's in this image?" },
+          {
+            type: "image_url",
+            image_url: { url: dataUri },
+          },
+          {
+            type: "text",
+            text: `
+Convert the image menu content into a structured JSON format that adheres exactly to the following schema: 
 {
   "categories": [
     {
@@ -51,21 +59,30 @@ You are an expert data parser. Given the following menu text, convert it into a 
       "image": "string | null",
       "categoryType": "food|drinks",
       "products": [
-        {
-          "name": "string",
+        { "name": "string",
           "price": "number",
           "details": {
             "detailsDescription": "string",
             "extras": [
-              { "id": "string", "name": "string", "price": "number" }
+              { "id": "string",
+                "name": "string",
+                "price": "number"
+              }
             ],
-            "ingredients": [
-              { "id": "string", "name": "string", "price": "number", "image": "string | null" }
+            "ingredients": [ 
+              { "id": "string",
+                "name": "string",
+                "price": "number",
+                "image": "string | null"
+              }
             ],
             "variants": {
               "name": "string",
               "variantList": [
-                { "id": "string", "name": "string", "price": "number" }
+                { "id": "string",
+                  "name": "string",
+                  "price": "number"
+                }
               ]
             }
           },
@@ -79,10 +96,13 @@ You are an expert data parser. Given the following menu text, convert it into a 
   ]
 }
 
-Here's the menu text:
-${extractedText}
-
-**Important Instructions:**
+Instructions:
+1. Analyze the content and structure of the image menu.
+2. Extract the information for each category and product accurately.
+3. Ensure that all string values are quoted, numerical values are represented as numbers, and boolean values are accurately indicated.
+4. If any category or product does not have an image, use 'null' for the image field.
+5. Maintain the hierarchy and relationships between categories and products as described in the provided schema.
+6. Validate the final JSON structure for correctness before outputting.
 - Output only the JSON data.
 - Do not include any explanations, comments, or extra text.
 - Do not use code blocks or markdown formatting.
@@ -90,93 +110,80 @@ ${extractedText}
 - Avoid trailing commas and ensure all keys and string values use double quotes.
 - Use only standard ASCII characters.
 
-Begin outputting the JSON now:
-`;
+Output only valid JSON data with no extra text.
+Begin outputting the JSON now:         `.trim(),
+          },
+        ],
+      },
+    ];
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+      messages: messages,
       max_tokens: 4000,
       temperature: 0,
+      store: true,
     });
 
-    const messageContent = response.choices[0]?.message?.content;
-    if (!messageContent) {
-      throw new Error("No content received from OpenAI.");
+    const rawText = response.choices[0]?.message?.content;
+    if (!rawText) {
+      throw new Error("No content received from GPT-4 Vision.");
     }
 
-    const jsonString = extractJSONFromResponse(messageContent);
-    console.log("Raw JSON from OpenAI:", jsonString);
+    const jsonString = extractJSONFromResponse(rawText);
+    console.log("Raw JSON from GPT-4 Vision:", jsonString);
 
-    try {
-      const parsedData = JSON.parse(jsonString);
-
-      if (!validateCategoryData(parsedData)) {
-        console.error("Validation Failed for Parsed Data:", parsedData);
-        throw new Error("Parsed data does not match the expected schema.");
-      }
-
-      console.log("Parsed Categories:", parsedData.categories);
-      return parsedData.categories;
-    } catch (jsonError) {
-      console.error("Error parsing JSON:", jsonString);
-      if (jsonError instanceof Error) {
-        throw new Error(`Failed to parse JSON: ${jsonError.message}`);
-      } else {
-        throw new Error("Failed to parse JSON: Unknown error");
-      }
+    const parsedData = JSON.parse(jsonString);
+    if (!validateCategoryData(parsedData)) {
+      console.error("Validation Failed for Parsed Data:", parsedData);
+      throw new Error("Parsed data does not match the expected schema.");
     }
+
+    console.log("Parsed Categories:", parsedData.categories);
+    return parsedData.categories;
   } catch (error) {
     console.error("Failed to parse image menu:", error);
     throw error;
   }
 };
 
-const extractTextFromImage = async (file: File): Promise<string> => {
-  try {
-    const formData = new FormData();
-    formData.append("image", file);
+async function fileToBase64(file: File): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(",")[1]; // Remove header
+      resolve(base64);
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
 
-    const OCR_BACKEND_URL = "http://46.202.140.217:5001/ocr";
-
-    const response = await fetch(OCR_BACKEND_URL, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error(`OCR service returned status ${response.status}`);
+function extractJSONFromResponse(responseText: string): string {
+  // Try to extract a JSON block from markdown fences
+  const regex = /```json\s*([\s\S]*?)\s*```/i;
+  const match = regex.exec(responseText);
+  if (match && match[1]) {
+    try {
+      const candidate = match[1].trim();
+      JSON.parse(candidate); // Validate
+      return candidate;
+    } catch (e) {
+      // Fall through if parsing fails
     }
-
-    const data = await response.json();
-    console.log("OCR Response Data:", data);
-
-    return data.text || "";
-  } catch (error) {
-    console.error("Error extracting text with EasyOCR:", error);
-    throw new Error(`Error extracting text with EasyOCR ${error}`);
   }
-};
-
-const extractJSONFromResponse = (responseText: string): string => {
+  // Fallback: extract text between the first "{" and the last "}"
+  const jsonStart = responseText.indexOf("{");
+  const jsonEnd = responseText.lastIndexOf("}");
+  if (jsonStart === -1 || jsonEnd === -1 || jsonEnd < jsonStart) {
+    throw new Error("No valid JSON object found in the response.");
+  }
+  const jsonString = responseText.substring(jsonStart, jsonEnd + 1).trim();
   try {
-    let jsonString = responseText.replace(/```json|```/g, "").trim();
-
-    const jsonStart = jsonString.indexOf("{");
-    const jsonEnd = jsonString.lastIndexOf("}");
-
-    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd >= jsonStart) {
-      jsonString = jsonString.substring(jsonStart, jsonEnd + 1);
-    } else {
-      throw new Error("No valid JSON object found in the response.");
-    }
-
-    // Validate and sanitize JSON
-    JSON.parse(jsonString); // Ensure it is a valid JSON string
-
+    JSON.parse(jsonString); // Validate JSON
     return jsonString;
-  } catch (error) {
-    console.error("Error extracting or validating JSON:", error);
-    throw new Error("Invalid JSON format received from OpenAI response.");
+  } catch (e) {
+    throw new Error("Extracted string is not valid JSON.");
   }
-};
+}
