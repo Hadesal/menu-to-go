@@ -223,9 +223,9 @@ export const exportSampleExcel = () => {
           image: "",
           details: {
             detailsDescription: "Delicious chocolate layered cake.",
-            allergies: [],
-            labels: [],
-            dietaryOptionLabel: "vegetarian",
+            allergies: ["milk", "eggs"],
+            labels: ["new"],
+            dietaryOptionLabel: "",
             variants: {
               name: "",
               variantList: [],
@@ -239,6 +239,44 @@ export const exportSampleExcel = () => {
         },
       ],
       categoryOrder: 2,
+    },
+    {
+      name: "Breakfast",
+      categoryType: "Food",
+      image: "breakfast.png",
+      products: [
+        {
+          name: "Pancakes",
+          price: 4.0,
+          isAvailable: true,
+          isSoldOut: false,
+          image: "",
+          details: {
+            detailsDescription: "Fluffy pancakes served with syrup.",
+            allergies: ["gluten", "eggs"],
+            labels: [],
+            dietaryOptionLabel: "vegetarian",
+            variants: {
+              name: "Toppings",
+              variantList: [
+                { name: "Maple Syrup", price: 0.5 },
+                { name: "Strawberries", price: 1.0 },
+              ],
+            },
+            ingredients: [
+              { name: "Flour", image: "" },
+              { name: "Milk", image: "" },
+              { name: "Eggs", image: "" },
+              { name: "Butter", image: "" },
+            ],
+            extras: [
+              { name: "Whipped Cream", price: 0.7 },
+              { name: "Chocolate Chips", price: 0.5 },
+            ],
+          },
+        },
+      ],
+      categoryOrder: 3,
     },
   ];
 

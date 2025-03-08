@@ -213,7 +213,8 @@ const restaurantSlice = createSlice({
 
           // Optionally set the first imported category as selected
           if (
-            !state.selectedCategory &&
+            (!state.selectedCategory ||
+              Object.keys(state.selectedCategory).length === 0) &&
             action.payload.categoryList.length > 0
           ) {
             state.selectedCategory = action.payload.categoryList[0];
