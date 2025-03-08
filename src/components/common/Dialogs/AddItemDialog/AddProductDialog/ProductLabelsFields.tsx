@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { dietaryOptionsMap } from "@constants/productLabels";
 import { Form, Select } from "antd";
 import { useLanguage } from "src/hooks/useLanguage";
-import halalLogo from "../../../../../assets/Halal_logo.svg.png";
-import veganLogo from "../../../../../assets/vegan.png";
-import vegetarianLogo from "../../../../../assets/veggie.png";
-import { dietaryOptionsMap } from "@constants/productLabels";
 
 interface ProductLabelsFieldsProps {
   values: any;

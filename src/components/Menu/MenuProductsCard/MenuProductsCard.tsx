@@ -1,4 +1,5 @@
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
+import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import {
   Box,
@@ -11,11 +12,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
-import halalLogo from "../../../assets/Halal_logo.svg.png";
-import veganLogo from "../../../assets/vegan.png";
-import vegetarianLogo from "../../../assets/veggie.png";
 import { currencies } from "../../common/Dialogs/UserDetailsDialog/Data/userDetailsData";
-import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
 
 export default function MenuProductsCard({
   product,

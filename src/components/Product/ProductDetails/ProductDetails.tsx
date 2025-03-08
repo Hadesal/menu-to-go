@@ -1,17 +1,13 @@
 import PlaceHolder from "@assets/catering-item-placeholder-704x520.png";
+import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
 import { productDefaultData } from "@constants/constants";
-import { DietaryOptions, Labels } from "@dataTypes/ProductDataTypes";
+import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { Box, Chip, IconButton, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@redux/reduxHooks";
 import { setSelectedProduct } from "@redux/slices/menuSlice";
-import halalLogo from "../../../assets/Halal_logo.svg.png";
-import veganLogo from "../../../assets/vegan.png";
-import vegetarianLogo from "../../../assets/veggie.png";
-import { Styles } from "./ProductDetails.styles";
 import { useLanguage } from "src/hooks/useLanguage";
-import { currencies } from "@components/common/Dialogs/UserDetailsDialog/Data/userDetailsData";
-import { dietaryOptionsMap, labelsOptions } from "@constants/productLabels";
+import { Styles } from "./ProductDetails.styles";
 
 interface productDetailsProps {
   productImg?: string;
