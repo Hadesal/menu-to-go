@@ -1,6 +1,7 @@
 import { CategoryData } from "@dataTypes/CategoryDataTypes";
 import { ProductData } from "@dataTypes/ProductDataTypes";
 import OpenAI from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 const openai = new OpenAI({
   apiKey: import.meta.env.OPENAI_API_KEY,
@@ -38,20 +39,17 @@ export const parseImageMenu = async (file: File): Promise<CategoryData[]> => {
   try {
     const base64Image = await fileToBase64(file);
     const dataUri = `data:image/jpeg;base64,${base64Image}`;
-
-    const messages = [
+    const messages: ChatCompletionMessageParam[] = [
       {
         role: "user",
         content: [
-          { type: "text", text: "What's in this image?" },
           {
-            type: "image_url",
-            image_url: { url: dataUri },
+            type: "text",
+            text: "You are a helpful assistant that analyzes images and answers questions.",
           },
           {
             type: "text",
-            text: `
-Convert the image menu content into a structured JSON format that adheres exactly to the following schema: 
+            text: `Convert the image menu content into a structured JSON format that adheres exactly to the following schema:
 {
   "categories": [
     {
@@ -111,7 +109,11 @@ Instructions:
 - Use only standard ASCII characters.
 
 Output only valid JSON data with no extra text.
-Begin outputting the JSON now:         `.trim(),
+Begin outputting the JSON now:`.trim(),
+          },
+          {
+            type: "image_url",
+            image_url: { url: dataUri },
           },
         ],
       },
@@ -152,7 +154,7 @@ async function fileToBase64(file: File): Promise<string> {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const base64 = result.split(",")[1]; // Remove header
+      const base64 = result.split(",")[1];
       resolve(base64);
     };
     reader.onerror = (err) => reject(err);
